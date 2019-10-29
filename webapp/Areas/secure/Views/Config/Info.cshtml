@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Information";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="form-Modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        @ViewBag.Title
+                        <span class="pull-right" style="font-size:16px;">
+                            <a href="javascript://" style="margin:0 10px;" title="Back" onclick="window.history.back()"><i class="fa fa-chevron-left fa-2x"></i></a>
+                            <a href="javascript://" title="Reboot System" data-toggle="modal" data-target="#restartApp-Modal"><i class="fa fa-recycle text-danger fa-2x"></i></a>
+                        </span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover table-striped table-bordered table-condensed">
+                        <tr>
+                            <th width="200px">Alpha Version</th>
+                            <td>@AppSettings.GetVal("app:Version")</td>
+                        </tr>
+                        <tr>
+                            <th>.NET Framework</th>
+                            <td>@HttpRuntime.TargetFramework</td>
+                        </tr>
+                        <tr>
+                            <th>ASP.NET MVC</th>
+                            <td>@typeof(Controller).Assembly.GetName().Version</td>
+                        </tr>
+                        <tr>
+                            <th>Hosting Permission</th>
+                            <td>@ViewBag.TrustLevel</td>
+                        </tr>
+                        <tr>
+                            <th>IIS</th>
+                            <td>@Request.ServerVariables["SERVER_SOFTWARE"]</td>
+                        </tr>
+                        <tr>
+                            <th>OS Version</th>
+                            <td>@Environment.OSVersion</td>
+                        </tr>
+                        <tr>
+                            <th>Application Path</th>
+                            <td>@Server.MapPath("~/")</td>
+                        </tr>
+                        <tr>
+                            <th style="vertical-align:top">SQL Server</th>
+                            <td>@Html.Raw(ViewBag.SqlVersionInfo)</td>
+                        </tr>
+                        <tr>
+                            <th>Crystal Reports</th>
+                            <td>@ViewBag.CrystalReports</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer text-right">
+                    <div class="pull-right" style="font-size:16px;">
+                        <a href="javascript://" style="margin:0 10px;" title="Back" onclick="window.history.back()"><i class="fa fa-chevron-left fa-2x"></i></a>
+                        <a href="javascript://" title="Reboot System" data-toggle="modal" data-target="#restartApp-Modal"><i class="fa fa-recycle text-danger fa-2x"></i></a>
+                    </div>
+                    @*<div class="btn-group btn-group-sm" role="group">
+                        <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
+                        <a href="javascript://" data-toggle="modal" data-target="#restartApp-Modal" class="btn btn-danger"><i class="fa fa-recycle"></i> Reboot System</a>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="restartApp-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <form id="frm" class="modal-content" method="post" action="/Secure/Config/RestartApp">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Restart Application</h4>
+            </div>
+            <div class="modal-body">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="/Secure/Config/Info" />
+                <div class="alert alert-warning">
+                    <h4><i class="fa fa-warning"></i> Warning!</h4>
+                    <p>Restarting system will refresh the cached settings and will force session expiration for all logged in users.</p>
+                </div>
+            </div>
+            <div class="modal-footer text-right">
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                    <button type="submit" class="btn btn-danger"><i class="fa fa-recycle"></i> Reboot System</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

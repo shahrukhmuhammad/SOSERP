@@ -1,0 +1,265 @@
+﻿@{
+    ViewBag.Title = "SEO Overview";
+    var websiteMetadata = ViewBag.WebsiteMetadata as List<CMS.Entity.CmsSeoMetadata>;
+    var cmsPages = ViewBag.CmsPages as List<CMS.Entity.CmsPage>;
+    var seoAccounts = ViewBag.SeoAccounts as List<CMS.Entity.CmsSeoAccount>;
+}
+
+@section styles{
+    <link href="~/Content/Bootstrap/Material-Design-Switch.css" rel="stylesheet" />
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h1 class="text-center"><i class="fa fa-search"></i>SEO Overview</h1>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default panel-Custom">
+            <a href="~/CMS/Seo/Metadata" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-code text-info"></i> Search Engine Optimization <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Manage website metadata and the data we use to personalise the website.
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Applied on Home Page Only</th>
+                                <th class="text-center">Applied on All Pages</th>
+                                <th class="text-center">Total Metadata</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><h1 class="text-center no-margin">@websiteMetadata.Where(x => x.AllPages == false).Count()</h1></td>
+                                <td><h1 class="text-center no-margin">@websiteMetadata.Where(x => x.AllPages == true).Count()</h1></td>
+                                <td><h1 class="text-center no-margin">@websiteMetadata.Count()</h1></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <a href="~/CMS/Seo/Metadata" class="btn btn-link">Manage Website Metadata</a>
+                <div class="table-responsive">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th>Metadata Title</th>
+                                <th>Applied on All Pages</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var x in websiteMetadata)
+                            {
+                                <tr>
+                                    <td>@x.Title</td>
+                                    <td><label class="label label-@(x.AllPages ? "success" : "warning")">@(x.AllPages ? "Yes" : "No")</label></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default panel-Custom">
+            <a href="~/CMS/Seo/UrlMetadata" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-link text-info"></i> Page Optimization <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <a href="~/CMS/Seo/UrlMetadata" class="btn btn-link">Manage Page Optimization</a>
+                <div class="table-responsive">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th>Page Title</th>
+                                <th>Total Metadata</th>
+                                <th>Keywords</th>
+                                <th>Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var x in cmsPages)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(x.Tags))
+                                        {
+                                            <a href="javascript://" title="@x.Tags"><i class="fa fa-info-circle"></i></a>
+                                        }
+                                        @x.Name
+                                    </td>
+                                    <td>@x.SeoMetadata.Count()</td>
+                                    <td>3</td>
+                                    <td><label class="label label-@(x.Status == CMS.Entity.CmsPageStatus.Published ? "success" : "warning")">@x.Status</label></td>
+                                    <td class="text-center">
+                                        <a href="~/CMS/Seo/PageMetadata/@x.Id" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default panel-Custom">
+            <a href="javascript://" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-tasks text-info"></i> SEO Checklist <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+
+            <!-- List group -->
+            <ul class="list-group">
+                <li class="list-group-item">
+                    Bootstrap Switch Default
+                    <div class="material-switch pull-right">
+                        <input id="someSwitchOptionDefault" name="someSwitchOption001" type="checkbox" />
+                        <label for="someSwitchOptionDefault" class="label-default"></label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    Bootstrap Switch Primary
+                    <div class="material-switch pull-right">
+                        <input id="someSwitchOptionPrimary" name="someSwitchOption001" type="checkbox" />
+                        <label for="someSwitchOptionPrimary" class="label-primary"></label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    Bootstrap Switch Success
+                    <div class="material-switch pull-right">
+                        <input id="someSwitchOptionSuccess" name="someSwitchOption001" type="checkbox" />
+                        <label for="someSwitchOptionSuccess" class="label-success"></label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    Bootstrap Switch Info
+                    <div class="material-switch pull-right">
+                        <input id="someSwitchOptionInfo" name="someSwitchOption001" type="checkbox" />
+                        <label for="someSwitchOptionInfo" class="label-info"></label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    Bootstrap Switch Warning
+                    <div class="material-switch pull-right">
+                        <input id="someSwitchOptionWarning" name="someSwitchOption001" type="checkbox" />
+                        <label for="someSwitchOptionWarning" class="label-warning"></label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    Bootstrap Switch Danger
+                    <div class="material-switch pull-right">
+                        <input id="someSwitchOptionDanger" name="someSwitchOption001" type="checkbox" />
+                        <label for="someSwitchOptionDanger" class="label-danger"></label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default panel-Custom">
+            <a href="~/CMS/Seo/Keyword" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-key text-info"></i> Keywords Management <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <a href="~/CMS/Seo/Keyword" class="btn btn-link">Manage keywords</a>
+                <div class="table-responsive">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Keyword</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>web</td>
+                                <td><label class="label label-success">Optimized</label></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>new</td>
+                                <td><label class="label label-warning">Optimizing</label></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>extra</td>
+                                <td><label class="label label-success">Optimized</label></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>extra database</td>
+                                <td><label class="label label-warning">Optimizing</label></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default panel-Custom">
+            <a href="~/CMS/Seo/Sitemap" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-sitemap text-info"></i> Sitemap <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <ul class="list-group">
+                <li href="javascript://" class="list-group-item">
+                    <span class="badge bg-transparent no-padding no-radius"><a href="~/CMS/Seo/Sitemap" class="btn btn-xs btn-link">Manage Sitemap</a></span>
+                    <h4 class="list-group-item-heading"><a href="javascript://">http://live.tendersafrica.net/Sitemap</a></h4>
+                    <h4 class="list-group-item-heading">Last Updated: <strong>@DateTime.UtcNow.AddDays(-5).GetTimeSpan()</strong></h4>
+                </li>
+            </ul>
+            <div class="table-responsive">
+                <table class="table table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Total Pages</th>
+                            <th class="text-center">Included</th>
+                            <th class="text-center">Excluded</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><h1 class="text-center no-margin">3</h1></td>
+                            <td><h1 class="text-center no-margin">2</h1></td>
+                            <td><h1 class="text-center no-margin">1</h1></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel panel-default panel-Custom">
+            <a href="~/CMS/Seo/Management" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-search-plus text-info"></i> Search Engines Management <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <a href="~/CMS/Seo/Management" class="btn btn-link">Manage Search Engines</a>
+                <div class="row">
+                    @foreach (var x in seoAccounts)
+                    {
+                        <div class="col-sm-6 col-md-6">
+                            <div class="well well-sm">
+                                <a href="~/CMS/Seo/Management@(x.Provider == "Google" ? "" : "/" + x.Provider)" class="thumbnail no-margin">
+                                    <img class="media-object" src="~/Content/Images/@(x.Provider.ToLower()).png" style="height:100px;" />
+                                    <div class="caption text-center no-padding">
+                                        <h3 class="no-margin">@x.Provider.ToUpperInvariant()</h3>
+                                    </div>
+                                    <table class="table table-condensed table-hover">
+                                        <tr>
+                                            <th class="text-center"><h5 class="no-margin"><label class="label label-@(x.Status == CMS.Entity.CmsSeoAccountStatus.UnConfigured ? "danger" : "success")">@x.Status.ToSpacedTitleCase()</label></h5></th>
+                                        </tr>
+                                    </table>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

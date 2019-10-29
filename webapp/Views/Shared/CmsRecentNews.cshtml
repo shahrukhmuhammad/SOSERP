@@ -1,0 +1,18 @@
+﻿@model List<CMS.Entity.CmsNews>
+
+@if (Model.Count() > 0)
+{
+    foreach (var x in Model)
+    {
+        <li class="list-group-item">
+            <h5>@x.Title</h5>
+            <small class="text-muted">@x.DateTime.ToShortDateString()</small>
+            <p>@x.Summary</p>
+            <p class="text-right no-padding no-margin"><a href="~/News/@x.Id">Continue Reading <i class="fa fa-angle-double-right"></i></a></p>
+        </li>
+    }
+}
+else
+{
+    <li class="list-group-item text-center" style="padding:100px 0;">No news found.</li>
+}

@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "gOauth";
+}
+
+<div class="inner-page">
+    <div class="container">
+        <h2>You will be redirected shortly, processing...</h2>
+    </div>
+</div>
+
+<div class="hidden">
+    <form id="frm" method="post">
+        <input id="hashParams" name="hashParams" value="" />
+    </form>
+</div>
+
+
+@section scripts{
+<script>
+    $(function () {
+        $("#hashParams").val(window.location.hash);
+    });
+
+    window.onload = function () {
+        document.forms['frm'].submit();
+    }
+
+    window.onunload = refreshParent;
+    function refreshParent() {
+        window.close();
+        window.opener.location.reload();
+    }
+</script>
+}

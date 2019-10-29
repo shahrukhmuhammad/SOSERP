@@ -1,0 +1,168 @@
+﻿@model List<Contact>
+
+@{
+    ViewBag.Title = "Suppliers";
+}
+@section styles{
+    <style>
+       .grid-img {
+            height: 35px;
+            width: 40px;
+        }
+       .customBtn {
+            text-decoration:none !important; font-size:14px;
+        }
+    </style>
+}
+@if (Request.RequestContext.RouteData.Values["Id"].ToString() == Convert.ToString((int)ContactType.Supplier))
+{
+    <div class="form-Modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    @ViewBag.Title
+                    <span class="pull-right menu-link">
+                        <a href="javascript://" class="text-muted" title="Go Back" style="margin:0 8px;" onclick="window.history.back()">
+                            <i class="fa fa-arrow-left"></i>
+                        </a>
+                        <a href="javascript://" class="clr-success" title="Import" style="margin:0 8px;">
+                            <i class="fa fa-download"></i>
+                        </a>
+                        <a href="javascript://" class="clr-primary" title="Export" style="margin:0 8px;">
+                            <i class="fa fa-upload"></i>
+                        </a>
+                        <a href="javascript://" class="clr-red forceRedirect" title="Delete Record" style="margin:0 8px;" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                        <a href="~/CRM/Contact/Record/0?r=@Request.RequestContext.RouteData.Values["Id"]" class="clr-info" style="margin:0 8px;" title="Add New">
+                            <i class="fa fa-plus-circle"></i>
+                        </a>
+                    </span>
+                </h3>
+            </div>
+            <div class="row" style="margin:15px 0">
+                <div class="col-md-12">
+                    <ul class="nav nav-pills">
+                        <li><a href="javascript://" id="" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-registered"></i> &nbsp; Registered</a></li>
+                        <li><a href="javascript://" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-shopping-bag"></i> &nbsp; Purchase</a></li>
+                        <li><a href="javascript://" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-history"></i> &nbsp; No Purchase History</a></li>
+                        <li><a href="javascript://" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-user-times"></i> &nbsp; InActive</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table id="crm-suppliers-dataTable" class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                                <th width="50px"></th>
+                                <th><input class="form-control input-sm input-tbl" type="text" placeholder="Full Name" id="crm-Leads-dataTable_2" /></th>
+                                <th><input class="form-control input-sm input-tbl" type="text" placeholder="Email Address" id="crm-Leads-dataTable_1" /></th>
+                                <th><input class="form-control input-sm input-tbl" type="text" placeholder="Phone" id="crm-Leads-dataTable_3" /></th>
+                                <th><input class="form-control input-sm input-tbl" type="text" placeholder="Created On" id="crm-Leads-dataTable_4" /></th>
+                                <th width="50px"><input class="form-control input-sm input-tbl" type="text" placeholder="Status" id="crm-Leads-dataTable_5" /></th>
+                                <th width="80px" class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td><input type="checkbox" class="checkIt" value="@x.Id" /></td>
+                                    <td>
+                                        <img src="~/Content/Uploads/CRM/@(x.Id).jpg" class="img-responsive grid-img" onerror="this.onerror = null; this.src = '/Content/Images/user.png';" />
+                                    </td>
+                                    <td>
+                                        <a href="~/CRM/Contact/Summary/@x.Id" title="@(x.Username == null ? "" : "Username: "+x.Username+",") @(x.Description == null ? "" : "Description: "+x.Description+",") @(x.Website == null ? "" : "Website: "+x.Website)">
+                                            @x.TitlePrefix. @x.FullName @(x.TitleSuffix.ToString() == "0" ? "" : x.TitleSuffix.ToString())
+                                        </a>
+                                    </td>
+                                    <td>@x.Email</td>
+                                    <td>@x.Phone</td>
+                                    <td>@x.CreatedOn.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        @if (x.Status == ContactStatus.Inactive || x.Status == ContactStatus.Suspended || x.Status == ContactStatus.PendingApproval)
+                                        {
+                                            <label class="label label-warning">@x.Status.ToSpacedTitleCase()</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="label label-success">@x.Status.ToSpacedTitleCase()</label>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="~/CRM/Contact/Summary/@x.Id" class="customBtn clr-primary" title="Summary">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a href="~/CRM/Contact/Record/@x.Id?r=@((int)x.ContactType)" class="customBtn clr-info" title="Edit">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        @if (x.Status == ContactStatus.PendingApproval)
+                                        {
+                                            <a href="javascript://" onclick="changeStatus('/CRM/Contact/ChangeStatus', '@x.Id')" class="customBtn clr-green" title="Approve Now"><i class="fa fa-check"></i></a>
+                                        }
+                                        else if (x.Status == ContactStatus.Suspended)
+                                        {
+                                            <a href="javascript://" onclick="changeStatus('/CRM/Contact/ChangeStatus', '@x.Id')" class="customBtn clr-green" title="Active Now"><i class="fa fa-check"></i></a>
+                                        }
+                                        else if (x.Status == ContactStatus.Active)
+                                        {
+                                            <a href="javascript://" onclick="changeStatus('/CRM/Contact/ChangeStatus', '@x.Id')" class="customBtn clr-yellow" title="Suspend Now"><i class="fa fa-ban"></i></a>
+                                        }
+                                        <a href="javascript://" class="customBtn clr-red" title="Delete" onclick="deleteRecord('@Url.Action("Delete")', '@x.Id')">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                        <div class="dropdown pull-right">
+                                            <a role="button" data-toggle="dropdown" class="dropdown-toggle customBtn" href="#">
+                                                <span class="caret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu gridDropdown">
+                                                <li><a href="javascript://">Messages</a></li>
+                                                <li><a href="javascript://">Add Note</a></li>
+                                                <li><a href="javascript://">Add a reminder</a></li>
+                                                <li><a href="javascript://">Link a Company</a></li>
+                                                <li><a href="javascript://">Create PO</a></li>
+                                                <li><a href="javascript://">Send Invoice</a></li>
+                                                <li><a href="javascript://">Make Payment</a></li>
+                                                <li><a href="javascript://">Export</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer text-right">
+                <div class="pull-right menu-link" style="font-size:26px;">
+                    <a href="javascript://" class="text-muted" title="Go Back" style="margin:0 8px;" onclick="window.history.back()">
+                        <i class="fa fa-arrow-left"></i>
+                    </a>
+                    <a href="javascript://" class="clr-success" title="Import" style="margin:0 8px;">
+                        <i class="fa fa-download"></i>
+                    </a>
+                    <a href="javascript://" class="clr-primary" title="Export" style="margin:0 8px;">
+                        <i class="fa fa-upload"></i>
+                    </a>
+                    <a href="javascript://" class="clr-red forceRedirect" title="Delete Record" style="margin:0 8px;" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                    <a href="~/CRM/Contact/Record/0?r=@Request.RequestContext.RouteData.Values["Id"]" class="clr-info" style="margin:0 8px;" title="Add New">
+                        <i class="fa fa-plus-circle"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#crm-suppliers-dataTable", [2, 3, 4, 5, 6], [0,1,7],@CurrentUser.PageLength);
+        });
+    </script>
+}
+

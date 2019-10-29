@@ -1,0 +1,88 @@
+﻿@model CMS.Entity.CmsPage
+@{
+    ViewBag.Title = Model.BrowserTitle;
+    var homepageMetadata = ViewBag.WebsiteMetadata as List<CMS.Entity.CmsSeoMetadata>;
+    if (homepageMetadata != null)
+    {
+        if (homepageMetadata.Count() > 0)
+        {
+            homepageMetadata = homepageMetadata.Where(x => x.AllPages == true).ToList();
+        }
+    }
+}
+
+@section metadata{
+    @foreach (var x in homepageMetadata)
+    {
+        @Html.Raw(x.Metadata);
+    }
+
+    @Html.Raw(Model.Metadata)
+}
+
+@section styles{
+    <style>
+        .space-md {
+            padding-top: 9px;
+            padding-bottom: 9px;
+        }
+    </style>
+}
+
+<div id="page-content">
+    <!--START OF PAGE WRAPPER-->
+    <div class="wrapper clearfix">
+        @if (TempData["SuccessMsg"] != null)
+        {
+            <!-- Alert Success -->
+            <div id="alert_success" class="alert alert-success margin-bottom-30">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <strong>Thank You!</strong> @TempData["SuccessMsg"]
+            </div>
+            <!-- /Alert Success -->
+        }
+
+        @if (TempData["ErrorMsg"] != null)
+        {
+            <!-- Alert Failed -->
+            <div id="alert_failed" class="alert alert-danger margin-bottom-30">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <strong>Error!</strong> @TempData["ErrorMsg"]
+            </div>
+            <!-- /Alert Failed -->
+        }
+
+        <!--START OF COLUMN LEFT-->
+        <div class="column-left">
+            <div class="text-wrapper clearfix contact-form">
+                <h1 class="blue">Drop us a line or just say Hello!</h1>
+                @*<p class="short-text">Kontakt z Tobą ma dla nas bardzo duże znaczenie. Jeśli masz pytanie, wątpliwość bądź chcesz wyrazić swoją opinię czekamy na wiadomość od Ciebie. </p>*@
+                <form id="frm" method="post">
+                    <div class="input-wrap">
+                        <input type="text" class="form-control" name="Name" placeholder="Name" required autofocus />
+                    </div>
+                    <div class="input-wrap">
+                        <input class="form-control" name="email" placeholder="Email address" type="email" required />
+                    </div>
+                    <div class="input-wrap" id="message-wrap">
+                        <textarea class="form-control" cols="40" name="Message" placeholder="Message" rows="5"></textarea>
+                    </div>
+                    <input type="submit" name="submit" id="kontakt-submit" value="Submit">
+                </form>
+            </div>
+        </div>
+        <!--END OF COLUMN LEFT-->
+        <!--START OF RIGHT LEFT-->
+        <div class="column-right">
+            <div class="text-wrapper clearfix" style="padding:5px;">
+                @Html.Action("CmsContent", new { id = "Google Map" })
+            </div>
+            <div class="text-wrapper clearfix">
+                <h2 class="blue">Address</h2>
+                <h4>@AppSettings.GetVal("website:Address")</h4>
+            </div>
+        </div>
+        <!--END OF RIGHT LEFT-->
+    </div>
+    <!--END OF PAGE WRAPPER-->
+</div>

@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "Task Manager Settings";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+    var taskManager = AppModule.GetById("TaskManager");
+}
+
+@section styles{
+    <link href="~/Content/materialDesignSwitch.css" rel="stylesheet" />
+    <style>
+       .top-padding {
+            padding-top: 10px !important;
+        }
+    </style>
+}
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> @TempData["ErrorMsg"]
+    </div>
+}
+
+
+<form id="frm" class="form-Modal" method="post" enctype="multipart/form-data">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                @ViewBag.Title
+                <span class="pull-right" style="font-size:16px">
+                    <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()" title="Cancel / Back"><i class="fa fa-close fa-2x"></i></a>
+                    <button type="submit" style="border:none; background:transparent" title="Save"><i class="fa fa-check-circle text-success fa-2x"></i></button>
+                </span>
+            </h4>
+        </div>
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="/Secure/TaskManagement/Settings" />
+        <div class="row top-padding">
+            <div class="col-md-12">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="material-switch pull-right">
+                            <input id="employeeTaskCreation" class="employeeTaskCreation" name="employee:TaskCreation" type="checkbox" data-val="@AppSettings.GetVal("employee:TaskCreation")" value="@AppSettings.GetVal("employee:TaskCreation")" @(AppSettings.GetVal<bool>("employee:TaskCreation") ? "checked" : "") />
+                            <label for="employeeTaskCreation" class="label-success employeeTaskCreation"></label>
+                        </div>
+                        <h4 class="list-group-item-heading">Do you want to allow employees to create new tasks? </h4>
+                        <p class="list-group-item-text">
+                            <a href="#">Enable this feature for employees to create new task</a>
+                        </p>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="material-switch pull-right">
+                            <input id="employeeAcceptNRejectTask" class="employeeAcceptNRejectTask" name="employee:AcceptNRejectTask" type="checkbox" data-val="@AppSettings.GetVal("employee:AcceptNRejectTask")" value="@AppSettings.GetVal("employee:AcceptNRejectTask")" @(AppSettings.GetVal<bool>("employee:AcceptNRejectTask") ? "checked" : "") />
+                            <label for="employeeAcceptNRejectTask" class="label-success employeeAcceptNRejectTask"></label>
+                        </div>
+                        <h4 class="list-group-item-heading">Do you want to allow employees consent to accept task?</h4>
+                        <p class="list-group-item-text">
+                            <a href="#">Enable this feature for employees to accept or reject tasks</a>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="pull-right" style="font-size:16px">
+                <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()" title="Cancel / Back"><i class="fa fa-close fa-2x"></i></a>
+                <button type="submit" style="border:none; background:transparent" title="Save"><i class="fa fa-check-circle text-success fa-2x"></i></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/Scripts/App/EmployeeSettings.js"></script>
+}

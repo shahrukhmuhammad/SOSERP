@@ -1,0 +1,3 @@
+﻿@model CmsContent
+@*@Html.Raw(Model.Contents)*@
+@Html.Raw(HttpUtility.HtmlDecode(Model.Contents))

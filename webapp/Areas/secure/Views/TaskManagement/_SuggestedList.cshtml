@@ -1,0 +1,56 @@
+﻿
+<div class="table-responsive">
+    <table id="tasks-dataTable" style="font-size:10px;" class="table table-hover table-condensed">
+        <thead>
+            <tr>
+                <th><input class="form-control input-sm input-tbl" style="font-size:10px; width:60px;" type="text" placeholder="Id" id="tasks-dataTable_0" /></th>
+                <th><input class="form-control input-sm input-tbl" style="font-size:10px; width:35px;" type="text" placeholder="Name" id="tasks-dataTable_1" /></th>
+                <th><input class="form-control input-sm input-tbl" style="font-size:10px; width:35px;" type="text" placeholder="Type" id="tasks-dataTable_2" /></th>
+                <th><input class="form-control input-sm input-tbl" style="font-size:10px; width:55px;" type="text" placeholder="Location" id="tasks-dataTable_3" /></th>
+                <th><input class="form-control input-sm input-tbl" style="font-size:10px; width:55px;" type="text" placeholder="Availability" id="tasks-dataTable_4" /></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < 3; i++)
+            {
+                <tr style="font-size:10px;" class="item-list">
+                    <td style="cursor:pointer" data-id="@i" data-item="@i" onclick="return PullItems(@i, @i)">@i</td>
+                    <td style="cursor:pointer" data-id="@i" data-item="@i" onclick="return PullItems(@i, @i)">Reyan @i</td>
+                    <td style="cursor:pointer" data-id="@i" data-item="@i" onclick="return PullItems(@i, @i)">Type @i</td>
+                    <td style="cursor:pointer" data-id="@i" data-item="@i" onclick="return PullItems(@i, @i)">Vienna Virginia @i</td>
+                    <td style="cursor:pointer" data-id="@i" data-item="@i" onclick="return PullItems(@i, @i)">Morning @i</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="~/Content/SelectJS/js/selectize.js"></script>
+<script src="~/Content/SelectJS/js/index.js"></script>
+
+<script src="~/Content/JsTree/assets/jquery.address-1.6.js"></script>
+<script src="~/Content/JsTree/assets/vakata.js"></script>
+<script src="~/Content/JsTree/assets/dist/jstree.min.js"></script>
+<script src="~/Content/JsTree/assets/docs.js"></script>
+<script>$.each($q, function (i, f) { $(f) }); $q = null;</script>
+
+<script>
+    function PullItems(e, f) {
+        if($('.box-section').val() == "AssignTo") {
+            $('#select-AssignTo')[0].selectize.addOption({ value: e, text: e }); //option can be created manually or loaded using Ajax
+            $('#select-AssignTo')[0].selectize.addItem(e);
+        }
+        else if($('.box-section').val() == "ManagedBy") {
+            $('#select-ManagedBy')[0].selectize.addOption({ value: e, text: e }); //option can be created manually or loaded using Ajax
+            $('#select-ManagedBy')[0].selectize.addItem(e);
+        }
+        else if($('.box-section').val() == "Observers") {
+            $('#select-Observers')[0].selectize.addOption({ value: e, text: e }); //option can be created manually or loaded using Ajax
+            $('#select-Observers')[0].selectize.addItem(e);
+        }
+        else if($('.box-section').val() == "CRMSection") {
+            $('#select-CRMClient')[0].selectize.addOption({ value: e, text: e }); //option can be created manually or loaded using Ajax
+            $('#select-CRMClient')[0].selectize.addItem(e);
+        }
+    }
+</script>

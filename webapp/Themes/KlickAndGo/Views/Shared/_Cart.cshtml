@@ -1,0 +1,88 @@
+﻿@model WebsiteUI.Models.Cart
+
+<form method="post" action="/cart.js">
+    <div class="dropdown-grid-wrapper hidden">
+        <div class="dropdown-menu no-padding animated fadeInDown col-xs-12 col-sm-9 col-md-7 animation-done" role="menu">
+            <div class="menu_c cart_menu">
+
+                <div class="menu_title clearfix">
+                    <h4>Shopping Cart</h4>
+                </div>
+                @if (Model.Items.Any())
+{
+                    <div class="widget_shopping_cart_content">
+                        <ul class="cart_list product_list_widget ">
+                            @foreach (var a in Model.Items)
+                    {
+                                <li>
+                                    <div class="thumb">
+                                        <span>
+
+                                            <a href="~/product/@a.Slug" title="@a.Title">
+                                                @if (a.ParentId != null)
+                                        {
+                                                    <img src="@Url.Action("Img", "Cdn", new { id = a.ParentId, s = "c", t = "p", target = "Website" })" alt="@a.Title" />
+                                        }
+                                        else
+                                        {
+                                                    <img src="@Url.Action("Img", "Cdn", new { id = a.ProductId, s = "c", t = "p", target = "Website" })" alt="@a.Title" />
+                                        }
+                                            </a>
+                                        </span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <h5>
+                                        <a href="~/product/@a.Slug">
+                                            @a.Title
+                                        </a>
+
+                                    </h5>
+                                    <input type="hidden" name="productId" value="@a.ProductId" class="item-productId" />
+                                    <a href="@Url.Action("Remove", "Cart", new { id = a.ProductId })" title="Remove this item" class="remove">Remove</a>
+                                </li>
+                                <li>
+                                    <p class="mobile-label-total">Total</p>
+
+                                    <span class="quantity">@a.Quantity × <span class="amount">@Settings.Get.CurrencySymbol@a.RetailPrice</span></span>
+                                </li>
+
+                    }
+
+                        </ul>
+                        <div style="clear:both"></div>
+                        <div class="total_row clearfix">
+                            <ul>
+                                <li>
+                                    <span class="total_val">Subtotal:</span>
+                                    <span class="total-price">
+                                        @Settings.Get.CurrencySymbol@Model.TotalAmount
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="checkout_row clearfix">
+                        <a class="btn_c" href="@Url.Action("Checkout", "Cart")">Checkout</a>
+                        <a href="javascript:void(0)" class="info_btn"><span class="fa fa-chevron-left"></span>Continue Shopping</a>
+
+                    </div>
+
+
+            }
+            else
+            {
+
+                    <div class="cart_row">
+                        <div class="empty-cart">Your Cart is empty</div>
+                        <p><a href="javascript:void(0)" class="btn_c btn_close">Continue Shopping</a></p>
+                    </div>
+            }
+
+
+            </div>
+        </div>
+    </div>
+
+</form>

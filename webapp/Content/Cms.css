@@ -1,0 +1,76 @@
+﻿body {
+    padding-top: 52px;
+    padding-left:15px;
+    padding-right:15px;
+    font-size:12px;
+}
+
+header > div.navbar-header > a.navbar-brand {
+    height:auto;
+}
+    header > div.navbar-header > a.navbar-brand > img {
+        float:left;
+        max-height:25px;
+        margin-right:10px;
+    }
+
+header > div.navbar-collapse > ul.navbar-right {
+    padding-right:15px;
+}
+
+footer {
+    padding:0 15px !important;
+    margin:0 -15px !important;
+}
+    footer div.row {
+        border-top:1px solid rgba(0,0,0,0.3);
+        padding:10px 0;
+    }
+
+#loading-mask {
+    height:100%;
+    width:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:9999;
+    background:rgba(255,255,255,0.7);
+}
+    #loading-mask > img {
+        margin:250px auto;
+        max-height:100px;
+        display:block;
+    }
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    /*max-width: 280px;*/
+}
+
+/* Commonly used */
+.no-padding {
+    padding:0;
+}
+.no-margin {
+    margin:0;
+}
+.img-centre {
+    display:block;
+    margin:0 auto;
+}
+.cms-News {
+    min-height:320px !important;
+}
+.panel > div.panel-heading > div.btn-group-xs {
+    float:right;
+    margin-top:-19px;
+}

@@ -1,0 +1,146 @@
+﻿@model List<BaseApp.Entity.AppMessage>
+@{
+    ViewBag.Title = "Outbox Messages";
+    var allUsers = ViewBag.AllUsers as List<BaseApp.Entity.AppUser>;
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Back"><i class="fa fa-angle-left"></i></a>
+                <a href="~/Secure/MessageCenter/New" class="btn btn-primary" title="Create New Message"><i class="fa fa-plus"></i></a>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table id="dataTable" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Message" id="dataTable_0" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Recipients" id="dataTable_1" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="External Recipients" id="dataTable_2" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Date" id="dataTable_3" /></th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td>@x.Message</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(x.Recipients))
+                                    {
+                                        <ul class="no-margin" style="padding:0 10px;">
+                                            @foreach (var y in x.RecipientsList)
+                                            {
+                                                <li>@allUsers.Where(z => z.Id == new Guid(y)).FirstOrDefault().FullName</li>
+                                            }
+                                            @if (x.ParentId.HasValue)
+                                            {
+                                                if (x.Parent.CreatorId.HasValue)
+                                                {
+                                                    <li>@x.Parent.Creator.FullName</li>
+                                                }
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        if (x.ParentId.HasValue)
+                                        {
+                                            if (!string.IsNullOrEmpty(x.Parent.Recipients))
+                                            {
+                                                <ul class="no-margin" style="padding:0 10px;">
+                                                    @foreach (var y in x.Parent.RecipientsList)
+                                                    {
+                                                        <li>@allUsers.Where(z => z.Id == new Guid(y)).FirstOrDefault().FullName</li>
+                                                    }
+                                                    @if (x.ParentId.HasValue)
+                                                    {
+                                                        if (x.Parent.CreatorId.HasValue)
+                                                        {
+                                                            if (x.Parent.CreatorId != CurrentUser.Id)
+                                                            {
+                                                                <li>@x.Parent.Creator.FullName</li>
+                                                            }
+                                                        }
+                                                    }
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <span>No record found</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>No record found</span>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(x.EmailRecipients))
+                                    {
+                                        <ul class="no-margin" style="padding:0 10px;">
+                                            @foreach (var y in x.EmailRecipientsList)
+                                            {
+                                                <li>@y</li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        if (x.ParentId.HasValue)
+                                        {
+                                            if (!string.IsNullOrEmpty(x.Parent.EmailRecipients))
+                                            {
+                                                <ul class="no-margin" style="padding:0 10px;">
+                                                    @foreach (var y in x.Parent.EmailRecipientsList)
+                                                    {
+                                                        <li>@y</li>
+                                                    }
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <span>No record found</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>No record found</span>
+                                        }
+                                    }
+                                </td>
+                                <td>@x.CreatedOn.ToString("dd/MM/yyyy hh:mm tt")</td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <a href="~/Secure/MessageCenter/Thread/@x.Id" class="btn btn-primary" title="View Thread"><i class="fa fa-eye"></i></a>
+                                        @*<a href="javascript://" onclick="deleteRecord('@Url.Action("Delete")', '@x.Id')" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>*@
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="~/Secure/MessageCenter/New" class="btn btn-primary"><i class="fa fa-plus"></i> Create New Message</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#dataTable", [0, 1, 2, 3], [4]);
+        });
+    </script>
+}

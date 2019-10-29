@@ -1,0 +1,520 @@
+﻿@functions{
+    #region Current Location Check
+    bool IsCurrentArea(string a)
+    {
+        var area = ViewContext.RouteData.DataTokens["area"].ToString();
+        return string.Compare(a, area, true) == 0;
+    }
+    bool IsCurrentController(string c)
+    {
+        var controller = ViewContext.RouteData.GetRequiredString("controller");
+        return string.Compare(c, controller, true) == 0;
+    }
+    bool IsCurrentAction(string c, string a)
+    {
+        var action = ViewContext.RouteData.GetRequiredString("controller") + ViewContext.RouteData.GetRequiredString("action");
+        return string.Compare(c + a, action, true) == 0;
+    }
+    #endregion
+
+    #region Set Location
+    string SetActiveArea(string area)
+    {
+        var res = IsCurrentArea(area);
+        return res ? "active-tile active" : null;
+    }
+    string SetActiveController(string controller)
+    {
+        var res = IsCurrentController(controller);
+        return res ? "active-tile active" : null;
+    }
+    string SetTopActiveController(string controller)
+    {
+        var res = IsCurrentController(controller);
+        return res ? "active" : null;
+    }
+    string SetActiveAction(string controller, string action)
+    {
+        var res = IsCurrentAction(controller, action);
+        return res ? "active" : null;
+    }
+    #endregion
+}
+
+
+@if (Request.IsAuthenticated)
+{
+    <nav id="mobile-Module-Menu" class="col-xs-9 well well-sm no-padding sidebar sidebar-left sidebar-animate" role="navigation"></nav>
+
+    <nav id="mobile-User-Menu" class="col-xs-9 well well-sm no-padding sidebar sidebar-right sidebar-animate" role="navigation">
+        <div class="list-group">
+            <h4 href="~/Secure/Account" class="list-group-item disabled no-margin">@CurrentUser.FullName</h4>
+            <div class="list-group-item">
+                <div class="media">
+                    <div class="media-left">
+                        <a href="~/Operations">
+                            <img class="media-object img-centre img-circle" src="~/Content/Uploads/Dp/@(CurrentUser.Id).jpg" style="width: 80px; height: 80px;" onerror="this.onerror = null; this.src = '/Content/Images/user.png';">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading no-margin">@CurrentUser.Code</h4>
+                        <small style="font-size:11px;"><strong>@CurrentUser.Role</strong></small>
+                        <br />
+                        <small class="pull-left" style="font-size:10px;">Last Login: <cite title="Source Title">@CurrentUser.LastLoginDate</cite></small>
+                        <br />
+                        <small id="servertime-mobile" class="pull-left" style="margin-top:-6px; margin-bottom:5px; font-size:10px;">@DateTime.Now.ToString("MMMM dd, yyyy H:mm:ss")</small>
+                    </div>
+                </div>
+            </div>
+            <a href="~/Operations" class="list-group-item @SetActiveAction("Account", "Index") @SetActiveAction("Account", "Edit")"><i class="fa fa-user-secret"></i> My Profile</a>
+            <a href="javascript://" class="list-group-item" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-cog"></i> Notifications & Preferences</a>
+            <a href="javascript://" class="list-group-item" data-toggle="modal" data-target="#themes-Modal"><i class="fa fa-paint-brush"></i> Theme</a>
+            <a href="javascript://" class="list-group-item @SetActiveAction("AppLog", "index")"><i class="fa fa-exchange"></i> My Activity</a>
+            <a href="javascript://" class="list-group-item" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-life-ring"></i> Support Center</a>
+            <a href="~/Operations/Account/Logout" class="list-group-item"><i class="fa fa-sign-out"></i> Logout</a>
+        </div>
+    </nav>
+
+    <div id="mobile-Top-Menu" class="navbar navbar-default navbar-fixed-top text-center">
+        <div class="btn-group btn-group-sm" role="group">
+            <div id="mobile-message-reader" class="btn-group btn-group-sm" role="group"></div>
+            <div id="mobile-notification-reader" class="btn-group btn-group-sm" role="group"></div>
+            <div id="mobile-notification-warning-reader" class="btn-group btn-group-sm" role="group"></div>
+
+            <a href="javascript://" onclick="$('#loading-mask').show(); window.location.reload(true);"><i class="fa fa-refresh"></i></a>
+        </div>
+    </div>
+}
+
+@if (IsCurrentAction("Account", "Login") || IsCurrentAction("Account", "Recovery"))
+{
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-header">
+            <a href="~/Secure/Account/Login" class="navbar-brand">@AppSettings.GetVal("app:Title")</a>
+        </div>
+    </div>
+
+    <small id="servertime" class="hidden">@DateTime.Now.ToString("MMMM dd, yyyy H:mm:ss")</small>
+    <small id="servertime-mobile" class="hidden">@DateTime.Now.ToString("MMMM dd, yyyy H:mm:ss")</small>
+}
+else
+{
+    <header class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-header">
+            <div class="row no-margin visible-xs">
+                <div class="col-xs-3">
+                    @if (!IsCurrentArea("Dashboard"))
+                    {
+                        @*<button type="button" class="navbar-toggle pull-left" data-toggle="sidebar" data-target="#mobile-Module-Menu" data-canvas="body" data-autohide="true" style="margin-right:0;">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>*@
+                    }
+                </div>
+                <div class="col-xs-6 text-center" style="padding:14px 0;">
+                    <a href="~/" class="navbar-brand" style="float:none; padding:0;">@AppSettings.GetVal("app:BrowserTitle")</a>
+                </div>
+                <div class="col-xs-3">
+                    <button id="user-Mobile-Menu" type="button" class="navbar-brand navbar-toggle" data-toggle="sidebar" data-target="#mobile-User-Menu" data-canvas="body" style="margin-right:0;">
+                        <span class="fa fa-user" style="font-size:16px;"></span>
+                    </button>
+                </div>
+            </div>
+            @*<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-Menu">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>*@
+
+            <a href="~/" class="navbar-brand hidden-xs"><img class="img-responsive" src="~/Content/Images/applogo.png" /> @AppSettings.GetVal("app:BrowserTitle")</a>
+        </div>
+        <div id="top-Menu" class="navbar-collapse collapse">
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="@SetActiveController("Account")"><a href="~/Secure/Account/Login"><i class="fa fa-user-secret"></i> Login</a></li>
+                </ul>
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="javascript://" onclick="" title="My Drive" data-placement="bottom"><i class="fa fa-folder-o"></i></a></li>
+                    <li id="message-reader" class="dropdown"></li>
+                    <li id="notification-reader" class="dropdown"></li>
+                    <li id="notification-warning-reader" class="dropdown"></li>
+                    <li class="@SetActiveAction("AppLog","Index")">
+                        <a href="~/Secure/AppLog" class="hidden-xs" title="My Activity" data-placement="bottom"><i class="fa fa-exchange"></i></a>
+                    </li>
+                    <li class="@SetActiveAction("Support","Index")">
+                        <a href="javascript://" class="hidden-xs" data-toggle="modal" data-target="#comingSoon-Modal" title="Support Center" data-placement="bottom"><i class="fa fa-life-ring"></i></a>
+                        <a href="javascript://" class="visible-xs" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-life-ring"></i> Support Center</a>
+                    </li>
+
+                    <li class="@SetTopActiveController("Account") dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-user"></i> @CurrentUser.FullName <i class="fa fa-angle-down"></i>
+                        </a>
+                        <div class="dropdown-menu no-padding" style="width:270px;">
+                            <div class="row well well-sm no-margin no-padding" style="padding-top:10px;">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <a href="~/Operations">
+                                            <img class="media-object img-centre img-circle" src="~/Content/Uploads/Dp/@(CurrentUser.Id).jpg" style="width: 80px; height: 80px;" onerror="this.onerror = null; this.src = '/Content/Images/user.png';">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading no-margin">@CurrentUser.Code</h4>
+                                        <small style="font-size:11px;"><strong>@CurrentUser.Role</strong></small>
+                                        <br />
+                                        <small class="pull-left" style="font-size:10px;">Last Login: <cite title="Source Title">@CurrentUser.LastLoginDate</cite></small>
+                                        <br />
+                                        <small id="servertime" class="pull-left" style="margin-top:-6px; margin-bottom:5px; font-size:10px;">@DateTime.Now.ToString("MMMM dd, yyyy H:mm:ss")</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="list-group no-margin">
+                                <a href="~/Operations" class="list-group-item @SetActiveAction("Account", "Index") @SetActiveAction("Account", "Edit")"><i class="fa fa-user-secret"></i> My Profile</a>
+                                <a href="javascript://" data-toggle="modal" data-target="#themes-Modal" class="list-group-item"><i class="fa fa-paint-brush"></i> Theme</a>
+                                <a href="javascript://" class="list-group-item @SetActiveAction("Account", "Security")"><i class="fa fa-lock"></i> Security Settings</a>
+                                <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-cog"></i> Notifications & Preferences</a>
+                                <a href="~/Operations/Account/Logout" class="list-group-item"><i class="fa fa-sign-out"></i> Logout</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            }
+        </div>
+    </header>
+}
+
+<div class="clearfix"></div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="comingSoon-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Feature Information</h4>
+            </div>
+            <div class="modal-body">
+                Currently this feature is under development and will soon be available.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Request.IsAuthenticated)
+{
+    <div class="modal fade" id="themes-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Themes</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="themesRow" class="row">
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Cerulean');">
+                                <div>
+                                    <span class="bar1" style="background: #209de5;"></span>
+                                    <span class="bar2" style="background: #04478a;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Cerulean</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Cerulean")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Cosmo');">
+                                <div>
+                                    <span class="bar1" style="background: #222222;"></span>
+                                    <span class="bar2" style="background: #2780e3;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Cosmo</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Cosmo")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Cyborg');">
+                                <div>
+                                    <span class="bar1" style="background: #060606;"></span>
+                                    <span class="bar2" style="background: #222222;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #060606;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Cyborg</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Cyborg")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Darkly');">
+                                <div>
+                                    <span class="bar1" style="background: #375a7f;"></span>
+                                    <span class="bar2" style="background: #00bc8c;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #222222;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Darkly</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Darkly")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Flatly');">
+                                <div>
+                                    <span class="bar1" style="background: #2c3e50;"></span>
+                                    <span class="bar2" style="background: #18bc9c;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Flatly</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Flatly")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Journal');">
+                                <div>
+                                    <span class="bar1" style="background: #fcfcfc;"></span>
+                                    <span class="bar2" style="background: #eb6864;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Journal</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Journal")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Lumen');">
+                                <div>
+                                    <span class="bar1" style="background: #f8f8f8;"></span>
+                                    <span class="bar2" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Lumen</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Lumen")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Paper');">
+                                <div>
+                                    <span class="bar1" style="background: #fcfcfc;"></span>
+                                    <span class="bar2" style="background: #2196f3;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Paper</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Paper")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Readable');">
+                                <div>
+                                    <span class="bar1" style="background: #fcfcfc;"></span>
+                                    <span class="bar2" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Readable</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Readable")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Sandstone');">
+                                <div>
+                                    <span class="bar1" style="background: #3e3f3a;"></span>
+                                    <span class="bar2" style="background: #93c54b;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Sandstone</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Sandstone")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Simplex');">
+                                <div>
+                                    <span class="bar1" style="background: #fcfcfc;"></span>
+                                    <span class="bar2" style="background: #d9230f;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Simplex</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Simplex")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Spacelab');">
+                                <div>
+                                    <span class="bar1" style="background: #e9e9e9;"></span>
+                                    <span class="bar2" style="background: #446e9a;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Spacelab</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Spacelab")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Slate');">
+                                <div>
+                                    <span class="bar1" style="background: #3d4247;"></span>
+                                    <span class="bar2" style="background: #7c848a;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #272b30;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Slate</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Slate")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Superhero');">
+                                <div>
+                                    <span class="bar1" style="background: #4e5d6c;"></span>
+                                    <span class="bar2" style="background: #df691a;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #2b3e50;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Superhero</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Superhero")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('United');">
+                                <div>
+                                    <span class="bar1" style="background: #e95420;"></span>
+                                    <span class="bar2" style="background: #772953;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">United</p>
+                                </div>
+                                @if (CurrentUser.Theme == "United")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <a class="thumbnail text-center" href="javascript://" onclick="changeTheme('Yeti');">
+                                <div>
+                                    <span class="bar1" style="background: #333333;"></span>
+                                    <span class="bar2" style="background: #008cba;"></span>
+                                </div>
+                                <div>
+                                    <span class="bar3" style="background: #fcfcfc;"></span>
+                                </div>
+                                <div class="caption">
+                                    <p class="no-underline">Yeti</p>
+                                </div>
+                                @if (CurrentUser.Theme == "Yeti")
+                                {
+                                    <label class="badge"><i class="fa fa-check-circle"></i></label>
+                                }
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

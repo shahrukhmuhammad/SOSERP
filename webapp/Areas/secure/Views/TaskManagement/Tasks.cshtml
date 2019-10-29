@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "Tasks";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+}
+
+<div class="form-Modal">
+    <div class="modal-content bg-transparent">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                My Tasks List
+                <span class="pull-right" style="font-size:16px;">
+                    <a href="javascript://" style="margin:0 10px;" title="Back" onclick="window.history.back()" class="@*btn*@btn-default"><i class="fa fa-angle-left fa-2x"></i> @*Back*@</a>
+                    <a href="javascript://" style="margin:0 10px;" title="Delete" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleTasks")', '.checkIt')" class="@*btn btn-danger*@ forceRedirect"><i class="fa fa-trash text-danger fa-2x"></i></a>
+                    <a href="~/Secure/TaskManagement/CreateTask" title="Add New" style="margin:0 10px;" class="@*btn btn-primary*@ addnew-task">
+                        <i class="fa fa-plus-circle fa-2x text-primary"></i>
+                    </a>
+                </span>
+            </h4>
+            @*<div class="col-md-12 no-padding">
+
+                </div>*@
+        </div>
+        <div class="modal-body">
+            @{Html.RenderAction("_TasksList", "TaskManagement");}
+
+        </div>
+        <div class="modal-footer text-right">
+            @*<span class="pull-right" style="font-size:16px;">
+                <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()"><i class="fa fa-angle-left fa-2x"></i></a>
+                <a href="javascript://" style="margin:0 10px;" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleTasks")', '.checkIt')" class="forceRedirect"><i class="fa fa-trash text-danger fa-2x"></i></a>
+                <a href="~/Secure/TaskManagement/CreateTask" style="margin:0 10px;" class="addnew-task">
+                    <i class="fa fa-plus-circle fa-2x text-primary"></i>
+                </a>
+            </span>*@
+            <div class="pull-right" style="font-size:16px;">
+                <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()"><i class="fa fa-angle-left fa-2x"></i></a>
+                <a href="javascript://" style="margin:0 10px;" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleTasks")', '.checkIt')" class="forceRedirect"><i class="fa fa-trash fa-2x text-danger"></i></a>
+                <a href="~/Secure/TaskManagement/CreateTask" style="margin:0 10px;" class="addnew-task">
+                    <i class="fa fa-plus-circle fa-2x text-primary"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updateTask-Modal" tabindex="-1" role="dialog" aria-labelledby="updateTask-Modal" data-backdrop="static" style="width:500px; margin:60px auto; height:auto;">
+    <div class="modal-dialog" role="document">
+
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/App/TasksManagement.js"></script>
+    <script>
+        $(function () {
+            filterDataTable("#tasks-dataTable", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], [0, 12]);
+        });
+
+        function FilterBy(e) {
+            $('#tasks-dataTable_9').val(e).trigger('keyup')
+            //$('#tasks-dataTable_9').focus(function () { $('tasks-dataTable_9').val(e) });
+            //$('#tasks-dataTable_9').bind('blur', function () {
+            //    $('#tasks-dataTable_9').val(e);
+            //});
+            //alert(e);
+        }
+    </script>
+}

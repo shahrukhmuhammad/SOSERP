@@ -1,0 +1,143 @@
+﻿@{
+    var querySlug = (ViewContext.RouteData.Values["slug"] == null ? "" : ViewContext.RouteData.Values["slug"].ToString());
+    var mainMenu = ViewBag.MainMenu as List<CMS.Entity.CmsPage>;
+    var rootFooterItems = mainMenu.Where(x => !x.ParentId.HasValue && x.Footer == true).OrderBy(x => x.PageOrder);
+}
+
+<!-- FOOTER -->
+<footer id="footer">
+    @Html.Raw(AppSettings.GetVal("website:Footer"))
+
+    <div class="container">
+        <div class="col-sm-6 col-sm-offset-6 text-right">
+            <ul class="pay-opt pull-right list-inline list-unstyled" style="margin-top:50px;">
+                <li>
+                    <a href="javascript://" title="Amazon">
+                        <img src="~/Content/Template/images/amz-icon.png" class="img-responsive" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript://" title="Paypal">
+                        <img src="~/Content/Template/images/paypal-icon.png" class="img-responsive" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript://" title="American Express">
+                        <img src="~/Content/Template/images/ax-icon.png" class="img-responsive" alt="">
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript://" title="Master Card">
+                        <img src="~/Content/Template/images/mst-icon.png" class="img-responsive" alt="">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="btmFooter" style="margin-top:0;">
+        <div class="container">
+            <div class="col-sm-7">
+                <p style="margin-top:15px;"><strong>@AppSettings.GetVal("website:Copyright")</strong></p>
+            </div>
+            <div class="col-sm-5 text-right">
+                <p>
+                    <span style="margin-right:65px;">A website by</span>
+                    <br />
+                    <strong>
+                        <img src="~/Content/Images/webnologo.jpg" style="width: 20px;height: 20px;margin-right: 5px;margin-top: -4px;" /><a href="http://www.webnomicstech.net/">Webnomics Technologies LLC</a>
+                    </strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+@*<div id="footer-Copyright" class="row well well-sm" style="margin-bottom:0;">
+    <div class="col-sm-6">
+        @AppSettings.GetVal("website:Copyright")
+    </div>
+    <div class="col-sm-6 text-right">
+        Base Application by <a href="http://www.webnomicstech.net" target="_blank"><strong>Webnomics Technologies</strong></a>
+    </div>
+</div>*@
+
+@*<footer class="well">
+    <div class="row no-padding">
+        <div class="col-md-3">
+            @Html.Action("CmsContent", new { id = "About Us" })
+        </div>
+        <div class="col-md-3">
+            <h5>OTHER LINKS</h5>
+            <div class="list-group">
+                @foreach (var footerItem in rootFooterItems)
+                {
+                    if (mainMenu.Any(x => x.ParentId == footerItem.Id))
+                    {
+                        var subItems = mainMenu.Where(x => x.ParentId == footerItem.Id && x.Footer == true).OrderBy(x => x.PageOrder);
+                        <a class="list-group-item @(querySlug == footerItem.Slug ? "active" : "")" href="@(footerItem.IsLink ? footerItem.LinkUrl : "/" + footerItem.Slug)" @(footerItem.LinkTarget ? "target=_blank" : "")><i class="fa fa-angle-right"></i> @footerItem.Name</a>
+                        if (subItems.Count() > 0)
+                        {
+                            <div class="list-group-item">
+                                <div class="list-group no-margin">
+                                    @foreach (var subItem in subItems)
+                                    {
+                                        <a class="list-group-item @(querySlug == subItem.Slug ? "active" : "")" href="@(subItem.IsLink ? subItem.LinkUrl : "/" + subItem.Slug)" @(subItem.LinkTarget ? "target=_blank" : "")><i class="fa fa-angle-right"></i> @subItem.Name</a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <a class="list-group-item @(querySlug == footerItem.Slug ? "active" : (string.IsNullOrEmpty(querySlug) && footerItem.Slug.ToLower() == "home" ? "active" : ""))" href="@(footerItem.IsLink ? footerItem.LinkUrl : "/" + footerItem.Slug)" @(footerItem.LinkTarget ? "target=_blank" : "")><i class="fa fa-angle-right"></i> @footerItem.Name</a>
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h5>GET IN TOUCH</h5>
+            <ul class="list-group">
+                <li class="list-group-item"><i class="fa fa-map"></i> @AppSettings.GetVal("contact:Address")</li>
+                <li class="list-group-item"><i class="fa fa-phone"></i> <a href="tel:@AppSettings.GetVal("contact:Phone")">@AppSettings.GetVal("contact:Phone")</a></li>
+                <li class="list-group-item"><i class="fa fa-envelope"></i> <a href="mailto:@AppSettings.GetVal("contact:Email")">@AppSettings.GetVal("contact:Email")</a></li>
+            </ul>
+            <h5>FOLLOW US</h5>
+            <div class="btn-group" role="group">
+                @{
+                    var socials = new[] { "Twitter", "Facebook", "LinkedIn", "Pinterest", "GooglePlus", "Youtube", "Tumblr", "Instagram", "Skype", "MeetMe", "DailyMotion", "MySpace" };
+                }
+                @foreach (var x in socials)
+                {
+                    var item = string.Format("social:{0}", x);
+                    if (!string.IsNullOrEmpty(AppSettings.GetVal(item)))
+                    {
+                        if (x == "LinkedIn")
+                        {
+                            <a class="btn btn-default" href="@AppSettings.GetVal(item)" target="_blank"><i class="fa fa-2x fa-@x.ToLower()"></i></a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-default" href="@AppSettings.GetVal(item)" target="_blank"><i class="fa fa-2x fa-@x.ToSpacedTitleCase().Replace(' ','-').ToLower()"></i></a>
+                        }
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Latest News</h3>
+                    <div class="btn-group btn-group-xs" role="group">
+                        <a href="~/News" class="btn btn-default"><i class="fa fa-list"></i> Show All</a>
+                    </div>
+                </div>
+                <div class="panel-body no-padding">
+                    <ul class="list-group cms-News no-margin">
+                        @Html.Action("CmsRecentNews")
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>*@

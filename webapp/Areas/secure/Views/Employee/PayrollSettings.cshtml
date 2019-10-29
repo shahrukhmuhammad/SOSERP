@@ -1,0 +1,161 @@
+﻿
+@{
+    ViewBag.Title = "Payroll Settings";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link href="~/Content/materialDesignSwitch.css" rel="stylesheet" />
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+    <style>
+        ul.stage-Nav > li.list-group > a.list-group-item::after {
+            left: 90%;
+        }
+
+        .cke_textarea_inline .container {
+            width: 965px;
+        }
+    </style>
+}
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> @TempData["ErrorMsg"]
+    </div>
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <div class="material-switch pull-right">
+                                        <input id="payrollSystem" class="payrollSystem" name="payroll:payrollSystem" type="checkbox" data-val="@AppSettings.GetVal("payroll:payrollSystem")" value="@AppSettings.GetVal("payroll:payrollSystem")" @(AppSettings.GetVal<bool>("payroll:payrollSystem") ? "checked" : "") />
+                                        <label for="payrollSystem" class="label-success payrollSystem"></label>
+                                    </div>
+                                    <h4 class="list-group-item-heading">Do you want to use internal payroll system? </h4>
+                                    <p class="list-group-item-text">
+                                        <a href="#">click here to connect your external account</a>
+                                    </p>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="material-switch pull-right">
+                                        <input id="payrollIsFLSAStandard" class="payrollIsFLSAStandard" name="payroll:IsFLSAStandard" type="checkbox" data-val="@AppSettings.GetVal("payroll:IsFLSAStandard")" value="@AppSettings.GetVal("payroll:IsFLSAStandard")" @(AppSettings.GetVal<bool>("payroll:IsFLSAStandard") ? "checked" : "") />
+                                        <label for="payrollIsFLSAStandard" class="label-success payrollIsFLSAStandard"></label>
+                                    </div>
+                                    <h4 class="list-group-item-heading">Do you want to apply FLSA standard overtime rates? <a href="javascript://" style="font-size:13px;" class="flsa-standard-rates">view details</a></h4>
+                                    <p class="list-group-item-text">
+                                        <a href="javascript://" class="overtime-rates">Setup you custom overtime rates</a>
+                                    </p>
+                                    <div class="row employeement-terms">
+                                        <div class="col-md-12">
+                                            <div class="panel panel-primary">
+                                                <div class="panel-body">
+                                                    <div class="row" style="margin-top:10px;">
+                                                        <div class="col-sm-12">
+                                                            <div class="panel panel-info">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <table class="table" align="center">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th class="text-left">Employee Type</th>
+                                                                                    <th class="text-center">Overtime Rates (percentage of regular rates)</th>
+                                                                                    <th class="text-center">Double time rates</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>Full Time - 40 Hour per week</td>
+                                                                                    <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollOvertime:FullTime")) %</td>
+                                                                                    <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollDoubleTime:FullTime")) %</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Part time - Less then 40 hours per week</td>
+                                                                                    <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollOvertime:PartTime")) %</td>
+                                                                                    <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollDoubleTime:PartTime")) %</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Varying weekly hours (no fixed hours)</td>
+                                                                                    <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollOvertime:VaryingWeekly")) %</td>
+                                                                                    <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollDoubleTime:VaryingWeekly")) %</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Contractor</td>
+                                                                                    <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollOvertime:Contractor")) %</td>
+                                                                                    <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollDoubleTime:Contractor")) %</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Per diem</td>
+                                                                                    <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollOvertime:Perdiem")) %</td>
+                                                                                    <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollDoubleTime:Perdiem")) %</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Freelance</td>
+                                                                                    <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollOvertime:Freelance")) %</td>
+                                                                                    <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollDoubleTime:Freelance")) %</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="material-switch pull-right">
+                                        <input id="printPaycheck" disabled class="printPaycheck" data-toggle="modal" data-target="#comingSoon-Modal" name="printPaycheck:printPaycheck" type="checkbox" data-val="@AppSettings.GetVal("printPaycheck:printPaycheck")" value="@AppSettings.GetVal("printPaycheck:printPaycheck")" />
+                                        <label for="printPaycheck" data-toggle="modal" data-target="#comingSoon-Modal" class="label-success printPaycheck"></label>
+                                    </div>
+                                    <h4 class="list-group-item-heading">Do you want to print pay checks? </h4>
+                                    <p class="list-group-item-text">
+                                        <a href="#">click here to setup your check template</a>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="overtimeRates-Modal" tabindex="-1" role="dialog" aria-labelledby="overtimeRates-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/App/EmployeeSettings.js"></script>
+}

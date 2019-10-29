@@ -1,0 +1,46 @@
+﻿@model IList<BaseApp.Entity.Insurance>
+
+<table id="insuranceRecord-Table" class="table table-condensed table-striped">
+    <tbody id="insurance-records"></tbody>
+    <tfoot>
+        <tr>
+            <th>Insurance Name</th>
+            <th>Insurance Type</th>
+            <th>Plan</th>
+            <th>Coverage</th>
+            <th>Premium</th>
+            <th>% Paid By Employee</th>
+            <th>Apply On</th>
+            <th>Action</th>
+        </tr>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td>@x.Title</td>
+                <td>@x.InsuranceType.ToSpacedTitleCase()</td>
+                <td>@x.InsurancePlan</td>
+                <td>@x.Coverage</td>
+                <td>@x.Premium</td>
+                <td>@x.PercentageByEmployee</td>
+                <td style="width:120px;">
+                    @*@(x.FullTime == true ? "Full Time, " : x.PartTime == true ? "Part Time, " : x.VaryingWeekly == true ? "Part Time, " : x.Contractor == true ? "Contractor, " : x.PerDm == true ? "Perdm, " : x.Freelance == true ? "Freelance" : "")*@
+                    @if (x.FullTime == true)
+                    { <span>Full Time</span> }
+                    @if (x.PartTime == true)
+                    { <span>, Part Time</span> }
+                    @if (x.VaryingWeekly == true)
+                    { <span>, Varying Weekly </span> }
+                    @if (x.Contractor == true)
+                    { <span>, Contractor </span> }
+                    @if (x.PerDm == true)
+                    { <span>, Perdm </span> }
+                    @if (x.Freelance == true)
+                    { <span>, Freelance </span> }
+                </td>
+                <td>
+                    <a href="javascript://" data-id="@x.Id" class="btn btn-xs btn-danger delInsuranceSection"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tfoot>
+</table>

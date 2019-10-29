@@ -1,0 +1,117 @@
+﻿@model Framework.Data.Wishlist
+
+@{
+    ViewBag.Title = "Wishlist";
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <link type="text/css" rel="stylesheet" href="~/Content/colorbox.css" />
+}
+
+@*@section pageTitle{<h1 class="pageTitle">Wishlist</h1>}*@
+
+@if (Request["Success"] != null)
+{
+    <div class="status status-success">Your request has been sent. We will contact you soon. Thank you!</div>
+}
+
+@if (Model != null && ViewBag.Items.Count > 0)
+{
+    <div class="center-block" style="max-width:700px; margin-top:20px;">
+        <table border="0" class="cart table" style="max-width:700px">
+    <tr>
+         @if (Request.RequestContext.RouteData.Values["id"] != null)
+         {
+        <td style="width:55px">Remove</td>
+         }
+        <td style="width:80px">Move to Cart</td>
+        <td colspan="2">Product</td>
+        @if (Request.IsAuthenticated)
+        {
+        <td style="width:65px">Price</td>
+        }
+        <td style="width:65px">Quantity</td>
+        @if (Request.IsAuthenticated)
+        {
+        <td style="width:65px">Total</td>
+        }
+    </tr>
+
+            @foreach (var a in ViewBag.Items)
+        {
+    <tr>
+        @if(Request.RequestContext.RouteData.Values["id"] != null)
+                {
+                <td>
+                    <a class="del" href="@Url.Action("Remove", "Wishlist", new { id = a.Id })" title="Remove"><span class="fa fa-remove"></span></a>
+                </td>
+                }
+        <td>
+            <a href="@Url.Action("Cart", "Wishlist", new{ id = a.Id })" class="del" title="Add to Cart"><span class="fa fa-plus "></span></a>
+        </td>
+        <td style="width:80px">
+            <a href="@Url.Action(string.Format("Product/{0}", a.ProductId), "Home")" title="@a.Title">
+                @if (a.ParentId == null || a.ParentId == 0)
+                        {
+                        <img src="@Url.Action("Img", "Cdn", new { id = a.ProductId, s = "c", t = "p", target = "Website" })" alt="@a.Title" />
+                        }
+                        else
+                        {
+                        <img src="@Url.Action("Img", "Cdn", new { id = a.ParentId, s = "c", t = "p", target = "Website" })" alt="@a.Title" />
+                        }
+            </a>
+        </td>
+        <td style="text-align:left">
+            <a href="@Url.Action(string.Format("Product/{0}", a.ProductId), "Home")">
+                @a.Title
+            </a>
+        </td>
+        @if (Request.IsAuthenticated)
+                {
+                <td>@a.Price.ToString("c")</td>
+                }
+        <td>@a.Quantity</td>
+        @if (Request.IsAuthenticated)
+                {
+                <td style="text-align:right">@((a.Quantity * a.Price).ToString("c"))</td>
+                }
+    </tr>
+        }
+        </table>
+    </div>
+    if (Request.RequestContext.RouteData.Values["id"] == null)
+    {
+        <div style="margin-top:10px">
+            <input type="button" class="formButton" value="Remove All" onclick="window.location='/Wishlist/Empty/All'" />
+            @if (Request["Success"] == null)
+            {
+                @*<input type="button" class="formButton" value="Send Quotation Request" />*@
+                @*<input type="button" class="formButton" value="Send Quotation Request" />*@
+                <a href="/Wishlist/QuotationRequest/@Model.IP" class="formButton" style="padding-top:7px;padding-bottom:6px ">Send Quotation Request</a>
+            }
+            @*<input type="button" class="formButton colorbox" value="Email A Friend" href="Wishlist/Email/@Model.IP" />*@
+        </div>
+    }
+    
+    @*<div style="margin-top:10px">
+        <strong>Sharing Url:</strong>
+        <a href="http://@HttpContext.Current.Request.Url.Host/Wishlist/@Model.IP">
+            http://@HttpContext.Current.Request.Url.Host/Wishlist/@Model.IP
+        </a>
+    </div>*@
+}
+else{
+    <span>No wishlist items.</span>
+}
+
+@section foot{
+    <script type="text/javascript" src="~/Scripts/jquery.colorbox-min.js"></script>
+    <script>
+        $(function () {
+            $('.cart tr:even').css('background', '#f8f8f8');
+
+            $('.colorbox').colorbox({ iframe: true, height: 460, width: 590 });
+        });
+    </script>
+}

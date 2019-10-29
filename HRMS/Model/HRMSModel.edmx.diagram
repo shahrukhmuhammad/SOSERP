@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a047b49a12014b9aa25ff3e36574ffb3" Name="Diagram1">
+        <EntityTypeShape EntityType="SOSHRMSModel.Center" Width="1.5" PointX="8" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="SOSHRMSModel.EmpArmyInformation" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SOSHRMSModel.EmpBankDetail" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SOSHRMSModel.EmpEmergencyContact" Width="1.5" PointX="3" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SOSHRMSModel.EmpFingerPrint" Width="1.5" PointX="3" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SOSHRMSModel.Employee" Width="1.5" PointX="0.75" PointY="18.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SOSHRMSModel.EmpPoliticalInformation" Width="1.5" PointX="3" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SOSHRMSModel.EmpReference" Width="1.5" PointX="3" PointY="26" IsExpanded="true" />
+        <EntityTypeShape EntityType="SOSHRMSModel.EmpRejoinHistory" Width="1.5" PointX="3" PointY="31.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SOSHRMSModel.EmpSalaryDetail" Width="1.5" PointX="3" PointY="34.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SOSHRMSModel.EmpTransferHistory" Width="1.5" PointX="3" PointY="39.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SOSHRMSModel.Project" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SOSHRMSModel.Region" Width="1.5" PointX="5.75" PointY="1.125" IsExpanded="true" />
+        <AssociationConnector Association="SOSHRMSModel.FK__Center__RegionId__1F98B2C1" ManuallyRouted="false" />
+        <AssociationConnector Association="SOSHRMSModel.FK__EmpArmyIn__Emplo__73BA3083" ManuallyRouted="false" />
+        <AssociationConnector Association="SOSHRMSModel.FK__EmpBankDe__Emplo__76969D2E" ManuallyRouted="false" />
+        <AssociationConnector Association="SOSHRMSModel.FK__EmpEmerge__Emplo__7C4F7684" ManuallyRouted="false" />
+        <AssociationConnector Association="SOSHRMSModel.FK__EmpFinger__Emplo__7D439ABD" ManuallyRouted="false" />
+        <AssociationConnector Association="SOSHRMSModel.FK__EmpPoliti__Emplo__07C12930" ManuallyRouted="false" />
+        <AssociationConnector Association="SOSHRMSModel.FK__EmpRefere__Emplo__01142BA1" ManuallyRouted="false" />
+        <AssociationConnector Association="SOSHRMSModel.FK__EmpRejoin__Emplo__04E4BC85" ManuallyRouted="false" />
+        <AssociationConnector Association="SOSHRMSModel.FK__EmpSalary__Emplo__05D8E0BE" ManuallyRouted="false" />
+        <AssociationConnector Association="SOSHRMSModel.FK__EmpTransf__Emplo__06CD04F7" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SOSHRMSModel.HRM_Vew_Employee" Width="1.5" PointX="5.375" PointY="7.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

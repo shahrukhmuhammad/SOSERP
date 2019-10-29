@@ -1,0 +1,20 @@
+﻿@model Framework.Data.CmsPage
+
+@{
+    ViewBag.Title = Model.BrowserTitle;
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_Layout.cshtml";
+}
+
+<div id="content">
+    <div class="container">
+
+
+        <ol class="breadcrumb">
+            <li><a href="~/" title="Home">Home</a></li>
+
+            <li>@Model.Name</li>
+
+        </ol>
+        @Html.Raw(HttpUtility.HtmlDecode(Model.Contents))
+        </div>
+    </div>

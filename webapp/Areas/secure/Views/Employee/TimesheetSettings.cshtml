@@ -1,0 +1,329 @@
+﻿
+@{
+    ViewBag.Title = "Timesheet Settings";
+}
+
+@section styles{
+    <link href="~/Content/materialDesignSwitch.css" rel="stylesheet" />
+}
+
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> @TempData["ErrorMsg"]
+    </div>
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+        </div>
+        <div class="modal-body">
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4 class="panel-title">General Settings</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="row form-group">
+                        <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>What is your week start day (for calculating overtime)?: </strong></label>
+                        <div class="col-sm-4">
+                            <select name="WeekStartDay" class="form-control">
+                                <option value="">Sunday</option>
+                                <option value="">Monday</option>
+                                <option value="">Tuesday</option>
+                                <option value="">Wednesday</option>
+                                <option value="">Thursday</option>
+                                <option value="">Friday</option>
+                                <option value="">Saturday</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>How often do you run payroll? </strong></label>
+                        <div class="col-sm-4">
+                            <select name="WeekStartDay" id="WeekStartDay" class="form-control">
+                                <option value="No predifined pay periods">No predifined pay periods</option>
+                                <option value="Weekly">Weekly</option>
+                                <option value="Bi-Weekly">Bi-Weekly (Every two weeks)</option>
+                                <option value="Semi-Monthly">Semi-Monthly (Twice a month)</option>
+                                <option value="Every-4-Weeks">Every 4 Weeks</option>
+                                <option value="Monthly">Monthly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group" id="payperiod-closing">
+                        <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>What was your last pay period closing date? </strong></label>
+                        <div class="col-sm-4">
+                            <input type="date" class="form-control input-sm" name="Employment.StartingDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                        </div>
+                    </div>
+                    <div id="firsthalf-closing-date">
+                        <div class="row form-group">
+                            <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>First half of the month payroll closes on what date? </strong></label>
+                            <div class="col-sm-4">
+                                <select name="FirsthalfClosingDate" id="FirsthalfClosingDate" class="form-control">
+                                    @for (int i = 1; i < 16; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>Last half of the month payroll closes on what date? </strong></label>
+                            <div class="col-sm-4">
+                                <select name="FirsthalfClosingDate" id="FirsthalfClosingDate" class="form-control">
+                                    @for (int i = 16; i < 31; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row form-group" id="closemonthly">
+                        <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>What date does your payroll close each month?</strong></label>
+                        <div class="col-sm-4">
+                            <select name="FirsthalfClosingDate" id="FirsthalfClosingDate" class="form-control">
+                                @for (int i = 1; i < 31; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="material-switch pull-right">
+                        <input id="timesheetApproval" class="timesheetApproval" name="timesheet:Approval" type="checkbox" data-val="@AppSettings.GetVal("timesheet:Approval")" value="@AppSettings.GetVal("timesheet:Approval")" @(AppSettings.GetVal<bool>("timesheet:Approval") ? "checked" : "") />
+                        <label for="timesheetApproval" class="label-success timesheetApproval"></label>
+                    </div>
+                    <h4 class="list-group-item-heading">Does Timesheet require manager's approval?</h4>
+                    <p class="list-group-item-text">
+                        Enable approval will require manager's approval for all timesheet submissions.
+                    </p>
+                </li>
+                <li class="list-group-item">
+                    <div class="material-switch pull-right">
+                        <input id="timesheetGeolocation" class="timesheetGeolocation" name="timesheet:Geolocation" type="checkbox" data-val="@AppSettings.GetVal("timesheet:Geolocation")" value="@AppSettings.GetVal("timesheet:Geolocation")" @(AppSettings.GetVal<bool>("timesheet:Geolocation") ? "checked" : "") />
+                        <label for="timesheetGeolocation" class="label-success timesheetGeolocation"></label>
+                    </div>
+                    <h4 class="list-group-item-heading">Do you track GeoLocations?</h4>
+                    <p class="list-group-item-text">
+                        Enable geolocations tracking will capture employees location and device data.
+                    </p>
+                </li>
+
+                <li class="list-group-item">
+                    <div class="material-switch pull-right">
+                        <input id="standardOvertimeRules" class="standardOvertimeRules" name="employee:OvertimeRulesIsCustom" type="checkbox" data-val="@AppSettings.GetVal("employee:OvertimeRules")" value="@AppSettings.GetVal("employee:OvertimeRules")" @(AppSettings.GetVal<bool>("employee:OvertimeRules") ? "checked" : "") />
+                        <label for="standardOvertimeRules" class="label-success standardOvertimeRules"></label>
+                    </div>
+                    <h4 class="list-group-item-heading">Do your company use standard overtime rules? <a href="javascript://" style="font-size:13px;">view details</a> </h4>
+                    <p class="list-group-item-text">
+                        Setup your customize overtime rules.
+                        <a href="javascript://" style="font-size:13px;" class="customize-overtimeSetup">Setup</a>
+                    </p>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-info">
+                                <div class="panel-body">
+                                    @if (AppSettings.GetVal("employee:OvertimeRules") == "false" && (AppSettings.GetVal("employee:OvertimeMethod") != "" || AppSettings.GetVal("employee:OvertimeWeekly") != "" || AppSettings.GetVal("employee:OvertimeDaily") != ""))
+                                    {
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>Overtime Calculation Method: </strong></label>
+                                            <div class="col-sm-4">
+                                                <label class="horizontal-label"> @AppSettings.GetVal("employee:OvertimeMethod")</label>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong> Regular Hours Per Week</strong></label>
+                                            <div class="col-sm-2">
+                                                <div class="input-group input-group-sm">
+                                                    <label class="horizontal-label"> @AppSettings.GetVal("employee:OvertimeWeekly")</label>
+                                                    <div class="input-group-addon">hour(s)</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong> Regular Hours Per Day</strong></label>
+                                            <div class="col-sm-2">
+                                                <div class="input-group input-group-sm">
+                                                    <label class="horizontal-label"> @AppSettings.GetVal("employee:OvertimeDaily")</label>
+                                                    <div class="input-group-addon">hour(s)</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong> Also calculate daily double time after</strong></label>
+                                            <div class="col-sm-2">
+                                                <div class="input-group input-group-sm">
+                                                    <label class="horizontal-label"> @AppSettings.GetVal("employee:DailyDoubleTime")</label>
+                                                    <div class="input-group-addon">hour(s)</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else if (AppSettings.GetVal("employee:OvertimeRules") == "true")
+                                    {
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>Overtime Calculation Method: </strong></label>
+                                            <div class="col-sm-4">
+                                                <label class="horizontal-label"> Standard value</label>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong> Regular Hours Per Week</strong></label>
+                                            <div class="col-sm-2">
+                                                <div class="input-group input-group-sm">
+                                                    <label class="horizontal-label"> Standard value</label>
+                                                    <div class="input-group-addon">hour(s)</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong> Regular Hours Per Day</strong></label>
+                                            <div class="col-sm-2">
+                                                <div class="input-group input-group-sm">
+                                                    <label class="horizontal-label"> Standard value</label>
+                                                    <div class="input-group-addon">hour(s)</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong> Also calculate daily double time after</strong></label>
+                                            <div class="col-sm-2">
+                                                <div class="input-group input-group-sm">
+                                                    <label class="horizontal-label"> Standard value</label>
+                                                    <div class="input-group-addon">hour(s)</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="material-switch pull-right">
+                        <input id="timesheetPaidTimeoff" class="timesheetPaidTimeoff" name="timesheet:PaidTimeoff" type="checkbox" data-val="@AppSettings.GetVal("timesheet:PaidTimeoff")" value="@AppSettings.GetVal("timesheet:PaidTimeoff")" @(AppSettings.GetVal<bool>("timesheet:PaidTimeoff") ? "checked" : "") />
+                        <label for="timesheetPaidTimeoff" class="label-success timesheetPaidTimeoff"></label>
+                    </div>
+                    <h4 class="list-group-item-heading">Do you offer Paid Time off? </h4>
+                    <p class="list-group-item-text">
+                        Setup your Paid Time off.
+                    </p>
+
+                    <div class="row" style="margin-top:10px; display:none;" id="paid-time-off">
+                        <div class="col-sm-12">
+                            <div class="panel panel-info">
+                                <div class="pull-right">
+                                    <a href="javascript://" style="margin:0 10px;" class="ptoRecord-Add"><i class="fa fa-plus-circle text-primary fa-2x"></i></a>
+                                </div>
+                                <div id="PtoCodes-Container">
+                                    @{ Html.RenderAction("_AllPtoCodes", "Employee"); }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            @*<div class="row">
+                <div class="col-sm-6">
+                    <form class="panel panel-info frm" method="post" action="~/Secure/Employee/SaveSettings">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="returnUrl" value="/Secure/Employee/TimesheetSettings" />
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Overtime Rules</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-sm-offset-2 horizontal-label">Overtime Calculation Method</label>
+                                <div class="col-sm-4">
+                                    <select name="employee:OvertimeMethod" class="form-control input-sm" required>
+                                        <option value="">-Select-</option>
+                                        <option value="Daily" @(AppSettings.GetVal("employee:OvertimeMethod") == "Daily" ? "selected" : "")>Daily</option>
+                                        <option value="Weekly" @(AppSettings.GetVal("employee:OvertimeMethod") == "Weekly" ? "selected" : "")>Weekly</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-sm-offset-2 horizontal-label">Regular Hours Per Week</label>
+                                <div class="col-sm-4">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control input-sm numericMask" name="employee:OvertimeWeekly" value="@AppSettings.GetVal("employee:OvertimeWeekly")" required />
+                                        <div class="input-group-addon">hour(s)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-sm-offset-2 horizontal-label">Regular Hours Per Day</label>
+                                <div class="col-sm-4">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control input-sm numericMask" name="employee:OvertimeDaily" value="@AppSettings.GetVal("employee:OvertimeDaily")" required />
+                                        <div class="input-group-addon">hour(s)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer text-right">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Paid Time Off Settings</h4>
+                            <div class="btn-group btn-group-xs" role="group">
+                                <a href="javascript://" class="btn btn-primary ptoRecord-Add"><i class="fa fa-plus"></i> Add New</a>
+                            </div>
+                        </div>
+                        <div id="PtoCodes-Container">
+                            @{ Html.RenderAction("_AllPtoCodes", "Employee"); }
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ptoAssignees-Modal" tabindex="-1" role="dialog" aria-labelledby="ptoAssignees-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+<div class="modal fade" id="overtimeRules-Modal" tabindex="-1" role="dialog" aria-labelledby="overtimeRules-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/App/EmployeeSettings.js"></script>
+}

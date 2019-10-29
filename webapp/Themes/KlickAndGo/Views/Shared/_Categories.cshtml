@@ -1,0 +1,1015 @@
+﻿@model IEnumerable<Ecommerce.Entity.Category>
+@*<script type="text/javascript" src="http://www.thisisitstores.co.uk/js/lib/jquery/jquery-1.10.2.min.js"></script>*@
+<style>
+    li:hover .wsmenu-submenu
+    {
+        display: block;
+    }
+</style>
+
+<style>
+       /* ============================================ *
+
+
+
+    * MAIN HEADER NAVIATION
+
+
+
+    * ============================================ */
+
+
+
+       #main-nav-container
+       {
+           /*float: left;*/
+           width: 100%;
+           background: #014c99;
+       }
+
+       #main-nav
+       {
+           clear: both;
+           position: relative;
+           max-width: 1260px;
+           margin: 0 auto;
+       }
+
+       @@media only screen and (min-width: 980px)
+       {
+           #header-nav
+           {
+               display: inline;
+               float: left;
+               width: 100%;
+               padding: 0;
+           }
+       }
+
+       @@media only screen and (max-width: 1439px) and (min-width: 1260px)
+       {
+           #main-nav
+           {
+               max-width: 85%;
+           }
+       }
+       /* ============================================ *
+
+
+
+    * NAVIGATION DROP DOWN MENU - DESKTOP
+
+
+
+    * ============================================ */
+
+
+
+       .nav-primary li.menu-active > ul
+       {
+           display: block;
+       }
+
+       .nav-8
+       {
+           Background-color: #dc0600;
+       }
+
+           .nav-8:hover
+           {
+               background-color: #a50400 !important;
+           }
+
+       @@media only screen and (max-width: 979px)
+       {
+           .nav-8 .level1.view-all a
+           {
+               background-color: #cb0500 !important;
+           }
+       }
+
+       @@media only screen and (min-width: 979px)
+       {
+           #nav
+           {
+               position: relative;
+               z-index: 500;
+               width: 100%;
+               height: 100%;
+               margin-right: 2%;
+               /*background: #014c99;*/
+           }
+
+               #nav a
+               {
+                   text-decoration: none;
+               }
+
+           ul.nav-primary
+           {
+               display: table;
+               float: left;
+               width: 100%;
+               height: 56px;
+               /*background: #014c99;
+               border-left: 1px solid #0757a8;*/
+           }
+
+           #nav ul a.top-level-link
+           {
+               display: none;
+           }
+           /* TOP LEVEL NAVIGATION (i.e. Home & Lifestyle)*/
+
+
+
+           #nav ul.nav-primary li.level0
+           {
+               display: table-cell;
+               height: 56px;
+               padding: 0;
+               /*border-right: 1px solid #0757a8;*/
+           }
+               /* DIFFERENT BACKGROUND COLOUR FOR LAST TAB
+
+        #nav ul.nav-primary li.level0:last-child {
+
+           border-right: none;
+           background: #C00;
+           border-radius: 0 3px 0 0;
+
+       }
+           #nav ul.nav-primary li.level0:last-child:hover {
+
+           border-right: none;
+           background: #B00;
+           border-radius: 0 3px 0 0;
+
+       } */
+
+               #nav ul.nav-primary li.level0 a.level0
+               {
+                   display: table;
+                   float: left;
+                   width: 100%;
+                   height: 56px;
+                   padding: 0 15px;
+                   font-family: 'Open Sans', sans-serif;
+                   font-size: 14px;
+                   color: #FFF;
+                   font-weight: bold;
+                   line-height: 16px;
+                   text-align: center;
+               }
+
+                   #nav ul.nav-primary li.level0 a.level0 span
+                   {
+                       display: table-cell;
+                       vertical-align: middle;
+                   }
+
+               #nav ul.nav-primary li.level0:hover
+               {
+                   background: #014184;
+               }
+
+               #nav ul.nav-primary li.level0.parent:hover:after
+               {
+                   content: '';
+                   position: relative;
+                   z-index: 900;
+                   top: 52px;
+                   display: block;
+                   width: 100%;
+                   height: 4px;
+                   margin: 0 auto;
+                   background: #06C;
+               }
+           /* 1ST LEVEL NAVIGATION (i.e. Housewares)*/
+
+
+
+           #nav ul.nav-primary li ul.level0, #nav ul.nav-primary li.level1
+           {
+               display: none;
+           }
+
+           #nav ul.nav-primary li:hover ul.level0
+           {
+               position: absolute;
+               z-index: 1200;
+               left: 50%;
+               right: 0;
+               display: block;
+               background: #FFF;
+               width: 100%;
+               max-width: 1260px;
+               margin-left: -50%;
+               margin-top: 56px;
+               padding: 0;
+           }
+
+               #nav ul.nav-primary li:hover ul.level0 div.menu-wrapper
+               {
+                   float: left;
+                   width: 58%;
+                   margin: 0;
+                   padding: 20px;
+                   padding-bottom: 0;
+                   -webkit-column-count: 3;
+                   -moz-column-count: 3;
+                   -ms-column-count: 3;
+                   -o-column-count: 3;
+                   column-count: 3;
+                   columns: 3;
+               }
+
+           #nav ul.nav-primary li:hover ul.level1 div.menu-wrapper, #nav ul.nav-primary li:hover ul.level2 div.menu-wrapper
+           {
+               float: left;
+               width: 100%;
+               padding: 0;
+               padding-bottom: 20px;
+               -webkit-column-count: 1;
+               -moz-column-count: 1;
+               -ms-column-count: 1;
+               -o-column-count: 1;
+               column-count: 1;
+               columns: 1;
+           }
+
+           #nav ul.nav-primary li:hover ul.level2 div.menu-wrapper
+           {
+               padding: 0;
+               padding-bottom: 0;
+           }
+
+           #nav ul.nav-primary li:hover ul.level0 li.level1
+           {
+               display: inline-block;
+           }
+
+           #nav ul.nav-primary li:hover ul.level0 li.view-all, #nav ul.nav-primary li:hover ul.level0 li.level2 ul li.view-all
+           {
+               display: none;
+           }
+
+           #nav ul.nav-primary li:hover ul.level0 li ul li.view-all
+           {
+               display: inline-block;
+           }
+           /* 2ND LEVEL NAVIGATION (i.e. Tableware) */
+
+
+
+           #nav ul.nav-primary li:hover ul.level0 li a
+           {
+               float: left;
+               width: 100%;
+               height: auto;
+               padding: 0;
+               padding-bottom: 10px;
+               font-family: 'Open Sans', sans-serif;
+               font-size: 14px;
+               color: #06C;
+               font-weight: bold;
+               text-align: left;
+           }
+
+               #nav ul.nav-primary li:hover ul.level0 li a:hover
+               {
+                   color: #014c99;
+               }
+
+               #nav ul.nav-primary li:hover ul.level0 li a.has-children
+               {
+                   padding-bottom: 10px;
+               }
+
+           #nav ul.nav-primary li:hover ul.level1 li
+           {
+               display: inline-block;
+               width: 100%;
+           }
+
+               #nav ul.nav-primary li:hover ul.level1 li a
+               {
+                   float: left;
+                   width: 100%;
+                   font-size: 13px;
+                   color: #5b5645;
+                   font-weight: normal;
+                   padding: 5px 0 5px 15px;
+                   background: url(http://www.thisisitstores.co.uk/skin/frontend/tii/default/images/arw-rgt-blue.png) center left no-repeat;
+               }
+
+                   #nav ul.nav-primary li:hover ul.level1 li a:hover
+                   {
+                       color: #06C;
+                   }
+           /* TOP NAVIGATION CUSTOM CONTENT - TOP LEVEL CAT. ONLY */
+
+
+
+           #nav ul.nav-primary li.level0.parent #top-level-custom-content
+           {
+               display: none;
+           }
+
+           #nav ul.nav-primary li.level0.parent:hover #top-level-custom-content
+           {
+               float: right;
+               display: block;
+               padding: 20px 20px 0 20px;
+               width: 42%;
+               right: 0;
+               top: 0;
+           }
+
+           #top-level-custom-content .title
+           {
+               float: left;
+               width: 55%;
+               padding: 10px 0;
+               font-size: 16px;
+               font-weight: bold;
+               color: #06C;
+           }
+
+           #top-level-custom-content img
+           {
+               float: left;
+               width: 40%;
+               margin-right: 5%;
+               margin-bottom: 5px;
+           }
+
+           #nav ul.nav-primary li.level0 #top-level-custom-content ul li a
+           {
+               float: left;
+               width: 32%;
+               margin: 10px 2% 0 0;
+               padding: 12px 10px;
+               border-bottom: none;
+               border-radius: 2px;
+               background-position: 95% 50%;
+               background: #06C;
+               font-family: 'Open Sans', sans-serif;
+               font-size: 14px;
+               color: #FFF;
+               font-weight: bold;
+               text-transform: capitalize;
+               text-align: center;
+           }
+
+           #nav ul.nav-primary li.level0 #top-level-custom-content ul li:first-child a
+           {
+               clear: left;
+           }
+
+           #nav ul.nav-primary li.level0 #top-level-custom-content ul li:last-child a
+           {
+               margin-right: 0;
+           }
+
+           #nav ul.nav-primary li.level0 #top-level-custom-content ul li a:hover
+           {
+               background: #014c99;
+           }
+
+           #nav ul.nav-primary li.level0 #top-level-custom-content ul li:first-child a
+           {
+               margin-top: 10px;
+           }
+
+           #nav ul.nav-primary li.level0 #top-level-custom-content ul li:last-child a
+           {
+               margin-bottom: 20px;
+           }
+
+           #nav ul.nav-primary li.level0 #top-level-custom-content ul li a.special
+           {
+               background: #cb1730;
+           }
+
+               #nav ul.nav-primary li.level0 #top-level-custom-content ul li a.special:hover
+               {
+                   background: #e92b47;
+               }
+
+           #nav ul.nav-primary li.level0 #top-level-custom-content ul li a.new
+           {
+               background: #8eb621;
+           }
+
+               #nav ul.nav-primary li.level0 #top-level-custom-content ul li a.new:hover
+               {
+                   background: #a1c638;
+               }
+
+           #nav ul.nav-primary li.level0 #top-level-custom-content ul li a.best
+           {
+               background: #2889b6;
+           }
+
+               #nav ul.nav-primary li.level0 #top-level-custom-content ul li a.best:hover
+               {
+                   background: #3c9bc7;
+               }
+
+           #nav ul.nav-primary li.hide
+           {
+               display: none;
+               background: #ff0024;
+           }
+       }
+
+
+
+       /* ============================================ *
+
+
+
+    * NAVIGATION DROP DOWN MENU - TABLET / MOBILE
+
+
+
+    * ============================================ */
+
+
+
+       @@media only screen and (max-width: 979px)
+       {
+           .nav-primary li
+           {
+               position: relative;
+           }
+
+               .nav-primary .menu-active > ul.level0, .nav-primary li.level0 li.sub-menu-active > ul, .nav-primary .menu-active > ul.level1, .nav-primary li.level1 li.sub-menu-active > ul, .nav-primary .menu-active > ul.level2, .nav-primary li.level2 li.sub-menu-active > ul
+               {
+                   display: block;
+               }
+
+               .nav-primary li.level0 li
+               {
+                   float: left;
+                   width: 100%;
+                   padding: 0;
+               }
+
+               .nav-primary li.level0 a
+               {
+                   float: left;
+                   width: 100%;
+                   padding: 15px 10px;
+                   border-bottom: 1px solid #014184;
+                   background: #014c99;
+                   color: #FFF;
+               }
+
+               .nav-primary li.level0:last-child a
+               {
+                   border-bottom: none;
+               }
+
+               .nav-primary li.level0 a span
+               {
+                   float: left;
+                   width: 100%;
+                   padding-right: 10px;
+                   background: url(http://www.thisisitstores.co.uk/skin/frontend/tii/default/images/arw-rgt-white.png) center right no-repeat;
+               }
+
+               .nav-primary li.level0 a.has-children span
+               {
+                   background: url(http://www.thisisitstores.co.uk/skin/frontend/tii/default/images/icon-plus-white.png) center right no-repeat;
+               }
+
+               .nav-primary li.menu-active > a, .nav-primary li.sub-menu-active > a
+               {
+                   background: #043b74;
+               }
+
+               .nav-primary li.parent.sub-menu-active > a span, .nav-primary li.parent.menu-active > a span
+               {
+                   float: left;
+                   width: 100%;
+                   padding-right: 10px;
+                   background: url(http://www.thisisitstores.co.uk/skin/frontend/tii/default/images/icon-minus-white.png) center right no-repeat;
+               }
+
+               .nav-primary li.level1 a
+               {
+                   padding-left: 20px;
+                   border-bottom: 1px solid #cacac1;
+                   background: #d8d8d1;
+                   color: #5b5645;
+               }
+
+                   .nav-primary li.level1 a span
+                   {
+                       background: url(http://www.thisisitstores.co.uk/skin/frontend/tii/default/images/arw-rgt-blue.png) center right no-repeat;
+                   }
+
+                   .nav-primary li.level1 a.has-children span
+                   {
+                       background: url(http://www.thisisitstores.co.uk/skin/frontend/tii/default/images/icon-plus-grey.png) center right no-repeat;
+                   }
+
+               .nav-primary li.level1.menu-active > a, .nav-primary li.level1.sub-menu-active > a
+               {
+                   background: #cacac1;
+               }
+
+                   .nav-primary li.level1.sub-menu-active > a span, .nav-primary li.level1.menu-active > a span
+                   {
+                       float: left;
+                       width: 100%;
+                       padding-right: 10px;
+                       background: url(http://www.thisisitstores.co.uk/skin/frontend/tii/default/images/icon-minus-grey.png) center right no-repeat;
+                   }
+
+           .nav-primary ul.level2
+           {
+               border-left: 1px solid #d8d8d1;
+           }
+
+           .nav-primary li.level2 a
+           {
+               padding-left: 30px;
+               border-bottom: 1px solid #d8d8d1;
+               background: #eaeae5;
+           }
+           /* HIDE DESKTOP ELEMENTS FROM MOBILE */
+
+
+
+           #nav ul a.top-level-link, .nav-primary li.level0 ul, #top-level-custom-content
+           {
+               display: none;
+           }
+       }
+</style>
+
+<header id="header" class="page-header-wrapper">
+    <div id="main-nav-container">
+        <div id="main-nav" style="float:left; padding-top:8px;">
+            <div id="header-nav" class="skip-content">
+                <nav id="nav">
+                    <ul class="nav-primary navbar-left" style="">
+                        @{ int i = 1;}
+                        @foreach (var c in Model.Where(m => m.ParentId == null).Take(7).OrderBy(m => m.CategoryId))
+                        {
+                            var subItems = Model.Where(x => x.ParentId == c.CategoryId);
+                            <li class="level0 nav-@i parent" id="">
+                                <a href="~/category/@(c.Title.ToString())" class="level0 has-children"><span>@c.Title</span></a>
+                                @if (subItems.Count() >= 0)
+                                {
+                                    <ul class="level0" style="display: none;">
+                                        <div class="menu-wrapper">
+                                            @{ int b = 1;}
+                                            @foreach (var e in subItems)
+                                            {
+                                                var subsubItems = Model.Where(x => x.ParentId == e.CategoryId);
+                                                <li class="level1 view-all"><a class="level1" href="~/category/@(e.Title.ToString())"><span>@e.Title</span></a></li>
+                                                <li class="level1 nav-@i-@b parent" id="">
+                                                    <a href="~/category/@(e.Title.ToString())" class="level1 has-children"><span>@e.Title</span>
+                                                    </a>
+                                                    @if (subsubItems.Count() >= 0)
+                                                    {
+                                                        <ul class="level1" style="display: none;">
+                                                            <div class="menu-wrapper">
+                                                                @foreach (var t in subsubItems)
+                                                                {
+                                                                    <li class="level2 view-all">
+                                                                        <a class="level2" href="~/category/@(t.Title.ToString())">
+                                                                            <span>@t.Title</span>
+                                                                        </a>
+                                                                    </li>
+                                                                }
+                                                            </div>
+                                                        </ul>
+                                                    }
+                                                </li>
+                                                {
+                                                    b++;
+                                                }
+                                            }
+                                        </div>
+                                        <div id="top-level-custom-content">
+                                            <img src="@Url.Action("Img","Cdn",new{id=c.CategoryId,s="s",t="c", w=400, h=400})" style="width:100px; height:100px;"><div class="title">@c.Title</div>@c.Description
+                                            <ul style="display: none;">
+                                                <li><a href="javascript://" class="special"><span>Offers</span></a></li>
+                                                <li><a href="javascript://" class="new"><span>What's New</span></a></li>
+                                                <li><a href="javascript://" class="best"><span>Best Sellers</span></a></li>
+                                            </ul>
+                                        </div>
+                                    </ul>
+                                }
+                            </li>
+                            {
+                                i++;
+                            }
+                        }
+                        <li class="level0 nav-8 last parent" id="">
+                            <a href="javascript://" class="level0 has-children"><span>Promotions</span></a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <script>
+                    jQuery(document).ready(function ($) {
+                        if (($('body').width()) < 979) { miniMobile(); }
+                        $(window).resize(function () { miniMobile(); });
+                        function miniMobile() {
+                            $screensize = $('body').width();
+                            if ($screensize < 979) {
+                                //open shop by category
+                                setTimeout(function menuCheck(e) {
+                                    var $curr = $('.sidebar').find('dl').attr('class');
+                                    if ($curr) {
+                                        $('.sidebar').find('dl').toggleClass('no-display');
+                                    }
+                                }, 500);
+                                //Open Dropdown navigation used for editing
+                                //$('#nav').parent('#header-nav').addClass('skip-active');
+
+                                //enable first level Dropdown
+                                $('#nav').find('.level0').addClass('menu-active');
+                                //remove top level menu titles (not needed)
+                                $('a.level0').addClass("here").css("display", "none");
+                                //Alter heading names to agree with top level
+                                $temp = $('#nav').find('.level1').filter('.view-all').each(function () {
+                                    $(this).html($(this).html().split("View All").join(""));
+                                });
+                                //hide all lower level navigation
+                                $hiding = $('#nav').find('.level1').filter('.view-all');
+                                $hiding.siblings().find('a').css("display", "none");
+                                //style options
+                                $hiding.children().css({ 'background-color': '#004d99', 'color': '#fff', 'padding-left': '20px' });
+                                $hiding.children().children().css({ 'background': "url(/skin/frontend/tii/default/images/arw-rgt-white.png) center right no-repeat" });
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+        <div style="float:right">
+            <ul class="hidden-xs nav navbar-nav navbar-right">
+                <li class="dropdown-grid no-open-arrow" >
+                    @*<div class="cart-icon" style="background-color: white">
+                        <i class="fa fa-heart" style="color:black"></i>
+                    </div>*@
+                    <a data-toggle="dropdown" href="javascript:;" class="dropdown-toggle" aria-expanded="true">
+                        @*@{Html.RenderAction("MiniWishList", "WishList");}*@
+                    </a>
+                    <div class="dropdown-grid-wrapper">
+                        <div class="dropdown-menu no-padding animated fadeInDown col-xs-12 col-sm-5 col-md-4 col-lg-3 animation-done" role="menu">
+                            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                            {
+                                <div class="menu_c acc_menu">
+                                    <div class="menu_title clearfix">
+                                        <h4> WishList</h4>
+                                        <a href="~/account/logout" class="sign_up">Log out</a>
+                                    </div>
+                                    <div class="login_frm">
+                                        <p class="text-center">Welcome! @User.Identity.Name</p>
+                                        <div class="remember">
+                                            <p>
+                                             <a href="@Url.Action("Index", "WishList")" class="signin_btn btn_c">My WishList</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="menu_c acc_menu">
+                                    <div class="menu_title clearfix">
+                                        <h4>WishList</h4>
+                                    </div>
+                                    <div class="login_frm">
+                                        <p class="text-center">Login or SignUp to create your Wishlist Now!</p>
+                                        <div class="remember">
+                                            <a href="@Url.Action("Login", "Account")" class="signin_btn btn_c">Login</a>
+                                            <a href="/account/register" class="signin_btn btn_c">Create Account</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown-grid no-open-arrow ">
+                    <a data-toggle="dropdown" href="javascript:void(0);" class="dropdown-toggle cart-popup" aria-expanded="true">
+                        @*@{Html.RenderAction("MiniCart", "Cart");}*@
+                    </a>
+                    @*@{Html.RenderAction("_Cart", "Cart"); }*@
+                </li>
+                <li class="dropdown-grid no-open-arrow">
+                    <a data-toggle="dropdown" href="javascript:;" class="dropdown-toggle" aria-expanded="true">
+                        <span class="icons"><i class="fa fa-user"></i></span>
+                    </a>
+                    <div class="dropdown-grid-wrapper">
+                        <div class="dropdown-menu no-padding animated fadeInDown col-xs-12 col-sm-5 col-md-4 col-lg-3 animation-done" role="menu">
+                            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                            {
+                                <div class="menu_c acc_menu">
+                                    <div class="menu_title clearfix">
+                                        <h4>My Account</h4>
+                                        <a href="~/account/logout" class="sign_up">Log out</a>
+                                    </div>
+                                    <div class="login_frm">
+                                        <p class="text-center">Welcome! @User.Identity.Name</p>
+                                        <div class="remember">
+
+                                            <a href="~/account/myaccount" class="signin_btn btn_c">My Profile</a><p>
+                                                <a href="@Url.Action("MyOrders", "Account")" class="signin_btn btn_c">My Orders</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="menu_c acc_menu">
+                                    <div class="menu_title clearfix">
+                                        <h4>My Account</h4>
+                                    </div>
+                                    <div class="login_frm">
+                                        <p class="text-center">Welcome!</p>
+                                        <div class="remember">
+                                            <a href="@Url.Action("Login", "Account")" class="signin_btn btn_c">Login</a>
+                                            <a href="/account/register" class="signin_btn btn_c">Create Account</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown-grid no-open-arrow">
+                    <div class="fixed-search">
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+        @*<div class="clearfix"></div>*@
+    </div>
+</header>
+
+@*<nav class="wsmenu" style="background-color:#215d9f;">
+        <ul class="mobile-sub mega_menu wsmenu-list" style="background-color:#215d9f;">
+
+            @foreach (var c in Model.Where(m => m.ParentId == null).Take(4).OrderBy(m => m.CategoryId))
+            {
+                var subItems = Model.Where(x => x.ParentId == c.CategoryId);
+
+
+                <li>
+                    <span class="wsmenu-click">
+                        <i class="wsmenu-arrow fa fa-angle-down"></i>
+                    </span>
+                    <a style="background-color:#215d9f; color:white" class="twin" href="~/category/@(c.Title.ToString().UrlFriendly())" @(subItems.Count() > 0 ? "data-toggle=dropdown class=dropdown-toggle aria-haspopup=true" : "") title="@c.Title">
+                        @c.Title
+                        <span class="arrow" style="color:white"></span>
+                    </a>
+                    @if (subItems.Count() >= 0)
+                    {
+                        <ul class="wsmenu-submenu" style="background-color:white; width:650px; ">
+
+                            <li style="float:right"><img src="~/Content/Images/colorbox/Promo1.jpg" height="150" width="150" /><span>@c.Description</span> </li>
+                            @foreach (var e in subItems)
+                        {
+
+                                <li style="float:left; min-width:100px"><a data-delay="500" href="~/category/@(e.Title.ToString().UrlFriendly())">@e.Title</a></li>
+                            }
+                        </ul>
+                    }
+                </li>
+            }
+
+            <li><a href="#Promotions">Promotions</a></li>
+        </ul>
+    </nav>*@
+
+@section foot{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.dropdown-toggle').dropdown();
+        });
+    </script>
+}
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        if (document.documentElement.clientWidth > 979) {
+            $('#overlay').hide();
+            var timeout;
+            $('#nav').hover(
+                function () {
+                    timeout = setTimeout(function () {
+                        timeout = null;
+                        $('#overlay').fadeIn();
+                        $('#nav ul.nav-primary li ul').show();
+                    }, 600);
+                },
+            function () {
+                if (timeout) {
+                    window.clearTimeout(timeout);
+                    timeoutId = null;
+                }
+                else {
+                    $('#overlay').fadeOut();
+                    $('#nav ul.nav-primary li ul').hide();
+                }
+            });
+        };
+    });
+
+
+
+</script>
+
+@*<li class="">
+        <span class="wsmenu-click">
+        <i class="wsmenu-arrow fa fa-angle-down"></i>
+        </span><a href="/pages/home-and-garden" class="twin">Home and Garden<span class="arrow"></span></a>
+
+        <div class="megamenu clearfix">
+            <ul class="wsmenu-sub-list">
+
+
+                <li class="col-lg-3 col-md-3 col-sm-3 mb20d link-list">
+                    <span class="wsmenu-click02"><i class="wsmenu-arrow fa fa-angle-down"></i></span><h5><a href="#">Homeware</a></h5>
+
+                    <ul style="">
+
+
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/stands-racks-and-hooks">Stands, racks and hooks</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/clothes-organisers">Clothes organisers</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/home-decorations">Home decorations</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/hot-water-bottles">Hot water bottles</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/greetings-cards">Greetings cards</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/photo-frames">Photo frames</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/wall-shelves">Wall shelves</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/door-knobs">Door knobs</a>
+
+
+                        </li>
+                    </ul>
+                </li>
+
+
+
+
+                <li class="col-lg-3 col-md-3 col-sm-3 mb20d link-list">
+                    <span class="wsmenu-click02"><i class="wsmenu-arrow fa fa-angle-down"></i></span><h5><a href="/pages/kitchen">Kitchen</a></h5>
+
+                    <ul style="">
+
+
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/disposable-cups-and-glasses">Disposable cups and glasses</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/storage-and-organisation">Storage and organisation</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/cutlery-and-utensils">Cutlery and utensils</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/patterned-crockery">Patterned crockery</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/affordable-white-crockery-and-tableware">White crockery</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/tea-and-coffee">Tea and coffee</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/tableware">Tableware</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/cookware">Cookware</a>
+
+
+                        </li>
+                    </ul>
+                </li>
+
+
+
+
+                <li class="col-lg-3 col-md-3 col-sm-3 mb20d link-list">
+                    <span class="wsmenu-click02"><i class="wsmenu-arrow fa fa-angle-down"></i></span><h5><a href="/pages/garden">Garden</a></h5>
+
+                    <ul style="">
+
+
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/picnic-hampers-and-turkish-beach-towels">Picnic hampers and towels</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/garden-storage-and-tools">Garden storage and tools</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/firepits-and-torches">Firepits and torches</a>
+
+
+                        </li>
+                    </ul>
+                </li>
+
+
+
+
+                <li class="col-lg-3 col-md-3 col-sm-3 mb20d link-list">
+                    <span class="wsmenu-click02"><i class="wsmenu-arrow fa fa-angle-down"></i></span><h5><a href="/pages/bathroom">Bathroom</a></h5>
+
+                    <ul style="">
+
+
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/bathroom-accessories">Bathroom accessories</a>
+
+
+
+                        </li>
+                        <li class="col-lg-12 col-md-12 col-sm-12 link-list">
+                            <a href="/collections/beauty-and-shaving">Beauty and shaving</a>
+
+
+                        </li>
+                    </ul>
+                </li>
+
+
+
+            </ul>
+        </div>
+
+    </li>*@

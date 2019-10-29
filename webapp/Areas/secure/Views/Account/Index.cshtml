@@ -1,0 +1,188 @@
+﻿@model BaseApp.Entity.AppUser
+@{
+    ViewBag.Title = Model.FullName;
+    var updatedUser = ViewBag.UpdatedUser as BaseApp.Entity.AppUser;
+    var createdUser = ViewBag.CreatedUser as BaseApp.Entity.AppUser;
+}
+
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <img class="img-responsive img-circle img-centre" src="~/Content/Uploads/Dp/@(Model.Id).jpg" style="max-height:140px;" onerror="this.onerror = null; this.src = '/Content/Images/user.png';">
+        <h4>Welcome, @Model.FullName</h4>
+        <h3>Control, protect and secure your account, all in one place</h3>
+        <p>My Account gives you quick access to settings and tools that let you safeguard your data, protect your privacy and decide how your information can make @AppSettings.GetVal("app:Title") services work better for you.</p>
+    </div>
+    <div class="col-md-6">
+        @*<div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Account/ChangePassword" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-lock text-info"></i> Sign-in & Security <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Control your password and account-access settings.
+                </div>
+                <a href="~/Secure/Account/ChangePassword" class="btn btn-link">Change Password</a>
+                <table class="table table-striped no-margin">
+                    <tr>
+                        <td class="text-right">Code</td>
+                        <th>@Model.Code</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Username</td>
+                        <th>@Model.Username</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Status</td>
+                        <th>
+                            @if (Model.Status == BaseApp.Entity.AppUserStatus.Active)
+                            {
+                                <label class="label label-success">Active</label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">Suspended</label>
+                            }
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Last Log-in</td>
+                        <th>@Model.LastLogin</th>
+                    </tr>
+                </table>
+            </div>
+        </div>*@
+
+        <div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Account/Edit" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-info text-info"></i> Personal info <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Manage your personal information and the data we use to personalise your experience.
+                </div>
+                <a href="~/Secure/Account/Edit" class="btn btn-link">Edit Profile</a>
+                <table class="table table-striped no-margin">
+                    <tr>
+                        <td class="text-right">First Name</td>
+                        <th>@Model.FirstName</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Middle Name</td>
+                        <th>@Model.MiddleName</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Last Name</td>
+                        <th>@Model.LastName</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Gender</td>
+                        <th>@Model.Gender.ToSpacedTitleCase()</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Date of Birth</td>
+                        <th>@Model.DateOfBirth.ToShortDateString()</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Email</td>
+                        <th>@Model.Email</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Home Phone</td>
+                        <th>@Model.HomePhone</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Work Phone</td>
+                        <th>@Model.WorkPhone</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Updated By</td>
+                        <th>@updatedUser.FullName on @Model.UpdatedOn</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Created By</td>
+                        <th>@createdUser.FullName on @Model.CreatedOn</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        @*<div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Account/Edit" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-key text-info"></i> Access Control <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    @Model.Role.Description
+                </div>
+                <table class="table table-striped no-margin">
+                    <tr>
+                        <td class="text-right">Role Code</td>
+                        <th>@Model.Role.Code</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Role Title</td>
+                        <th>@Model.Role.Title</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Permissions</td>
+                        <th>
+                            @if (Model.Role.Permissions == "All")
+                            {
+                                <span>All</span>
+                            }
+                            else
+                            {
+                                <ul class="no-padding no-margin" style="list-style:none;">
+                                    @foreach (var p in Model.Role.PermissionsList)
+                                    {
+                                        <li><i class="fa fa-check text-success"></i> @p.ToSpacedTitleCase()</li>
+                                    }
+                                </ul>
+                            }
+                        </th>
+                    </tr>
+                </table>
+            </div>
+        </div>*@
+
+        <div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Account/Edit" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-map text-info"></i> Postal information <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Manage your postal information and the data we use to personalise your experience.
+                </div>
+                <a href="~/Secure/Account/Edit" class="btn btn-link">Edit</a>
+                <table class="table table-striped no-margin">
+                    <tr>
+                        <td class="text-right">Address Line 1</td>
+                        <th>@Model.AddressLine1</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Address Line 2</td>
+                        <th>@Model.AddressLine2</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Zip Code</td>
+                        <th>@Model.ZipCode</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">City</td>
+                        <th>@Model.City</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">State</td>
+                        <th>@Model.State</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Country</td>
+                        <th>@Html.CountriesListWithCode().Where(x => x.Value == Model.Country).FirstOrDefault().Text</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

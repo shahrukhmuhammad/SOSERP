@@ -1,0 +1,123 @@
+﻿@model  IList<Ecommerce.Entity.Product>
+
+@{
+    ViewBag.Title = "Add Products";
+}
+
+@section styles{
+    <link href="~/Content/App/Ecommerce.css" rel="stylesheet" />
+}
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+            </div>
+        </div>
+        <div class="row" style="margin:15px 0">
+            <div class="col-md-12">
+                <ul class="nav nav-pills">
+                    <li><a href="javascript://" id="btn_featured" class="btn btn-default forceRedirect" style="padding:6px 20px;"> Featured</a></li>
+                    <li><a href="javascript://" id="btn_topSeller" class="btn btn-default forceRedirect" style="padding:6px 20px;"> Top Sellers</a></li>
+                    <li><a href="javascript://" id="btn_Website" class="btn btn-default forceRedirect" style="padding:6px 20px;"> Publish on Website</a></li>
+                    <li><a href="javascript://" id="btn_Facebook" class="btn btn-default forceRedirect" style="padding:6px 20px;"> Publish on Facebook</a></li>
+                    <li><a href="javascript://" id="btn_Tradeonly" class="btn btn-default forceRedirect" style="padding:6px 20px;"> Publish on Tradeonly</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table id="catalog-dataTable" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="" id="dataTable_0" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Sku" id="dataTable_1" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_2" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Category" id="dataTable_3" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Cost Price" id="dataTable_4" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Sale Price" id="dataTable_5" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Promotion" id="dataTable_6" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Publish Status" id="dataTable_7" /></th>
+                            @*<th class="text-center" width="100px;">Action</th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model as IList<Product>)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="checkIt" value="@x.ProductId" />
+                                </td>
+                                <td>
+                                    <img id="img-Preview" src="~/Content/Uploads/Ecommerce/p_@(x.ProductId).jpg" class="img-responsive grid-img" onerror="this.onerror = null; this.src = '/Content/Images/img.png';" />
+                                </td>
+                                <td>
+                                    @x.Sku
+                                </td>
+                                <td>
+                                    @x.Title
+                                </td>
+                                <td>
+                                    @x.CategoryTitle
+                                </td>
+                                <td>
+                                    @AppSettings.GetVal("CurrencySymbol") @x.PurchasePrice
+                                </td>
+                                <td>
+                                    @AppSettings.GetVal("CurrencySymbol") @x.SalePrice
+                                </td>
+                                <td>
+                                    @{ if (x.IsFeatured == "Yes")
+                                        { <span class="label label-success">Featured: Yes</span>}
+                                        else if (x.IsFeatured == "No")
+                                        { <span class="label label-danger">Featured: No</span>}
+                                        <br />
+                                        if (x.IsBestSelling == "Yes")
+                                        { <span class="label label-success">Top Seller: Yes</span>}
+                                        else if (x.IsBestSelling == "No")
+                                        { <span class="label label-danger">Top Seller: No</span>}
+                                    }
+                                </td>
+                                <td>
+                                    @{ if (x.IsPublished == "Yes")
+                                        { <span class="label label-success">Published On Website: Yes</span>}
+                                        else if (x.IsPublished == "No")
+                                        { <span class="label label-danger">Published On Website: No</span>}
+                                        <br />
+                                        if (x.IsPublishedFacebook == "Yes")
+                                        { <span class="label label-success">Published On Facebook: Yes</span>}
+                                        else if (x.IsPublishedFacebook == "No")
+                                        { <span class="label label-danger">Published On Facebook: No</span>}
+                                        <br />
+                                        if (x.IsPublishedTradeOnly == "Yes")
+                                        { <span class="label label-success">Published On TradeOnly: Yes</span>}
+                                        else if (x.IsPublishedTradeOnly == "No")
+                                        { <span class="label label-danger">Published On TradeOnly: No</span>}
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#catalog-dataTable", [2,3,4,5,6,7,], [0,1,2,8]);
+            //getProducts("#products-dataTable");
+        });
+    </script>
+    <script src="~/Scripts/App/Ecommerce.js"></script>
+}
+

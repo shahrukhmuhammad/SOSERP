@@ -1,0 +1,773 @@
+﻿
+@{
+    ViewBag.Title = "Employees";
+    var employees = AppModule.GetById("Employees");
+}
+
+@section styles{
+<link href="~/Content/materialDesignSwitch.css" rel="stylesheet" />
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+    <style>
+        ul.stage-Nav > li.list-group > a.list-group-item::after {
+            left: 90%;
+        }
+
+        .cke_textarea_inline .container {
+            width: 965px;
+        }
+    </style>
+}
+
+<ul class="nav nav-tabs nav-justified stage-Nav">
+    <li class="list-group">
+        <a id="carousel-Step1" href="javascript://" class="list-group-item active">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">1. Configurations</h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step2" href="javascript://" class="list-group-item">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">
+                2. Timesheet Settings
+            </h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step3" href="javascript://" class="list-group-item">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">
+                3. Payroll Settings
+            </h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step4" href="javascript://" class="list-group-item last">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">4. Review</h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+</ul>
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> @TempData["ErrorMsg"]
+    </div>
+}
+
+<div id="div-Carousel" class="carousel slide" data-ride="carousel" data-interval="false">
+    <form id="frm" class="carousel-inner" role="listbox" action="~/secure/setting/Employees" method="post" enctype="multipart/form-data">
+    <div class="carousel-inner form" role="listbox">
+
+
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="/Secure/Setting/Employees" />
+        <div class="item @(Request["tab"] == null ? "active" : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Configurations</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="window.history.back()" data-placement="bottom" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                            <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 2);" data-placement="bottom" class="btn btn-success">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="pull-right">
+                                    <input data-id="Model-Status" type="checkbox" class="switch" value="@(employees.Status ? "true" : "false")" @(employees.Status ? "checked" : "") />
+                                    <input id="Model-Status" name="employeeStatus" type="hidden" value="@(employees.Status ? "true" : "false")" />
+                                </span>
+                                <h4 class="list-group-item-heading">Activate / Deactivate Module</h4>
+                                <p class="list-group-item-text">Choose whether this module should be accessable and workable or not.</p>
+                            </li>
+                        </ul>
+
+                        <div class="form-group">
+                            <label>Message to show</label>
+                            <textarea id="Message" name="employeeMessage">@Html.Raw(employees.Message)</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                            <a href="javascript://" class="btn btn-success" onclick="carouselFormValidate(this, '#div-Carousel', 2);">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "loc" ? "active" : "") : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Employee Settings</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 3);" data-placement="bottom" class="btn btn-success review-btn">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-primary">
+                                    <h4 class="panel-heading">Timesheet Settings</h4>
+                                    <div class="panel-body">
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">General Settings</h4>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="row form-group">
+                                                    <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>What is your week start day (for calculating overtime)?: </strong></label>
+                                                    <div class="col-sm-4">
+                                                        <select name="WeekStartDay" class="form-control">
+                                                            <option value="">Sunday</option>
+                                                            <option value="">Monday</option>
+                                                            <option value="">Tuesday</option>
+                                                            <option value="">Wednesday</option>
+                                                            <option value="">Thursday</option>
+                                                            <option value="">Friday</option>
+                                                            <option value="">Saturday</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>How often do you run payroll? </strong></label>
+                                                    <div class="col-sm-4">
+                                                        <select name="WeekStartDay" id="WeekStartDay" class="form-control">
+                                                            <option value="No predifined pay periods">No predifined pay periods</option>
+                                                            <option value="Weekly">Weekly</option>
+                                                            <option value="Bi-Weekly">Bi-Weekly (Every two weeks)</option>
+                                                            <option value="Semi-Monthly">Semi-Monthly (Twice a month)</option>
+                                                            <option value="Every-4-Weeks">Every 4 Weeks</option>
+                                                            <option value="Monthly">Monthly</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group" id="payperiod-closing">
+                                                    <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>What was your last pay period closing date? </strong></label>
+                                                    <div class="col-sm-4">
+                                                        <input type="date" class="form-control input-sm" name="Employment.StartingDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                                                    </div>
+                                                </div>
+                                                <div id="firsthalf-closing-date">
+                                                    <div class="row form-group">
+                                                        <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>First half of the month payroll closes on what date? </strong></label>
+                                                        <div class="col-sm-4">
+                                                            <select name="FirsthalfClosingDate" id="FirsthalfClosingDate" class="form-control">
+                                                                @for (int i = 1; i < 16; i++)
+                                                                {
+                                                                <option value="@i">@i</option>
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>Last half of the month payroll closes on what date? </strong></label>
+                                                        <div class="col-sm-4">
+                                                            <select name="FirsthalfClosingDate" id="FirsthalfClosingDate" class="form-control">
+                                                                @for (int i = 16; i < 31; i++)
+                                                                {
+                                                                <option value="@i">@i</option>
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row form-group" id="closemonthly">
+                                                    <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>What date does your payroll close each month?</strong></label>
+                                                    <div class="col-sm-4">
+                                                        <select name="FirsthalfClosingDate" id="FirsthalfClosingDate" class="form-control">
+                                                            @for (int i = 1; i < 31; i++)
+                                                            {
+                                                            <option value="@i">@i</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <div class="material-switch pull-right">
+                                                    <input id="timesheetApproval" class="timesheetApproval" name="timesheet:Approval" type="checkbox" data-val="@AppSettings.GetVal("timesheet:Approval")" value="@AppSettings.GetVal("timesheet:Approval")" @(AppSettings.GetVal<bool>("timesheet:Approval") ? "checked" : "") />
+                                                    <label for="timesheetApproval" class="label-success timesheetApproval"></label>
+                                                </div>
+                                                <h4 class="list-group-item-heading">@*Does Timesheet require manager's approval?*@ Does Time Sheet Submission require manager’s approval? </h4>
+                                                <p class="list-group-item-text">
+                                                    Enable approval will require manager's approval for     .
+                                                </p>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="material-switch pull-right">
+                                                    <input id="timesheetGeolocation" class="timesheetGeolocation" name="timesheet:Geolocation" type="checkbox" data-val="@AppSettings.GetVal("timesheet:Geolocation")" value="@AppSettings.GetVal("timesheet:Geolocation")" @(AppSettings.GetVal<bool>("timesheet:Geolocation") ? "checked" : "") />
+                                                    <label for="timesheetGeolocation" class="label-success timesheetGeolocation"></label>
+                                                </div>
+                                                <h4 class="list-group-item-heading">Do you track GeoLocations?</h4>
+                                                <p class="list-group-item-text">
+                                                    Enable geolocations tracking will capture employees location and device data.
+                                                </p>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="material-switch pull-right">
+                                                    <input id="standardOvertimeRules" class="standardOvertimeRules" name="employee:OvertimeRulesIsCustom" type="checkbox" data-val="@AppSettings.GetVal("employee:OvertimeRules")" value="@AppSettings.GetVal("employee:OvertimeRules")" @(AppSettings.GetVal<bool>("employee:OvertimeRules") ? "checked" : "") />
+                                                    <label for="standardOvertimeRules" class="label-success standardOvertimeRules"></label>
+                                                </div>
+                                                <h4 class="list-group-item-heading">Do your company use standard overtime rules? <a href="javascript://" style="font-size:13px;">view details</a> </h4>
+                                                <p class="list-group-item-text">
+                                                    Setup your customize overtime rules.
+                                                    <a href="javascript://" style="font-size:13px;" class="customize-overtimeSetup">Setup</a>
+                                                </p>
+
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="panel panel-info">
+                                                            <div class="panel-body">
+                                                                @if (AppSettings.GetVal("employee:OvertimeRules") == "false" && (AppSettings.GetVal("employee:OvertimeMethod") != "" || AppSettings.GetVal("employee:OvertimeWeekly") != "" || AppSettings.GetVal("employee:OvertimeDaily") != ""))
+                                                                {
+                                                                <div class="row form-group">
+                                                                    <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>Overtime Calculation Method: </strong></label>
+                                                                    <div class="col-sm-4">
+                                                                        <label class="horizontal-label"> @AppSettings.GetVal("employee:OvertimeMethod")</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong> Regular Hours Per Week</strong></label>
+                                                                    <div class="col-sm-2">
+                                                                        <div class="input-group input-group-sm">
+                                                                            <label class="horizontal-label"> @AppSettings.GetVal("employee:OvertimeWeekly")</label>
+                                                                            <div class="input-group-addon">hour(s)</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong> Regular Hours Per Day</strong></label>
+                                                                    <div class="col-sm-2">
+                                                                        <div class="input-group input-group-sm">
+                                                                            <label class="horizontal-label"> @AppSettings.GetVal("employee:OvertimeDaily")</label>
+                                                                            <div class="input-group-addon">hour(s)</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong> Also calculate daily double time after</strong></label>
+                                                                    <div class="col-sm-2">
+                                                                        <div class="input-group input-group-sm">
+                                                                            <label class="horizontal-label"> @AppSettings.GetVal("employee:DailyDoubleTime")</label>
+                                                                            <div class="input-group-addon">hour(s)</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                }
+                                                                else if (AppSettings.GetVal("employee:OvertimeRules") == "true")
+                                                                {
+                                                                <div class="row form-group">
+                                                                    <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong>Overtime Calculation Method: </strong></label>
+                                                                    <div class="col-sm-4">
+                                                                        <label class="horizontal-label"> Standard value</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong> Regular Hours Per Week</strong></label>
+                                                                    <div class="col-sm-2">
+                                                                        <div class="input-group input-group-sm">
+                                                                            <label class="horizontal-label"> Standard value</label>
+                                                                            <div class="input-group-addon">hour(s)</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong> Regular Hours Per Day</strong></label>
+                                                                    <div class="col-sm-2">
+                                                                        <div class="input-group input-group-sm">
+                                                                            <label class="horizontal-label"> Standard value</label>
+                                                                            <div class="input-group-addon">hour(s)</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <label class="col-sm-4 col-sm-offset-2 horizontal-label"><strong> Also calculate daily double time after</strong></label>
+                                                                    <div class="col-sm-2">
+                                                                        <div class="input-group input-group-sm">
+                                                                            <label class="horizontal-label"> Standard value</label>
+                                                                            <div class="input-group-addon">hour(s)</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                }
+                                                                @*else if (AppSettings.GetVal("employee:OvertimeMethod") == "" || AppSettings.GetVal("employee:OvertimeMethod") == null || AppSettings.GetVal("employee:OvertimeWeekly") == "" || AppSettings.GetVal("employee:OvertimeWeekly") == null || AppSettings.GetVal("employee:OvertimeDaily") == "" || AppSettings.GetVal("employee:OvertimeDaily") == null)
+                                                                    {
+                                                                        <div class="media-heading">
+                                                                            <a href="javascript://" style="font-size:13px;" class="customize-overtimeSetup">
+                                                                                Click here to Setup your customize overtime rules.
+                                                                            </a>
+                                                                        </div>
+                                                                    }*@
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </li>
+                                        </ul>
+
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <div class="material-switch pull-right">
+                                                    <input id="timesheetPaidTimeoff" class="timesheetPaidTimeoff" name="timesheet:PaidTimeoff" type="checkbox" data-val="@AppSettings.GetVal("timesheet:PaidTimeoff")" value="@AppSettings.GetVal("timesheet:PaidTimeoff")" @(AppSettings.GetVal<bool>("timesheet:PaidTimeoff") ? "checked" : "") />
+                                                    <label for="timesheetPaidTimeoff" class="label-success timesheetPaidTimeoff"></label>
+                                                </div>
+                                                <h4 class="list-group-item-heading">Do you offer Paid Time off? </h4>
+                                                <p class="list-group-item-text">
+                                                    Setup your Paid Time off.
+                                                </p>
+
+                                                <div class="row" style="margin-top:10px; display:none;" id="paid-time-off">
+                                                    <div class="col-sm-12">
+                                                        <div class="panel panel-info">
+                                                            <div class="panel-body">
+                                                                <div class="btn-group btn-group-xs pull-right" role="group">
+                                                                    <a href="javascript://" class="ptoRecord-Add"><i class="fa fa-plus-circle fa-2x text-primary"></i> @*Add New*@</a>
+                                                                </div>
+                                                                <div id="PtoCodes-Container">
+                                                                    @{ Html.RenderAction("_AllPtoCodes", "Employee"); }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-primary">
+                                    <h4 class="panel-heading">Certificate Settings</h4>
+                                    <div class="panel-body">
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <div class="material-switch pull-right">
+                                                    <input id="employeeCertificates" class="employeeCertificates" name="employee:Certificates" type="checkbox" data-val="@AppSettings.GetVal("employee:Certificates")" value="@AppSettings.GetVal("employee:Certificates")" @(AppSettings.GetVal<bool>("employee:Certificates") ? "checked" : "") />
+                                                    <label for="employeeCertificates" class="label-success employeeCertificates"></label>
+                                                </div>
+                                                <h4 class="list-group-item-heading"> Are there any compulsory certificate requirements? </h4>
+                                                <div class="row" id="custom-employeeCertificates-fields" style="display:none">
+                                                    <div class="col-md-12">
+                                                        <div class="panel panel-primary">
+                                                            <div class="panel-body">
+                                                                <div class="form-group">
+                                                                    <div class="pull-right">
+                                                                        <button type="submit" style="display:none; margin:0 12px; border:none; padding: 0; background: transparent;" class="pull-left btn btn-default employeeCertificates-Save"><i class="fa fa-check-circle fa-2x text-success"></i></button>
+                                                                        <a href="javascript://" class="pull-left employeeCertificates-Add"><i class="fa fa-plus-circle fa-2x text-primary"></i></a>
+                                                                    </div>
+                                                                    <div class="clearfix"></div>
+                                                                    <div id="employeeCertificates-Container" style="margin-top:10px;">
+                                                                        @{ Html.RenderAction("_Certificates", "Setting"); }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul class="list-group">
+
+                            <li class="list-group-item">
+                                <div class="material-switch pull-right">
+                                    <input id="employeeCustomDataFields" class="timesheetPaidTimeoff" name="employee:CustomDataFields" type="checkbox" data-val="@AppSettings.GetVal("employee:CustomDataFields")" value="@AppSettings.GetVal("employee:CustomDataFields")" @(AppSettings.GetVal<bool>("employee:CustomDataFields") ? "checked" : "") />
+                                    <label for="employeeCustomDataFields" class="label-success employeeCustomDataFields"></label>
+                                </div>
+                                <h4 class="list-group-item-heading">Do you want to Enable Custom Data Fields? </h4>
+                                <p class="list-group-item-text">
+                                    Setup your Custom Data Fields.
+                                </p>
+                                <div class="row" id="custom-data-fields" style="display:none">
+                                    <div class="col-md-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-body">
+                                                @{Html.RenderAction("_EmployeeDataFields", "Employee");}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="javascript://" class="btn btn-success review-btn" onclick="carouselFormValidate(this, '#div-Carousel', 3);">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "loc" ? "active" : "" ) : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Employee Settings</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 3)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 4);" data-placement="bottom" class="btn btn-success review-btn">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-primary">
+                                    <h4 class="panel-heading">Payroll Settings</h4>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-info">
+                                                    <div class="panel-body">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item">
+                                                                <div class="material-switch pull-right">
+                                                                    <input id="payrollSystem" class="payrollSystem" name="payroll:payrollSystem" type="checkbox" data-val="@AppSettings.GetVal("payroll:payrollSystem")" value="@AppSettings.GetVal("payroll:payrollSystem")" @(AppSettings.GetVal<bool>("payroll:payrollSystem") ? "checked" : "") />
+                                                                    <label for="payrollSystem" class="label-success payrollSystem"></label>
+                                                                </div>
+                                                                <h4 class="list-group-item-heading">Do you want to use internal payroll system? </h4>
+                                                                <p class="list-group-item-text">
+                                                                    <a href="#">click here to connect your external account</a>
+                                                                </p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <div class="material-switch pull-right">
+                                                                    <input id="payrollIsFLSAStandard" class="payrollIsFLSAStandard" name="payroll:IsFLSAStandard" type="checkbox" data-val="@AppSettings.GetVal("payroll:IsFLSAStandard")" value="@AppSettings.GetVal("payroll:IsFLSAStandard")" @(AppSettings.GetVal<bool>("payroll:IsFLSAStandard") ? "checked" : "") />
+                                                                    <label for="payrollIsFLSAStandard" class="label-success payrollIsFLSAStandard"></label>
+                                                                </div>
+                                                                <h4 class="list-group-item-heading">Do you want to apply FLSA standard overtime rates? <a href="javascript://" style="font-size:13px;" class="flsa-standard-rates">view details</a></h4>
+                                                                <p class="list-group-item-text">
+                                                                    <a href="javascript://" class="overtime-rates">Setup you custom overtime rates</a>
+                                                                </p>
+                                                                <div class="row employeement-terms">
+                                                                    <div class="col-md-12">
+                                                                        <div class="panel panel-info">
+                                                                            <div class="row">
+                                                                                <div class="col-md-12">
+                                                                                    <table class="table" align="center">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th class="text-left">Employee Type</th>
+                                                                                                <th class="text-center">Overtime Rates (percentage of regular rates)</th>
+                                                                                                <th class="text-center">Double time rates</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td>Full Time - 40 Hour per week</td>
+                                                                                                <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollOvertime:FullTime")) %</td>
+                                                                                                <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollDoubleTime:FullTime")) %</td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>Part time - Less then 40 hours per week</td>
+                                                                                                <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollOvertime:PartTime")) %</td>
+                                                                                                <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollDoubleTime:PartTime")) %</td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>Varying weekly hours (no fixed hours)</td>
+                                                                                                <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollOvertime:VaryingWeekly")) %</td>
+                                                                                                <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollDoubleTime:VaryingWeekly")) %</td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>Contractor</td>
+                                                                                                <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollOvertime:Contractor")) %</td>
+                                                                                                <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollDoubleTime:Contractor")) %</td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>Per diem</td>
+                                                                                                <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollOvertime:Perdiem")) %</td>
+                                                                                                <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollDoubleTime:Perdiem")) %</td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>Freelance</td>
+                                                                                                <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollOvertime:Freelance")) %</td>
+                                                                                                <td class="text-center">@(AppSettings.GetVal("payroll:IsFLSAStandard") == "false" ? "st-rate" : AppSettings.GetVal("payrollDoubleTime:Freelance")) %</td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+                                                                            @*<div class="btn-group btn-group-xs pull-right" role="group">
+                                                                                    <a href="javascript://" class="btn btn-primary ptoRecord-Add"><i class="fa fa-plus"></i> Add New</a>
+                                                                                </div>
+                                                                                <div id="PtoCodes-Container">
+                                                                                    @{ Html.RenderAction("_AllPtoCodes", "Employee"); }
+                                                                                </div>*@
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <div class="material-switch pull-right">
+                                                                    <input id="employeeInsurance" class="employeeInsurance" name="employee:Insurance" type="checkbox" data-val="@AppSettings.GetVal("employee:Insurance")" value="@AppSettings.GetVal("employee:Insurance")" @(AppSettings.GetVal<bool>("employee:Insurance") ? "checked" : "") />
+                                                                    <label for="employeeInsurance" class="label-success employeeInsurance"></label>
+                                                                </div>
+                                                                <h4 class="list-group-item-heading"> Do your company offer employee’s comprehensive insurance? </h4>
+                                                                <div class="row" id="custom-insurance-fields" style="display:none">
+                                                                    <div class="col-md-12">
+                                                                        <div class="panel panel-primary">
+                                                                            <div class="panel-body">
+                                                                                @*<form method="post" action="~/secure/setting/addinsurance">*@
+                                                                                    <div class="form-group">
+                                                                                        <div class="pull-right">
+                                                                                            <button type="submit" style="display:none; margin:0 12px; border:none; padding: 0; background: transparent;" class="pull-left btn btn-default insurance-Save"><i class="fa fa-check-circle fa-2x text-success"></i></button>
+                                                                                            <a href="javascript://" class="pull-left insurance-Add"><i class="fa fa-plus-circle fa-2x text-primary"></i></a>
+                                                                                        </div>
+                                                                                        <div class="clearfix"></div>
+                                                                                        <div id="Insurance-Container" style="margin-top:10px;">
+                                                                                            @{ Html.RenderAction("_EmployeeInsurance", "Employee"); }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @*</form>*@
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+
+                                                            <li class="list-group-item">
+                                                                <div class="material-switch pull-right">
+                                                                    <input id="employeeDeductTaxes" class="employeeDeductTaxes" name="employee:DeductTaxes" type="checkbox" data-val="@AppSettings.GetVal("employee:DeductTaxes")" value="@AppSettings.GetVal("employee:DeductTaxes")" @(AppSettings.GetVal<bool>("employee:DeductTaxes") ? "checked" : "") />
+                                                                    <label for="employeeDeductTaxes" class="label-success employeeDeductTaxes"></label>
+                                                                </div>
+                                                                <h4 class="list-group-item-heading"> Payroll Tax Rules? </h4>
+                                                                <div class="row" id="custom-taxes-fields" style="display:none">
+                                                                    <div class="col-md-12">
+                                                                        <div class="panel panel-primary">
+                                                                            <div class="panel-body">
+                                                                                <div class="form-group">
+                                                                                    <div class="pull-right">
+                                                                                        <button type="submit" style="display:none; margin:0 12px; border:none; padding: 0; background: transparent;" class="pull-left btn btn-default taxType-Save"><i class="fa fa-check-circle fa-2x text-success"></i></button>
+                                                                                        <a href="javascript://" class="pull-left taxType-Add"><i class="fa fa-plus-circle fa-2x text-primary"></i></a>
+                                                                                    </div>
+                                                                                    <div class="clearfix"></div>
+                                                                                    <div id="TaxTypes-Container" style="margin-top:10px;">
+                                                                                        @{ Html.RenderAction("_TaxTypes", "Setting"); }
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+
+                                                            <li class="list-group-item">
+                                                                <div class="material-switch pull-right">
+                                                                    <input id="employeeBenefitsType" class="employeeBenefitsType" name="employee:BenefitsType" type="checkbox" data-val="@AppSettings.GetVal("employee:BenefitsType")" value="@AppSettings.GetVal("employee:BenefitsType")" @(AppSettings.GetVal<bool>("employee:BenefitsType") ? "checked" : "") />
+                                                                    <label for="employeeBenefitsType" class="label-success employeeBenefitsType"></label>
+                                                                </div>
+                                                                <h4 class="list-group-item-heading"> Do you offer employee benefits? </h4>
+                                                                <div class="row" id="custom-benefitstype-fields" style="display:none">
+                                                                    <div class="col-md-12">
+                                                                        <div class="panel panel-primary">
+                                                                            <div class="panel-body">
+                                                                                <div class="form-group">
+                                                                                    <div class="pull-right">
+                                                                                        <button type="submit" style="display:none; margin:0 12px; border:none; padding: 0; background: transparent;" class="pull-left btn btn-default benefitstype-Save"><i class="fa fa-check-circle fa-2x text-success"></i></button>
+                                                                                        <a href="javascript://" class="pull-left benefitstype-Add"><i class="fa fa-plus-circle fa-2x text-primary"></i></a>
+                                                                                    </div>
+                                                                                    <div class="clearfix"></div>
+                                                                                    <div id="BenefitsType-Container" style="margin-top:10px;">
+                                                                                        @{ Html.RenderAction("_BenefitsType", "Setting"); }
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+
+                                                            <li class="list-group-item">
+                                                                <div class="material-switch pull-right">
+                                                                    <input id="employeeBonus" class="employeeBonus" name="employee:Bonus" type="checkbox" data-val="@AppSettings.GetVal("employee:Bonus")" value="@AppSettings.GetVal("employee:Bonus")" @(AppSettings.GetVal<bool>("employee:Bonus") ? "checked" : "") />
+                                                                    <label for="employeeBonus" class="label-success employeeBonus"></label>
+                                                                </div>
+                                                                <h4 class="list-group-item-heading"> Do you offer employee Bonus? </h4>
+                                                                <div class="row" id="custom-employeeBonus-fields" style="display:none">
+                                                                    <div class="col-md-12">
+                                                                        <div class="panel panel-primary">
+                                                                            <div class="panel-body">
+                                                                                <div class="form-group">
+                                                                                    <div class="pull-right">
+                                                                                        <button type="submit" style="display:none; margin:0 12px; border:none; padding: 0; background: transparent;" class="pull-left btn btn-default employeeBonus-Save"><i class="fa fa-check-circle fa-2x text-success"></i></button>
+                                                                                        <a href="javascript://" class="pull-left employeeBonus-Add"><i class="fa fa-plus-circle fa-2x text-primary"></i></a>
+                                                                                    </div>
+                                                                                    <div class="clearfix"></div>
+                                                                                    <div id="employeeBonus-Container" style="margin-top:10px;">
+                                                                                        @{ Html.RenderAction("_EmployeeBonus", "Setting"); }
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+
+                                                            <li class="list-group-item">
+                                                                <div class="material-switch pull-right">
+                                                                    <input id="printPaycheck" disabled class="printPaycheck" data-toggle="modal" data-target="#comingSoon-Modal" name="printPaycheck:printPaycheck" type="checkbox" data-val="@AppSettings.GetVal("printPaycheck:printPaycheck")" value="@AppSettings.GetVal("printPaycheck:printPaycheck")" />
+                                                                    <label for="printPaycheck" data-toggle="modal" data-target="#comingSoon-Modal" class="label-success printPaycheck"></label>
+                                                                </div>
+                                                                <h4 class="list-group-item-heading">Do you want to print pay checks? </h4>
+                                                                <p class="list-group-item-text">
+                                                                    <a href="#">click here to setup your check template</a>
+                                                                </p>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                @*<div class="panel-footer text-right">
+                                                        <div class="btn-group btn-group-sm" role="group">
+                                                            <button type="button" id="overtimeruleBtn" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                                                        </div>
+                                                    </div>*@
+                                                @*</form>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="javascript://" class="btn btn-success review-btn" onclick="carouselFormValidate(this, '#div-Carousel', 3);">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "config" ? "active" : "" ) : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Review your changes</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 4)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                            <button type="submit" class="btn btn-success" data-placement="bottom"><i class="fa fa-check"></i> Submit</button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-striped">
+                                        <tr>
+                                            <th class="text-right">Employees Management Application Status</th>
+                                            <td>
+                                                <span id="review-Application-On" class="label label-success" hidden>ON</span>
+                                                <span id="review-Application-Off" class="label label-danger" hidden>OFF</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 3)" class="btn btn-default" role="button"><i class="fa fa-chevron-left"></i> Back</a>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+
+<div class="modal fade" id="ptoAssigneesN-Modal" tabindex="-1" role="dialog" aria-labelledby="ptoAssigneesN-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+<div class="modal fade" id="overtimeRules-Modal" tabindex="-1" role="dialog" aria-labelledby="overtimeRules-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+<div class="modal fade" id="overtimeRates-Modal" tabindex="-1" role="dialog" aria-labelledby="overtimeRates-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+@section scripts{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+            $(function () {
+                $("#Message").summernote({ height: 200 });
+            });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('Message');
+            });
+        </script>
+    }
+    <script>
+        $(function () {
+            $('.review-btn').click(function (e) {
+                if ($("#Model-Status").val() === "true") {
+                    $("#review-Application-On").show();
+                    $("#review-Application-Off").hide();
+                };
+
+                if ($("#Model-Status").val() === "false") {
+                    $("#review-Application-Off").show();
+                    $("#review-Application-On").hide();
+                };
+            });
+        });
+    </script>
+
+    <script src="~/Scripts/App/EmployeeSettings.js"></script>
+}

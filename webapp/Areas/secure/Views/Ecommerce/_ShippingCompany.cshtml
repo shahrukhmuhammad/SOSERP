@@ -1,0 +1,47 @@
+﻿@model Ecommerce.Entity.ShippingCompanyModel
+@{
+    var Src = (Model.ShippingCompanyId != 0 ? "../../../Content/Uploads/Ecommerce/sc_" + Model.ShippingCompanyId + ".jpg" : "");
+}
+
+<form id="frm" class="form-Modal" method="post" action="~/Secure/Ecommerce/ShippingCompanyRecord" enctype="multipart/form-data">
+    <div class="modal-content">
+        <input type="hidden" name="ShippingCompanyId" value="@Model.ShippingCompanyId" />
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Shipping Company</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Company Name</label>
+                <div class="col-sm-8">
+                    @Model.Title
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Company Web Address</label>
+                <div class="col-sm-8">
+                    @Model.CompanyWebAddrress
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Tracking Url</label>
+                <div class="col-sm-8">
+                    @Model.TrackingUrl
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Company Logo</label>
+                <div class="col-sm-8">
+                    <div class="thumbnail text-center">
+                        <img id="logo-Preview" src="@Src" class="img-responsive img-centre" style="max-height:150px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>

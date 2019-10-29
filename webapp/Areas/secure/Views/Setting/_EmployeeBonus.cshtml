@@ -1,0 +1,39 @@
+﻿@model IList<BaseApp.Entity.BonusType>
+
+<table id="employeeBonus-Table" class="table table-condensed table-striped">
+    <tbody id="employeeBonus-records"></tbody>
+    <tfoot>
+        <tr>
+            <th>Bonus Name</th>
+            <th>Frequency</th>
+            <th>% Bonus</th>
+            <th>Apply On</th>
+            <th>Action</th>
+        </tr>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td>@x.Title</td>
+                <td>@x.Frequency.ToSpacedTitleCase()</td>
+                <td>@x.BonusPercentage</td>
+                <td>
+                    @if (x.FullTime == true)
+                    { <span>Full Time</span> }
+                    @if (x.PartTime == true)
+                    { <span>, Part Time</span> }
+                    @if (x.VaryingWeekly == true)
+                    { <span>, Varying Weekly </span> }
+                    @if (x.Contractor == true)
+                    { <span>, Contractor </span> }
+                    @*@if (x.PerDm == true)
+                    { <span>, Perdm </span> }*@
+                    @if (x.Freelance == true)
+                    { <span>, Freelance </span> }
+                </td>
+                <td style="width:80px;">
+                    <a href="javascript://" data-id="@x.Id" class="btn btn-xs btn-danger delemployeeBonusSection"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tfoot>
+</table>

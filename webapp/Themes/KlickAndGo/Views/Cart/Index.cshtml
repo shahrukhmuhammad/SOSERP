@@ -1,0 +1,208 @@
+﻿@model WebsiteUI.Models.Cart
+@{
+    ViewBag.Title = "Shopping Cart";
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    h3 {
+        position: relative;
+        font-size: 20px;
+        z-index: 1;
+        overflow: hidden;
+        text-align: center;
+        color: #06c;
+        font-weight: 500;
+        padding: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+        h3:before, h3:after {
+            position: absolute;
+            top: 51%;
+            overflow: hidden;
+            width: 50%;
+            height: 2px;
+            content: '\a0';
+            background-color: #06c;
+            padding-right: 10px;
+        }
+
+        h3:before {
+            margin-left: -50%;
+            text-align: right;
+        }
+
+    .color {
+        background-color: #ccc;
+    }
+</style>
+
+
+
+<div id="content">
+    <div class="container">
+
+
+        <div class="title clearfix">
+            <h3>Shopping Cart</h3>
+        </div>
+        <div class="cart_c">
+            <div class="cart_top">
+                <div class="row">
+                    <div class="col-sm-12">
+                     @if (Model.Items.Any())
+                       {
+                        <div class="cart_tbl">
+                                <div class="clearfix title_row">
+                                    <ul style="font-family:sans-serif">
+                                        <li>Photo</li>
+                                        <li>Name</li>
+                                        <li>Price</li>
+                                        <li>Quantity</li>
+                                        <li>Total</li>
+                                    </ul>
+                                </div>
+                                <div class="clearfix con_rowtst">
+
+                                 @foreach (var a in Model.Items)
+                                   {                        
+                                    <ul class="itemstst">
+
+                                        <li>
+                                            <div class="thumb">
+                                            <span>
+                                             <a href="~/product/@a.Slug" title="@a.Title">
+                                     @if (a.ParentId != null)
+                                        {
+                                         <img src="@Url.Action("Img", "Cdn", new { id = a.ParentId, s = "c", t = "p", target = "Website" })" alt="@a.Title" />
+                                        }
+                                     else
+                                       {
+                                        <img src="@Url.Action("Img", "Cdn", new { id = a.ProductId, s = "c", t = "p", target = "Website" })" alt="@a.Title" />
+                                       }
+                                             </a>
+                                            </span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <h5>
+                                            <a href="~/product/@a.Slug">
+                                                            @a.Title
+                                                </a>
+
+                                            </h5>
+                                            <input type="hidden" name="productId" value="@a.ProductId" class="item-productId" />
+                                            @*<a class="remove" href="@Url.Action("Remove", "Cart", new { id = a.ProductId })" title="Remove this item">×</a>*@
+                                            <a  href="@Url.Action("Remove", "Cart", new { id = a.ProductId })" title="Remove this item" class="remove" >Remove</a>
+                                        </li>
+                                        <li>
+                                            <p class="mobile-label-price">Price</p>
+                                            <input type="number" class="price money item-price" style="border:none" readonly="readonly" value="@a.RetailPrice" />
+                                            @*<span class="price money" data-currency-gbp="&amp;pound;4.99" data-currency="GBP">£4.99</span>*@
+                                        </li>
+                                        <li>
+                                            <p class="mobile-label-quantity">Quantity</p>
+                                            @*<a class="minus_btn"></a>*@
+                                           
+                                            @*<input type="text" id="updates_31944302470" name="updates[]" class="txtbox" value="1" min="0" data-id="31944302470">*@
+                                            <input type="number" style="width:50px; text-align:center" class="proQty item-quantity txtbox" value="@a.Quantity" />
+                                            @*<a class="plus_btn"></a>*@
+                                            @*<div class="ajaxcart__errors text-center ajaxcart__item__31944302470__errors">
+                                                All available stock is in cart
+                                            </div>*@
+                                        </li>
+                                        <li>
+                                            <p class="mobile-label-total">Total</p>
+                                            <span class="price">
+                                                @Settings.Get.CurrencySymbol
+                                                <input type="number" style="width:115px;border:none;" readonly="readonly" class="item-total" value="@(a.Quantity * a.RetailPrice)" />
+                                            </span>                                           
+                                        </li>
+
+                                    </ul>
+                                   }
+                                </div>
+                                <div class="total_row clearfix">
+                                    <ul>
+                                        <li>
+                                            <span class="total_val">Subtotal:</span>
+                                            <span class="total-price">
+                                                @Settings.Get.CurrencySymbol
+                                                <input type="number" readonly="readonly" style="padding: 0; text-align:center;border:none" id="total-amount" value="@Model.TotalAmount" />
+                                            </span>
+                                            @*<span class="total-price money" data-currency-gbp="&amp;pound;41.45" data-currency="GBP">£41.45</span>*@
+                                        </li>
+                                    </ul>
+                                </div>
+
+
+                                <div class="cart_btn clearfix">
+                                    <a  href="@Url.Action("Index","Home")" class="info_btn"><span class="fa fa-chevron-left"></span>Continue Shopping</a>
+                                    <button  onclick="window.location='@Url.Action("Checkout", "Cart")'" type="submit" name="checkout"  class="next_btn">Secure Checkout</button>
+
+                                    @*<div class="additional-checkout">
+                                        <button name="button" type="submit" aria-label="Apple Pay" data-strategy="cart" style="display: none" class="additional-checkout-button additional-checkout-button--apple-pay"><span class="additional-checkout-button-visually-hidden">Checkout with: Apple Pay</span><span class="additional-checkout-button__logo"></span></button><button name="goto_pp" type="submit" id="paypal-express-button" class="additional-checkout-button additional-checkout-button--paypal-express" value="paypal_express" data-strategy="cart"><img alt="Checkout with: PayPal" src="./Your Shopping Cart_files/easy-checkout-btn-paypal-9835af2c2b0e2a543b2905789a7f08b678d62de2c77c1b0d16fd7689aff463f3.png"></button>
+                                    </div>*@
+
+                                </div>
+                          
+
+                        </div>
+}
+
+else
+{
+    <div class="cart_row">
+        <div class="empty-cart" style="text-align:center;">Your cart is empty</div>
+        <p><a href="javascript:void(0)" class="btn_c btn_close">Continue Shopping</a></p>
+    </div>
+}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    @section foot{
+        <script type="text/javascript">
+            $(function () {
+                //$('.cart tr:even').css('background','#f8f8f8');
+                var variantTitle = "";
+                debugger;
+                $('.con_rowtst').on("change", "input.item-quantity", function (e) {
+                    var totalAmount = parseFloat('0.00');
+                    $('.con_rowtst .itemstst').each(function (i, e) {
+                        var quantity = $(e).find('input.item-quantity').val();
+                        var price = $(e).find('input.item-price').val();
+                        price = parseFloat(price) * quantity;
+                        //var total = price;
+                        $(e).find('input.item-total').val(price.toFixed(2));
+                        totalAmount += price;
+                        var productId = $(e).find('input.item-productId').val();
+
+                            $.ajax({
+                                url: "/cart/add?id=" + productId + "&q=" + quantity + "&source=updatecart&variantTitle=" + variantTitle + "",
+                                //data: function () {
+                                //    id: productId;
+                               //    q: quantity
+                               //},
+                               success: function (d) {
+
+                              },
+                              error: function (r) {
+
+                               }
+                          });
+                          //alert(price.toFixed(2));
+                    });
+                    $('#total-amount').val(totalAmount.toFixed(2));
+                });
+            });
+        </script>
+    }

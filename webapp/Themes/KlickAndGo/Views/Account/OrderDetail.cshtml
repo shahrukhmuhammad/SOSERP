@@ -1,0 +1,122 @@
+﻿
+@model Framework.Data.Order
+@using Framework.Services
+@{
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_Layout.cshtml";
+}
+<section id="content">
+    <div class="container">
+
+
+        <ol class="breadcrumb">
+            <li><a href="~/" title="Home">Home</a></li>
+
+            <li>Order Detail</li>
+
+        </ol>
+
+        <h4 class="heading2">@Model.OrderStatus.ToString().SplitCamelCase() Order Detail</h4>
+
+
+        <fieldset style="line-height:21px;float:left;width:40%;min-height:190px; margin-top:30px;">
+            <legend>Shipping Info</legend>
+            @if (Model.IsLocalPickup == LocalPickup.No)
+        {
+        @Html.Raw(Model.ShippingDetails.Replace("\n", "<br />"))
+        }
+        else
+        {
+        <p><strong>Local pickup collection location:</strong></p>
+        @Settings.Get.LocalPickupAddress
+        }
+        </fieldset>
+
+        <fieldset style="float:right;width:45%;min-height:190px; margin-top:30px;"">
+            <legend>Order Summary</legend>
+            <table border="0">
+                <tr>
+                    <td><strong>Order #:</strong></td>
+                    <td>@Model.OrderCode</td>
+                </tr>
+                <tr>
+                    <td style="width:110px"><strong>Order Date:</strong></td>
+                    <td>@Model.DateTime.ToString("MMMM dd, yyy")</td>
+                </tr>
+                <tr>
+                    <td><strong>Sub-Total:</strong></td>
+                    <td>@Model.Details.Sum(x => x.Price).ToString("c")</td>
+                </tr>
+                @if (Model.Discount > 0)
+            {
+            <tr>
+                <td><strong>Discount: </strong></td>
+                <td>@Model.Discount.ToString("c")</td>
+            </tr>
+            }
+                @if (Model.IsLocalPickup == LocalPickup.No)
+            {
+            <tr>
+                <td><strong>Shipping Cost:</strong></td>
+                <td>@Model.ShippingCost</td>
+            </tr>
+            }
+                <tr>
+                    <td><strong>Tax:</strong></td>
+                    <td>@Model.Tax.ToString("c")</td>
+                </tr>
+                <tr>
+                    <td><strong>Order Total:</strong></td>
+                    <td><span style="color:#4f94a8;font-size:20px">@Model.GrandTotal.ToString("c")</span></td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <div class="clear" style="height:10px "></div>
+
+        <div style="height:200px; margin-top:30px;">
+            <table border="1">
+                <tr>
+                    <td>Product</td>
+                    <td>Price</td>
+                    <td>Quantity</td>
+                    <td>Total</td>
+                </tr>
+                @foreach (var d in Model.Details)
+            {
+            <tr>
+                <td style="text-align:left">@d.Description</td>
+                <td>@d.Price.ToString("c")</td>
+                <td  style="text-align:center">@d.Quantity</td>
+                <td style="text-align:right">@d.Total.ToString("c")</td>
+            </tr>
+            }
+            </table>
+        </div>
+        <div style="margin-top:60px">
+            <div class="pull-right" style="margin-top:5px">
+                @if (Model.OrderStatus == OrderStatus.Completed && ViewBag.CheckRequest == false)
+            {
+            <a href="@Url.Action("Index", "Requests", new { id = @Model.OrderCode })" target="_parent">Request Return or Exchange</a>
+            <span style="color:#b3b3b3"> | </span>
+            }
+                <a href="javascript:window.print()"><img src="~/Content/Images/print-icon.png" /> Print</a>
+            </div>
+
+            <div class="right" style="margin-right:40px;">
+                <strong>Total : </strong> @Model.Total.ToString("c")
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div style="color:#444;font-size:10px;padding-top:5px;margin-top:5px;border-top:1px solid #d5dfe5">
+            You may not use this site for any purpose that is unlawful or prohibited by this Terms and Conditions statement, or cause damage on or through this site. You promise that none of your communications with or through the site will violate any applicable local, state, national or international law.
+        </div>
+        </div>
+    </section>
+        @*<script type="text/javascript" src="~/Scripts/jquery-1.8.3.min.js"></script>
+            <script type="text/javascript">
+                $(function () {
+                    if (self.window == self.parent) window.location = '@Url.Action("MyOrders", "Account")';
+                    //$('.cart tr:even').css('background', '#f8f8f8');
+                });
+            </script>*@

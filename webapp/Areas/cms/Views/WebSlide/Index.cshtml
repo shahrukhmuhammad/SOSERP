@@ -1,0 +1,75 @@
+﻿@model List<CMS.Entity.CmsSlide>
+@{
+    ViewBag.Title = "All Slides";
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/CMS/WebSlide/Record" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Slide</a>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div id="cms-AllSlides" class="row">
+                @*@if (Model.Count() > 0)
+                {
+                    <div class="col-md-12"><label><input type="checkbox" onchange="checkAll(this, 'checkIt')" /> Select All</label></div>
+                    foreach (var x in Model)
+                    {
+                        <div class="col-sm-6 col-md-4">
+                            <div class="thumbnail">
+                                <img src="~/Content/Uploads/Slides/@x.FileName" alt="@x.Title" style="max-height:180px;">
+                                <div class="caption text-center">
+                                    <h4>@x.Title</h4>
+                                    <p>
+                                        @if (x.Status == CMS.Entity.CmsSlideStatus.Published)
+                                        {
+                                            <label class="label label-success">Published</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="label label-warning">Draft</label>
+                                        }
+                                    </p>
+                                    <p>
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            <div class="btn btn-default" style="padding-top:3px; height:22px;"><input type="checkbox" class="checkIt" style="margin:0;" value="@x.Id" /></div>
+                                            <a href="~/CMS/WebSlide/Record/@x.Id" class="btn btn-info"><i class="fa fa-edit"></i> Edit</a>
+                                            <a href="javascript://" onclick="changeStatus('@Url.Action("ChangeSlideStatus")', '@x.Id')" class="btn @(x.Status == CMS.Entity.CmsSlideStatus.Published ? "btn-warning" : "btn-success")" role="button"><i class="fa @(x.Status == CMS.Entity.CmsSlideStatus.Published ? "fa-ban" : "fa-check")"></i> @(x.Status == CMS.Entity.CmsSlideStatus.Published ? "Draft Now" : "Publish Now")</a>
+                                            <a href="javascript://" onclick="deleteRecord('@Url.Action("Delete")', '@x.Id')" class="btn btn-danger" role="button"><i class="fa fa-trash"></i> Delete</a>
+                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-md-12 text-center" style="padding:170px 15px;">
+                        <h5>There is no slide to show. Added slides will show here.</h5>
+                    </div>
+                }*@
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/CMS/WebSlide/Record" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Slide</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            getCmsSlides("#cms-AllSlides");
+        });
+    </script>
+}

@@ -1,0 +1,196 @@
+﻿@{
+//var querySlug = (ViewContext.RouteData.Values["slug"] == null ? "" : ViewContext.RouteData.Values["slug"].ToString());
+//var mainMenu = ViewBag.MainMenu as List<CMS.Entity.CmsPage>;
+//var parentSlugId = (!string.IsNullOrEmpty(querySlug) ? mainMenu.Where(x => x.Slug == querySlug).SingleOrDefault().ParentId : Guid.Empty);
+//var rootMenuItems = mainMenu.Where(x => !x.ParentId.HasValue && x.Menu == true).OrderBy(x => x.PageOrder);
+}
+
+@functions{
+    #region Current Location Check
+    bool IsCurrentController(string c)
+    {
+        var controller = ViewContext.RouteData.GetRequiredString("controller");
+        return string.Compare(c, controller, true) == 0;
+    }
+    bool IsCurrentAction(string c, string a)
+    {
+        var action = ViewContext.RouteData.GetRequiredString("controller") + ViewContext.RouteData.GetRequiredString("action");
+        return string.Compare(c + a, action, true) == 0;
+    }
+    #endregion
+
+    #region Set Location
+    string SetActiveController(string controller)
+    {
+        var res = IsCurrentController(controller);
+        return res ? "active" : null;
+    }
+    string SetActiveAction(string controller, string action)
+    {
+        var res = IsCurrentAction(controller, action);
+        return res ? "active" : null;
+    }
+    #endregion
+}
+
+<div id="shopify-section-header" class="shopify-section">
+    <div id="header" data-section-id="header" data-section-type="header-section">
+        <div id="modal-container" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-content">
+
+            </div>
+        </div>
+        <!--header top starts here-->
+        
+        <div id="flipkart-navbar">
+            <div class="container">
+                <div class="row row1" style="max-width:none">
+                    <ul class="largenav pull-right">
+                        <li class="upper-links"><a href="~/tradeportal/home" target="_blank">Trade Portal</a></li>
+                        <li class="upper-links"><a class="links" href="#"><span class="fa fa-truck"></span>&nbsp;Delivery Info</a></li>
+                        <li class="upper-links"><a class="links" href="#"><span class="fa fa-support"></span>&nbsp;Customer Support</a></li>
+                        <li class="upper-links"><a class="links" href="#"><span class="fa fa-mail-reply"></span>&nbsp;Join Exclusives</a></li>
+                    </ul>
+                </div>
+                <div class="row row2" style="max-width:none">
+                    <div class="col-sm-2" style="margin-top:-30px">
+                        <span class="smallnav menu" onclick="openNav()">☰ <img src="~/Themes/KlickAndGo/Content/cdn.shopify.com/s/files/1/0882/5910/files/newlogo.png" width="70" height="70" alt="Klick&Go" class="img-responsive"></span>
+                        <span class="largenav"><img class="img-responsive" src="~/Content/Images/applogo.png" width="140" height="140" /></span>
+                    </div>
+                    <div class="flipkart-navbar-search smallsearch col-sm-6 col-xs-8">
+                        <div class="row">
+                            <form action="@Url.Action("Search","Home")" method="get" role="search">
+                                <input type="hidden" id="search-param" name="post_type" value="product">
+                                <input type="hidden" id="search-mid" name="mid" value="">
+                                <input type="hidden" id="search-pf" name="pf" value="">
+                                <input type="hidden" id="search-pt" name="pt" value="">
+                                <input class="flipkart-navbar-input col-xs-11" type="text" placeholder="Search for Products, Brands and more" name="">
+                                <button type="submit" class="flipkart-navbar-button col-xs-1">
+                                    <svg width="15px" height="15px">
+                                        <path d="M11.618 9.897l4.224 4.212c.092.09.1.23.02.312l-1.464 1.46c-.08.08-.222.072-.314-.02L9.868 11.66M6.486 10.9c-2.42 0-4.38-1.955-4.38-4.367 0-2.413 1.96-4.37 4.38-4.37s4.38 1.957 4.38 4.37c0 2.412-1.96 4.368-4.38 4.368m0-10.834C2.904.066 0 2.96 0 6.533 0 10.105 2.904 13 6.486 13s6.487-2.895 6.487-6.467c0-3.572-2.905-6.467-6.487-6.467 "></path>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="row pull-right" style="">
+                            <span style="color:#04468d"><span class="fa fa-phone" style="color:darkblue"></span>&nbsp;@AppSettings.GetVal("contact:Phone")</span>&nbsp;&nbsp;&nbsp;
+                            <span style="color:#04468d"><span class="fa fa-envelope" style="color:darkblue"></span>&nbsp;@AppSettings.GetVal("contact:Email")</span>
+                        </div>
+                        <div class="row pull-right">
+                            <div class="social" style="padding-top:10px;padding-left:40px">
+                                <ul>
+                                    @Html.Partial("_SocialMedia")
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="mySidenav" class="sidenav">
+            <div class="container" style="background-color: #2874f0; padding-top: 10px;">
+                <span class="sidenav-heading">Home</span>
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+            </div>
+            <a href="~/tradeportal/home">Trade Portal</a>
+            <a class="links" href="#"><span class="fa fa-truck"></span>&nbsp;Delivery Info</a>
+            <a class="links" href="#"><span class="fa fa-support"></span>&nbsp;Customer Support</a>
+            <a class="links" href="#"><span class="fa fa-mail-reply"></span>&nbsp;Join Exclusives</a>
+        </div>
+        <!---Responsive header ends here-->
+        <!---header top ends here-->
+        <div class="header_bot  enabled-sticky-menu ">
+            <div class="header_content" style="background-color:#215d9f;">
+                <div class="container">
+                    <div id="nav" style="background-color:#215d9f;">
+                        <nav class="navbar" role="navigation">
+                            <div class="navbar-header">
+                                <a href="#" class="visible-ms visible-xs pull-right navbar-cart" id="wsnavtoggle" data-activator="#">
+                                    <div class="cart-icon">
+                                        <i class="fa fa-bars"></i>
+                                    </div>
+                                </a>
+                                <a href="javascript:void(0);" data-href="/cart" class="visible-ms visible-xs pull-right navbar-cart cart-popup">
+                                    @*@{Html.RenderAction("MiniCart", "Cart");}*@
+                                </a>
+                                <a href="#" class="visible-ms visible-xs pull-right navbar-cart">
+                                    <div class="cart-icon"><i class="fa fa-search"></i></div>
+                                </a>
+
+                                <div class="visible-ms visible-xs">
+                                    <a class="navbar-brand" href="/" itemprop="url">
+                                        <img src="//cdn.shopify.com/s/files/1/0882/5910/files/rinkit_blue_updated_logo_550x.png?v=1490950563" alt="Rinkit.com" itemprop="logo">
+                                    </a>
+                                </div><!-- ./visible-ms visible-xs -->
+
+                            </div>
+                            <!-- main menu -->
+                            @{Html.RenderAction("RenderCategories", "Cms");}
+
+                        </nav>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div><!-- /header -->
+
+
+
+    @section head{
+
+        <link href="~/Themes/KlickAndGo/Content/Style.css" rel="stylesheet" />
+    }
+
+
+
+</div>
+
+
+<!---Modal for Cart messages goes here-->
+<div class="modal fade" id="cartalert" role="search">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:cornflowerblue">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">ThankYou!</h4>
+            </div>
+            <div class="modal-body">
+                <h3>Item has been Added to Your Cart!</h3>
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <a href="" class="btn-sm btn-warning"> Continue Shoping</a>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <a href="" class="btn-sm btn-primary">Stay On Page</a>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <a href="" class="btn-sm btn-info">View Cart</a>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "70%";
+        // document.getElementById("flipkart-navbar").style.width = "50%";
+        document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.body.style.backgroundColor = "rgba(0,0,0,0)";
+    }
+</script>

@@ -1,0 +1,579 @@
+﻿@model List<BaseApp.Entity.Office>
+@{
+    ViewBag.Title = "Company Structure";
+    string acronym = string.Join(string.Empty, AppSettings.GetVal<string>("app:Title").Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0]));
+}
+
+@section styles{
+    <link href="~/Content/SelectJS/css/normalize.css" rel="stylesheet" />
+    <link href="~/Content/SelectJS/css/selectize.default.css" rel="stylesheet" />
+    <link href="~/Content/treeView.css" rel="stylesheet" />
+    <link href="~/Content/JsTree/assets/dist/themes/default/style.min.css" rel="stylesheet" />
+    <link href="~/Content/JsTree/assets/docs.css" rel="stylesheet" />
+    <link href="~/Content/AdvancedSearch/advance-search.css" rel="stylesheet" />
+    <script>window.$q = []; window.$ = window.jQuery = function (a) { window.$q.push(a); };</script>
+    <style>
+        .vakata-context li > a > i {
+            text-decoration: none;
+            display: inline-block;
+            width: 2.4em;
+            height: 2.4em;
+            background: 0 0;
+            margin: 0 0 0 0;
+            vertical-align: top;
+            text-align: center;
+            line-height: 2.4em;
+        }
+
+        .vakata-context, .vakata-context ul {
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            background: #f5f5f5;
+            border: 1px solid #979797;
+            -moz-box-shadow: 5px 5px 4px -4px #666;
+            /* -webkit-box-shadow: 2px 2px 2px #999; */
+            /* box-shadow: 2px 2px 2px #999; */
+        }
+
+            .vakata-context li > a {
+                display: block;
+                padding: 0 5px !important;
+                text-decoration: none;
+                width: auto;
+                color: #000;
+                /* white-space: nowrap; */
+                line-height: 2.4em;
+                -moz-text-shadow: 1px 1px 0 #fff;
+                -webkit-text-shadow: 1px 1px 0 #fff;
+                text-shadow: 1px 1px 0 #fff;
+                -moz-border-radius: 1px;
+                -webkit-border-radius: 1px;
+                border-radius: 1px;
+            }
+
+                .vakata-context li > a .vakata-contextmenu-sep {
+                    display: inline-block;
+                    width: 0;
+                    height: 0;
+                    background: #fff;
+                    margin: 0 0 0 0 !important;
+                    border-left: 1px solid #e2e3e3;
+                }
+    </style>
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="row" style="margin:12px 0;">
+            <div class="col-md-2 pull-right no-padding">
+                <div class="btn-group-xs pull-right" role="group">
+                    <button type="button" class="btn btn-primary" onclick="window.location.replace('?p=&viewMode=list')" title="List View" data-toggle="tooltip" data-placement="bottom"><span class="fa fa-th-list"></span></button>
+                    <button type="button" class="btn btn-primary" onclick="window.location.replace('/?p=&viewMode=grid')" title="Grid View" data-toggle="tooltip" data-placement="bottom"><span class="fa fa-th-large"></span></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="container" id="content">
+                        <!--.-->
+                        <div class="row page" id="docs">
+                            <div class="col-md-12" style="">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div id="jstree1" class="demo">
+                                            <ul>
+                                                <li data-jstree='{"icon":"fa fa-globe fa-2x text-info", "opened": true}'>
+                                                    <a href="javascript://" onclick="window.location.reload()"> Officient </a>
+                                                    <ul>
+                                                        @foreach (var x in Model.Where(m => m.ParentId == null))
+                                                        {
+                                                            if (x.Children.Count() > 0)
+                                                            {
+                                                                <li data-jstree='{"icon": "fa @(x.OfficeType == BaseApp.Entity.OfficeType.Branch ? "fa-building text-primary" : "fa-bank text-success") fa-2x"}' data-mainid="@x.Id">
+                                                                    @x.Title (@acronym-@x.Code)
+                                                                    @if (x.Children != null && x.Children.Count > 0)
+                                                                    {
+                                                                        <ul>
+                                                                            @foreach (var c in Model.Where(m => m.ParentId == x.Id))
+                                                                            {
+                                                                                if (c.Children.Count() > 0)
+                                                                                {
+                                                                                    <li data-jstree='{"icon": "fa @(c.OfficeType == BaseApp.Entity.OfficeType.Branch ? "fa-building text-primary" : "fa-bank text-success") fa-2x"}' data-mainid="@c.Id">
+                                                                                        @c.Title (@acronym-@c.Code)
+                                                                                        @if (c.Children != null && c.Children.Count > 0)
+                                                                                        {
+                                                                                            foreach (var b in Model.Where(m => m.ParentId == c.Id))
+                                                                                            {
+                                                                                                <ul>
+                                                                                                    <li data-jstree='{"icon": "fa @(b.OfficeType == BaseApp.Entity.OfficeType.Branch ? "fa-building text-primary" : "fa-bank text-success") fa-2x"}' data-mainid="@b.Id">
+                                                                                                        <a href="#">@b.Title (@acronym-@b.Code)</a>
+                                                                                                        <ul>
+                                                                                                            @foreach (var d in Model.Where(m => m.ParentId == b.Id))
+                                                                                                            {
+                                                                                                                <li data-jstree='{"icon": "fa @(d.OfficeType == BaseApp.Entity.OfficeType.Branch ? "fa-building text-primary" : "fa-bank text-success") fa-2x"}' data-mainid="@d.Id">
+                                                                                                                    @d.Title (@acronym-@d.Code)
+                                                                                                                    @if (d.Children != null && d.Children.Count > 0)
+                                                                                                                    {
+                                                                                                                        <ul>
+                                                                                                                            @foreach (var t in Model.Where(m => m.ParentId == d.Id))
+                                                                                                                            {
+                                                                                                                                <li data-jstree='{"icon": "fa @(t.OfficeType == BaseApp.Entity.OfficeType.Branch ? "fa-building text-primary" : "fa-bank text-success") fa-2x"}' data-mainid="@t.Id">
+                                                                                                                                    @t.Title (@acronym-@t.Code)
+                                                                                                                                    @if (t.Children != null && t.Children.Count > 0)
+                                                                                                                                    {
+                                                                                                                                        foreach (var n in Model.Where(m => m.ParentId == t.Id))
+                                                                                                                                        {
+                                                                                                                                            <ul>
+                                                                                                                                                <li data-jstree='{"icon": "fa @(n.OfficeType == BaseApp.Entity.OfficeType.Branch ? "fa-building text-primary" : "fa-bank text-bank") fa-2x"}' data-mainid="@n.Id">
+                                                                                                                                                    <a href="#">@n.Title (@acronym-@n.Code)</a>
+                                                                                                                                                </li>
+                                                                                                                                            </ul>
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                </li>
+                                                                                                                            }
+                                                                                                                        </ul>
+                                                                                                                    }
+                                                                                                                </li>
+                                                                                                            }
+                                                                                                        </ul>
+                                                                                                    </li>
+                                                                                                </ul>
+                                                                                            }
+                                                                                        }
+                                                                                    </li>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    if (c.ParentId.HasValue)
+                                                                                    {
+                                                                                        <li data-jstree='{"icon": "fa @(c.OfficeType == BaseApp.Entity.OfficeType.Branch ? "fa-building text-primary" : "fa-bank text-success") fa-2x"}' data-mainid="@c.Id"><a href="#">@c.Title (@acronym-@x.Code)</a></li>
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        </ul>
+                                                                    }
+                                                                </li>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (!x.ParentId.HasValue)
+                                                                {
+                                                                    <li data-jstree='{"icon": "fa @(x.OfficeType == BaseApp.Entity.OfficeType.Branch ? "fa-building" : "fa-bank") fa-2x text-primary"}' data-mainid="@x.Id"><a href="#">@x.Title (@acronym-@x.Code)</a></li>
+                                                                }
+                                                            }
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-info panel-Custom">
+                                                    <h4 class="panel-heading">
+                                                        <span class="panel-title" id="panelTitle"><i class="fa fa-info text-primary"></i> Overview </span>
+                                                    </h4>
+                                                    <div class="panel-body no-padding">
+                                                        <div id="create-office"></div>
+                                                        <div class="caption text-center" id="caption">
+                                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+                                                        </div>
+                                                        <div id="view-section">
+                                                            <table style="font-size:13px;" class="table table-striped table-condensed no-margin">
+                                                                <tr id="office-title-box" style="display:none">
+                                                                    <th style="width:260px;" class="text-right">
+                                                                        Title
+                                                                    </th>
+                                                                    <td id="office-title"></td>
+                                                                </tr>
+                                                                <tr id="total-offices-box">
+                                                                    <th style="width:260px;" class="text-right">Total Offices: </th>
+                                                                    <td id="total-offices"></td>
+                                                                </tr>
+                                                                <tr id="manager-name-box" style="display:none">
+                                                                    <th style="width:260px;" class="text-right">Manager: </th>
+                                                                    <td id="manager-name"></td>
+                                                                </tr>
+                                                                <tr id="working-hours-box" style="display:none">
+                                                                    <th style="width:260px;" class="text-right">Working Hours: </th>
+                                                                    <td id="working-hours"></td>
+                                                                </tr>
+                                                                <tr id="address-box" style="display:none">
+                                                                    <th style="width:260px;" class="text-right">Address: </th>
+                                                                    <td id="address"></td>
+                                                                </tr>
+                                                                <tr id="contactdetails-box" style="display:none">
+                                                                    <th style="width:260px;" class="text-right">Contact Details: </th>
+                                                                    <td id="contactdetails"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th style="width:260px;" class="text-right">Total No. of Employees: </th>
+                                                                    <td id="total-employees">
+                                                                        <a href="javascript://" id="employee-view">250</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--.-->
+                    </div>
+                </div>
+            </div>
+            <!-- #region name -->
+            @*<div class="row">
+                    <div class="col-sm-8 col-sm-offset-4 table-responsive">
+                        <div class="tree">
+                            <ul>
+                                <li>
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">@AppSettings.GetVal("app:Title")</h3>
+                                            <div class="btn-group btn-group-xs" role="group">
+                                                <a href="~/Secure/Office/Details/" class="btn btn-primary" title="Details"><i class="fa fa-eye"></i></a>
+                                                <a href="javascript://" class="btn btn-info officeRecord" data-id="" title="Edit"><i class="fa fa-pencil-square"></i></a>
+                                                <a href="javascript://" class="btn btn-success officeRecord" data-id="" data-parentId="" title="Add Department"><i class="fa fa-plus-square"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            Employees
+                                        </div>
+                                    </div>
+                                    <ul>
+                                        @foreach (var x in Model)
+                                        {
+                                            if (x.Children.Count() > 0)
+                                            {
+                                                <li>
+                                                    <div class="panel panel-info">
+                                                        <div class="panel-heading">
+                                                            <h3 class="panel-title">@x.Title (@acronym-@x.Code)</h3>
+                                                            <div class="btn-group btn-group-xs" role="group">
+                                                                <a href="~/Secure/Office/Details/@x.Id" class="btn btn-primary" title="Details"><i class="fa fa-eye"></i></a>
+                                                                <a href="javascript://" class="btn btn-info officeRecord" data-id="@x.Id" title="Edit"><i class="fa fa-pencil-square"></i></a>
+                                                                <a href="javascript://" class="btn btn-success officeRecord" data-id="" data-parentId="@x.Id" title="Add Department"><i class="fa fa-plus-square"></i></a>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-condensed table-hover">
+                                                            <tr>
+                                                                <td class="text-right">Manager:</td>
+                                                                <th><a href="~/Secure/Employee/Details/@x.ContactId">@x.Contact.FullName</a></th>
+                                                            </tr>
+                                                        </table>
+                                                        <div class="panel-body">
+                                                            Employees
+                                                        </div>
+                                                    </div>
+                                                    <ul>
+                                                        @foreach (var c in x.Children)
+                                                        {
+                                                            <li>
+                                                                <div class="panel panel-info">
+                                                                    <div class="panel-heading">
+                                                                        <h3 class="panel-title">@c.Title (@acronym-@c.Code)</h3>
+                                                                        <div class="btn-group btn-group-xs" role="group">
+                                                                            <a href="~/Secure/Office/Details/@x.Id" class="btn btn-primary" title="Details"><i class="fa fa-eye"></i></a>
+                                                                            <a href="javascript://" class="btn btn-info officeRecord" data-id="@c.Id" title="Edit"><i class="fa fa-pencil-square"></i></a>
+                                                                            <a href="javascript://" class="btn btn-success officeRecord" data-id="" data-parentId="@c.Id" title="Add Department"><i class="fa fa-plus-square"></i></a>
+                                                                            <a href="javascript://" onclick="deleteRecord('@Url.Action("Delete")', '@x.Id')" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table class="table table-condensed table-hover">
+                                                                        <tr>
+                                                                            <td class="text-right">Manager:</td>
+                                                                            <th><a href="~/Secure/Employee/Details/@c.ContactId">@c.Contact.FullName</a></th>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <div class="panel-body">
+                                                                        Employees
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                if (!x.ParentId.HasValue)
+                                                {
+                                                    <li>
+                                                        <div class="panel panel-info">
+                                                            <div class="panel-heading">
+                                                                <h3 class="panel-title">@x.Title (@acronym-@x.Code)</h3>
+                                                                <div class="btn-group btn-group-xs" role="group">
+                                                                    <a href="~/Secure/Office/Details/@x.Id" class="btn btn-primary" title="Details"><i class="fa fa-eye"></i></a>
+                                                                    <a href="javascript://" class="btn btn-info officeRecord" data-id="@x.Id" title="Edit"><i class="fa fa-pencil-square"></i></a>
+                                                                    <a href="javascript://" class="btn btn-success officeRecord" data-id="" data-parentId="@x.Id" title="Add Department"><i class="fa fa-plus-square"></i></a>
+                                                                    <a href="javascript://" onclick="deleteRecord('@Url.Action("Delete")', '@x.Id')" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                                                </div>
+                                                            </div>
+                                                            <table class="table table-condensed table-hover">
+                                                                <tr>
+                                                                    <td class="text-right">Manager:</td>
+                                                                    <th><a href="~/Secure/Employee/Details/@x.ContactId">@x.Contact.FullName</a></th>
+                                                                </tr>
+                                                            </table>
+                                                            <div class="panel-body">
+                                                                Employees
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>*@
+            <!-- #endregion -->
+        </div>
+        @*<div class="modal-footer text-right">
+                <div class="btn-group btn-group-sm" role="group">
+                    <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                    <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                    <a href="javascript://" class="btn btn-primary officeRecord" data-id=""><i class="fa fa-plus"></i> Add New</a>
+                </div>
+            </div>*@
+    </div>
+</div>
+
+<div class="modal fade" id="officeRecord-Modal" tabindex="-1" role="dialog" aria-labelledby="officeRecord-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/SelectJS/js/selectize.js"></script>
+    <script src="~/Content/SelectJS/js/index.js"></script>
+    <script src="~/Content/JsTree/assets/jquery.address-1.6.js"></script>
+    <script src="~/Content/JsTree/assets/vakata.js"></script>
+    <script src="~/Content/JsTree/assets/dist/jstree.min.js"></script>
+    <script src="~/Content/JsTree/assets/docs.js"></script>
+    <script>$.each($q, function (i, f) { $(f) }); $q = null;</script>
+    <script src="~/Scripts/App/Offices.js"></script>
+    <script>
+
+        $(function () {
+            $("#jstree1").on("changed.jstree", function (e, data) {
+                //alert(data.selected);
+                console.log(data.selected); // newly selected
+                console.log(data.deselected); // newly deselected
+            }).jstree({
+                "plugins": ["dnd", "changed", "contextmenu", "wholerow"], "contextmenu": {
+                "items": function($node) {
+                    var tree = $("#jstree1").jstree(true);
+                    return {
+                        "Create": {
+                            "separator_before": false,
+                            "separator_after": false,
+                            "label": "",
+                            "icon": "fa fa-plus-circle text-center text-primary",
+                            "action": function (obj) {
+                                obj.element.find('li:first')
+                                    .append('<ul class="subvakata-context" style="left: 40px; top: -1px; display: block;"><li class=""><a href="javascript://" class="add-office" title="Add Branch"><i class="fa fa-building text-center text-primary"></i> Add Branch <span class="vakata-contextmenu-sep">&nbsp;</span></a></li><li class=""><a href="javascript://" class="add-department" title="Add Department"><i class="fa fa-bank text-center text-success"></i> Add Department <span class="vakata-contextmenu-sep">&nbsp;</span></a></li> </ul>');
+                                //alert($node);
+                                $('.add-office').on('click', function () {
+                                    $('#view-section').css('display', 'none');
+                                    $('#create-office').html('');
+                                    $('#caption').css('display', 'none');
+                                    $('#loading-mask').show();
+                                    $.get('/secure/office/_OfficeDetails', function (d) {
+                                        $('#loading-mask').hide();
+                                        $('#create-office').html(d);
+                                        $('#OfficeType').val('Branch');
+                                        $('#panelTitle').html('<i class="fa fa-plus-circle text-primary"></i> Create New');
+                                        $('#select-ManagedBy').selectize({
+                                            plugins: ['remove_button'],
+                                            openOnFocus: false
+                                        });
+                                        var officeId = $('#' + $node.id).attr('data-mainid');
+                                        $.get('/secure/office/_GetOfficeInfo?id=' + officeId, function (officeData) {
+                                            $('#parentId').append('<option value=' + officeData.Id + ' selected="true">' + officeData.Title + '</option>')
+
+                                        });
+                                    });
+                                });
+
+                                $('.add-department').on('click', function () {
+                                    $('#view-section').css('display', 'none');
+                                    $('#create-office').html('');
+                                    $('#caption').css('display', 'none');
+                                    $('#loading-mask').show();
+                                    $.get('/secure/office/_OfficeDetails', function (d) {
+                                        $('#loading-mask').hide();
+                                        $('#create-office').html(d);
+                                        $('#OfficeType').val('Department');
+                                        $('#panelTitle').html('<i class="fa fa-plus-circle text-primary"></i> Create New');
+                                        $('#select-ManagedBy').selectize({
+                                            plugins: ['remove_button'],
+                                            openOnFocus: false
+                                        });
+                                        var officeId = $('#' + $node.id).attr('data-mainid');
+                                        $.get('/secure/office/_GetOfficeInfo?id=' + officeId, function (officeData) {
+                                            $('#parentId').append('<option value=' + officeData.Id + ' selected="true">' + officeData.Title + '</option>')
+
+                                        });
+                                    });
+                                });
+
+                                return false;
+                                //alert($(this));
+                                //$node = tree.create_node($node);
+                                //tree.edit($node);
+                            }
+                        },
+                        "Rename": {
+                            "separator_before": false,
+                            "separator_after": false,
+                            "label": "",
+                            "icon": "fa fa-edit text-center text-warning",
+                            "action": function (obj) {
+                                tree.edit($node);
+                            }
+                        },
+                        "Remove": {
+                            "separator_before": false,
+                            "separator_after": false,
+                            "label": "",
+                            "icon": "fa fa-trash-o text-danger",
+                            "action": function (obj) {
+                                tree.delete_node($node);
+                            }
+                        }
+                    };
+                }
+            }, "core": {
+                    "check_callback": function (d)
+                    {
+                        //alert(d);
+                    }
+                }
+            });
+
+            $("#jstree1").on("select_node.jstree", function (e, data) {
+                $('#loading-mask').show();
+                //jsonElement = data.data.origin.get_node(data.element);
+
+                //var id = jsonElement.id;
+                var id = $('#' + data.node.id).attr('data-mainid');
+                if (id != undefined) {
+                    $.get("/Secure/Office/_GetOfficeInfo?id=" + id, function (d) {
+                        $('#loading-mask').hide();
+                        $('#create-office').html('');
+                        $('#panelTitle').html('<i class="fa fa-info text-primary"></i> Overview of ' + d.Title + '');
+                        $('#view-section').css('display', 'block');
+                        $('#caption').css('display', 'block');
+                        $('#office-title-box').css('display', '');
+                        $('#total-offices-box').css('display', 'none');
+                        $('#office-title').html(d.Title);
+                        $('#caption').html(d.Description);
+                        $('#total-offices').html(d.CountSubOffices);
+                        $('#manager-name-box').css('display', '');
+                        $('#manager-name').html(d.ContactName);
+                        $('#total-employees').html('<a href="javascript://" id="employee-view">' + d.CountEmployees + '</a>');
+                        //alert(d);
+                        //$('#idcheck').html(data.node.id);
+                    });
+                }
+                else {
+                    $('#loading-mask').hide();
+                }
+            });
+
+            var selectNode = '';
+
+            $(document).on('dnd_start.vakata', function (e, data) {
+                console.log('Started');
+                jsonElement = data.data.origin.get_node(data.element);
+
+                var id = jsonElement.id;
+                selectNode = $('#' + id).attr('data-mainid');
+            });
+
+            $(document).on('dnd_stop.vakata', function (e, data) {
+
+                alert('are you sure want move this office.?');
+                //if (data.event.target.id === 'dragTarget') {
+
+                var jsonElement;
+
+                var nodeDragged = $(data.element).clone();
+                // $('#dragTarget').append(nodeDragged);
+                if (data.data.jstree && data.data.origin) {
+                    jsonElement = data.data.origin.get_node(data.element);
+
+                    var id = jsonElement.id;
+                    var icon = jsonElement.icon;
+                    var parent = jsonElement.parent;
+                    var parents = jsonElement.parents.join();
+                    var text = jsonElement.text;
+
+
+                    $.get("/Secure/Office/UpdateOfficeById?actualId=" + selectNode + "&nodeTransferId=" + $('#' + parent).attr('data-mainid'), function () {
+                        bootbox.alert("Updated Successfully");
+                        //window.location.reload();
+                    });
+                }
+
+                //}
+            });
+
+            $('#jstree2').jstree({
+                'plugins': ["wholerow", "checkbox"], 'core': {
+                    'data': [
+                        {
+                            "text": "Same but with checkboxes",
+                            "children": [
+                                { "text": "initially selected", "state": { "selected": true } },
+                                { "text": "custom icon URL", "icon": "http://jstree.com/tree-icon.png" },
+                                { "text": "initially open", "state": { "opened": true }, "children": ["Another node"] },
+                                { "text": "custom icon class", "icon": "glyphicon glyphicon-leaf" }
+                            ]
+                        },
+                        "And wholerow selection"
+                    ]
+                }
+            });
+
+        });
+    </script>
+    <script>
+        $(function () {
+
+            $(".officeRecord").click(function (ev) {
+                $('#loading-mask').show();
+                ev.preventDefault();
+                var parentId = $(this).attr("data-parentId");
+                var dataId = $(this).attr("data-id");
+                var target = "";
+                if (dataId === "") {
+                    target = "/Secure/Office/_Record/?p=" + parentId;
+                }
+                else {
+                    target = "/Secure/Office/_Record/" + dataId;
+                }
+
+
+                // load the url and show modal on success
+                $("#officeRecord-Modal .modal-dialog").load(target, function () {
+                    $("#officeRecord-Modal").modal("show");
+                    $('#loading-mask').hide();
+                });
+            });
+        });
+    </script>
+}

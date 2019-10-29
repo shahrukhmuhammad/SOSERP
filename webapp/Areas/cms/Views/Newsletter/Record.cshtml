@@ -1,0 +1,86 @@
+﻿@model CMS.Entity.CmsNewsletter
+@{
+    var queryId = ViewContext.RouteData.Values["id"];
+    ViewBag.Title = queryId == null ? "Add New Newsletter" : "Edit Newsletter";
+}
+
+@section styles{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+}
+
+<form id="frm" class="form-Modal" method="post" enctype="multipart/form-data">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <button type="submit" name="submit" value="draft" class="btn btn-primary"><i class="fa fa-send"></i> Save as Draft</button>
+                <button type="submit" name="submit" value="send" class="btn btn-success"><i class="fa fa-check"></i> Send</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+            <input id="Id" type="hidden" name="Id" value="@Model.Id" />
+
+            @if (TempData["ErrorMsg"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Error!</strong>
+                    @TempData["ErrorMsg"]
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input name="Subject" class="form-control input-sm" value="@Model.Subject" required autofocus />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Contents</label>
+                        <textarea  id="Contents" name="Contents" class="form-control input-sm" onblur="e.stopPropagation()" required>@Model.Contents</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><span class="fa fa-times"></span> Cancel / Back</a>
+                <button type="submit" name="submit" value="draft" class="btn btn-primary"><i class="fa fa-send"></i> Save as Draft</button>
+                <button type="submit" name="submit" value="send" class="btn btn-success"><i class="fa fa-check"></i> Send</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section scripts{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+                $(function () {
+                    $("#Contents").summernote({ height: 200 });
+                });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('Contents');
+            });
+        </script>
+    }
+}

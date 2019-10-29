@@ -1,0 +1,226 @@
+﻿@model CMS.Entity.CmsPage
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    ViewBag.Title = (queryId == null ? "Page Vitals" : "Edit " + Model.Name);
+    var allPages = ViewBag.AllPages as List<CMS.Entity.CmsPage>;
+    int orderLength = allPages.Where(x => x.ParentId == null).Count();
+}
+
+@section styles{
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet" />
+    <link href="~/Content/Bootstrap Typehead/tokenfield-typeahead.css" rel="stylesheet" />
+    <link href="~/Content/Bootstrap Typehead/bootstrap-tokenfield.css" rel="stylesheet" />
+    <style>
+        ul.stage-Nav > li.list-group > a.list-group-item::after {
+            left: 90%;
+        }
+    </style>
+}
+
+<ul class="nav nav-tabs nav-justified stage-Nav">
+    <li class="list-group">
+        <a id="carousel-Step1" href="@(queryId == null ? "javascript://" : "/CMS/WebPage/Step1/" + Model.Id)" class="list-group-item active">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">1. Page Vitals</h5>
+            <p class="list-group-item-text small text-left">URL, Name, Ordering & other settings</p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step2" href="@(queryId == null ? "javascript://" : "/CMS/WebPage/Step2/" + Model.Id)" class="list-group-item">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">2. Page Contents</h5>
+            <p class="list-group-item-text small text-left">Contents editor, Add page sections</p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step3" href="@(queryId == null ? "javascript://" : "/CMS/WebPage/Step3/" + Model.Id)" class="list-group-item">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">3. Optional SEO Settings</h5>
+            <p class="list-group-item-text small text-left">Page SEO metadata settings</p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step4" href="@(queryId == null ? "javascript://" : "/CMS/WebPage/Step4/" + Model.Id)" class="list-group-item last">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">4. Review & Publish</h5>
+            <p class="list-group-item-text small text-left">Review page settings & publish page</p>
+        </a>
+    </li>
+</ul>
+
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong>
+        @TempData["ErrorMsg"]
+    </div>
+}
+
+<form id="page-frm" method="post" class="form-Modal">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="IsSystem" value="@(Model.IsSystem ? "true" : "false")" />
+    <input type="hidden" id="Status" name="Status" value="@CMS.Entity.CmsPageStatus.Draft" />
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <button type="submit" class="btn btn-success">Next <i class="fa fa-angle-right"></i></button>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Url</label>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-addon">/</div>
+                            <input type="text" class="form-control input-sm alphanumericNoSpaceMask" id="Slug" name="Slug" value="@Model.Slug" required @(Model.IsSystem ? "readonly" : "") autofocus />
+                            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control input-sm" name="Name" value="@Model.Name" required />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Browser Title</label>
+                        <input type="text" class="form-control input-sm" name="BrowserTitle" value="@Model.BrowserTitle" required />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Parent</label>
+                        <select name="ParentId" class="form-control input-sm" @(Model.IsSystem ? "disabled" : "")>
+                            <option value="">-- No Parent --</option>
+                            @foreach (var x in allPages.Where(x => x.ParentId == null).ToList())
+                            {
+                                <option value="@x.Id" @(Model.ParentId == x.Id ? "selected" : "" )>@x.Name</option>
+                            }
+                        </select>
+                        @if (Model.IsSystem)
+                        {
+                            <input type="hidden" id="ParentId" name="ParentId" value="@Model.ParentId" />
+                        }
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Order</label>
+                        <select name="PageOrder" class="form-control input-sm" required>
+                            @for (int i = 1; i <= orderLength; i++)
+                            {
+                                <option value="@i" @(Model.PageOrder == i ? "selected" : "" )>@i</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Page is a Link <a href="javascript://" title="If page is a linked URL then check the checkbox and write URL."><i class="fa fa-info-circle"></i></a></label>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-addon">
+                                <div class="checkbox no-margin"><label style="min-height:11px;"><input type="checkbox" name="IsLink" value="@(Model.IsLink ? "true" : "false")" @(Model.IsLink ? "checked" : "") /></label></div>
+                            </div>
+                            <input type="url" class="form-control" id="LinkUrl" name="LinkUrl" value="@Model.LinkUrl" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Page is an external link <a href="javascript://" title="Choose whether the page should open in new tab or not."><i class="fa fa-info-circle"></i></a></label>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-addon">
+                                <div class="checkbox no-margin"><label style="min-height:11px;"><input type="checkbox" id="LinkTarget" name="LinkTarget" value="@(Model.LinkTarget ? "true" : "false")" @(Model.LinkTarget ? "checked" : "") /></label> Externel</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Show Page On</label>
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-addon">
+                                <div class="checkbox no-margin"><label style="min-height:11px;"><input type="checkbox" id="Menu" name="Menu" value="@(Model.Menu ? "true" : "false")" @(Model.Menu ? "checked" : "") /> Menu</label></div>
+                            </div>
+                            <div class="input-group-addon">
+                                <div class="checkbox no-margin"><label style="min-height:11px;"><input type="checkbox" id="Footer" name="Footer" value="@(Model.Footer ? "true" : "false")" @(Model.Footer ? "checked" : "") /> Footer</label></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Tags <a href="javascript://" title="Type tag and hit enter or tab to add another one."><i class="fa fa-info-circle"></i></a></label>
+                        <input id="tags-typehead" class="form-control input-sm" name="Tags" value="@Model.Tags" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <button type="submit" class="btn btn-success">Next <i class="fa fa-angle-right"></i></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <!--  Bootstrap Typehead  -->
+    <script src="~/Scripts/Bootstrap Typehead/bootstrap-tokenfield.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $('#tags-typehead').on('tokenfield:createdtoken', function (e) {
+                //// Über-simplistic e-mail validation
+                //var re = /\S+@@\S+\.\S+/
+                //var valid = re.test(e.attrs.value)
+                //if (!valid) {
+                //    $(e.relatedTarget).addClass('invalid')
+                //}
+            }).tokenfield({ createTokensOnBlur: true });
+
+            $("#page-frm").validate({
+                rules: {
+                    Slug: {
+                        remote: {
+                            url: "@Url.Action("CheckUniqueSlug", "WebPage")",
+                            type: "post",
+                            data: {
+                                Slug: function () {
+                                    return $("#Slug").val();
+                                },
+                                Id: function () {
+                                    return $("#Id").val();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

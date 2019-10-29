@@ -1,0 +1,215 @@
+﻿@model BaseApp.Entity.AppRole
+
+<link href="~/Content/Bootstrap Switch/bootstrap-switch.css" rel="stylesheet" />
+<link href="~/Content/materialDesignSwitch.css" rel="stylesheet" />
+
+@if (Model.Permissions != "" && Model.Permissions != null)
+{
+    <form id="frm" class="form-Modal" method="post" action="~/secure/AccessControl/Role">
+        <div class="modal-content">
+            @Html.AntiForgeryToken()
+            <input id="Id" type="hidden" name="Id" value="@Model.Id" />
+            <input id="RolePermissions" type="hidden" name="Permissions" value="@Model.Permissions" />
+
+            <div class="modal-header">
+                <h4 class="modal-title">Permissions</h4>
+                <div class="btn-group btn-group-xs" role="group">
+                    <button type="submit" class="btn btn-success" title="Submit"><i class="fa fa-check"> Save</i></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            @if (Model.Permissions == "All")
+                            {
+                                <div class="form-group">
+                                    <label> @Model.Code @Model.Title </label>
+                                </div>
+                                <div class="form-group">
+                                    <label> Permissons : All </label>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" name="Title" class="form-control input-sm" value="@Model.Title" required autofocus />
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea name="Description" class="form-control input-sm" style="min-height:98px;">@Model.Description</textarea>
+                                </div>
+                                <ul class="list-group">
+                                    @if (AppModule.GetById("TaskManager").Status)
+                                    {
+                                        <li class="list-group-item">
+                                            <span class="pull-right">
+                                                <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-TaskManagement" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.TaskManagement) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.TaskManagement) ? "checked" : "") : "") />
+                                                <input id="role-TaskManagement" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.TaskManagement) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.TaskManagement" />
+                                            </span>
+                                            <h6 class="list-group-item-heading">Task Management</h6>
+                                            <small style="font-size:11px;">Choose whether this role will have the permission to view and manage tasks.</small>
+                                        </li>
+                                    }
+                                    <li class="list-group-item">
+                                        <span class="pull-right">
+                                            <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-GeneralLog" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.LogsManagement) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.LogsManagement) ? "checked" : "") : "") />
+                                            <input id="role-GeneralLog" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.LogsManagement) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.LogsManagement" />
+                                        </span>
+                                        <h6 class="list-group-item-heading">Logs Management</h6>
+                                        <small style="font-size:11px;">Choose whether this role will have the permission to view and manage logs.</small>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right">
+                                            <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-Report" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.Report) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.Report) ? "checked" : "") : "") />
+                                            <input id="role-Report" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.Report) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.Report" />
+                                        </span>
+                                        <h6 class="list-group-item-heading">Report</h6>
+                                        <small style="font-size:11px;">Choose whether this role will have the permission to manage reports.</small>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right">
+                                            <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-ViewContact" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewContact) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewContact) ? "checked" : "") : "") />
+                                            <input id="role-ViewContact" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewContact) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.ViewContact" />
+                                        </span>
+                                        <h6 class="list-group-item-heading" style="margin-top:5px;">View Contact</h6>
+                                        <hr style="margin-bottom:15px;" />
+                                        <span class="pull-right">
+                                            <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-Contact" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.Contact) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.Contact) ? "checked" : "") : "") />
+                                            <input id="role-Contact" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.Contact) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.Contact" />
+                                        </span>
+                                        <h6 class="list-group-item-heading" style="margin-top:20px;">Control Contact</h6>
+                                        <small style="font-size:11px;">Choose whether this role will have the permission to control or view contact.</small>
+                                    </li>
+
+                                    @if (AppModule.GetById("CMS").Status)
+                                    {
+                                        <li class="list-group-item">
+                                            <span class="pull-right">
+                                                <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-ViewCMS" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewCMS) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewCMS) ? "checked" : "") : "") />
+                                                <input id="role-ViewCMS" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewCMS) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.ViewCMS" />
+                                            </span>
+                                            <h6 class="list-group-item-heading" style="margin-top:5px;">View Content Management</h6>
+                                            <hr style="margin-bottom:15px;" />
+                                            <span class="pull-right">
+                                                <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-CMS" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.CMS) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.CMS) ? "checked" : "") : "") />
+                                                <input id="role-CMS" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.CMS) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.CMS" />
+                                            </span>
+                                            <h6 class="list-group-item-heading" style="margin-top:20px;">Control Content Management</h6>
+                                            <hr style="margin-bottom:15px;" />
+                                            <small style="font-size:11px;">Choose whether this role will have the permission to control or view content management.</small>
+                                        </li>
+                                    }
+                                    @if (AppModule.GetById("Ecommerce").Status)
+                                    {
+                                        <li class="list-group-item">
+                                            <span class="pull-right">
+                                                <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-ViewEcommerce" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewEcommerce) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewEcommerce) ? "checked" : "") : "") />
+                                                <input id="role-ViewEcommerce" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewEcommerce) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.ViewEcommerce" />
+                                            </span>
+                                            <h6 class="list-group-item-heading" style="margin-top:5px;">View Ecommerce Management</h6>
+                                            <hr style="margin-bottom:15px;" />
+                                            <span class="pull-right">
+                                                <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-Ecommerce" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.Ecommerce) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.Ecommerce) ? "checked" : "") : "") />
+                                                <input id="role-Ecommerce" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.Ecommerce) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.Ecommerce" />
+                                            </span>
+                                            <h6 class="list-group-item-heading" style="margin-top:20px;">Control Ecommerce Management</h6>
+                                            <small style="font-size:11px;">Choose whether this role will have the permission to control or view Ecommerce management.</small>
+                                        </li>
+                                    }
+                                    @if (AppModule.GetById("Employees").Status)
+                                    {
+                                        <li class="list-group-item">
+                                            <span class="pull-right">
+                                                <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-ViewHRM" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewHRM) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewHRM) ? "checked" : "") : "") />
+                                                <input id="role-ViewHRM" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewHRM) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.ViewHRM" />
+                                            </span>
+                                            <h6 class="list-group-item-heading" style="margin-top:5px;">View Employee Management</h6>
+                                            <hr style="margin-bottom:15px;" />
+                                            <span class="pull-right">
+                                                <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-HRM" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.HRM) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.HRM) ? "checked" : "") : "") />
+                                                <input id="role-HRM" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.HRM) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.HRM" />
+                                            </span>
+                                            <h6 class="list-group-item-heading" style="margin-top:20px;">Control Employee Management</h6>
+                                            <small style="font-size:11px;">Choose whether this role will have the permission to control or view Employee management.</small>
+                                        </li>
+                                    }
+                                    @if (AppModule.GetById("CRM").Status)
+                                    {
+                                        <li class="list-group-item">
+                                            <span class="pull-right">
+                                                <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-ViewCRM" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewCRM) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewCRM) ? "checked" : "") : "") />
+                                                <input id="role-ViewCRM" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewCRM) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.ViewCRM" />
+                                            </span>
+                                            <h6 class="list-group-item-heading" style="margin-top:5px;">View CRM</h6>
+                                            <hr style="margin-bottom:15px;" />
+                                            <span class="pull-right">
+                                                <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-CRM" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.CRM) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.CRM) ? "checked" : "") : "") />
+                                                <input id="role-CRM" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.CRM) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.CRM" />
+                                            </span>
+                                            <h6 class="list-group-item-heading" style="margin-top:20px;">Control CRM</h6>
+                                            <small style="font-size:11px;">Choose whether this role will have the permission to control or view CRM.</small>
+                                        </li>
+                                    }
+                                    @if (AppModule.GetById("DMS").Status)
+                                    {
+                                        <li class="list-group-item">
+                                            <span class="pull-right">
+                                                <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-ViewDMS" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewDMS) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewDMS) ? "checked" : "") : "") />
+                                                <input id="role-ViewDMS" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.ViewDMS) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.ViewDMS" />
+                                            </span>
+                                            <h6 class="list-group-item-heading" style="margin-top:5px;">View DMS</h6>
+                                            <hr style="margin-bottom:15px;" />
+                                            <span class="pull-right">
+                                                <input type="checkbox" class="switch-Role" data-size="mini" data-id="role-DMS" value="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.DMS) ? "true" : "false") : "false")" @(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.DMS) ? "checked" : "") : "") />
+                                                <input id="role-DMS" type="hidden" class="@(Model.Permissions != null ? (Model.PermissionsList.Any(x => x == BaseApp.Entity.AppPermission.DMS) ? "role-Permission" : "") : "")" value="@BaseApp.Entity.AppPermission.DMS" />
+                                            </span>
+                                            <h6 class="list-group-item-heading" style="margin-top:20px;">Control DMS</h6>
+                                            <small style="font-size:11px;">Choose whether this role will have the permission to control or view DMS.</small>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer text-right">
+                <div class="btn-group btn-group-xs" role="group">
+                    <button type="submit" class="btn btn-success" title="Submit"><i class="fa fa-check"> Save</i></button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+}
+
+
+<script src="~/Scripts/BaseApp.js"></script>
+<script>
+            $(document).ready(function () {
+                $("[class='switch-Role']").bootstrapSwitch();
+                $('.switch-Role').on('switchChange.bootstrapSwitch', function (event, state) {
+                    var getAttr = $(this).attr('data-id');
+
+                    if (state) {
+                        $("#" + getAttr).addClass('role-Permission');
+                    }
+                    else {
+                        $("#" + getAttr).removeClass('role-Permission');
+                    }
+
+                    var rolePermission = '';
+                    $(".role-Permission").each(function () {
+                        var value = $(this).val();
+                        rolePermission += value + ',';
+                        document.getElementById("RolePermissions").value = rolePermission;
+                    });
+                });
+
+
+            });
+</script>

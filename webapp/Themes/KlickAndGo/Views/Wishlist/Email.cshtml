@@ -1,0 +1,67 @@
+﻿@model WebsiteUI.Models.WishlistEmailModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Email</title>
+    <link type="text/css" rel="stylesheet" href="~/Content/common.css" />
+    <style type="text/css">
+        body {
+            background: #fff;
+        }
+        .grayed {
+            color:#777;
+            font-style:italic;
+            font-size:11px;
+        }
+    </style>
+    <script type="text/javascript" src="~/Scripts/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+</head>
+<body>
+    <h2 class="heading2">Email A Friend</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="left">
+            @Html.LabelFor(x => x.Name) <span class="validator">*</span>
+            <br />
+            @Html.TextBoxFor(x => x.Name, new { @class = "formField", style="width:230px" })
+        </div>
+
+        <div class="right">
+            @Html.LabelFor(x => x.Email) <span class="validator">*</span>
+            <br />
+            @Html.TextBoxFor(x => x.Email, new { @class = "formField", style="width:230px" })
+        </div>
+        
+        <div class="clear"></div>
+        
+        <br /><br />
+
+        @Html.LabelFor(x => x.Message) <span class="grayed">(optional)</span>
+        <br />
+        @Html.TextAreaFor(x => x.Message, new { @class = "formField", style = "width:535px;height:165px" })
+
+        <div style="text-align:center;margin-top:5px">
+            <input type="submit" class="formButton" value="Send Email" />
+        </div>
+    }
+
+    @*<script type="text/javascript">
+        $('form').submit(function () {
+            if ($('form').valid()) {
+                $('.formButton[type="submit"]').removeClass("formButton").addClass("formButton-disabled").attr('disabled', true);
+            }
+        });
+    </script>*@
+</body>
+</html>

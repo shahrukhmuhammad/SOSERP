@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Full Featured Editor";
+}
+
+@section styles{
+    @Styles.Render("~/Content/SummerNote")
+}
+
+<textarea type="text" class="form-control" id="Contents"></textarea>
+
+<hr />
+
+<div class="airmode">
+    <h1>This area is air mode</h1>
+</div>
+
+
+@section scripts{
+    <!-- include codemirror (codemirror.css, codemirror.js, xml.js, formatting.js) -->
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/monokai.css">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.js"></script>
+
+    @Scripts.Render("~/bundles/SummerNote")
+    <script src="~/Scripts/Summer Note/summernote-ext-highlight.js"></script>
+    <script src="~/Scripts/Summer Note/summernote-ext-template.js"></script>
+    <script src="~/Scripts/Summer Note/summernote-ext-rtl.js"></script>
+    <script src="~/Scripts/Summer Note/summernote-map-plugin.js"></script>
+    <script src="~/Scripts/Summer Note/summernote-ext-print.js"></script>
+    <script src="~/Scripts/Summer Note/summernote-image-attributes.js"></script>
+    <script src="~/Scripts/Summer Note/summernote-floats-bs.js"></script>
+
+    
+    <script>
+        $(function () {
+            $("#Contents").summernote({
+                codemirror: { // codemirror options
+                    theme: 'monokai',
+                    lineNumbers: true
+                },
+                height: 700,
+                tabsize: 2,
+                // close prettify Html
+                prettifyHtml: true,
+                popover: {
+                    image: [
+                        ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                        /* ['float', ['floatLeft', 'floatRight', 'floatNone']], */
+                        /* Those are the old regular float buttons */
+                        ['floatBS', ['floatBSLeft', 'floatBSNone', 'floatBSRight']],
+                        ['custom', ['imageAttributes', 'imageShape']],
+                        ['remove', ['removeMedia']]
+                    ],
+                },
+                map: {
+                    apiKey: 'AIzaSyC4wQxb6hFjF1nrDEg6ePZcTbmswq89hAE',
+                    // This will be used when map is initialized in the dialog.
+                    center: {
+                        lat: -33.8688,
+                        lng: 151.2195
+                    },
+                    zoom: 13
+                },
+                toolbar: [
+                    ['style', ['style', 'clear']],
+                    ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video', 'hr', 'ltr', 'rtl']],
+                    ['view', ['fullscreen', 'codeview', 'undo', 'redo']],
+                    ['help', ['help']],
+
+                    ['misc', ['map', 'template', 'print']],
+
+                    // Add highlight plugin
+                    ['highlight', ['highlight']],
+                ],
+                template: {
+                    path: '/Content/Summer Note/Templates', // path to your template folder
+                    list: [ // list of your template (without the .html extension)
+                        'label-success'
+                    ]
+                },
+            });
+
+            $('.airmode').summernote({
+                airMode: true
+            });
+        });
+    </script>
+}
+

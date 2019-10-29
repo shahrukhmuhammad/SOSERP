@@ -1,0 +1,285 @@
+﻿@model List<BaseApp.Entity.AppUser>
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    var allOffices = ViewBag.AllOffices as List<BaseApp.Entity.Office>;
+    var office = new BaseApp.Entity.Office();
+    if (queryId == null)
+    {
+        ViewBag.Title = "App Users";
+    }
+    else
+    {
+        office = ViewBag.Office as BaseApp.Entity.Office;
+        ViewBag.Title = office.Title + "'s Contacts";
+    }
+}
+
+<div class="no-margin">
+    @*<fieldset>*@
+        @*<legend class="no-margin" style="font-size:12px;">
+            Showing Results from @(queryId == null ? "All Offices" : office.Title)
+            <div class="btn-group btn-group-xs pull-right" role="group" style="margin-top:-5px;">
+                @if (queryId != null)
+                {
+                    <a href="~/Secure/Office/Details/@office.Id" class="btn btn-default"><i class="fa fa-info"></i> Go to Details</a>
+                }
+                <a href="javascript://" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-building"></i> @(queryId == null ? "All Offices" : office.Title) <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="@(queryId == null ? "active" : "")"><a href="~/Secure/AccessControl">All Offices</a></li>
+                    @foreach (var x in allOffices)
+                    {
+                        <li class="@(queryId != null ? (queryId.ToString() == x.Id.ToString() ? "active" : "") : "")"><a href="~/Secure/AccessControl/Index/@x.Id">@x.Code - @x.Title</a></li>
+                    }
+                </ul>
+            </div>
+        </legend>*@
+        <table class="table table-striped table-hover table-condensed">
+            @if (queryId != null)
+            {
+                <thead>
+                    <tr>
+                        <th>Office</th>
+                        <th>Manager</th>
+                        <th>Departments</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@office.Title</td>
+                        <td><a href="~/Secure/Office/Details/@office.ContactId">@office.Contact.FullName</a></td>
+                        <td>
+                            @if (office.Children.Count() > 0)
+                            {
+                                <ul class="no-margin" style="padding:0 10px;">
+                                    @foreach (var dept in office.Children)
+                                    {
+                                        <li><a href="~/Secure/Office/DepartmentDetails/@dept.Id">@dept.Title</a></li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span>No department found.</span>
+                            }
+                        </td>
+                        <td>@office.Description</td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+    @*</fieldset>*@
+</div>
+
+<div class="row" style="margin-top:15px;">
+    @if (CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All))
+    {
+        @*<div class="col-md-6">
+            <div class="panel panel-default panel-Custom">
+                <a href="javascript://" class="panel-heading text-center">
+                    <h3 class="panel-title"><i class="fa fa-server text-info"></i> System Ownership Details </h3>
+                </a>
+                <div class="panel-body no-padding">
+                    <div class="caption">
+                        Manage system ownership settings.
+                    </div>
+
+                    <a href="javascript://" class="btn btn-link pull-left">Manage Details &nbsp; &nbsp; <i class="fa fa-edit"></i></a>
+
+                    <table class="table table-striped table-condensed no-margin">
+                        <tr>
+                            <th class="text-right" style="width:50%">Name: </th>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Designation: </th>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Email Address: </th>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Phone Number: </th>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Fax: </th>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                    <div align="center">
+                        <a href="~/Secure/Config/Info" class="btn btn-link">Licensing Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    }
+
+    @*<div class="col-md-6">
+        <div class="panel panel-default panel-Custom" style="height: 338px !important;">
+            <a href="javascript://" class="panel-heading text-center">
+                <h3 class="panel-title"><i class="fa fa-server text-info"></i> System Administerator </h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Manage system administrator details.
+                </div>
+
+                <a href="javascript://" class="btn btn-link pull-left">Manage Details &nbsp; &nbsp; <i class="fa fa-edit"></i></a>
+
+                <table class="table table-striped table-condensed no-margin">
+                    <tr>
+                        <th class="text-right" style="width:50%">Name: </th>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Designation: </th>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Email Address: </th>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Phone Number: </th>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Fax: </th>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>*@
+</div>
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                @ViewBag.Title
+                <span class="pull-right" style="font-size:16px;">
+                    <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()" title="Back"><i class="fa fa-angle-left fa-2x"></i></a>
+                    <a href="javascript://" style="margin:0 10px;" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')" class="forceRedirect" title="Delete"><i class="fa fa-trash fa-2x text-danger"></i></a>
+                    <a href="~/Secure/AccessControl/Record" title="Add New Contact"><i class="fa fa-user-plus fa-2x text-primary"></i></a>
+                </span>
+            </h4>
+            @*<div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Back"><i class="fa fa-angle-left"></i></a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')" class="btn btn-danger forceRedirect" title="Delete"><i class="fa fa-trash"></i></a>
+                @if (queryId == null)
+                {
+                    <a href="javascript://" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Add New Contact">
+                        <i class="fa fa-user-plus"></i> <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" style="margin-left:-106px;">
+                        @foreach (var x in allOffices)
+                        {
+                            <li><a href="~/Secure/AccessControl/Record?o=@x.Id">@x.Code - @x.Title</a></li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <a href="~/Secure/AccessControl/Record?o=@office.Id" class="btn btn-primary" title="Add New Contact"><i class="fa fa-user-plus"></i></a>
+                }
+            </div>*@
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table id="acl-Users-dataTable" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Code" id="dataTable_0" /></th>
+                            @if (queryId == null)
+                            {
+                                <th><input class="form-control input-sm input-tbl" type="text" placeholder="Office" id="dataTable_1" /></th>
+                            }
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Role" id="@(queryId == null ? "dataTable_2" : "dataTable_1")" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Username" id="@(queryId == null ? "dataTable_3" : "dataTable_2")" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Full Name" id="@(queryId == null ? "dataTable_4" : "dataTable_3")" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Status" id="@(queryId == null ? "dataTable_5" : "dataTable_4")" /></th>
+                            <th width="120px" class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.Contact))
+                                        {
+                                            <input type="checkbox" class="checkIt" value="@x.Id" />
+                                        }
+                                    </td>
+                                    <td><a href="~/Secure/AccessControl/Details/@x.Id">@x.Code</a></td>
+                                    @if (queryId == null)
+                                    {
+                                        <td><a href="~/Secure/Office/Details/@x.OfficeId">@x.Office.Title</a></td>
+                                    }
+                                    <td><a href="~/Secure/AccessControl/Roles">@x.Role.Code @x.Role.Title</a></td>
+                                    <td>@x.Username</td>
+                                    <td>@x.FullName</td>
+                                    <td>
+                                        @if (x.Status == BaseApp.Entity.AppUserStatus.Active)
+                                        {
+                                            <label class="label label-success">Active</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="label label-danger">Suspended</label>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            <a href="~/Secure/AccessControl/Details/@x.Id" class="btn btn-primary" title="Details"><i class="fa fa-eye"></i></a>
+                                            @if (CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.Contact))
+                                            {
+                                                <a href="~/Secure/AccessControl/Record/@x.Id" class="btn btn-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                                <a href="javascript://" onclick="changeStatus('@Url.Action("ChangeStatus")', '@x.Id')" class="btn @(x.Status == BaseApp.Entity.AppUserStatus.Active ? "btn-warning" : "btn-success")" title="@(x.Status == BaseApp.Entity.AppUserStatus.Active ? "Suspend Now" : "Active Now")"><i class="fa @(x.Status == BaseApp.Entity.AppUserStatus.Active ? "fa-ban" : "fa-check")"></i></a>
+                                                <a href="javascript://" onclick="deleteRecord('@Url.Action("Delete")', '@x.Id')" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="pull-right">
+                <a href="javascript://" style="margin:0 10px" onclick="window.history.back()"><i class="fa fa-angle-left fa-2x"></i></a>
+                <a href="javascript://" style="margin:0 10px" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')" class="forceRedirect"><i class="fa fa-trash fa-2x text-danger"></i></a>
+                    <a href="~/Secure/AccessControl/Record"><i class="fa fa-user-plus fa-2x text-primary"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="manageAccess-Modal" tabindex="-1" role="dialog" aria-labelledby="manageAccess   -Modal" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            @if (queryId == null)
+            {
+                @: filterDataTable("#acl-Users-dataTable", [1, 2, 3, 4, 5, 6], [0, 7]);
+                            @: getAppUsers("#acl-Users-dataTable", '@(queryId == null ? "" : queryId)');
+                        }
+            else
+            {
+                @: filterDataTable("#acl-Users-dataTable", [1, 2, 3, 4, 5], [0, 6]);
+                            @: getAppUsers("#acl-Users-dataTable", '@(queryId == null ? "" : queryId)');
+             }
+
+        });
+    </script>
+}

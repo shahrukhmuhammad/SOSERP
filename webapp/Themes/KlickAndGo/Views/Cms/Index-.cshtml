@@ -1,0 +1,936 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@model CMS.Entity.CmsPage
+@{
+    ViewBag.Title = Model.BrowserTitle;
+    var homepageMetadata = ViewBag.WebsiteMetadata as List<CMS.Entity.CmsSeoMetadata>;
+    if (homepageMetadata != null)
+    {
+        if (homepageMetadata.Count() > 0)
+        {
+            homepageMetadata = homepageMetadata.Where(x => x.AllPages == true).ToList();
+        }
+    }
+}
+@section head{
+    <style type="text/css">
+            .cart-icon
+            {
+            background-color:#04468d;width: 30px; margin-top:3px;
+         height: 30px; position: relative; text-align: center; line-height: 30px; border-radius: 50%;box-shadow: none; -moz-transition: color 0.3s;
+         -webkit-transition: color 0.3s;-o-transition: color 0.3s; transition: color 0.3s;
+            }
+            #container {
+            position: relative;
+            width: 100%;
+        }
+            #content .main_box .desc{
+                text-align:center;
+            }
+        .image {
+          opacity: 1;
+          display: block;
+          width: 100%;
+          height: auto;
+          transition: .5s ease;
+          backface-visibility: hidden;
+        }
+
+        .middle {
+          transition: .5s ease;
+          opacity: 0;
+          position: absolute;
+          top: 60%;
+          left: 90%;
+          transform: translate(-50%, -50%);
+          -ms-transform: translate(-50%, -50%)
+        }
+
+        #container:hover .image {
+          opacity: 0.7;
+        }
+
+        #container:hover .middle {
+          opacity: 1;
+        }
+
+        .text {
+          background-color: #4CAF50;
+          color: white;
+          font-size: 16px;
+          padding: 16px 32px;
+            font-family:sans-serif;
+        }
+    </style>
+}
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="entry-popup">
+        <div class="modal-dialog" style="width:85%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h2 class="modal-title text-center" id="myModalLabel"></h2>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-8">
+                        <div id="chart">
+                            <div id="question">
+                                <h1></h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" style="margin-top:230px;">
+                        <p style="margin: 0;padding: 0;font-family:Open Sans, HelveticaNeue,Helvetica Neue, Helvetica, Arial, sans-serif;font-weight: 400;color: #000000;">Click on the wheel and get discount</p>
+
+                        <span class="email_box">
+                            <input type="email" value="" placeholder="your-email@example.com" name="contact[email]" id="Email" class="txtbox" aria-label="your-email@example.com">
+                            @*<button class="btn btn-link" type="submit" value="Subscribe" name="commit" id="Subscribe"><span class="fa fa-check"></span></button>*@
+
+
+                            @*<form method="post" action="/contact#contact_form" id="contact_form" class="contact-form" accept-charset="UTF-8">
+                                    <input type="hidden" value="customer" name="form_type"><input type="hidden" name="utf8" value="✓">
+
+
+                                    <input type="hidden" name="contact[tags]" value="newsletter">
+                                    <input type="email" value="" placeholder="your-email@example.com" name="contact[email]" id="Email" class="txtbox" aria-label="your-email@example.com" autocorrect="off" autocapitalize="off">
+                                    <button class="btn btn-link" type="submit" value="Subscribe" name="commit" id="Subscribe"><span class="fa fa-check"></span></button>
+
+                                </form>*@
+                        </span>
+                        <span>
+                            <button type="button" id="file" class="info_btn" style="height:40px;font-size: 14px;line-height: 40px;color: #ffffff;display: inline-block;padding: 0 20px; margin: 20px 0 0 10px; font-weight: 700; background: #f5af19;text-decoration: none; border-radius: 18px; border: none;text-align:center;cursor:pointer;position:relative;" onClick="Refresh()">Close</button>
+
+                        </span>
+
+                        <script type="text/javascript">
+                            $("#Email").on('submit', function () {
+                                $('#file').trigger('click');
+                            });
+                            function Refresh() {
+                                window.parent.location = window.parent.location.href;
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" class="">
+  $(document).ready(function() {
+    if ($.cookie('pop') == null) {
+      function show_modal(){
+        $('#myModal').modal();
+      }
+      window.setTimeout(show_modal, 30000); // delay before it calls the modal function
+      $.cookie('pop', '60');
+    }
+  });
+</script>
+
+<style>
+        #slideshow {
+      margin: 80px auto;
+      margin-bottom:45px;
+      margin-top:10px;
+      position: relative;
+      width: 1200px;
+      height: 500px;
+      padding: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    #slideshow > div {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+    }
+</style>
+<script>
+    $("#slideshow > div:gt(0)").hide();
+
+    setInterval(function () {
+        $('#slideshow > div:first')
+          .fadeOut(1000)
+          .next()
+          .fadeIn(1000)
+          .end()
+          .appendTo('#slideshow');
+    }, 3000);
+</script>
+<style>
+    body{
+        font-family: 'open-sans',sans-serif;
+    }
+</style>
+<div id="content">
+    <div id="slideshow">
+        @foreach (var slide in (IEnumerable<Slide>)ViewBag.Slider)
+        {
+            <div>
+                <img src="@string.Format(@"{0}nslider_{1}.jpg", Settings.Get.CdnUrl, slide.SlideId)" style="width:100%; height:480px;" />
+            </div>
+        }
+
+    </div>
+    <!-- BEGIN content_for_index --><div id="shopify-section-slideshow" class="shopify-section">
+
+        <!--SLIDER END -->
+    </div>
+    <div id="shopify-section-1485883320496" class="shopify-section">
+        <div id="call-to-action">
+            <div class="f_top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-ms-6 col-xs-12">
+                            <div class="ftop_blk ">
+                                <a href="https://www.google.com/shopping/seller?q=rinkit.com&amp;hl=en_GB"><h5>100% Secure - Shop with confidence <span class="fa fa-arrow-circle-right"></span></h5></a>
+                                <span class="icon"><i class="fa fa-lock"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-ms-6 col-xs-12">
+                            <div class="ftop_blk ">
+                                <a href="pages/uk-delivery-information.html"><h5>Free UK delivery on orders over £50 <span class="fa fa-arrow-circle-right"></span></h5></a>
+                                <span class="icon"><i class="fa fa-thumbs-o-up"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-ms-6 col-xs-12">
+                            <div class="ftop_blk ">
+                                <a href="pages/uk-delivery-information.html"><h5>Next day delivery only £4.99 <span class="fa fa-arrow-circle-right"></span></h5></a>
+                                <span class="icon"><i class="fa fa-truck"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-ms-6 col-xs-12">
+                            <div class="ftop_blk  bor_none ">
+                                <a href="pages/customer-reviews.html"><h5>Thousands of happy customers <span class="fa fa-arrow-circle-right"></span></h5></a>
+                                <span class="icon"><i class="fa fa-smile-o"></i></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+          h3 {
+                position: relative;
+                font-size: 20px;
+                z-index: 1;
+                overflow: hidden;
+                text-align: center;
+                color:#06c;
+                font-weight:500;
+                padding:10px;
+                margin-left:10px;
+                margin-right:10px;
+            }
+               h3:before, h3:after {
+                position: absolute;
+                top: 51%;
+                overflow: hidden;
+                width: 50%;
+                height: 2px;
+                content: '\a0';
+                background-color: #06c;
+                padding-right:10px;
+            }
+                             h3:before {
+                margin-left: -50%;
+                text-align: right;
+            }
+                             .color {
+                background-color: #ccc;
+            }
+        </style>
+        <div id="shopify-section-1487940115930" class="shopify-section">
+
+            <div data-section-id="1487940115930" data-section-type="featured-products-section">
+                <div class="container">
+                    <div class="">
+                        <h3 class="text-center">Special Promotions</h3>
+                    </div>
+                    <div class="h_row_content h_row_4 featured-products" data-animation="fadeInUp" id="Promotions" style="margin-top:10px">
+                        @*@foreach (var product in (IEnumerable<Framework.Data.CatalogProduct>)ViewBag.ProductOnSale)
+                            {
+                            }*@
+                        <div class="product_c mt30 grid-layout">
+                            <div class="row">
+
+                                <div id="" class="featured-products">
+                                    <div class="col-md-3 col-sm-5 col-xs-7 mb30" style="min-height:358px;">
+                                        <div id="container">
+                                            <div class="main_box">
+                                                <div class="box_1">
+                                                    <div class="on-sale" style="float:left; background-color:red; position:absolute ">
+                                                        SALE
+                                                    </div>
+                                                    <div class="product-image">
+                                                        <img src="~/Content/Images/colorbox/Promo1.jpg" height="250" width="250" />
+                                                    </div>
+                                                    <div class="middle" style="width:0px;float:right">
+
+                                                    </div>
+                                                </div>
+                                                <div class="desc">
+                                                    <h5>
+                                                        Best Furniture
+                                                    </h5>
+                                                    <p>Enjoy Sale on Quality Furniture</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="" class="featured-products">
+                                    <div class="col-md-3 col-sm-5 col-xs-7 mb30" style="min-height:358px;">
+                                        <div id="container">
+                                            <div class="main_box">
+                                                <div class="box_1">
+                                                    <div class="on-sale" style="float:left; background-color:red; position:absolute ">
+                                                        SALE
+                                                    </div>
+                                                    <div class="product-image">
+                                                        <img src="~/Content/Images/colorbox/Promo1.jpg" height="250" width="250" />
+                                                    </div>
+                                                    <div class="middle" style="width:0px;float:right">
+
+                                                    </div>
+                                                </div>
+                                                <div class="desc">
+                                                    <h5>
+                                                        Best Furniture
+                                                    </h5>
+                                                    <p>Enjoy Sale on Quality Furniture</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="" class="featured-products">
+                                    <div class="col-md-3 col-sm-5 col-xs-7 mb30" style="min-height:358px;">
+                                        <div id="container">
+                                            <div class="main_box">
+                                                <div class="box_1">
+                                                    <div class="on-sale" style="float:left; background-color:red; position:absolute ">
+                                                        SALE
+                                                    </div>
+                                                    <div class="product-image">
+                                                        <img src="~/Content/Images/colorbox/Promo1.jpg" height="250" width="250" />
+                                                    </div>
+                                                    <div class="middle" style="width:0px;float:right">
+
+                                                    </div>
+                                                </div>
+                                                <div class="desc">
+                                                    <h5>
+                                                        Best Furniture
+                                                    </h5>
+                                                    <p>Enjoy Sale on Quality Furniture</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="" class="featured-products">
+
+                                    <div class="col-md-3 col-sm-5 col-xs-7 mb30" style="min-height:358px;">
+                                        <div id="container">
+                                            <div class="main_box">
+                                                <div class="box_1">
+                                                    <div class="on-sale" style="float:left; background-color:red; position:absolute ">
+                                                        SALE
+                                                    </div>
+                                                    <div class="product-image">
+                                                        <img src="~/Content/Images/colorbox/Promo1.jpg" height="250" width="250" />
+                                                    </div>
+                                                    <div class="middle" style="width:0px;float:right">
+
+                                                    </div>
+                                                </div>
+                                                <div class="desc">
+                                                    <h5>
+                                                        Best Furniture
+                                                    </h5>
+                                                    <p>Enjoy Sale on Quality Furniture</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="">
+                        <h3 class="text-center">Featured Prducts</h3>
+                    </div>
+                    <section class="section-products-carousel">
+                        <div class="home-v2-owl-carousel-tabs">
+                            <div class="woocommerce columns-3 h_row_content h_row_3 featured-products">
+                                <div class="products owl-carousel home-v2-carousel-tabs products-carousel columns-3 product_c mt30 grid-layout" data-animation="fadeInUp" style="margin-top:10px">
+                                    @foreach (var product in (IEnumerable<Framework.Data.CatalogProduct>)ViewBag.FeaturedProducts)
+                                    {
+                                        <div id="" class="featured-products">
+                                            <div class="col-md-12 col-sm-12 col-xs-12 mb30" style="min-height:358px;">
+                                                <div id="container">
+                                                    <div class="main_box">
+                                                        <div class="box_1">
+                                                            <div class="product-image">
+                                                                <a href="~/product/@product.Slug" class="coll-img coll-1150677059">
+                                                                    <img src="http://klickngo.co.uk/admin/Cdn/Img/@(product.ProductId == 0 ? "0" : product.ProductId.ToString())?s=m&t=p&target=null&w=150&h=150" alt="@product.Title">
+                                                                </a>
+                                                            </div>
+                                                            @*window.location='@Url.Action("Add", "Cart", new { @id = product.ProductId })'*@
+                                                            <input type="hidden" id="productvariantId-@product.ProductId" />
+                                                            <div class="middle">
+                                                                <div class="cart-icon" style="background-color: #04468d">
+                                                                    <a href="javascript://" class="cartadd" data-productid="@product.ProductId" @*onclick="Addtocart(@product.ProductId)"*@>
+                                                                        <i class="fa fa-shopping-cart" style="color:white"></i>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="cart-icon" style="background-color: #04468d">
+                                                                    <a href="javascript://" onclick="window.location='@Url.Action("Add", "Wishlist", new { @id = product.ProductId })'">
+                                                                        <i class="fa fa-heart" style="color:white"></i>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="cart-icon" style="background-color: #04468d">
+                                                                    <i class="fa fa-share-alt-square" style="color:white"></i>
+                                                                </div>
+                                                                <div class="cart-icon" style="background-color: #04468d">
+                                                                    <a href="~/product/@product.Slug">
+                                                                        <i class="fa fa-eye" style="color:white"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="middle" style="width:0px;float:right">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <h5>
+                                                                <a href="~/product/@product.Slug">@product.Title</a>
+                                                            </h5>
+                                                            <p>@product.ShortDescription</p>
+                                                           
+                                                            <div class="price">
+                                                                <span class="money">
+                                                                    @Settings.Get.CurrencySymbol@product.RetailPrice
+                                                                </span>
+                                                                <span class="compare-price money">
+                                                                    @Settings.Get.CurrencySymbol@product.OldPrice
+                                                                </span>
+                                                            </div>
+                                                            <div class="form-inline partial">
+                                                                @{Html.RenderAction("GetVariantsForHomePage", "Home", new { id = product.ProductId }); }
+                                                               
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div><!-- /.products -->
+                            </div>
+                        </div>
+                    </section>
+
+                    @*<div class="h_row_content h_row_4 featured-products" data-animation="fadeInUp" style="margin-top:10px">
+                            <div class="product_c mt30 grid-layout ">
+                                <div class="row">
+                                    @foreach (var product in (IEnumerable<Framework.Data.CatalogProduct>)ViewBag.FeaturedProducts)
+                                    {
+                                        <div id="" class="featured-products">
+                                            <div class="col-md-3 col-sm-5 col-xs-7 mb30 " style="min-height:358px;">
+                                                <div id="container">
+                                                    <div class="main_box">
+                                                        <div class="box_1">
+                                                            <div class="product-image">
+                                                                <a href="~/product/@product.Slug" class="coll-img coll-1150677059">
+                                                                    <img src="http://klickngo.co.uk//admin/@Url.Action("Img", "Cdn")/@(product.ProductId == 0 ? "0" : product.ProductId.ToString())?s=m&t=p&target=null&w=150&h=150" alt="@product.Title">
+                                                                </a>
+                                                            </div>
+                                                            <div class="middle">
+                                                                <div class="cart-icon" style="background-color: #04468d">
+                                                                    <a href="javascript://" onclick="window.location='@Url.Action("Add", "Cart", new { @id = product.ProductId })'">
+                                                                        <i class="fa fa-shopping-cart" style="color:white"></i>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="cart-icon" style="background-color: #04468d">
+                                                                    <i class="fa fa-heart" style="color:white"></i>
+                                                                </div>
+                                                                <div class="cart-icon" style="background-color: #04468d">
+                                                                    <i class="fa fa-share-alt-square" style="color:white"></i>
+                                                                </div>
+                                                                <div class="cart-icon" style="background-color: #04468d">
+                                                                    <a href="~/product/@product.Slug">
+                                                                        <i class="fa fa-eye" style="color:white"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="middle" style="width:0px;float:right">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <h5>
+                                                                <a href="~/product/@product.Slug">@product.Title</a>
+                                                            </h5>
+                                                            <p>@product.ShortDescription</p>
+                                                            <div class="price">
+                                                                <span class="money">
+                                                                    @Settings.Get.CurrencySymbol@product.RetailPrice
+                                                                </span>
+                                                                <span class="compare-price money">
+                                                                    @Settings.Get.CurrencySymbol@product.OldPrice
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>*@
+
+                    <div class="">
+                        <h3 class="text-center">Top Seller Prducts</h3>
+                    </div>
+                    <section class="section-products-carousel">
+                        <div class="home-v2-owl-carousel-tabs">
+                            <div class="woocommerce columns-3 h_row_content h_row_3 featured-products">
+                                <div class="products owl-carousel home-v2-carousel-tabs products-carousel columns-3 product_c mt30 grid-layout" data-animation="fadeInUp" style="margin-top:10px">
+                                    @foreach (var product in (IEnumerable<Framework.Data.CatalogProduct>)ViewBag.TopSellerProducts)
+                                    {
+                                        <div id="" class="featured-products">
+                                            <div class="col-md-12 col-sm-12 col-xs-12 mb30 " style="min-height:358px;">
+                                                <div id="container">
+                                                    <div class="main_box">
+                                                        <div class="box_1">
+                                                            <div class="product-image">
+                                                                <a href="~/product/@product.Slug" class="coll-img coll-1150677059">
+                                                                    <img src="http://klickngo.co.uk/admin/Cdn/Img/@(product.ProductId == 0 ? "0" : product.ProductId.ToString())?s=m&t=p&target=null&w=150&h=150" alt="@product.Title">
+                                                                </a>
+                                                            </div>
+                                                            <div class="middle">
+                                                                <div class="cart-icon" style="background-color: #04468d">
+                                                                    <a href="javascript://" onclick="window.location='@Url.Action("Add", "Cart", new { @id = product.ProductId })'">
+                                                                        <i class="fa fa-shopping-cart" style="color:white"></i>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="cart-icon" style="background-color: #04468d">
+                                                                    <a href="javascript://" onclick="window.location='@Url.Action("Add", "Wishlist", new { @id = product.ProductId })'">
+                                                                        <i class="fa fa-heart" style="color:white"></i>
+                                                                    </a>
+                                                                 </div>
+                                                                <div class="cart-icon" style="background-color: #04468d">
+                                                                    <i class="fa fa-share-alt-square" style="color:white"></i>
+                                                                </div>
+                                                                <div class="cart-icon" style="background-color: #04468d">
+                                                                    <a href="~/product/@product.Slug">
+                                                                        <i class="fa fa-eye" style="color:white"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="middle" style="width:0px;float:right">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <h5>
+                                                                <a href="~/product/@product.Slug">@product.Title</a>
+                                                            </h5>
+                                                            <p>@product.ShortDescription</p>
+                                                            <div class="price">
+                                                                <span class="money">
+                                                                    @Settings.Get.CurrencySymbol@product.RetailPrice
+                                                                </span>
+                                                                <span class="compare-price money">
+                                                                    @Settings.Get.CurrencySymbol@product.OldPrice
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="shopify-section-1485891171215" class="shopify-section">
+        <div class="home-cta-bg mt-30 mb30 section-1485891171215" data-section-id="1485891171215" data-section-type="text-section">
+            <div class="cta-overlay">
+                <div class="container">
+                    <div class="h_row_content h_row_3 animated fadeInUp" data-animation="fadeInUp">
+
+                        @Html.Action("CmsContent", new { id = "ContentPromotion" })
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <style>
+            #content .home-cta-bg.section-1485891171215
+            {
+                height: 250px;
+                background-image: url("/Themes/KlickAndGo/Content/cdn.shopify.com/s/files/1/0882/5910/files/family_banner_50c3b446-f305-43d7-a5da-bacc8bea45d2_1400x5c9f.jpg");
+                /*background-image: url('../cdn.shopify.com/s/files/1/0882/5910/files/family_banner_50c3b446-f305-43d7-a5da-bacc8bea45d2_1400x5c9f.jpg?v=1501069082');*/
+            }
+
+            #content .home-cta-bg
+            {
+                background-color: #ffffff;
+            }
+
+                #content .home-cta-bg.section-1485891171215 .cta-overlay
+                {
+                    background: rgba(0,0,0,0);
+                }
+        </style>
+    </div>
+
+
+
+    <div id="shopify-section-featured-collections" class="shopify-section">
+
+        <div class="container" data-section-id="featured-collections" data-section-type="featured-collections-section">
+            <div class="clearfix">
+                <h3>Popular Departments</h3>
+            </div>
+            <div class="h_row_content home_collection section-featured-collections " data-animation="fadeInUp">
+
+                <div class="catalog_c mt30">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="product_c ">
+                                @{
+                                    double countCat = ViewBag.CountCategories;
+                                    double v = (int)Math.Ceiling(countCat / 12);
+                                    int i = 0;
+                                }
+
+                                @for (int e = 0; e < v; e++)
+                                {
+                                    <div class="row view-grid animated fadeInUp" data-animation="fadeInUp">
+                                        @{
+                                            var getcateg = ViewBag.ShopByCategories as List<Category>;
+                                            var varModel = (IEnumerable<Framework.Data.Category>)ViewBag.ShopByCategories;
+                                            int g = 0;
+                                        }
+
+                                        @for (int u = i; i < varModel.Count(); u++)
+                                        {
+                                            <div class="col-md-2 col-sm-3 col-xs-6 mb30">
+                                                <div class="main_box">
+                                                    <div class="box_1">
+                                                        <a href="~/category/@(varModel.ElementAt(u).Slug)">
+                                                            <img src="@Url.Action("Img", "Cdn", new { id = varModel.ElementAt(u).CategoryId, s = "s", t = "c", w = 150, h = 150 })" alt="" class="image" />
+                                                        </a>
+                                                    </div>
+                                                    <div class="desc">
+                                                        <h5>
+                                                            <a href="~/category/@(varModel.ElementAt(u).Slug)">
+                                                                @varModel.ElementAt(u).Title
+                                                            </a>
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            i++;
+                                            g++;
+                                            if (g == 12)
+                                            {
+                                                countCat += 1;
+                                                break;
+                                            }
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+                    $(".regular").slick({
+                        dots: false,
+                        infinite: true,
+                        slidesToShow: 4,
+                        slidesToScroll: 3
+                    });
+                </script>
+            </div>
+        </div>
+        <style>
+            #content .home_collection.section-featured-collections .box_1
+            {
+                height: 140px;
+            }
+        </style>
+    </div>
+
+
+
+    <div id="shopify-section-1487673493198" class="shopify-section">
+        <div class="container" data-count="3" data-section-id="1487673493198" data-section-type="featured-images-section">
+            <div class="h_row_content h_row_1 ideas-hover section-1487673493198">
+                <div class="row">
+                    <div class="col-sm-4 animated" data-animation="rollIn">
+                        <a name="DeliveryInfo" class="div-link">
+                            <div class="box box_1 red5 feature_1">
+                                <figure class="effect-chico">
+                                    <img alt="Delivery Information" src="~/Themes/KlickAndGo/Content/cdn.shopify.com/s/files/1/0882/5910/files/delivery_information_large20de.jpg">
+                                    <figcaption> </figcaption>
+                                </figure>
+                                <div class="box_inn">
+                                    <div class="promo-overlay">
+                                        <h5><p>Delivery Information</p></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-4 animated" data-animation="bounceInRight">
+                        <a name="OpenEmail" class="div-link">
+                            <div class="box box_2 red5 feature_2">
+                                <figure class="effect-chico">
+                                    <img alt="Join&nbsp;Email Exclusives" src="~/Themes/KlickAndGo/Content/cdn.shopify.com/s/files/1/0882/5910/files/email-notification_57c7bc17-e9e6-4887-816d-36ca01e12ea5_large298b.jpg">
+                                    <figcaption> </figcaption>
+                                </figure>
+
+                                <div class="box_inn">
+                                    <div class="promo-overlay">
+                                        <h5 id="OpenEmail"><p>Join&nbsp;Email Exclusives</p></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-4 animated" data-animation="bounceInRight">
+                        <a class="div-link" id="support" name="support">
+                            <div class="box box_3 red5 feature_3">
+                                <figure class="effect-chico ">
+                                    <img alt="Customer Reviews" src="~/Themes/KlickAndGo/Content/cdn.shopify.com/s/files/1/0882/5910/files/customer-reviews_larged68d.jpg">
+                                    <figcaption> </figcaption>
+                                </figure>
+
+                                <div class="box_inn">
+                                    <div class="promo-overlay">
+                                        <h5><p>Customer Support</p></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12" id="DeliveryInfo" hidden>
+                @Html.Action("CmsContent", new { id = "ContentTop" })
+            </div>
+            <div class="col-lg-12 col-md-12" style="background-color:white" id="ContactUs" hidden>
+                <div class="col-lg-6 col-md-6">
+                    <h2 style="color:cornflowerblue">Contact Us</h2>
+                    <p>If you have any questions regarding any aspect of our website or our service, you can email us at @Settings.Get.StoreEmail, or use the enquiry form here. We aim to respond to all enquires as soon as possible.</p>
+                    <p>*Please Note: We are closed on UK public holidays</p>
+                    <h2 style="color:cornflowerblue"><span class="fa fa-phone"></span> TelePhone</h2>
+                    <span style="font-weight:bold">&nbsp;@Settings.Get.StorePhone</span></br>
+                    <p>Monday to Friday, 9am - 5pm</p>
+                    <p>Saturday, 9am - 1pm</p>
+                    </br>
+                    <h2 style="color:cornflowerblue"><span class="fa fa-envelope"></span>Email</h2>
+                    <a><p>@Settings.Get.StoreEmail</p></a>
+                    </br>
+                    <h2 style="color:cornflowerblue"><span class="fa fa-location-arrow"></span>Address</h2>
+                    <p>Anthony Jones</p>
+                    <p>15</p>
+                    <p>FFORDD BECK</p>
+                    <p>GOWERTON, Swansea SA4 3GE</p>
+                    <p>United Kingdom</p>
+                </div>
+                <div class="col-lg-6 col-md-6" style="background-color:whitesmoke">
+                    <h3 style="color:cornflowerblue">Online Contact Form</h3>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" placeholder="Name" /><br />
+                        <label>Email</label>
+                        <input type="email" class="form-control" placeholder="Your Email" /><br />
+                        <label>Phone</label>
+                        <input type="tel" class="form-control" placeholder="Your Phone" /><br />
+                        <label>Comment</label>
+                        <textarea class="form-control"></textarea>
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 form-inline" id="myEmail" style="background-color:#215d9f; border-radius:5px; height:50px;">
+                <input type="email" class="col-lg-offset-2 col-md-8 form-control" style="width:55%; margin-top:8px;" placeholder="Enter Your Email" />
+                <span class="btn btn-warning col-lg-1 col-md-1" style="margin-top:8px; margin-left:8px;"> <i class="fa fa-mail-reply"></i> Submit</span>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $("a[name=OpenEmail]").on("click", function () {
+                    $('#DeliveryInfo').hide();
+                    $('#ContactUs').hide();
+                    $('#myEmail').toggle();
+                });
+                $("a[name=DeliveryInfo]").on("click", function () {
+                    $('#ContactUs').hide();
+                    $('#myEmail').hide();
+                    $('#DeliveryInfo').toggle();
+                });
+                $("a[name=support]").on("click", function () {
+                    $('#myEmail').hide();
+                    $('#DeliveryInfo').hide();
+                    $('#ContactUs').toggle();
+                });
+
+            });
+
+            @*function Addtocart(id)
+            {
+                
+                $.ajax({
+                         url: '@Url.Action("Add", "Cart")', 
+                         ContentType: 'application/json',
+                         dataType: 'json',
+                         data: { id },
+                         success: function (cart) {
+                            debugger
+                            $(".count").html(cart);
+                            $("#cartalert").show();
+                       },
+                       error: function (response) {
+
+                       },
+                      }).complete(function () {
+
+                     });
+
+            }*@
+        </script>
+
+    </div><!-- END content_for_index -->
+</div>
+@*<script>
+         function ChangeVarient(id) {
+            var leng = $('.soflow').length;
+            var criteria = "";
+            for (var i = 0; i < leng; i++) {
+                //criteria += alert($('#provariation-' + i).data('id') + ' ' + $('#provariation-' + i).val());
+                if ($('#soflow-' + i).val() != "") {
+                    criteria += $('#soflow-' + i).data('id') + "=''" + $('#soflow-' + i).val() + "'' And ";
+                }
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/home/productvariant?Criteria=" + criteria.slice(0, -5) + "&productId=Id",
+                //data: function () {
+                //    Criteria = criteria
+                //},
+                success: function (data) {
+                    $('#productvariantId').val(data[0].Id);
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+            //alert($(this).data('id') + ' ' + $(this).val());
+        }
+
+         function Add(id) {
+            if ($('.soflow').val() == "") {
+                //alertify.alert("Please Choose Options");
+                $('.soflow').css('border-color', 'red');
+            }
+            else {
+                var productvariantId = $('#productvariantId').val();
+
+                window.location.href = '@Url.Action("Add","Cart")?id=id&variantTitle=' + productvariantId
+            }
+
+           
+            //alert($(this).data('id') + ' ' + $(this).val());
+        });
+</script>*@
+
+<script>
+    $('.soflow').on('change', function () {
+        var leng = $('.soflow').length;
+        var productid = $(this).data('productid');
+
+        debugger;
+        var criteria = "";
+        for (var i = 0; i < leng; i++) {
+            //criteria += alert($('#provariation-' + i).data('id') + ' ' + $('#provariation-' + i).val());
+            if ($('#soflow-' + i).val() != "" && $('#soflow-' + i).val() != undefined) {
+                criteria += $('#soflow-' + i).data('id') + "=''" + $('#soflow-' + i).val() + "'' And ";
+            }
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/home/productvariant?Criteria=" + criteria.slice(0, -5) + "&productId=" + productid,
+            //data: function () {
+            //    Criteria = criteria
+            //},
+            success: function (data) {
+                $('#productvariantId-' + productid).val(data[0].Id);
+            },
+            error: function (error) {
+                alert(error);
+            }
+        });
+        //alert($(this).data('id') + ' ' + $(this).val());
+    });
+
+    $('.cartadd').on('click', function () {
+        var productid = $(this).data('productid');
+        debugger
+        var formid = $(".partial").length;
+        if ($('.soflow').val() == "" ) {
+            //alertify.alert("Please Choose Options");
+            $('.soflow').css('border-color', 'red');
+        }
+        else {
+            var productvariantId = $('#productvariantId-' + productid).val();
+            window.location.href = '@Url.Action("Add","Cart")?id=' + productid + '&variantTitle=' + productvariantId
+        }
+
+        @*$.ajax({
+            type: "POST",
+            url: "/home/productvariant?Criteria=" + criteria.slice(0, -5) + "&productId=@Model.ProductId",
+            //data: function () {
+            //    Criteria = criteria
+            //},
+            success: function (data) {
+                $('#productvariantId').val(data[0].Id);
+            },
+            error: function (error) {
+                alert(error);
+            }
+        });*@
+        //alert($(this).data('id') + ' ' + $(this).val());
+    });
+
+    
+</script>

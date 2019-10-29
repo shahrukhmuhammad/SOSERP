@@ -1,0 +1,48 @@
+﻿
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Events Calendar" data-placement="bottom">
+    <i class="fa fa-calendar" style="font-size:21px;"></i>
+</a>
+
+<div class="dropdown-menu no-padding">
+    <div class="form-Modal">
+        <div class="modal-content">
+            <div class="modal-header sm-padding">
+                <a href="javascript://" style="padding:5px;" class="pull-left"><h6 class="modal-title"> <i class="fa fa-plus"></i> Create Event</h6></a>
+                <a href="~/Secure/Schedular/Calendar" style="padding:5px;" class="pull-right"><h6 class="modal-title"> <i class="fa fa-calendar"></i> Event Calendar</h6></a>
+                @*<div class="btn-group btn-group-xs" role="group">
+                    <a href="javascript://" class="btn btn-link markAllRead-notification"><small>Create Event</small></a>
+                </div>
+                <div class="btn-group btn-group-xs" role="group">
+                    <a href="javascript://" class="btn btn-link markAllRead-notification"><small>Event Calendar</small></a>
+                </div>*@
+            </div>
+            <div class="list-group no-margin" style="max-height:240px; overflow-y:auto;">
+                @*@if (Model.Count() > 0)
+                {
+                    foreach (var x in Model)
+                    {
+                        <div class="list-group-item @(!x.IsRead ? "list-group-item-warning" : "") no-radius sm-padding">
+                            <span class="badge no-radius">@x.CreatedOn.GetTimeSpan()</span>
+                            <h6 class="list-group-item-heading" style="font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:250px;">@x.Title</h6>
+                            <p style="font-size:9px; margin-top:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:270px;">@x.Description</p>
+
+                            <div class="btn-group btn-group-xs pull-right" role="group" style="margin-right:10px; margin-top:-25px;">
+                                <a class="btn btn-primary notification-item" data-id="@x.Id" href="~/Secure/AppNotification/Details/@x.Id"><i class="fa fa-eye"></i></a>
+                                <a class="btn btn-info notification-item" data-id="@x.Id" href="@x.ActionUrl"><i class="fa fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {*@
+                    <small class="list-group-item sm-padding text-center">No record found</small>
+                @*}*@
+            </div>
+            <div class="modal-footer no-padding">
+                <div class="well well-sm no-margin no-padding text-center">
+                    <a href="javascript://" class="btn btn-link btn-sm fullWidth">See all Events</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

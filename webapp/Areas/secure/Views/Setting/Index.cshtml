@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "Company Settings";
+}
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> @TempData["ErrorMsg"]
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="frm" class="form-Modal" method="post" enctype="multipart/form-data" action="/Secure/Setting/Company">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">@ViewBag.Title</h4>
+                    <div class="btn-group btn-group-xs" role="group">
+                        <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Cancel / Back"><i class="fa fa-close"></i></a>
+                        <button type="submit" class="btn btn-success" title="Save"><i class="fa fa-check"></i></button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="/Secure/Setting" />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            @*<div class="form-group">
+                                    <label>Application Start</label>
+                                    <select name="app:StartURL" class="form-control input-sm">
+                                        @foreach (var x in AppModule.GetAll())
+                                        {
+                                            <option value="/@(x.Id == "CMS" ? "" : "")" @(AppSettings.GetVal("app:StartURL").Contains(x.Id) ? "selected" : "")>@x.Title</option>
+                                        }
+                                    </select>
+                                </div>*@
+
+                            <div class="form-group">
+                                <label>System Title</label>
+                                <input name="app:Title" type="text" class="form-control input-sm" value="@AppSettings.GetVal("app:Title")" required autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label>Browser Title</label>
+                                <input name="app:BrowserTitle" type="text" class="form-control input-sm" value="@AppSettings.GetVal("app:BrowserTitle")" required autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label>CDN Path</label>
+                                <input name="app:CDNPath" type="url" class="form-control input-sm" value="@AppSettings.GetVal("app:CDNPath")" required autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label>Contact Email</label>
+                                <input name="contact:Email" type="email" class="form-control input-sm" value="@AppSettings.GetVal("contact:Email")" required autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label>Contact Phone</label>
+                                <input name="contact:Phone" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:Phone")" required autofocus />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>System Logo <a href="javascript://" title="For best experience use PNG format file type for logo."><i class="fa fa-info-circle"></i></a></label>
+                                <div class="thumbnail text-center">
+                                    <img id="logo-Preview" src="~/Content/Images/applogo.png" class="img-responsive img-centre" style="max-height:210px;">
+                                    <div class="caption">
+                                        <input type="file" class="form-control input-sm" id="logo" name="logo" onchange="previewImage(this,'#logo-Preview')" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>System Favicon <a href="javascript://" title="Updated favicon icon can take upto 1 day to show in browser because of browser cache issue."><i class="fa fa-info-circle"></i></a></label>
+                                <div class="thumbnail text-center">
+                                    <img id="favicon-Preview" src="~/appfavicon.ico" class="img-responsive img-centre" style="max-height:50px;">
+                                    <div class="caption">
+                                        <input type="file" class="form-control input-sm" id="favicon" name="favicon" onchange="previewImage(this, '#favicon-Preview')" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Contact Address</label>
+                                <input name="contact:Address" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:Address")" required autofocus />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-right">
+                    <div class="btn-group btn-group-sm" role="group">
+                        <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

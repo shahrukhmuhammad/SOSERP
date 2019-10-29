@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewBag.Title = "Dummy Test";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link href="~/Content/App/TaskManagement.css" rel="stylesheet" />
+    <link href="~/Content/Jquery-Filer/jquery.filer.css" rel="stylesheet" />
+    <link href="~/Content/DMS/bootstrap-dms.css" rel="stylesheet" />
+
+    <style>
+        #dataTable_length, #dataTable_filter, #dataTable_info, #dataTable_paginate {
+            display: none;
+        }
+
+        .breadcrumb {
+            margin-bottom: 5px;
+        }
+
+        .breadcrumb {
+            border-color: #ededed;
+            border-style: solid;
+            border-width: 0 1px 4px 1px;
+            font-size: 12px;
+        }
+
+        .breadcrumb {
+            padding: 8px 15px;
+            /* margin-bottom: 20px; */
+            list-style: none;
+            /* background-color: #fafafa; */
+            /* border-radius: 4px; */
+        }
+    </style>
+    }
+
+<div class="form-Modal">
+    <div class="modal-content bg-transparent">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <div class="btn-group btn-group-xs" role="group">
+                    <a href="javascript://" title="Checklist" id="checklist-options"><i class="fa fa-list-ol"></i> Checklist</a>
+                    <a href="javascript://" title="Checklist" id="upload-options"><i class="fa fa-upload"></i> DMS</a>
+                    @*<button type="button" class="btn btn-primary" aria-haspopup="true">
+                        <i class="fa fa-plus"></i> Create New
+                    </button>*@
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row" style="margin-top:8px;">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading" style="background-color: rgba(40, 169, 182, 0.35)">
+                            <a href="javascript://" title="Checklist" id="checklist-options"><i class="fa fa-list-ol"></i></a>
+                        </div>
+                        <div class="panel-body" style="padding:0">
+                            @{ Html.RenderPartial("_UploadFiles");}
+                            <div class="checklist-box" style="display:none">
+                                @{ Html.Partial("_Checklist");}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Scripts/App/TasksManagement.js"></script>
+    <script src="~/Scripts/Jquery-Filer/custom.js"></script>
+    <script src="~/Scripts/Jquery-Filer/jquery.filer.js"></script>
+
+<script>
+
+
+    var dt = $("#dms-list-dataTable").DataTable({
+        lengthMenu: [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
+        columnDefs: [
+            { targets: [1, 2, 3], type: "string" },
+            { targets: [0, 4], sortable: false }
+        ],
+        order: [],
+    });
+    new $.fn.dataTable.CustomSearch(dt, {
+        container: 'thead:after',
+        fields: [1, 2, 3]
+    });
+    $('#dms-list-dataTable tbody').on('click', 'tr', function () {
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+        }
+        else {
+            dt.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    });
+    var dmsPath = '@DMS.System.BaseUrl.GetBaseUrl()/DMS/Docs';
+    var parentId = '@Request.RequestContext.RouteData.Values["id"]';
+    var p = '@Request["p"]';
+    var mode = '@Request["mode"]';
+</script>
+<script src="~/Scripts/DMS/dmsbase.js"></script>
+<script src="~/Scripts/jquery.filedrop.js"></script>
+
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+                $(function () {
+                    $("#Message").summernote({ height: 200 });
+                });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+                $(function () {
+                    makeAlloyEditor('Message');
+                });
+        </script>
+    }
+}

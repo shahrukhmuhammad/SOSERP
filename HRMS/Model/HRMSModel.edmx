@@ -1,0 +1,1638 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SOSHRMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Center">
+          <Key>
+            <PropertyRef Name="CenterId" />
+          </Key>
+          <Property Name="CenterId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" />
+          <Property Name="RegionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RegionHead" Type="nvarchar" MaxLength="256" />
+          <Property Name="SupervisorName" Type="nvarchar" MaxLength="256" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="EmpArmyInformation">
+          <Key>
+            <PropertyRef Name="ArmyInformationId" />
+          </Key>
+          <Property Name="ArmyInformationId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="JoiningDate" Type="date" />
+          <Property Name="UnitName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ForceNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastUnit" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastCenter" Type="nvarchar" MaxLength="100" />
+          <Property Name="ServicePeriod" Type="int" />
+          <Property Name="RecordCenter" Type="nvarchar" MaxLength="100" />
+          <Property Name="DischargeDate" Type="date" />
+          <Property Name="Rank" Type="nvarchar" MaxLength="100" />
+          <Property Name="Trade" Type="nvarchar" MaxLength="100" />
+          <Property Name="ForceType" Type="nvarchar" MaxLength="100" />
+          <Property Name="PreviousForces" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="EmpBankDetails">
+          <Key>
+            <PropertyRef Name="BankDetailsId" />
+          </Key>
+          <Property Name="BankDetailsId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="BankName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AccountTitle" Type="nvarchar" MaxLength="100" />
+          <Property Name="AccountNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="BranchName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountOwner" Type="nvarchar" MaxLength="100" />
+          <Property Name="OpeningDate" Type="datetime" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="EmpEmergencyContact">
+          <Key>
+            <PropertyRef Name="EmergencyContactId" />
+          </Key>
+          <Property Name="EmergencyContactId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmergencyAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="EmergencyPhone" Type="nvarchar" MaxLength="20" />
+          <Property Name="EmergencyCell" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="EmpFingerPrints">
+          <Key>
+            <PropertyRef Name="FingerPrintId" />
+          </Key>
+          <Property Name="FingerPrintId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="LeftThumb" Type="nvarchar" MaxLength="500" />
+          <Property Name="LeftIndexFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="LeftMiddleFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="LeftRingFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="LeftBabyFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="RightThumb" Type="nvarchar" MaxLength="500" />
+          <Property Name="RightIndexFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="RightMiddleFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="RightRingFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="RightBabyFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ProjectId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
+          <Property Name="Code" Type="nvarchar" MaxLength="10" />
+          <Property Name="CNIC" Type="nvarchar" MaxLength="20" />
+          <Property Name="FatherName" Type="nvarchar" MaxLength="200" />
+          <Property Name="FatherCNIC" Type="nvarchar" MaxLength="20" />
+          <Property Name="PermanentAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="CurrentAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="ProfilePicture" Type="nvarchar(max)" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Region" Type="nvarchar" MaxLength="20" />
+          <Property Name="Center" Type="nvarchar" MaxLength="100" />
+          <Property Name="Supervisor" Type="nvarchar" MaxLength="100" />
+          <Property Name="Post" Type="nvarchar" MaxLength="100" />
+          <Property Name="MotherName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Education" Type="nvarchar" MaxLength="100" />
+          <Property Name="BloodGroup" Type="nvarchar" MaxLength="10" />
+          <Property Name="IdentificationMarks" Type="nvarchar" MaxLength="50" />
+          <Property Name="Height" Type="nvarchar" MaxLength="20" />
+          <Property Name="Weight" Type="nvarchar" MaxLength="20" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="10" />
+          <Property Name="MaritalStatus" Type="nvarchar" MaxLength="10" />
+          <Property Name="NextToKIN" Type="nvarchar" MaxLength="100" />
+          <Property Name="WifeName" Type="nvarchar" MaxLength="100" />
+          <Property Name="NoOfChilds" Type="int" />
+          <Property Name="NoOfBoys" Type="int" />
+          <Property Name="NoOfGirls" Type="int" />
+          <Property Name="Status" Type="tinyint" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+          <Property Name="RegionId" Type="uniqueidentifier" />
+          <Property Name="CenterId" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="EmpPoliticalInformation">
+          <Key>
+            <PropertyRef Name="PoliticalInformationId" />
+          </Key>
+          <Property Name="PoliticalInformationId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PoliceStation" Type="nvarchar" MaxLength="100" />
+          <Property Name="PostOffice" Type="nvarchar" MaxLength="100" />
+          <Property Name="AreaNazimName" Type="nvarchar" MaxLength="100" />
+          <Property Name="WellKnownPerson" Type="nvarchar" MaxLength="100" />
+          <Property Name="UCNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="NANumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="PANumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="VoteNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="EmpReference">
+          <Key>
+            <PropertyRef Name="ReferenceId" />
+          </Key>
+          <Property Name="ReferenceId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RefName" Type="nvarchar" MaxLength="100" />
+          <Property Name="RefAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="RefAddressType" Type="nvarchar" MaxLength="10" />
+          <Property Name="RefPhoto" Type="nvarchar(max)" />
+          <Property Name="RefState" Type="nvarchar" MaxLength="50" />
+          <Property Name="RefCountry" Type="nvarchar" MaxLength="50" />
+          <Property Name="RefCNIC" Type="nvarchar" MaxLength="20" />
+          <Property Name="RefProfession" Type="nvarchar" MaxLength="100" />
+          <Property Name="RefPhone" Type="nvarchar" MaxLength="20" />
+          <Property Name="RefMobile" Type="nvarchar" MaxLength="20" />
+          <Property Name="RefEmail" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="EmpRejoinHistory">
+          <Key>
+            <PropertyRef Name="RejoinHistoryId" />
+          </Key>
+          <Property Name="RejoinHistoryId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PreviousAppointmentDate" Type="date" />
+          <Property Name="PreviousTerminateDate" Type="date" />
+          <Property Name="RejoinDate" Type="date" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="EmpSalaryDetails">
+          <Key>
+            <PropertyRef Name="SalaryDetailsId" />
+          </Key>
+          <Property Name="SalaryDetailsId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="BasicSalary" Type="int" />
+          <Property Name="DutyBouns" Type="int" />
+          <Property Name="WeaponAllowance" Type="int" />
+          <Property Name="AnnualLeaves" Type="int" />
+          <Property Name="Contract" Type="int" />
+          <Property Name="AppointmentDate" Type="date" />
+          <Property Name="ResignationDate" Type="date" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="EmpTransferHistory">
+          <Key>
+            <PropertyRef Name="TransferHistoryId" />
+          </Key>
+          <Property Name="TransferHistoryId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="OTSegment" Type="nvarchar" MaxLength="200" />
+          <Property Name="OTSubSegment" Type="nvarchar" MaxLength="200" />
+          <Property Name="OTDepartSegment" Type="nvarchar" MaxLength="200" />
+          <Property Name="OTJob" Type="nvarchar" MaxLength="200" />
+          <Property Name="OTManager" Type="nvarchar" MaxLength="200" />
+          <Property Name="OTCoach" Type="nvarchar" MaxLength="200" />
+          <Property Name="OTCenter" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTSegment" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTSubSegment" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTDepartSegment" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTJob" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTManager" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTCoach" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTCenter" Type="nvarchar" MaxLength="200" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="ProjectId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ProjectName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Region">
+          <Key>
+            <PropertyRef Name="RegionId" />
+          </Key>
+          <Property Name="RegionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" />
+          <Property Name="Code" Type="nvarchar" MaxLength="128" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="HRM_Vew_Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+            <PropertyRef Name="ProjectId" />
+            <PropertyRef Name="CreatedOn" />
+            <PropertyRef Name="CreatedBy" />
+          </Key>
+          <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ProjectId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
+          <Property Name="Code" Type="nvarchar" MaxLength="10" />
+          <Property Name="CNIC" Type="nvarchar" MaxLength="20" />
+          <Property Name="FatherName" Type="nvarchar" MaxLength="200" />
+          <Property Name="FatherCNIC" Type="nvarchar" MaxLength="20" />
+          <Property Name="PermanentAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="CurrentAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="ProfilePicture" Type="nvarchar(max)" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Region" Type="nvarchar" MaxLength="20" />
+          <Property Name="Center" Type="nvarchar" MaxLength="100" />
+          <Property Name="Supervisor" Type="nvarchar" MaxLength="100" />
+          <Property Name="Post" Type="nvarchar" MaxLength="100" />
+          <Property Name="MotherName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Education" Type="nvarchar" MaxLength="100" />
+          <Property Name="BloodGroup" Type="nvarchar" MaxLength="10" />
+          <Property Name="IdentificationMarks" Type="nvarchar" MaxLength="50" />
+          <Property Name="Height" Type="nvarchar" MaxLength="20" />
+          <Property Name="Weight" Type="nvarchar" MaxLength="20" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="10" />
+          <Property Name="MaritalStatus" Type="nvarchar" MaxLength="10" />
+          <Property Name="NextToKIN" Type="nvarchar" MaxLength="100" />
+          <Property Name="WifeName" Type="nvarchar" MaxLength="100" />
+          <Property Name="NoOfChilds" Type="int" />
+          <Property Name="NoOfBoys" Type="int" />
+          <Property Name="NoOfGirls" Type="int" />
+          <Property Name="Status" Type="tinyint" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+          <Property Name="ArmyInformationId" Type="uniqueidentifier" />
+          <Property Name="JoiningDate" Type="date" />
+          <Property Name="UnitName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ForceNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastUnit" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastCenter" Type="nvarchar" MaxLength="100" />
+          <Property Name="ServicePeriod" Type="int" />
+          <Property Name="RecordCenter" Type="nvarchar" MaxLength="100" />
+          <Property Name="DischargeDate" Type="date" />
+          <Property Name="Rank" Type="nvarchar" MaxLength="100" />
+          <Property Name="Trade" Type="nvarchar" MaxLength="100" />
+          <Property Name="ForceType" Type="nvarchar" MaxLength="100" />
+          <Property Name="PreviousForces" Type="nvarchar" MaxLength="100" />
+          <Property Name="BankDetailsId" Type="uniqueidentifier" />
+          <Property Name="BankName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AccountTitle" Type="nvarchar" MaxLength="100" />
+          <Property Name="AccountNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="BranchName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountOwner" Type="nvarchar" MaxLength="100" />
+          <Property Name="OpeningDate" Type="datetime" />
+          <Property Name="EmergencyContactId" Type="uniqueidentifier" />
+          <Property Name="EmergencyAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="EmergencyPhone" Type="nvarchar" MaxLength="20" />
+          <Property Name="EmergencyCell" Type="nvarchar" MaxLength="20" />
+          <Property Name="FingerPrintId" Type="uniqueidentifier" />
+          <Property Name="LeftThumb" Type="nvarchar" MaxLength="500" />
+          <Property Name="LeftIndexFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="LeftMiddleFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="LeftRingFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="LeftBabyFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="RightThumb" Type="nvarchar" MaxLength="500" />
+          <Property Name="RightIndexFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="RightMiddleFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="RightRingFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="RightBabyFinger" Type="nvarchar" MaxLength="500" />
+          <Property Name="PoliticalInformationId" Type="uniqueidentifier" />
+          <Property Name="PoliceStation" Type="nvarchar" MaxLength="100" />
+          <Property Name="PostOffice" Type="nvarchar" MaxLength="100" />
+          <Property Name="AreaNazimName" Type="nvarchar" MaxLength="100" />
+          <Property Name="WellKnownPerson" Type="nvarchar" MaxLength="100" />
+          <Property Name="UCNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="NANumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="PANumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="VoteNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="RejoinHistoryId" Type="uniqueidentifier" />
+          <Property Name="PreviousAppointmentDate" Type="date" />
+          <Property Name="PreviousTerminateDate" Type="date" />
+          <Property Name="RejoinDate" Type="date" />
+          <Property Name="SalaryDetailsId" Type="uniqueidentifier" />
+          <Property Name="BasicSalary" Type="int" />
+          <Property Name="DutyBouns" Type="int" />
+          <Property Name="WeaponAllowance" Type="int" />
+          <Property Name="AnnualLeaves" Type="int" />
+          <Property Name="Contract" Type="int" />
+          <Property Name="AppointmentDate" Type="date" />
+          <Property Name="ResignationDate" Type="date" />
+          <Property Name="TransferHistoryId" Type="uniqueidentifier" />
+          <Property Name="OTSegment" Type="nvarchar" MaxLength="200" />
+          <Property Name="OTSubSegment" Type="nvarchar" MaxLength="200" />
+          <Property Name="OTDepartSegment" Type="nvarchar" MaxLength="200" />
+          <Property Name="OTJob" Type="nvarchar" MaxLength="200" />
+          <Property Name="OTManager" Type="nvarchar" MaxLength="200" />
+          <Property Name="OTCoach" Type="nvarchar" MaxLength="200" />
+          <Property Name="OTCenter" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTSegment" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTSubSegment" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTDepartSegment" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTJob" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTManager" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTCoach" Type="nvarchar" MaxLength="200" />
+          <Property Name="NTCenter" Type="nvarchar" MaxLength="200" />
+          <Property Name="RegionId" Type="uniqueidentifier" />
+          <Property Name="RegionName" Type="nvarchar" MaxLength="256" />
+          <Property Name="RegionCode" Type="nvarchar" MaxLength="128" />
+          <Property Name="CenterId" Type="uniqueidentifier" />
+          <Property Name="CenterName" Type="nvarchar" MaxLength="256" />
+          <Property Name="RegionHead" Type="nvarchar" MaxLength="256" />
+          <Property Name="SupervisorName" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <Association Name="FK__Center__RegionId__1F98B2C1">
+          <End Role="Region" Type="Self.Region" Multiplicity="1" />
+          <End Role="Center" Type="Self.Center" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="RegionId" />
+            </Principal>
+            <Dependent Role="Center">
+              <PropertyRef Name="RegionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpArmyIn__Emplo__73BA3083">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpArmyInformation" Type="Self.EmpArmyInformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpArmyInformation">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpBankDe__Emplo__76969D2E">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpBankDetails" Type="Self.EmpBankDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpBankDetails">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpEmerge__Emplo__7C4F7684">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpEmergencyContact" Type="Self.EmpEmergencyContact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpEmergencyContact">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpFinger__Emplo__7D439ABD">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpFingerPrints" Type="Self.EmpFingerPrints" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpFingerPrints">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpPoliti__Emplo__07C12930">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpPoliticalInformation" Type="Self.EmpPoliticalInformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpPoliticalInformation">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpRefere__Emplo__01142BA1">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpReference" Type="Self.EmpReference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpReference">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpRejoin__Emplo__04E4BC85">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpRejoinHistory" Type="Self.EmpRejoinHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpRejoinHistory">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpSalary__Emplo__05D8E0BE">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpSalaryDetails" Type="Self.EmpSalaryDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpSalaryDetails">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpTransf__Emplo__06CD04F7">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpTransferHistory" Type="Self.EmpTransferHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpTransferHistory">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="SP_Employee_GetMaxCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="SOSHRMSModelStoreContainer">
+          <EntitySet Name="Center" EntityType="Self.Center" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmpArmyInformation" EntityType="Self.EmpArmyInformation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmpBankDetails" EntityType="Self.EmpBankDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmpEmergencyContact" EntityType="Self.EmpEmergencyContact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmpFingerPrints" EntityType="Self.EmpFingerPrints" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmpPoliticalInformation" EntityType="Self.EmpPoliticalInformation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmpReference" EntityType="Self.EmpReference" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmpRejoinHistory" EntityType="Self.EmpRejoinHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmpSalaryDetails" EntityType="Self.EmpSalaryDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmpTransferHistory" EntityType="Self.EmpTransferHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HRM_Vew_Employee" EntityType="Self.HRM_Vew_Employee" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [HRM_Vew_Employee].[EmployeeId] AS [EmployeeId], 
+    [HRM_Vew_Employee].[ProjectId] AS [ProjectId], 
+    [HRM_Vew_Employee].[Name] AS [Name], 
+    [HRM_Vew_Employee].[Code] AS [Code], 
+    [HRM_Vew_Employee].[CNIC] AS [CNIC], 
+    [HRM_Vew_Employee].[FatherName] AS [FatherName], 
+    [HRM_Vew_Employee].[FatherCNIC] AS [FatherCNIC], 
+    [HRM_Vew_Employee].[PermanentAddress] AS [PermanentAddress], 
+    [HRM_Vew_Employee].[CurrentAddress] AS [CurrentAddress], 
+    [HRM_Vew_Employee].[ProfilePicture] AS [ProfilePicture], 
+    [HRM_Vew_Employee].[Phone] AS [Phone], 
+    [HRM_Vew_Employee].[Region] AS [Region], 
+    [HRM_Vew_Employee].[Center] AS [Center], 
+    [HRM_Vew_Employee].[Supervisor] AS [Supervisor], 
+    [HRM_Vew_Employee].[Post] AS [Post], 
+    [HRM_Vew_Employee].[MotherName] AS [MotherName], 
+    [HRM_Vew_Employee].[Education] AS [Education], 
+    [HRM_Vew_Employee].[BloodGroup] AS [BloodGroup], 
+    [HRM_Vew_Employee].[IdentificationMarks] AS [IdentificationMarks], 
+    [HRM_Vew_Employee].[Height] AS [Height], 
+    [HRM_Vew_Employee].[Weight] AS [Weight], 
+    [HRM_Vew_Employee].[Gender] AS [Gender], 
+    [HRM_Vew_Employee].[MaritalStatus] AS [MaritalStatus], 
+    [HRM_Vew_Employee].[NextToKIN] AS [NextToKIN], 
+    [HRM_Vew_Employee].[WifeName] AS [WifeName], 
+    [HRM_Vew_Employee].[NoOfChilds] AS [NoOfChilds], 
+    [HRM_Vew_Employee].[NoOfBoys] AS [NoOfBoys], 
+    [HRM_Vew_Employee].[NoOfGirls] AS [NoOfGirls], 
+    [HRM_Vew_Employee].[Status] AS [Status], 
+    [HRM_Vew_Employee].[CreatedOn] AS [CreatedOn], 
+    [HRM_Vew_Employee].[CreatedBy] AS [CreatedBy], 
+    [HRM_Vew_Employee].[UpdatedOn] AS [UpdatedOn], 
+    [HRM_Vew_Employee].[UpdatedBy] AS [UpdatedBy], 
+    [HRM_Vew_Employee].[ArmyInformationId] AS [ArmyInformationId], 
+    [HRM_Vew_Employee].[JoiningDate] AS [JoiningDate], 
+    [HRM_Vew_Employee].[UnitName] AS [UnitName], 
+    [HRM_Vew_Employee].[ForceNo] AS [ForceNo], 
+    [HRM_Vew_Employee].[LastUnit] AS [LastUnit], 
+    [HRM_Vew_Employee].[LastCenter] AS [LastCenter], 
+    [HRM_Vew_Employee].[ServicePeriod] AS [ServicePeriod], 
+    [HRM_Vew_Employee].[RecordCenter] AS [RecordCenter], 
+    [HRM_Vew_Employee].[DischargeDate] AS [DischargeDate], 
+    [HRM_Vew_Employee].[Rank] AS [Rank], 
+    [HRM_Vew_Employee].[Trade] AS [Trade], 
+    [HRM_Vew_Employee].[ForceType] AS [ForceType], 
+    [HRM_Vew_Employee].[PreviousForces] AS [PreviousForces], 
+    [HRM_Vew_Employee].[BankDetailsId] AS [BankDetailsId], 
+    [HRM_Vew_Employee].[BankName] AS [BankName], 
+    [HRM_Vew_Employee].[AccountTitle] AS [AccountTitle], 
+    [HRM_Vew_Employee].[AccountNo] AS [AccountNo], 
+    [HRM_Vew_Employee].[BranchName] AS [BranchName], 
+    [HRM_Vew_Employee].[AccountOwner] AS [AccountOwner], 
+    [HRM_Vew_Employee].[OpeningDate] AS [OpeningDate], 
+    [HRM_Vew_Employee].[EmergencyContactId] AS [EmergencyContactId], 
+    [HRM_Vew_Employee].[EmergencyAddress] AS [EmergencyAddress], 
+    [HRM_Vew_Employee].[EmergencyPhone] AS [EmergencyPhone], 
+    [HRM_Vew_Employee].[EmergencyCell] AS [EmergencyCell], 
+    [HRM_Vew_Employee].[FingerPrintId] AS [FingerPrintId], 
+    [HRM_Vew_Employee].[LeftThumb] AS [LeftThumb], 
+    [HRM_Vew_Employee].[LeftIndexFinger] AS [LeftIndexFinger], 
+    [HRM_Vew_Employee].[LeftMiddleFinger] AS [LeftMiddleFinger], 
+    [HRM_Vew_Employee].[LeftRingFinger] AS [LeftRingFinger], 
+    [HRM_Vew_Employee].[LeftBabyFinger] AS [LeftBabyFinger], 
+    [HRM_Vew_Employee].[RightThumb] AS [RightThumb], 
+    [HRM_Vew_Employee].[RightIndexFinger] AS [RightIndexFinger], 
+    [HRM_Vew_Employee].[RightMiddleFinger] AS [RightMiddleFinger], 
+    [HRM_Vew_Employee].[RightRingFinger] AS [RightRingFinger], 
+    [HRM_Vew_Employee].[RightBabyFinger] AS [RightBabyFinger], 
+    [HRM_Vew_Employee].[PoliticalInformationId] AS [PoliticalInformationId], 
+    [HRM_Vew_Employee].[PoliceStation] AS [PoliceStation], 
+    [HRM_Vew_Employee].[PostOffice] AS [PostOffice], 
+    [HRM_Vew_Employee].[AreaNazimName] AS [AreaNazimName], 
+    [HRM_Vew_Employee].[WellKnownPerson] AS [WellKnownPerson], 
+    [HRM_Vew_Employee].[UCNo] AS [UCNo], 
+    [HRM_Vew_Employee].[NANumber] AS [NANumber], 
+    [HRM_Vew_Employee].[PANumber] AS [PANumber], 
+    [HRM_Vew_Employee].[VoteNo] AS [VoteNo], 
+    [HRM_Vew_Employee].[RejoinHistoryId] AS [RejoinHistoryId], 
+    [HRM_Vew_Employee].[PreviousAppointmentDate] AS [PreviousAppointmentDate], 
+    [HRM_Vew_Employee].[PreviousTerminateDate] AS [PreviousTerminateDate], 
+    [HRM_Vew_Employee].[RejoinDate] AS [RejoinDate], 
+    [HRM_Vew_Employee].[SalaryDetailsId] AS [SalaryDetailsId], 
+    [HRM_Vew_Employee].[BasicSalary] AS [BasicSalary], 
+    [HRM_Vew_Employee].[DutyBouns] AS [DutyBouns], 
+    [HRM_Vew_Employee].[WeaponAllowance] AS [WeaponAllowance], 
+    [HRM_Vew_Employee].[AnnualLeaves] AS [AnnualLeaves], 
+    [HRM_Vew_Employee].[Contract] AS [Contract], 
+    [HRM_Vew_Employee].[AppointmentDate] AS [AppointmentDate], 
+    [HRM_Vew_Employee].[ResignationDate] AS [ResignationDate], 
+    [HRM_Vew_Employee].[TransferHistoryId] AS [TransferHistoryId], 
+    [HRM_Vew_Employee].[OTSegment] AS [OTSegment], 
+    [HRM_Vew_Employee].[OTSubSegment] AS [OTSubSegment], 
+    [HRM_Vew_Employee].[OTDepartSegment] AS [OTDepartSegment], 
+    [HRM_Vew_Employee].[OTJob] AS [OTJob], 
+    [HRM_Vew_Employee].[OTManager] AS [OTManager], 
+    [HRM_Vew_Employee].[OTCoach] AS [OTCoach], 
+    [HRM_Vew_Employee].[OTCenter] AS [OTCenter], 
+    [HRM_Vew_Employee].[NTSegment] AS [NTSegment], 
+    [HRM_Vew_Employee].[NTSubSegment] AS [NTSubSegment], 
+    [HRM_Vew_Employee].[NTDepartSegment] AS [NTDepartSegment], 
+    [HRM_Vew_Employee].[NTJob] AS [NTJob], 
+    [HRM_Vew_Employee].[NTManager] AS [NTManager], 
+    [HRM_Vew_Employee].[NTCoach] AS [NTCoach], 
+    [HRM_Vew_Employee].[NTCenter] AS [NTCenter], 
+    [HRM_Vew_Employee].[RegionId] AS [RegionId], 
+    [HRM_Vew_Employee].[RegionName] AS [RegionName], 
+    [HRM_Vew_Employee].[RegionCode] AS [RegionCode], 
+    [HRM_Vew_Employee].[CenterId] AS [CenterId], 
+    [HRM_Vew_Employee].[CenterName] AS [CenterName], 
+    [HRM_Vew_Employee].[RegionHead] AS [RegionHead], 
+    [HRM_Vew_Employee].[SupervisorName] AS [SupervisorName]
+    FROM [dbo].[HRM_Vew_Employee] AS [HRM_Vew_Employee]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__Center__RegionId__1F98B2C1" Association="Self.FK__Center__RegionId__1F98B2C1">
+            <End Role="Region" EntitySet="Region" />
+            <End Role="Center" EntitySet="Center" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpArmyIn__Emplo__73BA3083" Association="Self.FK__EmpArmyIn__Emplo__73BA3083">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmpArmyInformation" EntitySet="EmpArmyInformation" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpBankDe__Emplo__76969D2E" Association="Self.FK__EmpBankDe__Emplo__76969D2E">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmpBankDetails" EntitySet="EmpBankDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpEmerge__Emplo__7C4F7684" Association="Self.FK__EmpEmerge__Emplo__7C4F7684">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmpEmergencyContact" EntitySet="EmpEmergencyContact" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpFinger__Emplo__7D439ABD" Association="Self.FK__EmpFinger__Emplo__7D439ABD">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmpFingerPrints" EntitySet="EmpFingerPrints" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpPoliti__Emplo__07C12930" Association="Self.FK__EmpPoliti__Emplo__07C12930">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmpPoliticalInformation" EntitySet="EmpPoliticalInformation" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpRefere__Emplo__01142BA1" Association="Self.FK__EmpRefere__Emplo__01142BA1">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmpReference" EntitySet="EmpReference" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpRejoin__Emplo__04E4BC85" Association="Self.FK__EmpRejoin__Emplo__04E4BC85">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmpRejoinHistory" EntitySet="EmpRejoinHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpSalary__Emplo__05D8E0BE" Association="Self.FK__EmpSalary__Emplo__05D8E0BE">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmpSalaryDetails" EntitySet="EmpSalaryDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpTransf__Emplo__06CD04F7" Association="Self.FK__EmpTransf__Emplo__06CD04F7">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmpTransferHistory" EntitySet="EmpTransferHistory" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SOSHRMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Center">
+          <Key>
+            <PropertyRef Name="CenterId" />
+          </Key>
+          <Property Name="CenterId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="RegionId" Type="Guid" Nullable="false" />
+          <Property Name="RegionHead" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="SupervisorName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Region" Relationship="Self.FK__Center__RegionId__1F98B2C1" FromRole="Center" ToRole="Region" />
+        </EntityType>
+        <EntityType Name="EmpArmyInformation">
+          <Key>
+            <PropertyRef Name="ArmyInformationId" />
+          </Key>
+          <Property Name="ArmyInformationId" Type="Guid" Nullable="false" />
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="JoiningDate" Type="DateTime" Precision="0" />
+          <Property Name="UnitName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ForceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastUnit" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastCenter" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ServicePeriod" Type="Int32" />
+          <Property Name="RecordCenter" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DischargeDate" Type="DateTime" Precision="0" />
+          <Property Name="Rank" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Trade" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ForceType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PreviousForces" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__EmpArmyIn__Emplo__73BA3083" FromRole="EmpArmyInformation" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="EmpBankDetail">
+          <Key>
+            <PropertyRef Name="BankDetailsId" />
+          </Key>
+          <Property Name="BankDetailsId" Type="Guid" Nullable="false" />
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountOwner" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OpeningDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__EmpBankDe__Emplo__76969D2E" FromRole="EmpBankDetails" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="EmpEmergencyContact">
+          <Key>
+            <PropertyRef Name="EmergencyContactId" />
+          </Key>
+          <Property Name="EmergencyContactId" Type="Guid" Nullable="false" />
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="EmergencyAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="EmergencyPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EmergencyCell" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__EmpEmerge__Emplo__7C4F7684" FromRole="EmpEmergencyContact" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="EmpFingerPrint">
+          <Key>
+            <PropertyRef Name="FingerPrintId" />
+          </Key>
+          <Property Name="FingerPrintId" Type="Guid" Nullable="false" />
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="LeftThumb" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LeftIndexFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LeftMiddleFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LeftRingFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LeftBabyFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightThumb" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightIndexFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightMiddleFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightRingFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightBabyFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__EmpFinger__Emplo__7D439ABD" FromRole="EmpFingerPrints" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="ProjectId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FatherName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FatherCNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PermanentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CurrentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ProfilePicture" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Region" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Center" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Supervisor" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Post" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MotherName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Education" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BloodGroup" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IdentificationMarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Height" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Weight" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="MaritalStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="NextToKIN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WifeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NoOfChilds" Type="Int32" />
+          <Property Name="NoOfBoys" Type="Int32" />
+          <Property Name="NoOfGirls" Type="Int32" />
+          <Property Name="Status" Type="Byte" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <Property Name="RegionId" Type="Guid" />
+          <Property Name="CenterId" Type="Guid" />
+          <NavigationProperty Name="EmpArmyInformations" Relationship="Self.FK__EmpArmyIn__Emplo__73BA3083" FromRole="Employee" ToRole="EmpArmyInformation" />
+          <NavigationProperty Name="EmpBankDetails" Relationship="Self.FK__EmpBankDe__Emplo__76969D2E" FromRole="Employee" ToRole="EmpBankDetails" />
+          <NavigationProperty Name="EmpEmergencyContacts" Relationship="Self.FK__EmpEmerge__Emplo__7C4F7684" FromRole="Employee" ToRole="EmpEmergencyContact" />
+          <NavigationProperty Name="EmpFingerPrints" Relationship="Self.FK__EmpFinger__Emplo__7D439ABD" FromRole="Employee" ToRole="EmpFingerPrints" />
+          <NavigationProperty Name="EmpPoliticalInformations" Relationship="Self.FK__EmpPoliti__Emplo__07C12930" FromRole="Employee" ToRole="EmpPoliticalInformation" />
+          <NavigationProperty Name="EmpReferences" Relationship="Self.FK__EmpRefere__Emplo__01142BA1" FromRole="Employee" ToRole="EmpReference" />
+          <NavigationProperty Name="EmpRejoinHistories" Relationship="Self.FK__EmpRejoin__Emplo__04E4BC85" FromRole="Employee" ToRole="EmpRejoinHistory" />
+          <NavigationProperty Name="EmpSalaryDetails" Relationship="Self.FK__EmpSalary__Emplo__05D8E0BE" FromRole="Employee" ToRole="EmpSalaryDetails" />
+          <NavigationProperty Name="EmpTransferHistories" Relationship="Self.FK__EmpTransf__Emplo__06CD04F7" FromRole="Employee" ToRole="EmpTransferHistory" />
+        </EntityType>
+        <EntityType Name="EmpPoliticalInformation">
+          <Key>
+            <PropertyRef Name="PoliticalInformationId" />
+          </Key>
+          <Property Name="PoliticalInformationId" Type="Guid" Nullable="false" />
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="PoliceStation" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PostOffice" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AreaNazimName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WellKnownPerson" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UCNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NANumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PANumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VoteNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__EmpPoliti__Emplo__07C12930" FromRole="EmpPoliticalInformation" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="EmpReference">
+          <Key>
+            <PropertyRef Name="ReferenceId" />
+          </Key>
+          <Property Name="ReferenceId" Type="Guid" Nullable="false" />
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="RefName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RefAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RefAddressType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="RefPhoto" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RefState" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RefCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RefCNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RefProfession" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RefPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RefMobile" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RefEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__EmpRefere__Emplo__01142BA1" FromRole="EmpReference" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="EmpRejoinHistory">
+          <Key>
+            <PropertyRef Name="RejoinHistoryId" />
+          </Key>
+          <Property Name="RejoinHistoryId" Type="Guid" Nullable="false" />
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="PreviousAppointmentDate" Type="DateTime" Precision="0" />
+          <Property Name="PreviousTerminateDate" Type="DateTime" Precision="0" />
+          <Property Name="RejoinDate" Type="DateTime" Precision="0" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__EmpRejoin__Emplo__04E4BC85" FromRole="EmpRejoinHistory" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="EmpSalaryDetail">
+          <Key>
+            <PropertyRef Name="SalaryDetailsId" />
+          </Key>
+          <Property Name="SalaryDetailsId" Type="Guid" Nullable="false" />
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="BasicSalary" Type="Int32" />
+          <Property Name="DutyBouns" Type="Int32" />
+          <Property Name="WeaponAllowance" Type="Int32" />
+          <Property Name="AnnualLeaves" Type="Int32" />
+          <Property Name="Contract" Type="Int32" />
+          <Property Name="AppointmentDate" Type="DateTime" Precision="0" />
+          <Property Name="ResignationDate" Type="DateTime" Precision="0" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__EmpSalary__Emplo__05D8E0BE" FromRole="EmpSalaryDetails" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="EmpTransferHistory">
+          <Key>
+            <PropertyRef Name="TransferHistoryId" />
+          </Key>
+          <Property Name="TransferHistoryId" Type="Guid" Nullable="false" />
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="OTSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTSubSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTDepartSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTJob" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTManager" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTCoach" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTCenter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTSubSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTDepartSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTJob" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTManager" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTCoach" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTCenter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__EmpTransf__Emplo__06CD04F7" FromRole="EmpTransferHistory" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="ProjectId" Type="Guid" Nullable="false" />
+          <Property Name="ProjectName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Region">
+          <Key>
+            <PropertyRef Name="RegionId" />
+          </Key>
+          <Property Name="RegionId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Centers" Relationship="Self.FK__Center__RegionId__1F98B2C1" FromRole="Region" ToRole="Center" />
+        </EntityType>
+        <Association Name="FK__Center__RegionId__1F98B2C1">
+          <End Role="Region" Type="Self.Region" Multiplicity="1" />
+          <End Role="Center" Type="Self.Center" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="RegionId" />
+            </Principal>
+            <Dependent Role="Center">
+              <PropertyRef Name="RegionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpArmyIn__Emplo__73BA3083">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpArmyInformation" Type="Self.EmpArmyInformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpArmyInformation">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpBankDe__Emplo__76969D2E">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpBankDetails" Type="Self.EmpBankDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpBankDetails">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpEmerge__Emplo__7C4F7684">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpEmergencyContact" Type="Self.EmpEmergencyContact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpEmergencyContact">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpFinger__Emplo__7D439ABD">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpFingerPrints" Type="Self.EmpFingerPrint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpFingerPrints">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpPoliti__Emplo__07C12930">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpPoliticalInformation" Type="Self.EmpPoliticalInformation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpPoliticalInformation">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpRefere__Emplo__01142BA1">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpReference" Type="Self.EmpReference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpReference">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpRejoin__Emplo__04E4BC85">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpRejoinHistory" Type="Self.EmpRejoinHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpRejoinHistory">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpSalary__Emplo__05D8E0BE">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpSalaryDetails" Type="Self.EmpSalaryDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpSalaryDetails">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EmpTransf__Emplo__06CD04F7">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpTransferHistory" Type="Self.EmpTransferHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpTransferHistory">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SOSHRMSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Centers" EntityType="Self.Center" />
+          <EntitySet Name="EmpArmyInformations" EntityType="Self.EmpArmyInformation" />
+          <EntitySet Name="EmpBankDetails" EntityType="Self.EmpBankDetail" />
+          <EntitySet Name="EmpEmergencyContacts" EntityType="Self.EmpEmergencyContact" />
+          <EntitySet Name="EmpFingerPrints" EntityType="Self.EmpFingerPrint" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="EmpPoliticalInformations" EntityType="Self.EmpPoliticalInformation" />
+          <EntitySet Name="EmpReferences" EntityType="Self.EmpReference" />
+          <EntitySet Name="EmpRejoinHistories" EntityType="Self.EmpRejoinHistory" />
+          <EntitySet Name="EmpSalaryDetails" EntityType="Self.EmpSalaryDetail" />
+          <EntitySet Name="EmpTransferHistories" EntityType="Self.EmpTransferHistory" />
+          <EntitySet Name="Projects" EntityType="Self.Project" />
+          <EntitySet Name="Regions" EntityType="Self.Region" />
+          <AssociationSet Name="FK__Center__RegionId__1F98B2C1" Association="Self.FK__Center__RegionId__1F98B2C1">
+            <End Role="Region" EntitySet="Regions" />
+            <End Role="Center" EntitySet="Centers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpArmyIn__Emplo__73BA3083" Association="Self.FK__EmpArmyIn__Emplo__73BA3083">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmpArmyInformation" EntitySet="EmpArmyInformations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpBankDe__Emplo__76969D2E" Association="Self.FK__EmpBankDe__Emplo__76969D2E">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmpBankDetails" EntitySet="EmpBankDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpEmerge__Emplo__7C4F7684" Association="Self.FK__EmpEmerge__Emplo__7C4F7684">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmpEmergencyContact" EntitySet="EmpEmergencyContacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpFinger__Emplo__7D439ABD" Association="Self.FK__EmpFinger__Emplo__7D439ABD">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmpFingerPrints" EntitySet="EmpFingerPrints" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpPoliti__Emplo__07C12930" Association="Self.FK__EmpPoliti__Emplo__07C12930">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmpPoliticalInformation" EntitySet="EmpPoliticalInformations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpRefere__Emplo__01142BA1" Association="Self.FK__EmpRefere__Emplo__01142BA1">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmpReference" EntitySet="EmpReferences" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpRejoin__Emplo__04E4BC85" Association="Self.FK__EmpRejoin__Emplo__04E4BC85">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmpRejoinHistory" EntitySet="EmpRejoinHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpSalary__Emplo__05D8E0BE" Association="Self.FK__EmpSalary__Emplo__05D8E0BE">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmpSalaryDetails" EntitySet="EmpSalaryDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpTransf__Emplo__06CD04F7" Association="Self.FK__EmpTransf__Emplo__06CD04F7">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmpTransferHistory" EntitySet="EmpTransferHistories" />
+          </AssociationSet>
+          <FunctionImport Name="SP_Employee_GetMaxCode" ReturnType="Collection(String)" />
+          <EntitySet Name="HRM_Vew_Employee" EntityType="SOSHRMSModel.HRM_Vew_Employee" />
+        </EntityContainer>
+        <EntityType Name="HRM_Vew_Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+            <PropertyRef Name="ProjectId" />
+            <PropertyRef Name="CreatedOn" />
+            <PropertyRef Name="CreatedBy" />
+          </Key>
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="ProjectId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FatherName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FatherCNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PermanentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CurrentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ProfilePicture" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Region" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Center" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Supervisor" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Post" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MotherName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Education" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BloodGroup" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IdentificationMarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Height" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Weight" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="MaritalStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="NextToKIN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WifeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NoOfChilds" Type="Int32" />
+          <Property Name="NoOfBoys" Type="Int32" />
+          <Property Name="NoOfGirls" Type="Int32" />
+          <Property Name="Status" Type="Byte" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <Property Name="ArmyInformationId" Type="Guid" />
+          <Property Name="JoiningDate" Type="DateTime" Precision="0" />
+          <Property Name="UnitName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ForceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastUnit" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastCenter" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ServicePeriod" Type="Int32" />
+          <Property Name="RecordCenter" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DischargeDate" Type="DateTime" Precision="0" />
+          <Property Name="Rank" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Trade" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ForceType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PreviousForces" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BankDetailsId" Type="Guid" />
+          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountOwner" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OpeningDate" Type="DateTime" Precision="3" />
+          <Property Name="EmergencyContactId" Type="Guid" />
+          <Property Name="EmergencyAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="EmergencyPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EmergencyCell" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FingerPrintId" Type="Guid" />
+          <Property Name="LeftThumb" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LeftIndexFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LeftMiddleFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LeftRingFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LeftBabyFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightThumb" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightIndexFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightMiddleFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightRingFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightBabyFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="PoliticalInformationId" Type="Guid" />
+          <Property Name="PoliceStation" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PostOffice" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AreaNazimName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WellKnownPerson" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UCNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NANumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PANumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VoteNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RejoinHistoryId" Type="Guid" />
+          <Property Name="PreviousAppointmentDate" Type="DateTime" Precision="0" />
+          <Property Name="PreviousTerminateDate" Type="DateTime" Precision="0" />
+          <Property Name="RejoinDate" Type="DateTime" Precision="0" />
+          <Property Name="SalaryDetailsId" Type="Guid" />
+          <Property Name="BasicSalary" Type="Int32" />
+          <Property Name="DutyBouns" Type="Int32" />
+          <Property Name="WeaponAllowance" Type="Int32" />
+          <Property Name="AnnualLeaves" Type="Int32" />
+          <Property Name="Contract" Type="Int32" />
+          <Property Name="AppointmentDate" Type="DateTime" Precision="0" />
+          <Property Name="ResignationDate" Type="DateTime" Precision="0" />
+          <Property Name="TransferHistoryId" Type="Guid" />
+          <Property Name="OTSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTSubSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTDepartSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTJob" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTManager" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTCoach" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTCenter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTSubSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTDepartSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTJob" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTManager" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTCoach" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTCenter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RegionId" Type="Guid" />
+          <Property Name="RegionName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="RegionCode" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CenterId" Type="Guid" />
+          <Property Name="CenterName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="RegionHead" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="SupervisorName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SOSHRMSModelStoreContainer" CdmEntityContainer="SOSHRMSEntities">
+          <EntitySetMapping Name="Centers">
+            <EntityTypeMapping TypeName="SOSHRMSModel.Center">
+              <MappingFragment StoreEntitySet="Center">
+                <ScalarProperty Name="CenterId" ColumnName="CenterId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+                <ScalarProperty Name="RegionHead" ColumnName="RegionHead" />
+                <ScalarProperty Name="SupervisorName" ColumnName="SupervisorName" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmpArmyInformations">
+            <EntityTypeMapping TypeName="SOSHRMSModel.EmpArmyInformation">
+              <MappingFragment StoreEntitySet="EmpArmyInformation">
+                <ScalarProperty Name="ArmyInformationId" ColumnName="ArmyInformationId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+                <ScalarProperty Name="UnitName" ColumnName="UnitName" />
+                <ScalarProperty Name="ForceNo" ColumnName="ForceNo" />
+                <ScalarProperty Name="LastUnit" ColumnName="LastUnit" />
+                <ScalarProperty Name="LastCenter" ColumnName="LastCenter" />
+                <ScalarProperty Name="ServicePeriod" ColumnName="ServicePeriod" />
+                <ScalarProperty Name="RecordCenter" ColumnName="RecordCenter" />
+                <ScalarProperty Name="DischargeDate" ColumnName="DischargeDate" />
+                <ScalarProperty Name="Rank" ColumnName="Rank" />
+                <ScalarProperty Name="Trade" ColumnName="Trade" />
+                <ScalarProperty Name="ForceType" ColumnName="ForceType" />
+                <ScalarProperty Name="PreviousForces" ColumnName="PreviousForces" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmpBankDetails">
+            <EntityTypeMapping TypeName="SOSHRMSModel.EmpBankDetail">
+              <MappingFragment StoreEntitySet="EmpBankDetails">
+                <ScalarProperty Name="BankDetailsId" ColumnName="BankDetailsId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="AccountTitle" ColumnName="AccountTitle" />
+                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="AccountOwner" ColumnName="AccountOwner" />
+                <ScalarProperty Name="OpeningDate" ColumnName="OpeningDate" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmpEmergencyContacts">
+            <EntityTypeMapping TypeName="SOSHRMSModel.EmpEmergencyContact">
+              <MappingFragment StoreEntitySet="EmpEmergencyContact">
+                <ScalarProperty Name="EmergencyContactId" ColumnName="EmergencyContactId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="EmergencyAddress" ColumnName="EmergencyAddress" />
+                <ScalarProperty Name="EmergencyPhone" ColumnName="EmergencyPhone" />
+                <ScalarProperty Name="EmergencyCell" ColumnName="EmergencyCell" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmpFingerPrints">
+            <EntityTypeMapping TypeName="SOSHRMSModel.EmpFingerPrint">
+              <MappingFragment StoreEntitySet="EmpFingerPrints">
+                <ScalarProperty Name="FingerPrintId" ColumnName="FingerPrintId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="LeftThumb" ColumnName="LeftThumb" />
+                <ScalarProperty Name="LeftIndexFinger" ColumnName="LeftIndexFinger" />
+                <ScalarProperty Name="LeftMiddleFinger" ColumnName="LeftMiddleFinger" />
+                <ScalarProperty Name="LeftRingFinger" ColumnName="LeftRingFinger" />
+                <ScalarProperty Name="LeftBabyFinger" ColumnName="LeftBabyFinger" />
+                <ScalarProperty Name="RightThumb" ColumnName="RightThumb" />
+                <ScalarProperty Name="RightIndexFinger" ColumnName="RightIndexFinger" />
+                <ScalarProperty Name="RightMiddleFinger" ColumnName="RightMiddleFinger" />
+                <ScalarProperty Name="RightRingFinger" ColumnName="RightRingFinger" />
+                <ScalarProperty Name="RightBabyFinger" ColumnName="RightBabyFinger" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="SOSHRMSModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CNIC" ColumnName="CNIC" />
+                <ScalarProperty Name="FatherName" ColumnName="FatherName" />
+                <ScalarProperty Name="FatherCNIC" ColumnName="FatherCNIC" />
+                <ScalarProperty Name="PermanentAddress" ColumnName="PermanentAddress" />
+                <ScalarProperty Name="CurrentAddress" ColumnName="CurrentAddress" />
+                <ScalarProperty Name="ProfilePicture" ColumnName="ProfilePicture" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Region" ColumnName="Region" />
+                <ScalarProperty Name="Center" ColumnName="Center" />
+                <ScalarProperty Name="Supervisor" ColumnName="Supervisor" />
+                <ScalarProperty Name="Post" ColumnName="Post" />
+                <ScalarProperty Name="MotherName" ColumnName="MotherName" />
+                <ScalarProperty Name="Education" ColumnName="Education" />
+                <ScalarProperty Name="BloodGroup" ColumnName="BloodGroup" />
+                <ScalarProperty Name="IdentificationMarks" ColumnName="IdentificationMarks" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
+                <ScalarProperty Name="NextToKIN" ColumnName="NextToKIN" />
+                <ScalarProperty Name="WifeName" ColumnName="WifeName" />
+                <ScalarProperty Name="NoOfChilds" ColumnName="NoOfChilds" />
+                <ScalarProperty Name="NoOfBoys" ColumnName="NoOfBoys" />
+                <ScalarProperty Name="NoOfGirls" ColumnName="NoOfGirls" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+                <ScalarProperty Name="CenterId" ColumnName="CenterId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmpPoliticalInformations">
+            <EntityTypeMapping TypeName="SOSHRMSModel.EmpPoliticalInformation">
+              <MappingFragment StoreEntitySet="EmpPoliticalInformation">
+                <ScalarProperty Name="PoliticalInformationId" ColumnName="PoliticalInformationId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="PoliceStation" ColumnName="PoliceStation" />
+                <ScalarProperty Name="PostOffice" ColumnName="PostOffice" />
+                <ScalarProperty Name="AreaNazimName" ColumnName="AreaNazimName" />
+                <ScalarProperty Name="WellKnownPerson" ColumnName="WellKnownPerson" />
+                <ScalarProperty Name="UCNo" ColumnName="UCNo" />
+                <ScalarProperty Name="NANumber" ColumnName="NANumber" />
+                <ScalarProperty Name="PANumber" ColumnName="PANumber" />
+                <ScalarProperty Name="VoteNo" ColumnName="VoteNo" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmpReferences">
+            <EntityTypeMapping TypeName="SOSHRMSModel.EmpReference">
+              <MappingFragment StoreEntitySet="EmpReference">
+                <ScalarProperty Name="ReferenceId" ColumnName="ReferenceId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="RefName" ColumnName="RefName" />
+                <ScalarProperty Name="RefAddress" ColumnName="RefAddress" />
+                <ScalarProperty Name="RefAddressType" ColumnName="RefAddressType" />
+                <ScalarProperty Name="RefPhoto" ColumnName="RefPhoto" />
+                <ScalarProperty Name="RefState" ColumnName="RefState" />
+                <ScalarProperty Name="RefCountry" ColumnName="RefCountry" />
+                <ScalarProperty Name="RefCNIC" ColumnName="RefCNIC" />
+                <ScalarProperty Name="RefProfession" ColumnName="RefProfession" />
+                <ScalarProperty Name="RefPhone" ColumnName="RefPhone" />
+                <ScalarProperty Name="RefMobile" ColumnName="RefMobile" />
+                <ScalarProperty Name="RefEmail" ColumnName="RefEmail" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmpRejoinHistories">
+            <EntityTypeMapping TypeName="SOSHRMSModel.EmpRejoinHistory">
+              <MappingFragment StoreEntitySet="EmpRejoinHistory">
+                <ScalarProperty Name="RejoinHistoryId" ColumnName="RejoinHistoryId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="PreviousAppointmentDate" ColumnName="PreviousAppointmentDate" />
+                <ScalarProperty Name="PreviousTerminateDate" ColumnName="PreviousTerminateDate" />
+                <ScalarProperty Name="RejoinDate" ColumnName="RejoinDate" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmpSalaryDetails">
+            <EntityTypeMapping TypeName="SOSHRMSModel.EmpSalaryDetail">
+              <MappingFragment StoreEntitySet="EmpSalaryDetails">
+                <ScalarProperty Name="SalaryDetailsId" ColumnName="SalaryDetailsId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="BasicSalary" ColumnName="BasicSalary" />
+                <ScalarProperty Name="DutyBouns" ColumnName="DutyBouns" />
+                <ScalarProperty Name="WeaponAllowance" ColumnName="WeaponAllowance" />
+                <ScalarProperty Name="AnnualLeaves" ColumnName="AnnualLeaves" />
+                <ScalarProperty Name="Contract" ColumnName="Contract" />
+                <ScalarProperty Name="AppointmentDate" ColumnName="AppointmentDate" />
+                <ScalarProperty Name="ResignationDate" ColumnName="ResignationDate" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmpTransferHistories">
+            <EntityTypeMapping TypeName="SOSHRMSModel.EmpTransferHistory">
+              <MappingFragment StoreEntitySet="EmpTransferHistory">
+                <ScalarProperty Name="TransferHistoryId" ColumnName="TransferHistoryId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="OTSegment" ColumnName="OTSegment" />
+                <ScalarProperty Name="OTSubSegment" ColumnName="OTSubSegment" />
+                <ScalarProperty Name="OTDepartSegment" ColumnName="OTDepartSegment" />
+                <ScalarProperty Name="OTJob" ColumnName="OTJob" />
+                <ScalarProperty Name="OTManager" ColumnName="OTManager" />
+                <ScalarProperty Name="OTCoach" ColumnName="OTCoach" />
+                <ScalarProperty Name="OTCenter" ColumnName="OTCenter" />
+                <ScalarProperty Name="NTSegment" ColumnName="NTSegment" />
+                <ScalarProperty Name="NTSubSegment" ColumnName="NTSubSegment" />
+                <ScalarProperty Name="NTDepartSegment" ColumnName="NTDepartSegment" />
+                <ScalarProperty Name="NTJob" ColumnName="NTJob" />
+                <ScalarProperty Name="NTManager" ColumnName="NTManager" />
+                <ScalarProperty Name="NTCoach" ColumnName="NTCoach" />
+                <ScalarProperty Name="NTCenter" ColumnName="NTCenter" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="SOSHRMSModel.Project">
+              <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Regions">
+            <EntityTypeMapping TypeName="SOSHRMSModel.Region">
+              <MappingFragment StoreEntitySet="Region">
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_Employee_GetMaxCode" FunctionName="SOSHRMSModel.Store.SP_Employee_GetMaxCode" />
+          <EntitySetMapping Name="HRM_Vew_Employee">
+            <EntityTypeMapping TypeName="SOSHRMSModel.HRM_Vew_Employee">
+              <MappingFragment StoreEntitySet="HRM_Vew_Employee">
+                <ScalarProperty Name="SupervisorName" ColumnName="SupervisorName" />
+                <ScalarProperty Name="RegionHead" ColumnName="RegionHead" />
+                <ScalarProperty Name="CenterName" ColumnName="CenterName" />
+                <ScalarProperty Name="CenterId" ColumnName="CenterId" />
+                <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
+                <ScalarProperty Name="RegionName" ColumnName="RegionName" />
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+                <ScalarProperty Name="NTCenter" ColumnName="NTCenter" />
+                <ScalarProperty Name="NTCoach" ColumnName="NTCoach" />
+                <ScalarProperty Name="NTManager" ColumnName="NTManager" />
+                <ScalarProperty Name="NTJob" ColumnName="NTJob" />
+                <ScalarProperty Name="NTDepartSegment" ColumnName="NTDepartSegment" />
+                <ScalarProperty Name="NTSubSegment" ColumnName="NTSubSegment" />
+                <ScalarProperty Name="NTSegment" ColumnName="NTSegment" />
+                <ScalarProperty Name="OTCenter" ColumnName="OTCenter" />
+                <ScalarProperty Name="OTCoach" ColumnName="OTCoach" />
+                <ScalarProperty Name="OTManager" ColumnName="OTManager" />
+                <ScalarProperty Name="OTJob" ColumnName="OTJob" />
+                <ScalarProperty Name="OTDepartSegment" ColumnName="OTDepartSegment" />
+                <ScalarProperty Name="OTSubSegment" ColumnName="OTSubSegment" />
+                <ScalarProperty Name="OTSegment" ColumnName="OTSegment" />
+                <ScalarProperty Name="TransferHistoryId" ColumnName="TransferHistoryId" />
+                <ScalarProperty Name="ResignationDate" ColumnName="ResignationDate" />
+                <ScalarProperty Name="AppointmentDate" ColumnName="AppointmentDate" />
+                <ScalarProperty Name="Contract" ColumnName="Contract" />
+                <ScalarProperty Name="AnnualLeaves" ColumnName="AnnualLeaves" />
+                <ScalarProperty Name="WeaponAllowance" ColumnName="WeaponAllowance" />
+                <ScalarProperty Name="DutyBouns" ColumnName="DutyBouns" />
+                <ScalarProperty Name="BasicSalary" ColumnName="BasicSalary" />
+                <ScalarProperty Name="SalaryDetailsId" ColumnName="SalaryDetailsId" />
+                <ScalarProperty Name="RejoinDate" ColumnName="RejoinDate" />
+                <ScalarProperty Name="PreviousTerminateDate" ColumnName="PreviousTerminateDate" />
+                <ScalarProperty Name="PreviousAppointmentDate" ColumnName="PreviousAppointmentDate" />
+                <ScalarProperty Name="RejoinHistoryId" ColumnName="RejoinHistoryId" />
+                <ScalarProperty Name="VoteNo" ColumnName="VoteNo" />
+                <ScalarProperty Name="PANumber" ColumnName="PANumber" />
+                <ScalarProperty Name="NANumber" ColumnName="NANumber" />
+                <ScalarProperty Name="UCNo" ColumnName="UCNo" />
+                <ScalarProperty Name="WellKnownPerson" ColumnName="WellKnownPerson" />
+                <ScalarProperty Name="AreaNazimName" ColumnName="AreaNazimName" />
+                <ScalarProperty Name="PostOffice" ColumnName="PostOffice" />
+                <ScalarProperty Name="PoliceStation" ColumnName="PoliceStation" />
+                <ScalarProperty Name="PoliticalInformationId" ColumnName="PoliticalInformationId" />
+                <ScalarProperty Name="RightBabyFinger" ColumnName="RightBabyFinger" />
+                <ScalarProperty Name="RightRingFinger" ColumnName="RightRingFinger" />
+                <ScalarProperty Name="RightMiddleFinger" ColumnName="RightMiddleFinger" />
+                <ScalarProperty Name="RightIndexFinger" ColumnName="RightIndexFinger" />
+                <ScalarProperty Name="RightThumb" ColumnName="RightThumb" />
+                <ScalarProperty Name="LeftBabyFinger" ColumnName="LeftBabyFinger" />
+                <ScalarProperty Name="LeftRingFinger" ColumnName="LeftRingFinger" />
+                <ScalarProperty Name="LeftMiddleFinger" ColumnName="LeftMiddleFinger" />
+                <ScalarProperty Name="LeftIndexFinger" ColumnName="LeftIndexFinger" />
+                <ScalarProperty Name="LeftThumb" ColumnName="LeftThumb" />
+                <ScalarProperty Name="FingerPrintId" ColumnName="FingerPrintId" />
+                <ScalarProperty Name="EmergencyCell" ColumnName="EmergencyCell" />
+                <ScalarProperty Name="EmergencyPhone" ColumnName="EmergencyPhone" />
+                <ScalarProperty Name="EmergencyAddress" ColumnName="EmergencyAddress" />
+                <ScalarProperty Name="EmergencyContactId" ColumnName="EmergencyContactId" />
+                <ScalarProperty Name="OpeningDate" ColumnName="OpeningDate" />
+                <ScalarProperty Name="AccountOwner" ColumnName="AccountOwner" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+                <ScalarProperty Name="AccountTitle" ColumnName="AccountTitle" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="BankDetailsId" ColumnName="BankDetailsId" />
+                <ScalarProperty Name="PreviousForces" ColumnName="PreviousForces" />
+                <ScalarProperty Name="ForceType" ColumnName="ForceType" />
+                <ScalarProperty Name="Trade" ColumnName="Trade" />
+                <ScalarProperty Name="Rank" ColumnName="Rank" />
+                <ScalarProperty Name="DischargeDate" ColumnName="DischargeDate" />
+                <ScalarProperty Name="RecordCenter" ColumnName="RecordCenter" />
+                <ScalarProperty Name="ServicePeriod" ColumnName="ServicePeriod" />
+                <ScalarProperty Name="LastCenter" ColumnName="LastCenter" />
+                <ScalarProperty Name="LastUnit" ColumnName="LastUnit" />
+                <ScalarProperty Name="ForceNo" ColumnName="ForceNo" />
+                <ScalarProperty Name="UnitName" ColumnName="UnitName" />
+                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+                <ScalarProperty Name="ArmyInformationId" ColumnName="ArmyInformationId" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="NoOfGirls" ColumnName="NoOfGirls" />
+                <ScalarProperty Name="NoOfBoys" ColumnName="NoOfBoys" />
+                <ScalarProperty Name="NoOfChilds" ColumnName="NoOfChilds" />
+                <ScalarProperty Name="WifeName" ColumnName="WifeName" />
+                <ScalarProperty Name="NextToKIN" ColumnName="NextToKIN" />
+                <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="IdentificationMarks" ColumnName="IdentificationMarks" />
+                <ScalarProperty Name="BloodGroup" ColumnName="BloodGroup" />
+                <ScalarProperty Name="Education" ColumnName="Education" />
+                <ScalarProperty Name="MotherName" ColumnName="MotherName" />
+                <ScalarProperty Name="Post" ColumnName="Post" />
+                <ScalarProperty Name="Supervisor" ColumnName="Supervisor" />
+                <ScalarProperty Name="Center" ColumnName="Center" />
+                <ScalarProperty Name="Region" ColumnName="Region" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ProfilePicture" ColumnName="ProfilePicture" />
+                <ScalarProperty Name="CurrentAddress" ColumnName="CurrentAddress" />
+                <ScalarProperty Name="PermanentAddress" ColumnName="PermanentAddress" />
+                <ScalarProperty Name="FatherCNIC" ColumnName="FatherCNIC" />
+                <ScalarProperty Name="FatherName" ColumnName="FatherName" />
+                <ScalarProperty Name="CNIC" ColumnName="CNIC" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

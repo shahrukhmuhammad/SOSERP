@@ -1,0 +1,160 @@
+﻿
+@{
+    ViewBag.Title = "Email Templates";
+}
+
+@section styles{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+}
+
+<form id="email-frm" class="form-Modal" method="post">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                @ViewBag.Title
+                <span class="pull-right" style="font-size:16px;">
+                    <a href="javascript://" onclick="window.history.back()" title="Cancel / Back"><i class="fa fa-close fa-2x"></i></a>
+                    <button type="button" class="Restore" title="Restore" style="border:none; background:transparent;"><i @*style="background-color:orange; color:#fefefe; padding:4px; font-size:18px; border-radius:100px;"*@ class="fa fa-undo text-warning fa-2x"></i></button>
+                    <button type="submit" style="border:none; background:transparent;" title="Save"><i class="fa fa-check-circle fa-2x text-success"></i></button>
+                </span>
+            </h4>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Template Type</label>
+                        <select class="form-control input-sm" required autofocus name="Id" id="Id">
+                            <option value="">-select template-</option>
+                            @foreach (var template in BaseApp.Entity.EmailTemplateType.List())
+                            {
+                                <option value="@template.Key">@template.Value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" class="form-control input-sm" placeholder="Enter email subject" name="Subject" id="Subject" required>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Body Content</label>
+                        <textarea id="DefaultContent" class="hidden" disabled readonly></textarea>
+                        <textarea id="BodyContent" name="BodyContent" required></textarea>
+                        <p class="form-control-static text-danger small">
+                            Note: Template may contain variables like <strong>@@Model.FullName</strong>. Please feel free to place them anywhere in template but <strong>DO NOT</strong> remove them.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <span class="pull-right" style="font-size:16px;">
+                <a href="javascript://" onclick="window.history.back()" title="Cancel / Back"><i class="fa fa-close fa-2x"></i></a>
+                <button type="button" class="Restore" title="Restore" style="border:none; background:transparent;"><i @*style="background-color:orange; color:#fefefe; padding:4px; font-size:18px; border-radius:100px;"*@ class="fa fa-undo text-warning fa-2x"></i></button>
+                <button type="submit" style="border:none; background:transparent;" title="Save"><i class="fa fa-check-circle fa-2x text-success"></i></button>
+            </span>
+            @*<div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                <button type="button" class="btn btn-warning Restore"><i class="fa fa-undo"></i> Restore</button>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+            </div>*@
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+            $(function () {
+                $("#BodyContent").summernote({ height: 200 });
+                $('#email-frm').validate({
+                    submitHandler: function (frm) {
+                        $('#loading-mask').show();
+                        $(frm).ajaxSubmit(function (d) {
+                            $('#loading-mask').fadeOut();
+                        });
+                    }
+                });
+
+                $('#Id').change(function () {
+                    var id = $(this).val();
+                    if (id == '') return;
+                    $('#loading-mask').show();
+                    $.get('/Secure/Setting/EmailTemplate?id=' + id).success(function (d) {
+                        $('#Subject').val(d.Subject);
+                        $('#BodyContent').summernote('code', d.BodyContent);
+                        $('#DefaultContent').val(d.DefaultContent);
+                        $("#loading-mask").fadeOut();
+                    });
+                });
+                $('.Restore').click(function () {
+                    var id = $('#Id').val();
+                    if (id == '') return;
+                    bootbox.confirm("Are you sure, you want to replace this page's content with previous revision?", function (res) {
+                        if (res) {
+                            $("#loading-mask").show();
+                            $('#BodyContent').summernote('code', $('#DefaultContent').val());
+                            $("#loading-mask").fadeOut();
+                        }
+                    });
+                });
+            });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('BodyContent');
+
+                $('#email-frm').validate({
+                    submitHandler: function (frm) {
+                        $('#loading-mask').show();
+                        $(frm).ajaxSubmit(function (d) {
+                            $('#loading-mask').fadeOut();
+                        });
+                    }
+                });
+
+                $('#Id').change(function () {
+                    var id = $(this).val();
+                    if (id == '') return;
+                    $('#loading-mask').show();
+                    $.get('/Secure/Setting/EmailTemplate?id=' + id).success(function (d) {
+                        $('#Subject').val(d.Subject);
+                        $('.ae-editable').html(d.BodyContent);
+                        $('#DefaultContent').val(d.DefaultContent);
+                        $("#loading-mask").fadeOut();
+                    });
+                });
+
+                $('.Restore').click(function () {
+                    var id = $('#Id').val();
+                    if (id == '') return;
+                    bootbox.confirm("Are you sure, you want to replace this page's content with default revision?", function (res) {
+                        if (res) {
+                            $("#loading-mask").show();
+                            $('.ae-editable').html($('#DefaultContent').val());
+                            $("#loading-mask").fadeOut();
+                        }
+                    });
+                });
+            });
+        </script>
+    }
+}

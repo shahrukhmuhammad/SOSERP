@@ -1,0 +1,220 @@
+﻿@model Ecommerce.Entity.Order
+
+@{
+    ViewBag.Title = "Sale";
+    var orderDetails = ViewBag.OrderDetails as IList<OrderDetail>;
+}
+@section styles{
+    <link href="~/Content/App/Ecommerce.css" rel="stylesheet" />
+}
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/Ecommerce/Order/InventorySale" class="btn btn-primary"><i class="fa fa-plus"></i> Create New Order</a>
+            </div>
+        </div>
+        <div class="row" style="margin:15px 0">
+            <div class="col-md-12">
+                <ul class="nav nav-pills">
+                    <li><a href="javascript://" id="" class="btn btn-default" style="padding:6px 20px;"> New Orders</a></li>
+                    <li><a href="javascript://" class="btn btn-default" style="padding:6px 20px;"> Dispatched Orders</a></li>
+                    <li><a href="javascript://" class="btn btn-default" style="padding:6px 20px;"> Cancelled Orders</a></li>
+                    <li><a href="javascript://" class="btn btn-default" style="padding:6px 20px;"> Pending</a></li>
+                    <li><a href="javascript://" class="btn btn-default" style="padding:6px 20px;"> All</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-body modal-pading">
+            <div class="table-responsive">
+                <table id="Orders-dataTable" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                            <th width="45px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Order ID" id="dataTable_0" /></th>
+                            <th width="130px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Product Details" id="dataTable_1" /></th>
+                            <th width="60px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Buyer Details" id="dataTable_2" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Order Source" id="dataTable_3" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Sold For" id="dataTable_4" /></th>
+                            <th width="35px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Qty" id="dataTable_5" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Total" id="dataTable_6" /></th>
+                            <th width="50px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Order Date" id="dataTable_7" /></th>
+                            <th width="155px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Postage Package" id="dataTable_8" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Order Status" id="dataTable_9" /></th>
+                            <th class="text-center" width="70px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in ViewBag.SalesGrid as IList<Order>)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="checkIt" value="@x.OrderId" />
+                                </td>
+                                <td>
+                                    @x.OrderId
+                                    @*@if (orders.GetSaleOrderDetail(x.OrderId).ToList().Count() > 1)
+                                    {
+                                        <ul class="mutiItem list-group">
+                                            @foreach (var item in orders.GetSaleOrderDetail(x.OrderId).ToList())
+                                            {
+                                                <li class="list-group-item">
+                                                    @(x.OrderId)-@(item.ProductId)
+                                                </li>
+                                            }
+                                        </ul>
+                                    }*@
+                                </td>
+                                <td>
+                                    @if (orderDetails.Where(y=> y.OrderId == x.OrderId).ToList().Count() > 1)
+                                    {
+                                        <ul class="mutiItem list-group">
+                                            @foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                            {
+                                                <li class="list-group-item">
+                                                    <div class="imgDiv">
+                                                        <img id="img-Preview" src="~/Content/Uploads/Ecommerce/p_@(item.ProductId).jpg" class="img-responsive grid-img" onerror="this.onerror = null; this.src = '/Content/Images/img.png';" />
+                                                        @item.Sku
+                                                    </div>
+                                                    <small class="text-primary"><a href="#">@item.Description </a></small>
+                                                   <div class="clearfix"></div>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                        {
+                                            <div class="imgDiv">
+                                                <img id="img-Preview" src="~/Content/Uploads/Ecommerce/p_@(item.ProductId).jpg" class="img-responsive grid-img" onerror="this.onerror = null; this.src = '/Content/Images/img.png';" />
+                                                @item.Sku
+                                            </div>
+                                                    <small class="text-primary"><a href="#">@item.Description </a></small>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    <span class="text-primary"><a href="javascript://">@x.ContactTitle</a></span> <br />
+                                    <span class="text-primary">Acct Type </span> <br />
+                                    @if (x.IsDropShipper)
+                                    { <text> Dropshipper</text>}
+                                    else if (x.IsTrader)
+                                    { <text> Trader </text>}
+                                </td>
+
+                                <td>
+                                    @x.OrderSource
+                                </td>
+                                <td>
+                                    @if (orderDetails.Where(y => y.OrderId == x.OrderId).ToList().Count() > 1)
+                                    {
+                                        <ul class="mutiItem list-group">
+                                            @foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                            {
+                                                <li class="list-group-item">
+                                                    @AppSettings.GetVal("CurrencySymbol") @item.Price
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                        {
+                                            @AppSettings.GetVal("CurrencySymbol") @item.Price
+                                        }
+                                    }
+
+                                </td>
+                                <td>
+                                    @if (orderDetails.Where(y => y.OrderId == x.OrderId).ToList().Count() > 1)
+                                    {
+                                        <ul class="mutiItem list-group">
+                                            @foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                            {
+                                                <li class="list-group-item">
+                                                    @item.Quantity
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                        {
+                                            @item.Quantity
+                                        }
+                                    }
+                                </td>
+
+                                <td>
+                                    @AppSettings.GetVal("CurrencySymbol") @x.OrderTotal
+
+                                </td>
+                                <td>
+                                    @x.DateTime.ToString("dd/MM/yyyy hh:mm tt")
+                                </td>
+                                <td>
+                                    @x.shippingpackagesDetails <br />
+                                    <span>(@x.shippingpackagesDeliveryTime)</span><br />
+                                    <span><b>Cost: </b>@AppSettings.GetVal("CurrencySymbol") @x.shippingpackagesPrice</span><br />
+                                    @if (x.ShippingCode != "")
+                                    {
+                                        <span><b>Tracking No</b> @x.ShippingCode [<a href="javascript://" class="tracking-no" data-id="@x.OrderId">Edit</a>]</span>
+                                    }
+                                    else
+                                    {
+                                        <span><b>Tracking No</b> [<a href="javascript://" class="tracking-no" data-id="@x.OrderId">Add</a>]</span>
+                                    }
+                                </td>
+                                <td>
+                                    @x.OrderStatus
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <a href="/Ecommerce/Order/SaleOrderDetail/@x.OrderId" class="btn btn-primary" title="View"><i class="fa fa-share"></i></a>
+                                        <a href="javascript://" onclick="' + deleteRecordData + '" class="btn btn-danger" title="Cancel"><i class="fa fa-times"></i></a>
+                                        <div class="dropdown pull-left">
+                                            <a role="button" data-toggle="dropdown" class="dropdown-toggle btn btn-primary btn-xs" href="#">
+                                                <span class="caret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu gridDropdown">
+                                                <li><a href="javascript://">Print Postage labels/Invoices</a></li>
+                                                <li><a href="javascript://">View & Process Order</a></li>
+                                                <li><a href="javascript://">Mark as Dispatched</a></li>
+                                                <li><a href="javascript://">Add Tracking Details</a></li>
+                                                <li><a href="javascript://">Update Postage Package</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiplePages")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/Ecommerce/Order/InventorySale" class="btn btn-primary"><i class="fa fa-plus"></i> Create New Order</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#Orders-dataTable", [1,2,3,4,5,6,7,8,9,10], [0,11]);
+            //getProducts("#Orders-dataTable");
+        });
+    </script>
+    <script src="~/Scripts/App/Ecommerce.js"></script>
+}
+

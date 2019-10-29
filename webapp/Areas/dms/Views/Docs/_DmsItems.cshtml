@@ -1,0 +1,177 @@
+﻿@model List<DmsItem>
+@{
+    var viewMode = Request["viewMode"];
+    if (viewMode == null)
+    {
+        viewMode = "list";
+    }
+}
+
+<div class="modal-body" style="padding:0;">
+
+    @if (viewMode == "list")
+    {
+        <div class="table-responsive">
+            <table id="dms-list-dataTable" class="table table-hover table-condensed" style="margin:0 !important;">
+                <thead>
+                    <tr>
+                        <th style="width:29px;"><input type="checkbox" id="selectall" @(Request["mode"] == DmsRenderMode.Browse.ToString() ? "disabled" : "") /></th>
+                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Name" id="dataTable_0" /></th>
+                        <th style="width:100px" class="hidden-xs"><input class="form-control input-sm input-tbl" type="text" placeholder="Type" id="dataTable_1" /></th>
+                        <th style="width:100px" class="hidden-xs"><input class="form-control input-sm input-tbl" type="text" placeholder="Size" id="dataTable_2" /></th>
+                        <th style="width:117px" class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DmsItem x in Model)
+                    {
+                        <tr>
+                            <td style="width:29px;"><input type="checkbox" class="selectitem" data-id="@x.Id" @(Request["mode"] == DmsRenderMode.Browse.ToString() ? "disabled" : "") /></td>
+                            <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                <span class="@(Request["mode"] == DmsRenderMode.Browse.ToString() ? "dms-browse-item" : "dms-item")" data-type="@(x.ResourceType == DmsResourceType.File ? x.Extension : "Folder")" data-id="@x.Id" title="@(x.ResourceType == DmsResourceType.File ? x.Filename + Environment.NewLine + "Type: " + x.Type.ToUpper() + " File" + Environment.NewLine + "Size: " + x.FileSize.SizeSuffix() : x.Title + Environment.NewLine + "File folder")&#10;Data modified: @(x.DateModified.HasValue ? x.DateModified.Value.ToString("dd MMM yyyy hh:mm tt") : null)">
+                                    <img src="@x.IconImg()" class="dms-icon-image" /> @x.Filename
+                                </span>
+                                <span style="width:@(Request["q"] != null ? 50 : 25)px;text-align:right">
+                                    @if (x.IsSystem)
+                                    { <i class="fa fa-lock fa-fw" title="System" style="cursor:default;color:#838383"></i> }
+                                    @if (Request["q"] != null)
+                                    { <span class="fa fa-folder-open dms-item" data-type="Folder" data-id="@x.ParentId" title="Show in folder" data-toggle="tooltip" data-placement="top"></span> }
+                                </span>
+                            </td>
+                            <td style="width:100px" class="hidden-xs">@x.Type</td>
+                            <td style="width:100px" class="hidden-xs text-right">@(x.ResourceType == DmsResourceType.File ? x.FileSize.SizeSuffix() : " ")</td>
+                            <td style="width:100px" class="text-center">
+                                <div class="btn-group btn-group-xs">
+                                    <span class="@(x.IsSystem ? "disabled" : "") btn btn-warning dms-title-btn" data-title="Rename" data-id="@x.Id" data-text="@x.Title" data-hint="Type a naw name." data-toggle="tooltip" title="Rename"><i class="fa fa-terminal fa-fw"></i></span>
+                                    <span class="@(x.ResourceType == DmsResourceType.Folder ? "disabled" : "") btn btn-default dms-revisions-btn" data-toggle="tooltip" data-id="@x.Id" data-filename="@x.Filename" title="Revisions"><i class="fa fa-sort-numeric-desc fa-fw"></i></span>
+                                    <span data-toggle="tooltip" class="@(x.ResourceType == DmsResourceType.Folder ? "disabled" : "") btn btn-info dms-permissions-btn" title="Permissions" data-id="@x.Id" data-filename="@x.Filename"><i class="fa fa-eye-slash fa-fw"></i></span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+        @*<table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th style="width:29px;"><input type="checkbox" id="selectall" @(Request["mode"] == DmsRenderMode.Browse.ToString() ? "disabled" : "") /></th>
+                    <th>Name</th>
+                    <th style="width:180px" class="hidden-xs hidden-sm">Date modified</th>
+                    <th style="width:100px" class="hidden-xs">Type</th>
+                    <th style="width:100px" class="hidden-xs">Size</th>
+                    <th style="width:117px" class="text-center">Action</th>
+                </tr>
+            </thead>
+        </table>
+
+        <div class="table-responsive dms-files-wrapper">
+            <table id="grid" class="table table-condensed" style="table-layout:fixed">
+                <tbody>
+                    @foreach (DmsItem x in Model)
+                    {
+                        <tr>
+                            <td style="width:29px;">
+                                <input type="checkbox" class="selectitem" data-id="@x.Id" @(Request["mode"] == DmsRenderMode.Browse.ToString() ? "disabled" : "") />
+                            </td>
+                            <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                <span class="@(Request["mode"] == DmsRenderMode.Browse.ToString() ? "dms-browse-item" : "dms-item")" data-type="@(x.ResourceType == DmsResourceType.File ? x.Extension : "Folder")" data-id="@x.Id" title="@(x.ResourceType == DmsResourceType.File ? x.Filename + Environment.NewLine + "Type: " + x.Type.ToUpper() + " File" + Environment.NewLine + "Size: " + x.FileSize.SizeSuffix() : x.Title + Environment.NewLine + "File folder")&#10;Data modified: @(x.DateModified.HasValue ? x.DateModified.Value.ToString("dd MMM yyyy hh:mm tt") : null)">
+                                    <img src="@x.IconImg()" class="dms-icon-image" /> @x.Filename
+                                </span>
+                            </td>
+
+                            <td style="width:@(Request["q"] != null ? 50 : 25)px;text-align:right">
+                                @if (x.IsSystem)
+                                { <i class="fa fa-lock fa-fw" title="System" style="cursor:default;color:#838383"></i> }
+                                @if (Request["q"] != null)
+                                { <span class="fa fa-folder-open dms-item" data-type="Folder" data-id="@x.ParentId" title="Show in folder" data-toggle="tooltip" data-placement="top"></span> }
+                            </td>
+
+                            <td style="width:180px" class="hidden-xs hidden-sm">@(x.DateModified.HasValue ? x.DateModified.Value.ToString("dd MMM yyyy hh:mm tt") : null)</td>
+                            <td style="width:100px" class="hidden-xs">@x.Type</td>
+                            <td style="width:100px" class="hidden-xs text-right">@(x.ResourceType == DmsResourceType.File ? x.FileSize.SizeSuffix() : " ")</td>
+                            <td style="width:100px">
+                                <div class="btn-group btn-group-xs">
+                                    <span class="@(x.IsSystem ? "disabled" : "") btn btn-warning dms-title-btn" data-title="Rename" data-id="@x.Id" data-text="@x.Title" data-hint="Type a naw name." data-toggle="tooltip" title="Rename"><i class="fa fa-terminal fa-fw"></i></span>
+                                    <span class="@(x.ResourceType == DmsResourceType.Folder ? "disabled" : "") btn btn-default dms-revisions-btn" data-toggle="tooltip" data-id="@x.Id" data-filename="@x.Filename" title="Revisions"><i class="fa fa-sort-numeric-desc fa-fw"></i></span>
+                                    <span data-toggle="tooltip" class="@(x.ResourceType == DmsResourceType.Folder ? "disabled" : "") btn btn-info dms-permissions-btn" title="Permissions" data-id="@x.Id" data-filename="@x.Filename"><i class="fa fa-eye-slash fa-fw"></i></span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (Model.Count == 0)
+            {
+                <div class="text-center help-block" style="margin-top:80px; margin-bottom:80px">
+                    <i class="fa fa-folder-open-o fa-5x"></i>
+                    <p>No files</p>
+                </div>
+            }
+        </div>*@
+    }
+    @if (viewMode == "grid")
+    {
+        if (Model.Count == 0)
+        {
+            <div class="text-center help-block" style="margin-top:80px; margin-bottom:80px">
+                <i class="fa fa-folder-open-o fa-5x"></i>
+                <p>No files</p>
+            </div>
+        }
+        else
+        {
+            <div class="row" style="margin-top:20px;">
+                @foreach (DmsItem x in Model)
+                {
+                    <div class="col-sm-3 col-md-3">
+                        <div style="height:192px;" class="thumbnail text-center">
+                            <span class="badge-left"><input type="checkbox" class="selectitem" data-id="@x.Id" @(Request["mode"] == DmsRenderMode.Browse.ToString() ? "disabled" : "") /></span>
+                            <span class="badge-right"><i class="fa fa-heart-o"></i></span>
+
+                            <img src="@x.IconImg()" style="width:64px;" class="@(Request["mode"] == DmsRenderMode.Browse.ToString() ? "dms-browse-item" : "dms-item")" data-type="@(x.ResourceType == DmsResourceType.File ? x.Extension : "Folder")" data-id="@x.Id" title="@(x.ResourceType == DmsResourceType.File ? x.Filename + Environment.NewLine + "Type: " + x.Type.ToUpper() + " File" + Environment.NewLine + "Size: " + x.FileSize.SizeSuffix() : x.Title + Environment.NewLine + "File folder")&#10;Data modified: @(x.DateModified.HasValue ? x.DateModified.Value.ToString("dd MMM yyyy hh:mm tt") : null)" />
+                            <div class="caption">
+                                <p style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                    <span class="@(Request["mode"] == DmsRenderMode.Browse.ToString() ? "dms-browse-item" : "dms-item")" data-type="@(x.ResourceType == DmsResourceType.File ? x.Extension : "Folder")" data-id="@x.Id" title="@(x.ResourceType == DmsResourceType.File ? x.Filename + Environment.NewLine + "Type: " + x.Type.ToUpper() + " File" + Environment.NewLine + "Size: " + x.FileSize.SizeSuffix() : x.Title + Environment.NewLine + "File folder")&#10;Data modified: @(x.DateModified.HasValue ? x.DateModified.Value.ToString("dd MMM yyyy hh:mm tt") : null)">
+                                        @x.Title
+                                    </span>
+                                </p>
+                                <table class="table table-condensed table-striped" style="margin:0 !important; font-size:70%; @(x.ResourceType == DmsResourceType.File ? "" : "margin-bottom:25px !important;")">
+                                    <tr>
+                                        <th class="text-right">Type</th>
+                                        <td>@x.Type.ToSpacedTitleCase()</td>
+                                    </tr>
+                                    @if (x.ResourceType == DmsResourceType.File)
+                                    {
+                                        <tr>
+                                            <th class="text-right">Size</th>
+                                            <td>@x.FileSize.SizeSuffix()</td>
+                                        </tr>
+                                    }
+                                </table>
+                                <div class="btn-group btn-group-xs">
+                                    <span class="@(x.IsSystem ? "disabled" : "") btn btn-warning dms-title-btn" data-title="Rename" data-id="@x.Id" data-text="@x.Title" data-hint="Type a naw name." data-toggle="tooltip" title="Rename"><i class="fa fa-terminal fa-fw"></i></span>
+                                    <span class="@(x.ResourceType == DmsResourceType.Folder ? "disabled" : "") btn btn-default dms-revisions-btn" data-toggle="tooltip" data-id="@x.Id" data-filename="@x.Filename" title="Revisions"><i class="fa fa-sort-numeric-desc fa-fw"></i></span>
+                                    <span data-toggle="tooltip" class="@(x.ResourceType == DmsResourceType.Folder ? "disabled" : "") btn btn-info dms-permissions-btn" title="Permissions" data-id="@x.Id" data-filename="@x.Filename"><i class="fa fa-eye-slash fa-fw"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+<div class="modal-footer" style="padding:0 15px;">
+    <span class="pull-left" style="line-height:30px">@Model.Count items</span>
+    <span class="pull-right">
+        @if (Request["mode"] == DmsRenderMode.Browse.ToString())
+            {
+            <button type="button" class="btn btn-default btn-sm" id="dms-close-modal">Close</button>
+                <button type="button" disabled class="btn btn-success btn-sm" id="dmsBrowseChooseBtn"><i class="fa fa-check-square-o"></i> Choose</button>
+        }
+    </span>
+</div>

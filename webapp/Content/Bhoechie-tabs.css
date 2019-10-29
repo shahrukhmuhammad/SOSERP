@@ -1,0 +1,73 @@
+﻿
+/*  bhoechie tab */
+div.bhoechie-tab-container{
+  z-index: 10;
+  background-color: transparent;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  background-clip: padding-box;
+  opacity: 0.97;
+  filter: alpha(opacity=97);
+}
+div.bhoechie-tab-menu{
+  padding-right: 0;
+  padding-left: 0;
+  padding-bottom: 0;
+}
+div.bhoechie-tab-menu div.list-group{
+  margin-bottom: 0;
+}
+div.bhoechie-tab-menu div.list-group>a{
+  margin-bottom: 0;
+}
+div.bhoechie-tab-menu div.list-group>a .glyphicon,
+div.bhoechie-tab-menu div.list-group>a .fa {
+  color: #5A55A3;
+}
+div.bhoechie-tab-menu div.list-group>a:first-child{
+  border-top-right-radius: 0;
+  -moz-border-top-right-radius: 0;
+}
+div.bhoechie-tab-menu div.list-group>a:last-child{
+  border-bottom-right-radius: 0;
+  -moz-border-bottom-right-radius: 0;
+}
+div.bhoechie-tab-menu div.list-group>a.active,
+div.bhoechie-tab-menu div.list-group>a.active .glyphicon,
+div.bhoechie-tab-menu div.list-group>a.active .fa{
+    background: #00c0ef !important;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #00c0ef), color-stop(1, #14d1ff)) !important;
+    background: -ms-linear-gradient(bottom, #00c0ef, #14d1ff) !important;
+    background: -moz-linear-gradient(center bottom, #00c0ef 0%, #14d1ff 100%) !important;
+    background: -o-linear-gradient(#14d1ff, #00c0ef) !important;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#14d1ff', endColorstr='#00c0ef', GradientType=0) !important;
+    color: #fff;
+}
+    div.bhoechie-tab-menu div.list-group > a.active > h4 {
+        color: #fff;
+    }
+.bhoechie-tab-menu > .list-group > .list-group-item {
+    border-color:transparent !important;
+}
+div.bhoechie-tab-menu div.list-group>a.active:after{
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  margin-top: -13px;
+  border-left: 0;
+  border-bottom: 13px solid transparent;
+  border-top: 13px solid transparent;
+  border-left: 10px solid #00c0ef;
+}
+
+div.bhoechie-tab-content{
+  /*background-color: #ffffff;*/
+  /* border: 1px solid #eeeeee; */
+  padding-top: 15px;
+  padding-bottom:15px;
+}
+
+div.bhoechie-tab div.bhoechie-tab-content:not(.active){
+  display: none;
+}

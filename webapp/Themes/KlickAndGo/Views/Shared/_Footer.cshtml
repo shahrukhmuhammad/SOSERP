@@ -1,0 +1,133 @@
+﻿
+
+
+<div data-findify-event="update-cart">
+
+</div>
+
+<!-- BEGIN: Google Customer Review by Simprosys InfoMedia For Any Assistance on this Code contact support@simprosys.com -->
+<script src="~/Themes/KlickAndGo/Content/apis.google.com/js/platforme200.js" async defer></script>
+@*<script>
+  window.renderBadge = function() {
+    var ratingBadgeContainer = document.createElement("div");
+      document.body.appendChild(ratingBadgeContainer);
+      window.gapi.load("ratingbadge", function() {
+        window.gapi.ratingbadge.render(
+          ratingBadgeContainer, {
+            "merchant_id": 102111060,
+            "position": "BOTTOM_LEFT"
+          });
+     });
+  }
+</script>*@
+<script>
+  window.___gcfg = {
+    lang: "en_GB"
+  };
+</script>
+<!-- END: Google Customer Review  by Simprosys InfoMedia-->
+<script id="back-in-stock-helper">
+  var _BISConfig = _BISConfig || {};
+
+
+</script>
+
+<script>
+      $(document).ready(function(){
+        setTimeout(function(){
+          $( "limespot" ).appendTo('.lime-append');
+        },2000)
+      });
+</script>
+<script type="text/javascript" id="stamped-script-widget"src="~/Themes/KlickAndGo/Content/cdn-stamped-io.azureedge.net/files/widget.min2d0a.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Themes/KlickAndGo/Content/cdn-stamped-io.azureedge.net/files/widget.min.css" />
+<script>
+    var timer;
+    var delay = 500;
+    $('.swatch-element').hover(function(event) {
+        var $this = $(this);
+        timer = setTimeout(function(){
+            $this.children(".tooltip").show();
+            $this.addClass("is-open");
+        }, delay);
+    }, function() {
+        clearTimeout(timer);
+        $(".tooltip").hide(0);
+        $('.swatch-element').removeClass("is-open");
+    });
+</script>
+
+<!-- CRITEO START -->
+
+
+
+<script type="text/javascript">
+    $(function () {
+
+        function priceFromCents(cents) {
+            if (typeof (cents) != "number")
+                return;
+
+            return (cents / 100);
+        }
+
+        var deviceType = /iPad/.test(navigator.userAgent) ? "t" : /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Silk/.test(navigator.userAgent) ? "m" : "d";
+        window.criteo_q = window.criteo_q || [];
+        window.criteo_q.push(
+          { event: "setAccount", account: 43243 },
+          { event: "setEmail", email: "" },
+          { event: "setSiteType", type: deviceType },
+          { event: "viewHome" }
+
+        );
+
+        function isRelevantCartUpdate(settings) {
+            function dataContains(term) {
+                return settings.data && settings.data.indexOf && settings.data.indexOf(term) > -1;
+            }
+
+            return (settings.url == "/cart/add" || settings.url == "cart/update")
+                && (
+                    dataContains('attributes[prod') ||
+                    (dataContains('id=') && dataContains('quantity='))
+                  );
+        }
+
+        $(document).ajaxSuccess(function (event, xhr, settings) {
+            if (isRelevantCartUpdate(settings)) {
+                $.getJSON("", function (data) {
+                    var basketData = [];
+                    var item;
+
+                    if (!data.items || !data.items.length)
+                        return;
+
+                    for (var i = 0; i < data.items.length; i++) {
+                        item = data.items[i];
+
+                        basketData.push({
+                            id: item.product_id,
+                            price: priceFromCents(item.price),
+                            quantity: item.quantity
+                        });
+                    }
+
+                    //            window.criteo_q.push({
+                    //                event: "viewBasket",
+                    //                product: basketData
+                    //            });
+                    //        });
+                    //    }
+                    //});
+                });
+            }
+        });
+    });
+</script>
+
+
+<!-- CRITEO END -->
+<script src="~/Themes/KlickAndGo/Content/www.codeblackbelt.com/js/modules/main.min221d.js"></script>
+
+<!-- Mirrored from www.rinkit.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 07 Oct 2017 19:36:05 GMT -->
+

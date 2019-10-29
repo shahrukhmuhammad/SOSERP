@@ -1,0 +1,796 @@
+﻿@model WebsiteUI.Models.RegisterModel
+@{
+    ViewBag.Title = "Register Account";
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_Layout.cshtml";
+}
+
+@section Head{
+<style type="text/css">
+
+ul.nav-wizard {
+  background-color: #f1f1f1;
+  border: 1px solid #d4d4d4;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+ul.nav-wizard:before {
+  position: absolute;
+}
+ul.nav-wizard:after {
+  display: block;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 138px;
+  height: 47px;
+  border-top: 1px solid #d4d4d4;
+  border-bottom: 1px solid #d4d4d4;
+  z-index: 11;
+  content: " ";
+}
+ul.nav-wizard li {
+  position: relative;
+  float: left;
+  height: 46px;
+  display: inline-block;
+  text-align: center;
+  padding: 0 20px 0 30px;
+  margin: 0;
+  font-size: 16px;
+  line-height: 46px;
+}
+ul.nav-wizard li a {
+  color: #428bca;
+  padding: 0;
+}
+ul.nav-wizard li a:hover {
+  background-color: transparent;
+}
+ul.nav-wizard li:before {
+  position: absolute;
+  display: block;
+  border: 24px solid transparent;
+  border-left: 16px solid #d4d4d4;
+  border-right: 0;
+  top: -1px;
+  z-index: 10;
+  content: '';
+  right: -16px;
+}
+ul.nav-wizard li:after {
+  position: absolute;
+  display: block;
+  border: 24px solid transparent;
+  border-left: 16px solid #f1f1f1;
+  border-right: 0;
+  top: -1px;
+  z-index: 10;
+  content: '';
+  right: -15px;
+}
+ul.nav-wizard li.active {
+  color: #3a87ad;
+  background: #dedede;
+}
+ul.nav-wizard li.active:after {
+  border-left: 16px solid #dedede;
+}
+ul.nav-wizard li.active a,
+ul.nav-wizard li.active a:active,
+ul.nav-wizard li.active a:visited,
+ul.nav-wizard li.active a:focus {
+  color: #989898;
+  background: #dedede;
+}
+ul.nav-wizard .active ~ li {
+  color: #999999;
+  background: #f9f9f9;
+}
+ul.nav-wizard .active ~ li:after {
+  border-left: 16px solid #f9f9f9;
+}
+ul.nav-wizard .active ~ li a,
+ul.nav-wizard .active ~ li a:active,
+ul.nav-wizard .active ~ li a:visited,
+ul.nav-wizard .active ~ li a:focus {
+  color: #999999;
+  background: #f9f9f9;
+}
+ul.nav-wizard.nav-wizard-backnav li:hover {
+  color: #468847;
+  background: #f6fbfd;
+}
+ul.nav-wizard.nav-wizard-backnav li:hover:after {
+  border-left: 16px solid #f6fbfd;
+}
+ul.nav-wizard.nav-wizard-backnav li:hover a,
+ul.nav-wizard.nav-wizard-backnav li:hover a:active,
+ul.nav-wizard.nav-wizard-backnav li:hover a:visited,
+ul.nav-wizard.nav-wizard-backnav li:hover a:focus {
+  color: #468847;
+  background: #f6fbfd;
+}
+ul.nav-wizard.nav-wizard-backnav .active ~ li {
+  color: #999999;
+  background: #ededed;
+}
+ul.nav-wizard.nav-wizard-backnav .active ~ li:after {
+  border-left: 16px solid #ededed;
+}
+ul.nav-wizard.nav-wizard-backnav .active ~ li a,
+ul.nav-wizard.nav-wizard-backnav .active ~ li a:active,
+ul.nav-wizard.nav-wizard-backnav .active ~ li a:visited,
+ul.nav-wizard.nav-wizard-backnav .active ~ li a:focus {
+  color: #999999;
+  background: #ededed;
+}
+</style>
+    <style type="text/css">
+
+/*form styles*/
+#msform {
+	width: 400px;
+	margin: 50px auto;
+	position: relative;
+}
+#msform fieldset {
+	background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	
+	box-sizing: border-box;
+}
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+	display: none;
+}
+/*inputs*/
+
+
+#msform .action-button:hover, #msform .action-button:focus {
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
+}
+/*headings*/
+.fs-title {
+	font-size: 15px;
+	text-transform: uppercase;
+	color: #2C3E50;
+	margin-bottom: 10px;
+}
+.fs-subtitle {
+	font-weight: normal;
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 20px;
+}
+        .validator
+        {
+            color: red;
+        }
+
+        #content .sfbox .frm{
+                border-bottom: 1px dashed #d7dbdb;
+    padding-bottom: 10px;
+}
+        
+        #content .box-registration .lbltxt, #content .box-login .lbltxt
+        {
+            padding: 20px 0 0 0;
+            width: 165px;display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+            
+        }
+         #content .box-registration .lbltxt1, #content .box-login .lbltxt1
+        {
+            padding: 20px 0 0 0;
+           width: 137px;
+    margin-left: 78px;display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+            
+        }
+
+        #content .frm .txtbox, #content .sidebar .txtbox
+        {
+            width: 30%;
+           border: 1px solid #85858c;
+            height: 30px;
+            display: inline-block;
+            padding: 0 15px;
+            border-radius: 0px;
+            margin: 0;
+            font-size: 14px;
+            color: #000000;
+            font-weight: 400;
+        }
+        label {
+    
+}
+        header
+        {
+            display: table-row;
+            line-height: 1.5em;
+            font-size: 2em;
+            white-space: nowrap; /* Prevent titles from wrapping when more than one word is used */
+        }
+    </style>
+}
+
+
+@*<ol class="breadcrumb">
+        <li><a href="~/" title="Home">Home</a></li>
+
+        <li>Create Account</li>
+
+    </ol>*@
+
+@if (Request.QueryString["type"] == "tradeportal")
+{
+
+    <div id="content">
+        <div class="container"id="msform" style="width:80%;">
+
+                <div class="wizard">
+
+                    <ul class="nav nav-wizard">
+                        <li class="active">
+                            <a href="#step1" data-toggle="tab">1. Create Account</a>
+                        </li>
+                        <li class="disabled">
+                            <a href="#step2" data-toggle="tab">2. About you</a>
+                        </li>
+                        <li class="disabled">
+                            <a href="#step3" data-toggle="tab">3. Status And Experience</a>
+                        </li>
+
+                        <li class="disabled">
+                            <a href="#step4" data-toggle="tab">Confirm Order</a>
+                        </li>
+                    </ul>
+                    <div class="row mt20">
+
+                        <p id="successMsg">@ViewBag.RegisterMessage</p>
+                        <div class="tab-content">
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.Raw(TempData["StatusMessage"] == null ? "" : TempData["StatusMessage"].ToString())
+
+                            <div class="tab-pane active" id="step1">
+                                <fieldset>
+                                    <input type="hidden" value="tradeportal" name="type" />
+                                    <header>
+
+
+                                        <h5 style="background-color:#04468d; color:#ffffff; padding:10px;">Personal Information</h5>
+
+                                    </header>
+
+                                    <div class="sfbox box-registration" style="background: none repeat scroll 0 0 #fff;border-radius: 0px;border-top:2px solid #04468d;">
+                                        @*<div class="col-md-6  col-sm-8 ">*@
+                                        <div class="frm" style="border-bottom:1px dashed #d7dbdb;">
+                                            <label class="lbltxt">@Html.LabelFor(x => x.Country)</label>
+                                            @Html.DropDownListFor(x => x.Country, Framework.Mvc.MvcHelper.CountryList(), new { @class = "txtbox" })
+
+                                        </div>
+                                      
+                                        <div class="frm">
+                                            <label class="lbltxt">Title</label>
+
+                                            @Html.DropDownList("UserTitle", new List<SelectListItem>
+        {
+            new SelectListItem{ Text="Mr.", Value="0"},
+            new SelectListItem{ Text="Miss", Value="1"},
+                new SelectListItem{ Text="Mrs", Value="2"}
+        }, "--- Select ---", new { @class = "txtbox" })
+                                            <input type = "hidden" value = "" />
+                                           
+                                            <label class="lbltxt1">@Html.LabelFor(x => x.FirstName)</label>
+                                            @Html.TextBoxFor(x => x.FirstName, new { @class = "txtbox" })
+                                            @Html.ValidationMessageFor(x => x.FirstName, null, new { @class = "validator" })
+                                        </div>
+                                        @*<div class="frm">
+                                            <label class="lbltxt">Middle Initial<span style="color:#bcbcbc;padding-right:4px;">(optional)</span></label>
+                                            <input class="txtbox dropdown" maxlength="2"/>
+                                            <label class="lbltxt1">
+                                                Surname
+                                            </label>
+                                            <input class="txtbox" />
+
+
+                                        </div>*@
+
+
+
+                                        <div class="frm">
+                                            <label class="lbltxt">
+                                                @Html.LabelFor(x => x.Email)
+                                            </label>
+                                            @Html.TextBoxFor(x => x.Email, new { @class = "txtbox" })
+                                            @Html.ValidationMessageFor(x => x.Email, null, new { @class = "validator" })
+                                            <label class="lbltxt1">@Html.LabelFor(x => x.VerifyEmail)</label>
+                                            @Html.TextBoxFor(x => x.VerifyEmail, new { @class = "txtbox" })
+                                            @Html.ValidationMessageFor(x => x.VerifyEmail, null, new { @class = "validator" })
+                                        </div>
+
+                                        <div class="frm">
+
+                                            <label class="lbltxt">
+                                                @Html.LabelFor(x => x.HomePhone)
+                                            </label>
+                                            @Html.TextBoxFor(x => x.HomePhone, new { @class = "txtbox", maxlength = "10" })
+                                            @Html.ValidationMessageFor(x => x.HomePhone, null, new { @class = "validator" })
+
+                                            <label class="lbltxt1">
+                                                @Html.LabelFor(x => x.MobilePhone)
+                                            </label>
+
+                                            @Html.TextBoxFor(x => x.MobilePhone, new { @class = "txtbox", maxlength = "10" })
+
+                                            @Html.ValidationMessageFor(x => x.MobilePhone, null, new { @class = "validator" })
+
+                                            
+
+                                        </div>
+                                        <div class="frm">
+                                            <label class="lbltxt">
+                                                Account Type
+                                            </label>
+                                            
+                                            <label>@Html.CheckBoxFor(x => x.IsTrader, new { @checked = "true" }) Trader</label>
+                    <label>@Html.CheckBoxFor(x => x.IsDropShipper) Drop Shipper</label>
+                                        </div>
+                                        @*<div class="frm">
+                                            <label class="checkbox" style="display:inline;margin-left:30px;margin-top:50px;" for="terms">
+                                                <input type="checkbox" />
+                                                My account will be managed by third party
+                                            </label>
+                                        </div>*@
+
+                                    </div>
+
+                                    @*<input type="button" name="password" class="next btn btn-info" value="Next" />*@
+
+                                    <header>
+                                        <h5 style="background-color:#04468d; color:#ffffff; padding:10px;">Set Account Credentials</h5>
+
+                                    </header>
+                                    <div class="sfbox box-registration" style="background: none repeat scroll 0 0 #fff;border-radius: 0px;border-top:2px solid #04468d;">
+
+
+                                        <div class="frm">
+                                            <label class="lbltxt">
+                                                @Html.LabelFor(x => x.Password)
+                                            </label>
+                                            @Html.PasswordFor(x => x.Password, new { @class = "txtbox" })
+                                            @Html.ValidationMessageFor(x => x.Password, null, new { @class = "validator" })
+
+                                            <label class="lbltxt1">
+                                                @Html.LabelFor(x => x.ConfirmPassword)
+                                            </label>
+                                            @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "txtbox" })
+                                            @Html.ValidationMessageFor(x => x.ConfirmPassword, null, new { @class = "validator" })
+
+
+                                        </div>
+
+                                        <div class="frm">
+                                            <label class="lbltxt">
+                                                Security Question
+                                            </label>
+                                            <select class="txtbox">
+                                                <option>-Select-</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="frm">
+                                            <label class="lbltxt">Answer</label>
+                                            <input class="txtbox" />
+                                            <label class="lbltxt1"> Verify Answer</label>
+                                            <input class="txtbox" />
+                                        </div>
+
+                                        <input type="checkbox" required="required" id="terms" name="terms" class="input-checkbox" style="margin-top:50px;margin-left:10px;">
+                                        <label class="checkbox" style="display:inline;margin-left:30px;margin-top:50px;" for="terms">
+                                            I confirm that Klickandgo.co.uk may contact me to help complete my application.
+
+                                        </label>
+                                        <input type="hidden" value="1" name="terms-field">
+                                        <div class="row">
+                                            <div class="col-md-7 col-sm-8 ">
+                                                <input  type="button" onclick="validations()" value="next" class="btn_c btn btn-primary"  style="float:right;line-height:
+     40px;color: #ffffff;padding: 0 58px;max-width: 288px;background:#0fb912;border-radius: 6px;"/>
+                                            </div>
+                                        </div>
+                                        @*<div class="row">
+                    <div class="col-md-7 col-sm-8 ">
+                        <input type="submit" class="btn_c next" style="float:right;line-height: 40px;color: #ffffff;padding: 0 58px;max-width: 288px;background:#0fb912;border-radius: 6px;" value="Save & Continue" />
+
+                    </div>
+                </div>*@
+                                        @*<ul class="list-inline pull-right">
+                    <li><button type="button" class="btn btn-primary">Continue</button></li>
+                </ul>*@
+
+
+                                    </div>
+                                </fieldset>
+                            </div>
+
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.Raw(TempData["StatusMessage"] == null ? "" : TempData["StatusMessage"].ToString())
+
+                            <div class="tab-pane" id="step2" style="display:none;">
+                                <fieldset>
+                                    <header>
+                                        <h5 style="background-color:#04468d; color:#ffffff; padding:10px;">Home Address</h5>
+                                    </header>
+
+                                    <div class="sfbox box-registration" style="background: none repeat scroll 0 0 #fff;border-radius: 0px;border-top:2px solid #04468d;">
+                                        @*<div class="col-md-6  col-sm-8 ">*@
+                                        <div class="frm" style="border-bottom:1px dashed #d7dbdb;">
+                                            <label class="lbltxt">@Html.LabelFor(x => x.Country)</label>
+                                            @Html.DropDownListFor(x => x.Country, Framework.Mvc.MvcHelper.CountryList(), new { @class = "txtbox" })
+
+                                        </div>
+
+                                        <div class="frm">
+                                            <label class="lbltxt">
+                                                @Html.LabelFor(x => x.PostalCode)
+                                            </label>
+                                            @Html.TextBoxFor(x => x.PostalCode, new { @maxlength = "6", @class = "txtbox" })
+                                            @Html.ValidationMessageFor(x => x.PostalCode, null, new { @class = "validator" })
+                                            <button type="submit" class="btn_c" style="float:right;margin-top:8px;">Find Address</button>
+                                        </div>
+                                        <div class="frm">
+                                            <label class="lbltxt">
+                                               @Html.LabelFor(x => x.Building)
+                                            </label>
+                                            @Html.TextBoxFor(x => x.Building, new {  @class = "txtbox" })
+                                            @Html.ValidationMessageFor(x => x.Building, null, new { @class = "validator" })
+                                            <label class="lbltxt1" style="width: 183px;margin-left: 30px;">
+                                                Flat Number<span style="color:#bcbcbc;padding-right:4px;">(optional)</span>
+                                            </label>
+                                            <input class="txtbox" />
+
+
+                                        </div>
+
+
+
+                                        <div class="frm">
+                                            <label class="lbltxt">
+                                                @Html.LabelFor(x => x.StreetAddress)
+                                            </label>
+                                            @Html.TextBoxFor(x => x.StreetAddress, new { @class = "txtbox" })
+                                            @Html.ValidationMessageFor(x => x.StreetAddress, null, new { @class = "validator" })
+                                            <label class="lbltxt1" style="width:181px;margin-left: 34px;">
+                                                @Html.LabelFor(x => x.AddressLine)
+                                                <span style="color:#bcbcbc;padding-right:4px;">(optional)</span>
+                                            </label>
+                                            @Html.TextBoxFor(x => x.AddressLine, new { @class = "txtbox" })
+                                            @Html.ValidationMessageFor(x => x.AddressLine, null, new { @class = "validator" })
+                                        </div>
+
+                                        <div class="frm">
+                                            <label class="lbltxt">
+                                                Town/   @Html.LabelFor(x => x.City)
+                                            </label>
+                                            @Html.TextBoxFor(x => x.City, new { @class = "txtbox", maxlength = "21" })
+                                            @Html.ValidationMessageFor(x => x.City, null, new { @class = "validator" })
+                                            <label class="lbltxt1" style="width: 181px;margin-left: 34px;">
+                                                Region/Country/State
+                                                <span style="color:#bcbcbc;padding-right:4px;">(optional)</span>
+                                            </label>
+                                            <input class="txtbox" />
+                                        </div>
+                                        <div class="frm">
+                                            
+                                            <label class="lbltxt">
+                                               @Html.LabelFor(x => x.HomePhone)
+                                            </label>
+                                           @Html.TextBoxFor(x => x.HomePhone, new { @class = "txtbox", maxlength = "10"})
+                                             @Html.ValidationMessageFor(x => x.HomePhone, null, new { @class = "validator" })
+                                            <label class="lbltxt1" style="width: 183px;margin-left: 34px;">
+                                                @Html.LabelFor(x => x.MobilePhone)
+                                            </label>
+                                            
+                                                @Html.TextBoxFor(x => x.MobilePhone, new { @class = "txtbox", maxlength = "10" })
+                                            
+                                            @Html.ValidationMessageFor(x => x.MobilePhone, null, new { @class = "validator" })                                      
+    @*<label>@Html.CheckBoxFor(x => x.IsTrader, new { @checked = "true" }) Trade Only</label>
+                  
+                                        </div>
+                                        <div class="frm">
+                                            <label class="checkbox" style="display:inline;margin-left:30px;margin-top:50px;" for="terms">
+                                                <input type="checkbox" />
+                                                I whould like provide the separate Mailing Address
+                                            </label>
+                                        </div>
+
+                                        @*</div>*@
+                                    </div>
+                                        </div>
+                                    @*<input type="button" name="password" class="next btn btn-info" value="Next" />*@
+
+                                    <header>
+                                        <h5 style="background-color:#04468d; color:#ffffff; padding:10px;">Identify Varification</h5>
+
+                                    </header>
+                                    <div class="sfbox box-registration" style="background: none repeat scroll 0 0 #fff;border-radius: 0px;border-top:2px solid #04468d;">
+
+
+                                        <div class="frm">
+                                            <label class="lbltxt">
+                                                @Html.LabelFor(x => x.Country)
+                                            </label>
+                                            @Html.DropDownListFor(x => x.Country, Framework.Mvc.MvcHelper.CountryList(), new { @class = "txtbox" })
+                                           
+                                           </div>
+
+                                        <div class="frm">
+                                            <label class="lbltxt" style="width:100%;">
+                                                Do you have tax residency in any conutry other than United Kingdom?
+                                            </label>
+                                            <input type="checkbox" />
+                                            
+                                        </div>
+
+                                        <div class="frm">
+                                            <label class="lbltxt">Date of Birth
+                                            <span>(DD/MM/YYYY)
+                                                </span></label>
+                                            @Html.DropDownList("month", Enumerable.Range(1, 12).Select(i => new SelectListItem { Value = i.ToString(), Text = System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat.GetMonthName(i) }), "")
+                                            @Html.DropDownList("day", Enumerable.Range(1, 31).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString() }), "")
+                                            @Html.DropDownList("year", Enumerable.Range(1900, 118).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString() }), "")
+                                            @*<span>
+
+                                                <input class="txtbox" style="width:10%;" />
+                                                <input class="txtbox" style="width:10%;" />
+                                                <input class="txtbox" style="width:9%;" />
+                                            </span>*@  
+                                         
+                                        </div>
+
+                                       
+                                        <div class="row">
+                                            <div class="col-md-7 col-sm-8 ">
+                                                <button type="button" class="btn_c btn btn-primary" style="float:right;line-height: 40px;color: #ffffff;padding: 0 58px;max-width: 288px;background:#0fb912;border-radius: 6px;">
+                                                Save & Continue</button>
+                                            </div>
+                                        </div>
+                                        @*<div class="row">
+                    <div class="col-md-7 col-sm-8 ">
+                        <input type="submit" class="btn_c next" style="float:right;line-height: 40px;color: #ffffff;padding: 0 58px;max-width: 288px;background:#0fb912;border-radius: 6px;" value="Save & Continue" />
+
+                    </div>
+                </div>*@
+                                        @*<ul class="list-inline pull-right">
+                    <li><button type="button" class="btn btn-primary">Continue</button></li>
+                </ul>*@
+
+
+                                    </div>
+
+                                    @*<ul class="list-inline pull-right">
+                                        <li><button type="button" class="btn btn-primary">Continue</button></li>
+                                    </ul>*@
+                                </fieldset>
+                            </div>
+}
+@*@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.Raw(TempData["StatusMessage"] == null ? "" : TempData["StatusMessage"].ToString())
+
+
+                            <div class="tab-pane" id="step3" style="display:none;">
+                                <fieldset>
+                                    <header>
+                                        <h5 style="background-color:#04468d; color:#ffffff; padding:10px;"></h5>
+                                    </header>
+
+                                    <div class="sfbox box-registration" style="background: none repeat scroll 0 0 #fff;border-radius: 0px;border-top:2px solid #04468d;">
+                                        @*<div class="col-md-6  col-sm-8 ">*@
+                                        @*div class="frm" style="border-bottom:1px dashed #d7dbdb;">
+        <label class="lbltxt"style="width:460px;">How long has your business been established?</label>
+       <input class="txtbox"/>
+    </div>
+
+    <div class="frm">
+        <label class="lbltxt"style="width:460px;">
+            Anticipated monthly spend on materials
+        </label>
+       <input class="txtbox"/>
+         </div>
+    <div class="frm">
+        <label class="lbltxt"style="width:460px;">
+            Do you wish to receive statements/invoices by e-mail?
+        </label>
+        <input class="checkbox" />
+
+    </div>
+    <div class="frm">
+
+        <label class="lbltxt" style="width:460px;">
+            Name and contact details of who deals with invoice queries and payments:
+        </label>
+        <input class="txtbox" />
+
+
+    </div>
+
+
+    <div class="frm">
+        <label class="lbltxt"style="width:460px;">
+            Do you wish all goods to be supplied against an official Order Number? @*Yes/NoIfNo,pleasestatewhomaycollectgoodsonyouraccount:*@
+                                            @*</label>
+                                            <input class="checkbox" />
+                                          
+                                        </div>
+
+                                        <div class="frm">
+                                            <label class="lbltxt"style="width:460px;">
+                                              Have any of the directors,owners or partners of this business held any other credit 
+                                                accounts with any company?
+                                            </label>
+                                           
+                                        </div>
+                                        <div class="frm">
+
+                                            <label class="lbltxt" style="width:460px;">
+                                                Which other Merchants do you hold an account with?
+
+                                            </label>
+                                            <input class="txtbox" />
+                                
+                                        </div>
+                                        
+                                        <button type="button" class="btn_c btn btn-primary" style="float:right;line-height: 40px;color: #ffffff;padding: 0 58px;max-width: 288px;background:#0fb912;border-radius: 6px;">Save & Continue</button>
+
+                                    </div>
+
+                                    @*<input type="button" name="password" class="next btn btn-info" value="Next" />*@
+                                 @*</fieldset>
+                            </div>
+}*@
+                        </div>
+
+                    </div>
+                  
+                </div>
+           
+        </div>
+    </div>
+}
+
+
+else
+{
+    <div id="content">
+        <div class="container">
+
+
+            <div class="row mt20">
+                <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                    <div class="sfbox box-registration">
+                        @using (Html.BeginForm())
+                        {
+                        @Html.AntiForgeryToken()
+                        @Html.Raw(TempData["StatusMessage"] == null ? "" : TempData["StatusMessage"].ToString())
+
+                        <div class="frm">
+                            <label for="first_name" class="lbltxt">@Html.LabelFor(x => x.FirstName)</label>
+                            @Html.TextBoxFor(x => x.FirstName, new { @class = "txtbox" })
+
+                            @Html.ValidationMessageFor(x => x.FirstName, null, new { @class = "validator" })
+                        </div>
+                        <div class="frm">
+                            <label for="last_name" class="lbltxt">@Html.LabelFor(x => x.LastName)</label>
+                            @Html.TextBoxFor(x => x.LastName, new { @class = "txtbox" })
+
+                            @Html.ValidationMessageFor(x => x.LastName, null, new { @class = "validator" })
+                        </div>
+                        <div class="frm">
+                            <label for="email" class="lbltxt">@Html.LabelFor(x => x.Email)</label>
+                            @Html.TextBoxFor(x => x.Email, new { @class = "txtbox" })
+
+                            @Html.ValidationMessageFor(x => x.Email, null, new { @class = "validator" })
+
+
+                        </div>
+                        <div class="frm">
+                            <label for="password" class="lbltxt">@Html.LabelFor(x => x.Password)</label>
+
+                            @Html.PasswordFor(x => x.Password, new { @class = "txtbox" })
+
+                            @Html.ValidationMessageFor(x => x.Password, null, new { @class = "validator" })
+
+
+                        </div>
+                        <div class="frm">
+                            <label for="password" class="lbltxt">@Html.LabelFor(x => x.ConfirmPassword)</label>
+                            @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "txtbox" })
+
+                            @Html.ValidationMessageFor(x => x.ConfirmPassword, null, new { @class = "validator" })
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-ms-6">
+                                <p>
+                                    <input type="submit" class="btn_c" value="Create Account">
+                                </p>
+                            </div>
+                        </div>
+                        }
+                        <div class="row">
+
+                            <div class="col-sm-8 col-ms-6 col-md-12 sign-in" style="text-align: right;">Returning Customer? <a href="@Url.Action("Login", "Account")">Sign In &rarr;</a></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+@section foot{
+    @*<script type="text/javascript">
+        var mobile = txt1.value() + txt2.value() + txt3.value()
+         
+           @Model.HomePhone = mobile;
+        
+    </script>*@
+    <script type="text/javascript" src="~/Scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+    <script type="text/javascript">
+        //function validations() {
+        //    if ($(".txtbox").val() = "") {
+        //        alert('Fields are empty')
+        //    }
+        //}
+        $(document).ready(function () {
+            allNextBtn = $('.next');
+            //Wizard
+            $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+
+                var $target = $(e.target);
+
+                if ($target.parent().hasClass('disabled')) {
+                    return false;
+                }
+            });
+
+            $(".btn-primary").click(function (e) {
+
+                var $active = $('.wizard .nav-wizard li.active');
+                $active.next().removeClass('disabled');
+                nextTab($active);
+
+            });
+        });
+
+        $('form').submit(function () {
+            if ($('form').valid().each()) {
+                //$('.formButton[type="submit"]').removeClass("formButton").addClass("formButton-disabled").attr('disabled', true);
+            }
+        });
+    </script>
+}

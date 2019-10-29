@@ -1,0 +1,97 @@
+﻿@model CMS.Entity.CmsNews
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    ViewBag.Title = (queryId == null ? "Add New News" : "Edit News");
+}
+
+@section styles{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+}
+
+<form id="frm" method="post" class="form-Modal">
+    @Html.AntiForgeryToken()
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" class="form-control input-sm" name="Title" value="@Model.Title" required autofocus />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <div class="input-group datePicker">
+                            <input name="DateTime" class="form-control input-sm" type="text" value="@Model.DateTime.ToShortDateString()" required autocomplete="off">
+                            <span class="input-group-addon input-group-sm">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="Status" class="form-control input-sm" required>
+                            <option value="@((int)CMS.Entity.CmsNewsStatus.Draft)" @(Model.Status == CMS.Entity.CmsNewsStatus.Draft ? "selected" : "")>@CMS.Entity.CmsNewsStatus.Draft</option>
+                            <option value="@((int)CMS.Entity.CmsNewsStatus.Published)" @(Model.Status == CMS.Entity.CmsNewsStatus.Published ? "selected" : "")>@CMS.Entity.CmsNewsStatus.Published</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Summary</label>
+                        <textarea type="text" class="form-control input-sm" name="Summary" rows="3">@Model.Summary</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Contents</label>
+                        <textarea type="text" class="form-control" id="Contents" name="Details">@Model.Details</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section scripts{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+                $(function () {
+                    $("#Contents").summernote({ height: 200 });
+                });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('Contents');
+            });
+        </script>
+    }
+}

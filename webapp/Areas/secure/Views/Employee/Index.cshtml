@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "Employees Management";
+}
+
+@section styles{
+    <style>
+        .circle-btns > a > .count {
+            font-size:16px !important;
+        }
+    </style>
+}
+
+<div class="user-Profile" style="min-height:430px;">
+    <div class="row tb-padding">
+        <div class="col-sm-9 col-sm-offset-2">
+            <div class="circle-btns">
+                <a href="javascript://">
+                    <p class="title">Projects</p>
+                    <p class="count">19</p>
+                </a>
+                <a href="javascript://">
+                    <p class="title">Paid Payrolls</p>
+                    <p class="count">$ 13,000</p>
+                </a>
+                <a href="javascript://">
+                    <p class="title">Pending Payrolls</p>
+                    <p class="count">$ 1,300</p>
+                </a>
+                <a href="javascript://">
+                    <p class="title">Un Paid Payrolls</p>
+                    <p class="count">$ 10,000</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="employees-Container">
+        @{ Html.RenderAction("_AllEmployees", "Employee"); }
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#employees-dataTable", [1, 2, 3, 4, 5, 6], [0, 7]);
+        });
+    </script>
+}

@@ -1,0 +1,25 @@
+﻿@model List<DmsItem>
+
+<div style="max-height:430px;overflow-y:auto;">
+    <table class="table table-condensed">
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td><a href="/dms/download/@x.Id" target="_blank">Version @x.Version</a></td>
+                <td>@x.CreatorName</td>
+                <td class="text-muted">@(x.DateModified.HasValue ? x.DateModified.Value.ToString("dd MMM yyyy hh:mm tt") : null)</td>
+                <td>@x.FileSize.SizeSuffix()</td>
+                <td>
+                    @if (Model.IndexOf(x) > 0)
+                    {
+                        <span class="btn btn-success btn-xs" onclick="restoreRevision('@x.Id')">Restore</span>
+                    }
+                    else
+                    {
+                        <span class="label label-info">Current</span>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</div>

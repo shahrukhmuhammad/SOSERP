@@ -1,0 +1,271 @@
+﻿@{
+    var menuItems = ViewBag.MainMenu as IList<CMS.Entity.CmsPage>;
+    var sec = ViewContext.RouteData.Values["slug"];
+    var sec_dict = menuItems.ToDictionary(x => x.Slug, x => x);
+    var cur_sec = sec == null ? null : sec_dict[sec.ToString()];
+}
+
+
+<div id="shopify-section-header" class="shopify-section">
+    @*<div class="promo-bar">
+            <p>Enjoy<strong> Free UK delivery</strong>&nbsp;on orders over £50</p>
+        </div>*@
+
+    <nav class="navbar navbar-default" style="margin-bottom:0px; border-radius:0px;background-color: #ffffff;
+    border-color: #ffffff;">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                <div class="container">
+
+                    @*<ul class="hidden-md nav navbar-nav navbar-right">
+                            <li class="dropdown-grid no-open-arrow " style="margin-top:13px;">
+                                <a data-toggle="dropdown" href="javascript:void(0);" class="dropdown-toggle cart-popup" aria-expanded="true">
+                                    <div class="cart-icon"><span class="count hidden">0</span><i class="fa fa-shopping-cart"></i></div>
+                                    @{Html.RenderAction("MiniCart", "Cart");}
+                                </a>
+                                @{Html.RenderAction("_Cart", "Cart"); }
+                            </li>
+                        </ul>*@
+                    <div class="top_menu col-md-2">
+                        <a class="navbar-brand" style="padding: 10px 15px;" href="/" itemprop="url">
+                            <img width="120" height="120" src="~/Themes/KlickAndGo/Content/cdn.shopify.com/s/files/1/0882/5910/files/tradeportalLogoNew.png" alt="Klick&Go" class="img-responsive">
+                        </a>
+                    </div>
+                    <div class="col-md-10 pull-right">
+                        <div class="row" style="padding:8px;">
+                            <div class="col-md-12 text-right">
+                                <span style="color:#04468d"><span class="fa fa-phone" style="color:darkblue"></span>&nbsp;@AppSettings.GetVal("contact:Phone")</span>&nbsp;&nbsp;&nbsp;
+                                <span style="color:#04468d"><span class="fa fa-envelope" style="color:darkblue"></span>&nbsp;@AppSettings.GetVal("contact:Email")</span>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <form action="@Url.Action("Search","Home")" method="get" role="search" style="margin-top:20px;">
+                                    <div class="menu_c search_menu">
+                                        <div class="search_box" style="border: 1px solid #e6e6e6; border-radius: 52px;">
+                                            <input type="hidden" id="search-param" name="post_type" value="product">
+                                            <input type="hidden" id="search-mid" name="mid" value="">
+                                            <input type="hidden" id="search-pf" name="pf" value="">
+                                            <input type="hidden" id="search-pt" name="pt" value="">
+                                            @*<input type="hidden" name="type" value="product">*@
+
+                                            <input style="width:88%; height: 33px;border-radius: 24px;-webkit-appearance:listitem; padding:0 10px;" type="search" name="keyword" value="" id="search-txt" class="txtbox input" placeholder="Search" aria-label="Search" autocomplete="off">
+                                            <button class="btn btn-link" type="submit" value="Search">
+                                                <span class="fa fa-search"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <ul class="nav navbar-nav col-md-7">
+                                <li class="">
+                                    <a href="~/home/allproducts?type=tradeportal" style="font-weight: 600;text-transform: none;font-size: 13px;color:black;">
+                                        <span class="icons" style="display:block;text-align:center;">
+                                            <i class="fa fa-2x fa-product-hunt"></i>
+                                        </span>
+                                        Products
+                                    </a>
+                                </li>
+
+
+                                @*<li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">One more separated link</a></li>
+                </ul>
+            </li>*@
+
+                                <li>
+                                    <a href="#" style="font-weight: 600;text-transform: none;font-size: 13px;color:black;">
+                                        <span class="icons" style="display:block;text-align:center;">
+                                            <i class="fa fa-2x fa-question-circle"></i>
+                                        </span>
+                                        Trade Terms
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="" style="font-weight: 600;text-transform: none;font-size: 13px;color:red;">
+                                        <span class="icons" style="display:block;text-align:center;">
+                                            <i class="fa fa-2x fa-first-order"></i>
+                                        </span>
+                                        Quick Orders
+                                    </a>
+
+                                </li>
+                                <li>
+                                    <a href="" style="font-weight: 600;text-transform: none;font-size: 13px;color:black;">
+                                        <span class="icons" style="display:block;text-align:center;">
+                                            <i class="fa fa-2x fa-file"></i>
+                                        </span>
+                                        Stock Report
+                                    </a>
+
+                                </li>
+                                <li>
+                                    <a href="#" style="font-weight: 600;text-transform: none;font-size: 13px;color:black;">
+                                        <span class="icons" style="display:block;text-align:center;">
+                                            <i class="fa fa-2x fa-user"></i>
+                                        </span> My Account
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                    </div>
+
+                    <style type="text/css">
+                                            .cart-icon
+                                            {
+                                                color: white;
+                        background-color: #04468d;
+
+                                                width: 30px;
+                                                height: 30px;
+                                                position: relative;
+                                                text-align: center;
+                                                line-height: 30px;
+                                                border-radius: 50%;
+                                                box-shadow: none;
+                                                -moz-transition: color 0.3s;
+                                                -webkit-transition: color 0.3s;
+                                                -o-transition: color 0.3s;
+                                                transition: color 0.3s;
+                                            }
+                    </style>
+
+
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+
+        </div>
+    </nav>
+
+    <div id="header" data-section-id="header" data-section-type="header-section">
+        <div id="modal-container" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-content">
+
+            </div>
+        </div>
+        <div class="header_top">
+            <div class="container">
+
+
+
+                <div class="hed_right" style="padding-top:25px;">
+
+                    @*<ul>
+                            @{var rootItems = menuItems.Where(x => x.ParentId == Guid.Empty && x.Menu == true).OrderBy(x => x.PageOrder);}
+                            @foreach (var rootItem in rootItems)
+                            {
+                                if (menuItems.Any(x => x.ParentId == rootItem.Id))
+                                {
+                                    var subItems = menuItems.Where(x => x.ParentId == rootItem.Id && x.Menu == true).OrderBy(x => x.PageOrder);
+
+                                    <li><a href="#">@rootItem.Name</a></li>
+                                    foreach (var subItem in subItems)
+                                    {
+                                        <li><a href="@(subItem.IsLink == true ? subItem.LinkUrl : "/topic/" + subItem.Slug)">@subItem.Name</a></li>
+                                    }
+
+
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a href="@(rootItem.IsLink == true ? rootItem.LinkUrl : "/topic/" + rootItem.Slug)" id="@rootItem.Slug"> @rootItem.Name</a>
+                                    </li>
+
+
+
+                                }
+                            }
+                        </ul>*@
+
+
+                    @*<div class="header-contact">
+
+                            <ul>
+
+                                <li><a href="#"><span class="fa fa-phone"></span>@Settings.Get.StorePhone</a></li>
+
+
+                                <li><a href="#"><span class="fa fa-envelope"></span>@Settings.Get.StoreEmail</a></li>
+
+                            </ul>
+                        </div>*@
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="header_bot  enabled-sticky-menu ">
+            <div class="header_content">
+                <div class="container">
+
+
+                    <div id="nav">
+                        <nav class="navbar" role="navigation">
+                            <div class="navbar-header">
+                                <a href="#" class="visible-ms visible-xs pull-right navbar-cart" id="wsnavtoggle" data-activator="#">
+                                    <div class="cart-icon">
+                                        <i class="fa fa-bars"></i>
+                                    </div>
+                                </a>
+                                <a href="javascript:void(0);" data-href="/cart" class="visible-ms visible-xs pull-right navbar-cart cart-popup">
+                                    @*@{Html.RenderAction("MiniCart", "Cart");}*@
+                                </a>
+                                <a href="#" class="visible-ms visible-xs pull-right navbar-cart">
+                                    <div class="cart-icon"><i class="fa fa-search"></i></div>
+                                </a>
+
+                                <div class="visible-ms visible-xs">
+
+
+
+                                </div><!-- ./visible-ms visible-xs -->
+
+                            </div>
+                            <!-- main menu -->
+                            @*@{Html.RenderAction("RenderCategories", "Home", new { @id = 0 });}*@
+
+                        </nav>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div><!-- /header -->
+
+
+
+    @section head{
+
+        <link href="~/Themes/KlickAndGo/Content/Style.css" rel="stylesheet" />
+    }
+
+
+
+</div>
+

@@ -1,0 +1,133 @@
+﻿@model BaseApp.Entity.Office
+@{
+    ViewBag.Title = Model.Title;
+    var updatedUser = ViewBag.UpdatedUser as BaseApp.Entity.AppUser;
+    var createdUser = ViewBag.CreatedUser as BaseApp.Entity.AppUser;
+
+    string acronym = string.Join(string.Empty, AppSettings.GetVal<string>("app:Title").Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0]));
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <i class="fa fa-5x fa-building"></i>
+        <h4>@Model.Title</h4>
+        <h3>Control, protect and secure <strong>@Model.Title</strong>, all in one place</h3>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Office/Record/@Model.Id" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-info text-info"></i> Vitals <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    @Model.Description
+                </div>
+                <a href="~/Secure/Office/Record/@Model.Id" class="btn btn-link">Edit</a>
+                <table class="table table-striped no-margin">
+                    <tr>
+                        <td class="text-right">Code</td>
+                        <th>@acronym-@Model.Code</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Title</td>
+                        <th>@Model.Title</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Parent</td>
+                        <th>
+                            @if (Model.ParentId.HasValue)
+                            {
+                                <a href="~/Secure/Office/Details/@Model.ParentId">@Model.Parent.Title</a>
+                            }
+                            else
+                            {
+                                <span>-No Parent-</span>
+                            }
+                        </th>
+                    </tr>
+                    @*<tr>
+                        <td class="text-right">Time Zone</td>
+                        <th>@Model.TimeZoneTitle</th>
+                    </tr>*@
+                    <tr>
+                        <td class="text-right">Updated By</td>
+                        <th>@updatedUser.FullName on @Model.UpdatedOn</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Created By</td>
+                        <th>@createdUser.FullName on @Model.CreatedOn</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Office/Record/@Model.Id/?tab=manager" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-user text-info"></i> Manager <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    The manager who is responsible for the operations.
+                </div>
+                <a href="~/Secure/Office/Record/@Model.Id/?tab=manager" class="btn btn-link">Change Manager</a>
+                <table class="table table-striped no-margin">
+                    <tr>
+                        <td class="text-right">Name</td>
+                        <th>@Model.Contact.FullName</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Home Phone</td>
+                        <th>@Model.Contact.HomePhone</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Work Phone</td>
+                        <th>@Model.Contact.WorkPhone</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Email</td>
+                        <th>@Model.Contact.Email</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default panel-Custom">
+    <a href="~/Secure/Office/Record/@Model.Id/?tab=loc" class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-map text-info"></i> Address <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+    </a>
+    <div class="panel-body no-padding">
+        <div class="caption">
+            Manage @Model.Title location information and the data we use to personalise your experience.
+        </div>
+        <a href="~/Secure/Office/Record/@Model.Id/?tab=loc" class="btn btn-link">Edit location</a>
+        <div class="row">
+            <div class="col-sm-6">
+                <table class="table table-striped no-margin">
+                    <tr>
+                        <td class="text-right">Address Line 1</td>
+                        <th>@Model.AddressLine1</th>
+                    </tr>
+                    <tr>
+                        <td class="text-right">Address Line 2</td>
+                        <th>@Model.AddressLine2</th>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-6">
+                <table class="table table-striped no-margin">
+                    <tr>
+                        <td>Zip Code: <b>@Model.ZipCode</b></td>
+                        <td class="text-right">City: <b>@Model.City</b></td>
+                    </tr>
+                    <tr>
+                        <td>State: <b>@Model.State</b></td>
+                        <td class="text-right">Country: <b>@Html.CountriesListWithCode().Where(x => x.Value == Model.Country).FirstOrDefault().Text</b></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

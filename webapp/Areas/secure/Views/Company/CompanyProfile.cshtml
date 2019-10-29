@@ -1,0 +1,331 @@
+﻿
+@{
+    ViewBag.Title = "CompanyProfile";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" style="margin-top:15px;">
+    <!-- #region name -->
+
+    @*<div class="col-sm-3">
+            <div class="panel panel-default" style="margin-bottom:5px;">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title" style="font-size:12px;">
+                        <a class="list-group-item" href="javascript://"><i class="fa fa-file clr-royalBlue"></i> Company Details</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default" style="margin-bottom:5px;">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title" style="font-size:12px;">
+                        <a class="list-group-item" href="javascript://"><i class="fa fa-list clr-royalBlue"></i> Marketing Materials</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default" style="margin-bottom:5px;">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title" style="font-size:12px;">
+                        <a class="list-group-item" href="javascript://"><i class="fa fa-flag clr-royalBlue"></i> Milestone</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default" style="margin-bottom:5px;">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title" style="font-size:12px;">
+                        <a class="list-group-item" href="javascript://"><i class="fa fa-anchor clr-royalBlue"></i> Capabilities</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default" style="margin-bottom:5px;">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title" style="font-size:12px;">
+                        <a class="list-group-item" href="javascript://"><i class="fa fa-bank clr-royalBlue"></i> Trading Details</a>
+                    </h4>
+                </div>
+            </div>
+        </div>*@
+
+<!-- #endregion -->
+
+    <div class="col-md-12">
+        <form id="frm" class="col-md-12 form-Modal" method="post" enctype="multipart/form-data">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4 class="modal-title" style="color:#fefefe;">Company Details</h4>
+                </div>
+                <div class="panel-body">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="/Secure/Company/CompanyProfile" />
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-condensed table-striped" style="text-align: center; font-size: 15px;">
+                                <tr>
+                                    <th style="padding:8px; width:165px;">Company Name: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            The Company &nbsp; &nbsp;
+                                            <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span style="display:none">
+                                            <input type="text" class="form-control" />
+                                        </span>
+                                    </td>
+                                </tr>
+                                @*<tr>
+                                    <th style="padding:8px; width:165px;">Company name to display in the header: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            The Company &nbsp; &nbsp;
+                                            <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span style="display:none">
+                                            <input type="text" class="form-control" />
+                                        </span>
+                                    </td>
+                                </tr>*@
+                                <tr>
+                                    <th style="padding:8px; width:165px;">Business Type: </th>
+                                    <td style="padding:8px;"> 
+                                        <span>Sole Proprietarship &nbsp; &nbsp; 
+                                            <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a> 
+                                        </span> 
+                                        <span style="display:none">
+                                            <select>
+                                                <option value="">-- Select Type --</option>
+                                                <option value="Sole Proprietarship">Sole Proprietarship</option>
+                                                <option value="Partnership">Partnership</option>
+                                                <option value="Limited Liability Company">Limited Liability Company (LLC)</option>
+                                                <option value="Corporation">Corporation</option>
+                                                <option value="Cooperative">Cooperative</option>
+                                                <option value="S Corporation">S Corporation</option>
+                                                <option value="Non Profit Organization">Non Profit Organization (NPO)</option>
+                                                <option value="NGO">NGO</option>
+                                            </select>
+                                        </span> 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px; width:165px;">Foundation Date: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            29/02/2004 &nbsp; &nbsp;
+                                            <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span style="display:none">
+                                            <input type="date" class="form-control" />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px; width:165px;">Company Type: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            Information Technology &nbsp; &nbsp;
+                                            <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span style="display:none">
+                                            <select>
+                                                <option value="">-- Select Company Type --</option>
+                                                <option value="Accounting">Accounting</option>
+                                                <option value="Architecture">Architecture</option>
+                                                <option value="Creative">Creative (Advertising, Design)</option>
+                                                <option value="Consulting">Consulting</option>
+                                                <option value="Information Technology">Information Technology</option>
+                                                <option value="Law">Law</option>
+                                                <option value="Non Profit Organization">Non Profit Organization (NPO)</option>
+                                                <option value="Public Relations">Public Relations</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">Web Address: </th>
+                                    <td style="padding:8px;"> 
+                                        <span>
+                                            http://abc.com &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a> 
+                                        </span> 
+                                        <span style="display:none">
+                                            <input name="" type="url" class="form-control input-sm" value="" required />
+                                        </span> 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">Company Email: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            test1@webnomicstech.net &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span style="display:none">
+                                            <input name="" type="url" class="form-control input-sm" value="" required />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">Phone: </th>
+                                    <td style="padding:8px;"> 
+                                        <span> 
+                                            +1(111)111-1111 &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a> 
+                                        </span> 
+                                        <span style="display:none">
+                                            <input name="" type="text" class="form-control input-sm" value="" required />
+                                        </span> 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">Fax: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            +1(121)111-1011 &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span style="display:none">
+                                            <input name="" type="text" class="form-control input-sm" value="" required />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">Address Line 1: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            @AppSettings.GetVal("contact:Address") &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span class="caption" style="display:none">
+                                            <input name="contact:Address" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:Address")" required />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">Address Line 2: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            @AppSettings.GetVal("contact:Address2") &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span class="caption" style="display:none">
+                                            <input name="contact:Address2" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:Address")" required />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">City: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            @AppSettings.GetVal("contact:City") &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span class="caption" style="display:none">
+                                            <input name="contact:City" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:City")" required />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">State: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            @AppSettings.GetVal("contact:State") &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span class="caption" style="display:none">
+                                            <input name="contact:State" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:State")" required />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">Zip Code: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            @AppSettings.GetVal("contact:ZipCode") &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span class="caption" style="display:none">
+                                            <input name="contact:ZipCode" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:ZipCode")" required />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">Overview: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span class="caption" style="display:none">
+                                            <input name="Currency" type="text" class="form-control input-sm" value="Currency" required />
+                                        </span>
+                                    </td>
+                                </tr>
+                                @*<tr>
+                                    <th style="padding:8px;">Default Currency: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            $ &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span class="caption" style="display:none">
+                                            <input name="Currency" type="text" class="form-control input-sm" value="Currency" required />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">Default Time Zone: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            GST &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span class="caption" style="display:none">
+                                            <input name="TimeZone" type="text" class="form-control input-sm" value="TimeZone" required />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">Hours of Operation: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            GST &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span class="caption" style="display:none">
+                                            <input name="TimeZone" type="text" class="form-control input-sm" value="TimeZone" required />
+                                        </span>
+                                    </td>
+                                </tr>*@
+                                <tr>
+                                    <th style="padding:8px;">Impressum: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span class="caption" style="display:none">
+                                            <input name="TimeZone" type="text" class="form-control input-sm" value="TimeZone" required />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">Mission: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span class="caption" style="display:none">
+                                            <input name="TimeZone" type="text" class="form-control input-sm" value="TimeZone" required />
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px;">Description: </th>
+                                    <td style="padding:8px;">
+                                        <span>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                        </span>
+                                        <span class="caption" style="display:none">
+                                            <textarea rows="3" class="form-control"></textarea>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-right">
+                    <div class="btn-group btn-group-sm" role="group">
+                        <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

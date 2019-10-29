@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "Website Footer";
+}
+
+@section styles{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+}
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong>
+        @TempData["ErrorMsg"]
+    </div>
+}
+
+<form id="page-frm" method="post" class="form-Modal">
+    @Html.AntiForgeryToken()
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" class="btn btn-warning Restore"><i class="fa fa-undo"></i> Restore</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+            </div>
+        </div>
+
+        <textarea id="DefaultContent" class="hidden" disabled readonly>@AppSettings.GetVal("website:FooterDefault")</textarea>
+
+        <textarea type="text" class="form-control" id="Contents" name="website:Footer">@AppSettings.GetVal("website:Footer")</textarea>
+
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <button type="button" class="btn btn-warning Restore"><i class="fa fa-undo"></i> Restore</button>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+            $(function () {
+                $("#Contents").summernote({ height: 200 });
+                $('.Restore').click(function () {
+                    var id = $('#Id').val();
+                    if (id == '') return;
+                    bootbox.confirm("Are you sure, you want to replace this page's content with default revision?", function (res) {
+                        if (res) {
+                            $("#loading-mask").show();
+                            $('#Contents').summernote('code', $('#DefaultContent').val());
+                            $("#loading-mask").fadeOut();
+                        }
+                    });
+                });
+            });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('Contents');
+                $('.Restore').click(function () {
+                    var id = $('#Id').val();
+                    if (id == '') return;
+                    bootbox.confirm("Are you sure, you want to replace this page's content with default revision?", function (res) {
+                        if (res) {
+                            $("#loading-mask").show();
+                            $('.ae-editable').html($('#DefaultContent').val());
+                            $("#loading-mask").fadeOut();
+                        }
+                    });
+                });
+            });
+        </script>
+    }
+}

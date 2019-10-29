@@ -1,0 +1,740 @@
+﻿@{
+    var querySlug = (ViewContext.RouteData.Values["slug"] == null ? "" : ViewContext.RouteData.Values["slug"].ToString());
+    var mainMenu = ViewBag.MainMenu as List<CMS.Entity.CmsPage>;
+    var parentSlugId = (!string.IsNullOrEmpty(querySlug) ? mainMenu.Where(x => x.Slug == querySlug).SingleOrDefault().ParentId : Guid.Empty);
+    var rootMenuItems = mainMenu.Where(x => !x.ParentId.HasValue && x.Menu == true).OrderBy(x => x.PageOrder);
+}
+
+@functions{
+    #region Current Location Check
+    bool IsCurrentController(string c)
+    {
+        var controller = ViewContext.RouteData.GetRequiredString("controller");
+        return string.Compare(c, controller, true) == 0;
+    }
+    bool IsCurrentAction(string c, string a)
+    {
+        var action = ViewContext.RouteData.GetRequiredString("controller") + ViewContext.RouteData.GetRequiredString("action");
+        return string.Compare(c + a, action, true) == 0;
+    }
+    #endregion
+
+    #region Set Location
+    string SetActiveController(string controller)
+    {
+        var res = IsCurrentController(controller);
+        return res ? "active" : null;
+    }
+    string SetActiveAction(string controller, string action)
+    {
+        var res = IsCurrentAction(controller, action);
+        return res ? "active" : null;
+    }
+    #endregion
+}
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <script type="text/javascript" src="~/Scripts/NewTemplate/html5.js"></script>
+    <meta charset="UTF-8" />
+    <meta content="True" name="HandheldFriendly" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <link rel="apple-touch-icon" href="~/Content/NewTemplate/img/halodoktorze.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="~/Content/NewTemplate/img/halodoktorze-ipad.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="~/Content/NewTemplate/img/halodoktorze-iphone-retina.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="~/Content/NewTemplate/img/halodoktorze-ipad-retina.png" />
+
+    @RenderSection("metadata", required: false)
+
+    <title>@ViewBag.Title - @AppSettings.GetVal("website:BrowserTitle")</title>
+
+    <!-- Favicon Icon -->
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    @Scripts.Render("~/bundles/modernizr")
+
+    @Styles.Render("~/Content/FontAwesome")
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css" />
+    <link href="~/Content/NewTemplate/css/general.css" rel="stylesheet" type="text/css" media="all" />
+    <script type="text/javascript" src="~/Scripts/NewTemplate/head_libs.ac927c124978.js" charset="utf-8"></script>
+
+    @RenderSection("styles", required: false)
+</head>
+<body class="home">
+    <div id="fixed-messages"><div class="close"></div></div>
+
+    
+    <div id="fixed-headers">
+        <div id="fixed-header-1" class="fixed-nav-head">
+            <div id="profil-panel">
+                <span class="mobile-login">
+                    <img src="~/Content/NewTemplate/img/login-icon.svg" data-png="~/Content/NewTemplate/img/login-icon.png" alt="login icon" />
+                </span>
+                <a href="/" rel="home" class="site-logo-mobile">
+                    <img src="~/Content/NewTemplate/img/logo.svg" data-png="~/Content/NewTemplate/img/logo.png" alt="logo" width="180" height="33" />
+                </a>
+                <a href="#back" class="go-back in-panel">
+                    <img src="~/Content/NewTemplate/img/arrow-back.svg" data-png="~/Content/NewTemplate/img/arrow-back.png" alt="back icon" />
+                </a>
+            </div>
+            <div class="nav-fix" id="home-panel-1">
+                <span class="icon-spec">
+                    <img src="~/Content/NewTemplate/img/icon-1-green.svg" data-png="~/Content/NewTemplate/img/icon-2-green.png" alt="ikona specjalizacji" />
+                </span>
+                <div class="nav-top-wrap clearfix"><h2>Specjalizacja</h2><span class="close-panel mobile"></span></div>
+            </div>
+            <div class="nav-fix" id="home-panel-2">
+                <span class="icon-compas">
+                    <img src="~/Content/NewTemplate/img/icon-2-green.svg" data-png="~/Content/NewTemplate/img/icon-2-green.png" alt="ikona lokalizacji" />
+                </span>
+                <div class="nav-top-wrap clearfix"><h2>Lokalizacja</h2><span class="close-panel mobile"></span></div>
+            </div>
+        </div>
+        <div id="fixed-header-2" class="fixed-nav-head">
+            <nav class="user-links-mobile show">
+                <div style="margin:auto;">
+                    <a href="/rejestracja/" class="ul1">Register</a>
+                    <a href="/logowanie/">Login</a>
+                </div>
+            </nav>
+            <div class="clearfix"></div>
+            <span class="mobile-login">
+                <img src="~/Content/NewTemplate/img/login-icon.svg" data-png="~/Content/NewTemplate/img/login-icon.png" alt="login icon" />
+            </span>
+            <a href="#" class="mobile-open-panel">
+                <img src="~/Content/NewTemplate/img/menu-icon.svg" data-png="~/Content/NewTemplate/img/menu-icon.png" alt="menu icon" />
+            </a>
+            <a href="/" rel="home" class="site-logo-mobile">
+                <img src="~/Content/NewTemplate/img/logo.svg" data-png="~/Content/NewTemplate/img/logo.png" alt="logo" width="180" height="33" />
+            </a>
+        </div>
+        <div id="fixed-header-3" class="fixed-nav-head">
+            <a href="#back" class="go-back back-left in-panel">
+                <img src="~/Content/NewTemplate/img/arrow-left-white.svg" data-png="~/Content/NewTemplate/img/arrow-left-white.png" alt="back icon" />
+            </a>
+            <div id='address-title'></div>
+        </div>
+    </div>
+
+    <div class="page-left-panel" id="panel-1">
+        <div class="page-left-panel-inner">
+            <div class="scroller">
+                <div class="desktop">
+                    <span class='icon-compas'>
+                        <img src="~/Content/NewTemplate/img/icon-2-green.svg" data-png="~/Content/NewTemplate/img/icon-2-green.png" alt="ikona lokalizacji" />
+                    </span>
+                    <h2>Sector</h2>
+                    <div id="search-letter">
+                        <input type="text" name="menu-search-city" class="menu-search-city" placeholder="search sector" />
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <input type="text" name="menu-search-city" class="menu-search-city mobile" placeholder="search sector" />
+                <div id="close-msc">
+
+                    <img width="15" height="15" alt="close icon" src="~/Content/NewTemplate/img/error-icon-light-gray.svg" data-png="~/Content/NewTemplate/img/error-icon-light-gray.png">
+                </div>
+                <span class="my-loc mobile">
+                    <img src="~/Content/NewTemplate/img/direction-icon-white.svg" data-png="~/Content/NewTemplate/img/direction-icon-white.png" alt="geolocation" width="17" height="17" />
+                    Sector
+                </span>
+                <ul class="popular clearfix">
+                    <li class="col-1"><span>Top Sectors</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Accounting & Auditing</a><br />
+                    </li>
+                    <li class="col-3">
+                        <a href="javascript://">Agriculture</a><br />
+                    </li>
+                    <li class="col-4">
+                        <a href="javascript://">Banking</a><br />
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-A" data-show="A">
+                    <li class="col-1"><span>A</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Accounting & Auditing</a>
+                    </li>
+                    <li class="col-3"><a href="javascript://">Agriculture</a></li>
+                    <li class="col-4"></li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-B" data-show="B">
+                    <li class="col-1"><span>B</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Banking</a>
+                    </li>
+                    <li class="col-3">
+                        <a href="javascript://">Building Science & Architecture</a>
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-C" data-show="C">
+                    <li class="col-1"><span>C</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Cleaning</a>
+                    </li>
+                    <li class="col-3">
+                        <a href="javascript://">Communication, Public Relations & Advertising</a>
+                    </li>
+                    <li class="col-4">
+                        
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-D" data-show="D">
+                    <li class="col-1"><span>D</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Database Management</a>
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-E" data-show="E">
+                    <li class="col-1"><span>E</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Economics & Finance</a>
+                        <a href="javascript://">Engineering: Civil: Harbour</a>
+                        <a href="javascript://">Engineering: Civil: Water & Hydraulics</a>
+                        <a href="javascript://">Engineering: Mechanical</a>
+                        <a href="javascript://">Event Management</a>
+                    </li>
+                    <li class="col-3">
+                        <a href="javascript://">Education & Training</a>
+                        <a href="javascript://">Engineering: Civil: Roads, Bridges, Dams</a>
+                        <a href="javascript://">Engineering: Electrical</a>
+                        <a href="javascript://">Engineering: Mining, Geology & Soils</a>
+                    </li>
+                    <li class="col-4">
+                        <a href="javascript://">Engineering: Chemical</a>
+                        <a href="javascript://">Engineering: Civil: Structural</a>
+                        <a href="javascript://">Engineering: Electronic & Sound</a>
+                        <a href="javascript://">Environmental Sciences</a>
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-F" data-show="F">
+                    <li class="col-1"><span>F</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Furnishing</a>
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-G" data-show="G">
+                    <li class="col-1"><span>G</span></li>
+                    <li class="col-2">
+                        
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-H" data-show="H">
+                    <li class="col-1"><span>H</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Human Resources & Labour</a>
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-I" data-show="I">
+                    <li class="col-1"><span>I</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Information Systems & Technology</a>
+                    </li>
+                    <li class="col-3">
+                        <a href="javascript://">Insurance</a>
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-J" data-show="J">
+                    <li class="col-1"><span>J</span></li>
+                    <li class="col-2">
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-K" data-show="K">
+                    <li class="col-1"><span>K</span></li>
+                    <li class="col-2">
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-L" data-show="L">
+                    <li class="col-1"><span>L</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Landscaping</a>
+                        <a href="javascript://">Legal Practitioners & Lawyers</a>
+                    </li>
+                    <li class="col-3">
+                        <a href="javascript://">Language Practitioners & Linguists</a>
+                    </li>
+                    <li class="col-4">
+                        <a href="javascript://">Land & Air Survey, GIS</a>
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-M" data-show="M">
+                    <li class="col-1"><span>M</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Manufacturing</a>
+                    </li>
+                    <li class="col-3">
+                        <a href="javascript://">Medical Health Professionals</a>
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-N" data-show="N">
+                    <li class="col-1"><span>N</span></li>
+                    <li class="col-2">
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-O" data-show="O">
+                    <li class="col-1"><span>O</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Organisational Development & Transformation</a>
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-P" data-show="P">
+                    <li class="col-1"><span>P</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Project Managers</a>
+                    </li>
+                    <li class="col-3">
+                        <a href="javascript://">Property Developers</a>
+                    </li>
+                    <li class="col-4">
+                        <a href="javascript://">Property Valuers</a>
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-Q" data-show="Q">
+                    <li class="col-1"><span>Q</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Quantity Surveyors</a>
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-R" data-show="R">
+                    <li class="col-1"><span>R</span></li>
+                    <li class="col-2">
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-S" data-show="S">
+                    <li class="col-1"><span>S</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Small Business Development</a>
+                        <a href="javascript://">Stationery</a>
+                    </li>
+                    <li class="col-3">
+                        <a href="javascript://">Security</a>
+                    </li>
+                    <li class="col-4">
+                        <a href="javascript://">Social Researchers & Sociologists</a>
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-T" data-show="T">
+                    <li class="col-1"><span>T</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Telecommunications</a>
+                        <a href="javascript://">Travel, Tourism & Hospitality</a>
+                    </li>
+                    <li class="col-3">
+                        <a href="javascript://">Town & Regional Planners</a>
+                        <a href="javascript://">Textiles</a>
+                    </li>
+                    <li class="col-4">
+                        <a href="javascript://">Transportation</a>
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-U" data-show="U">
+                    <li class="col-1"><span>U</span></li>
+                    <li class="col-2">
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-V" data-show="V">
+                    <li class="col-1"><span>V</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Video & Film</a>
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-W" data-show="W">
+                    <li class="col-1"><span>W</span></li>
+                    <li class="col-2">
+                        <a href="javascript://">Writing & Publishing</a>
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-X" data-show="X">
+                    <li class="col-1"><span>X</span></li>
+                    <li class="col-2">
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-Y" data-show="Y">
+                    <li class="col-1"><span>Y</span></li>
+                    <li class="col-2">
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-Z" data-show="Z">
+                    <li class="col-1"><span>Z</span></li>
+                    <li class="col-2">
+                    </li>
+                    <li class="col-3">
+                    </li>
+                    <li class="col-4">
+                    </li>
+                </ul>
+                <ul class="city-list clearfix" id="letter-blind"><li></li></ul>
+
+            </div>
+            <ul id="letters-search">
+                <li class="go-to-search">
+                    <img src="~/Content/NewTemplate/img/search-dark.svg" data-png="~/Content/NewTemplate/img/search-dark.png" alt="search" width="11" height="12" />
+                </li>
+                <li id="l-A" class="active">A</li>
+                <li id="l-B">B</li>
+                <li id="l-C">C</li>
+                <li id="l-D">D</li>
+                <li id="l-E">E</li>
+                <li id="l-F">F</li>
+                <li id="l-G">G</li>
+                <li id="l-H">H</li>
+                <li id="l-I">I</li>
+                <li id="l-J">J</li>
+                <li id="l-K">K</li>
+                <li id="l-L">L</li>
+                <li id="l-M">M</li>
+                <li id="l-N">N</li>
+                <li id="l-O">O</li>
+                <li id="l-P">P</li>
+                <li id="l-Q">Q</li>
+                <li id="l-R">R</li>
+                <li id="l-S">S</li>
+                <li id="l-T">T</li>
+                <li id="l-U">U</li>
+                <li id="l-V">V</li>
+                <li id="l-W">W</li>
+                <li id="l-X">X</li>
+                <li id="l-Y">Y</li>
+                <li id="l-Z">Z</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="page-left-panel" id="panel-2">
+        <div class="page-left-panel-inner">
+            <div class="scroller">
+                <div class="desktop">
+                    <span class="icon-spec"><img src="~/Content/NewTemplate/img/icon-1-green.svg" data-png="~/Content/NewTemplate/img/icon-1-green.png" alt="ikonka specjalizacji" /></span>
+                    <h2 class="desktop">Countries</h2>
+                    <span class="close-panel mobile"></span>
+                    <input type="text" name="menu-search-spec" class="menu-search-spec" placeholder="search country" />
+                    <div id="close-msc2"><img width="15" height="15" alt="close icon" src="~/Content/NewTemplate/img/error-icon-light-gray.svg" data-png="~/Content/NewTemplate/img/error-icon-light-gray.png" /></div>
+                    <div class="clearfix"></div>
+                </div>
+                <input type="text" name="menu-search-city" class="menu-search-spec mobile" placeholder="search country" />
+                <ul class="specs">
+                    <li>
+                        <a href="javascript://">Angola</a>
+                        <a href="javascript://">Botswana</a>
+                        <a href="javascript://">Burundi</a>
+                        <a href="javascript://">Congo, Democratic Republic</a>
+                        <a href="javascript://">Ethiopia</a>
+                        <a href="javascript://">Kenya</a>
+                        <a href="javascript://">Lesotho</a>
+                        <a href="javascript://">Malawi</a>
+                        <a href="javascript://">Mozambique</a>
+                        <a href="javascript://">Namibia</a>
+                        <a href="javascript://">Rwanda</a>
+                        <a href="javascript://">Somalia</a>
+                        <a href="javascript://">South Africa</a>
+                        <a href="javascript://">South Sudan</a>
+                        <a href="javascript://">Sudan</a>
+                        <a href="javascript://">Swaziland</a>
+                        <a href="javascript://">Tanzania</a>
+                        <a href="javascript://">Uganda</a>
+                        <a href="javascript://">Zambia</a>
+                        <a href="javascript://">Zimbabwe</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="panel-list" class="hidden mobile">
+        <div id="nav-mobile2" class="mobile">
+            <nav class="user-links-mobile">
+                <a href="/rejestracja/" class="ul1">Register</a>
+                <a href="/logowanie/">Login</a>
+            </nav>
+            <div class="mobile-header">
+                <div class="wrapper">
+                    <a href="#" class="mobile-login"><img src="~/Content/NewTemplate/img/login-icon.svg" data-png="~/Content/NewTemplate/img/login-icon.png" alt="login icon" /></a>
+                    <a href="/" rel="home" class="site-logo-mobile"><img src="~/Content/NewTemplate/img/logo.svg" data-png="~/Content/NewTemplate/img/logo.png" alt="logo" width="180" height="33" /></a>
+                    <a href="#back" class="go-back in-panel"><img src="~/Content/NewTemplate/img/arrow-back.svg" data-png="~/Content/NewTemplate/img/arrow-back.png" alt="back icon" /></a>
+                </div>
+            </div>
+        </div>
+        <div class="mobile-filters">
+            <div class="filters-mobile">
+                <div class="wrapper">
+                    <form>
+                        <fieldset>
+                            <div class="filter-date start clearfix">
+                                <a href="#" class="btn small" id="dp4" data-date-format="dd.mm.yyyy" data-date="">Termin od</a>
+                                <input type="hidden" name="date_from" />
+                                <img src="~/Content/NewTemplate/img/date-icon.svg" data-png="~/Content/NewTemplate/img/date-icon.png" alt="ikonka daty" class="date-icon" />
+                            </div>
+                            <div class="filter-date end clearfix">
+                                <a href="#" class="btn small" id="dp5" data-date-format="dd.mm.yyyy" data-date="">Termin do</a>
+                                <input type="hidden" name="date_to" />
+                                <img src="~/Content/NewTemplate/img/date-icon.svg" data-png="~/Content/NewTemplate/img/date-icon.png" alt="ikonka daty" class="date-icon" />
+                            </div>
+                            <input type="submit" name="submit" value="Szukaj" id="filter-submit" />
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="panel-list-2"></div>
+
+    <div id="page-outer-wrap">
+        <div id="page-main-content">
+            <div id="main-overlay"></div>
+            <div id="message-top-wrapper"></div>
+            <div id="header-top">
+                <div class="wrapper">
+                    <a href="/" rel="home" id="site-logo">
+                        <img src="~/Content/Images/logo.png" data-png="~/Content/Images/logo.png" alt="@AppSettings.GetVal("website:BrowserTitle")" />
+                        <span>
+                            @AppSettings.GetVal("website:Title")
+                            <br />
+                            <small>Largest Source of African Tenders</small>
+                        </span>
+                    </a>
+                    <nav id="user-links">
+                        @foreach (var rootItem in rootMenuItems)
+                        {
+                            if (mainMenu.Any(x => x.ParentId == rootItem.Id))
+                            {
+                                var subItems = mainMenu.Where(x => x.ParentId == rootItem.Id && x.Menu == true).OrderBy(x => x.PageOrder);
+
+                                if (subItems.Count() > 0)
+                                {
+                                    @*<li class="dropdown @(querySlug == rootItem.Slug || parentSlugId == rootItem.Id ? "active" : "")">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">@rootItem.Name <i class="caret"></i></a>
+                                        <ul class="dropdown-menu">
+                                            <li class="@(querySlug == rootItem.Slug ? "active" : "")"><a href="@(rootItem.IsLink ? rootItem.LinkUrl : "/" + rootItem.Slug)" @(rootItem.LinkTarget ? "target=_blank" : "")><i class="fa fa-angle-right"></i> @rootItem.Name</a></li>
+                                            <li class="divider" role="separator"></li>
+                                            @foreach (var subItem in subItems)
+                                            {
+                                                <li class="@(querySlug == subItem.Slug ? "active" : "")"><a href="@(subItem.IsLink ? subItem.LinkUrl : "/" + subItem.Slug)" @(subItem.LinkTarget ? "target=_blank" : "")><i class="fa fa-angle-right"></i> @subItem.Name</a></li>
+                                            }
+                                        </ul>
+                                    </li>*@
+                                }
+                                else
+                                {
+                                    <a class="@(querySlug == rootItem.Slug ? "active" : (string.IsNullOrEmpty(querySlug) && rootItem.Slug.ToLower() == "home" ? "active" : ""))" href="@(rootItem.IsLink ? rootItem.LinkUrl : "/" + rootItem.Slug)" id="@rootItem.Slug" @(rootItem.LinkTarget ? "target=_blank" : "")>@rootItem.Name</a>
+                                }
+                            }
+                            else
+                            {
+                                <a class="@(querySlug == rootItem.Slug ? "active" : (string.IsNullOrEmpty(querySlug) && rootItem.Slug.ToLower() == "home" ? "active" : ""))" href="@(rootItem.IsLink ? rootItem.LinkUrl : "/" + rootItem.Slug)" id="@rootItem.Slug" @(rootItem.LinkTarget ? "target=_blank" : "")>@rootItem.Name</a>
+                            }
+                        }
+                    </nav>
+                </div>
+            </div>
+            <div id="site-top">
+                @if (string.IsNullOrEmpty(querySlug))
+                {
+                    <div id="instruction">
+                        <ul><li class="first"><i class="fa fa-search"></i><br /> Search Tender</li><li class="second"><i class="fa fa-calendar-check-o"></i><br /> Select Plan</li><li class="third"><i class="fa fa-home"></i><br /> Register</li></ul>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(querySlug))
+                {
+                    if (querySlug.ToString().ToLower() == "home")
+                    {
+                        <div id="instruction">
+                            <ul><li class="first"><i class="fa fa-search"></i><br /> Search Tender</li><li class="second"><i class="fa fa-calendar-check-o"></i><br /> Select Plan</li><li class="third"><i class="fa fa-home"></i><br /> Register</li></ul>
+                        </div>
+                    }
+                }
+                
+                <div class="wrapper clearfix" id="search">
+                    <form action="/lekarze/">
+                        <div id="search-w">
+                            <input type="text" name="q" id="search-text" placeholder="e.g. Architecture" value="" autocomplete="off">
+                            <input type="submit" id="search-submit" value="" />
+                        </div>
+                    </form>
+                    <button id="search-spec" class="primary-button search-spec">
+                        <span class="icon-spec"><img src="~/Content/NewTemplate/img/icon-1.svg" data-png="~/Content/NewTemplate/img/icon-1.png" alt="ikonka specjalizacji" /></span>
+                        <span>Country</span>
+                        <span class="entypo arrow-down"><img src="~/Content/NewTemplate/img/arrow-down.svg" data-png="~/Content/NewTemplate/img/arrow-down.png" alt="strzałka" /></span>
+                    </button>
+                    <button id="search-city" class="primary-button search-city">
+                        <span class="icon-compas"><img src="~/Content/NewTemplate/img/icon-2.svg" data-png="~/Content/NewTemplate/img/icon-2.png" alt="ikona lokalizacji" /></span><span>Sector</span>
+                        <span class="entypo arrow-down">
+                            <img src="~/Content/NewTemplate/img/arrow-down.svg" data-png="~/Content/NewTemplate/img/arrow-down.png" alt="strzałka" />
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <div id="page-content">
+                <!--START OF PAGE WRAPPER-->
+                @RenderBody()
+                <!--END OF PAGE WRAPPER-->
+            </div>
+
+            <footer id="page-footer" class="clearfix">
+                <div class="wrapper clearfix">
+                    <div id="footer-full">
+                        <nav id="footer-links">
+                            <ul id="footer-col-1">
+                                <li>
+                                    <div rel="home" id="footer-logo">
+                                        <img src="~/Content/Images/logo.png" data-png="~/Content/Images/logo.png" alt="@AppSettings.GetVal("website:BrowserTitle")" />
+                                        <span>
+                                            @AppSettings.GetVal("website:Title")
+                                            <br />
+                                            <small>Largest Source of African Tenders</small>
+                                        </span>
+                                    </div>
+                                    <small style="line-height:16px; margin-top:20px; float:left;">
+                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                                    </small>
+                                </li>
+                            </ul>
+                            <ul id="footer-col-2">
+                                <li><strong>ABOUT US</strong></li>
+                                <li><a href="javascript://">Available Jobs</a></li>
+                                <li><a href="javascript://">Submit Tender</a></li>
+                                <li><a href="javascript://">Contact Us</a></li>
+                                <li><a href="javascript://">History</a></li>
+                                <li><a href="javascript://">Impressium</a></li>
+                            </ul>
+                            <ul id="footer-col-3">
+                                <li><strong>SEARCH BY COUNTRY</strong></li>
+                                <li><a href="javascript://">United States</a></li>
+                                <li><a href="javascript://">South Africa</a></li>
+                                <li><a href="javascript://">West Indies</a></li>
+                                <li><a href="javascript://">Australia</a></li>
+                                <li><a href="javascript://">United Kingdom</a></li>
+                                <li><a href="javascript://">United Arab Emirates</a></li>
+                            </ul>
+                            <ul id="footer-col-4">
+                                <li><strong>SEARCH BY INDUSTRY</strong></li>
+                                <li><a href="javascript://">Agriculture</a></li>
+                                <li><a href="javascript://">Automobiles</a></li>
+                                <li><a href="javascript://">Construction</a></li>
+                                <li><a href="javascript://">Chemicals</a></li>
+                                <li><a href="javascript://">Machinery</a></li>
+                                <li><a href="javascript://">Textiles</a></li>
+                            </ul>
+                            <ul id="footer-col-5">
+                                <li><strong>USEFUL LINKS</strong></li>
+                                <li><a href="javascript://">Become an agent</a></li>
+                                <li><a href="javascript://">Apply for job</a></li>
+                                <li><a href="javascript://">West Indies</a></li>
+                                <li><a href="javascript://">Our other services</a></li>
+                                <li><a href="javascript://">FAQs</a></li>
+                                <li><a href="javascript://">Terms & Conditions</a></li>
+                                <li><a href="javascript://">Privacy Policy</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="wrapper">
+                    <div id="socials">
+                        <a href="javascript://"><i class="fa fa-facebook"></i></a>
+                        <a href="javascript://"><i class="fa fa-twitter"></i></a>
+                        <a href="javascript://"><i class="fa fa-google-plus"></i></a>
+                    </div>
+                    <div id="payment-Options">
+                        <a href="javascript://"><img src="~/Content/Images/amz-icon.png" /></a>
+                        <a href="javascript://"><img src="~/Content/Images/mst-icon.png" /></a>
+                        <a href="javascript://"><img src="~/Content/Images/mstr-icon.png" /></a>
+                        <a href="javascript://"><img src="~/Content/Images/paypal-icon.png" /></a>
+                    </div>
+                </div>
+            </footer>
+            <div id="ue" class="clearfix">
+                <div class="wrapper">
+                    <span id='ue-text'>
+                        @AppSettings.GetVal("website:Copyright")
+                    </span>
+                    <a id="webnoStamp" href="http://www.webnomicstech.net/" target="_blank">
+                        A website by
+                        <br />
+                        <img src="~/Content/Images/webnologo.jpg" />
+                        <span>Webnomics Technologies LLC</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-loader ui-corner-all ui-body-a ui-loader-default">
+        <span class="ui-icon ui-icon-loading"></span>
+    </div>
+    <script type="text/javascript" src="~/Scripts/NewTemplate/libs.a5f5171e4a1c.js" charset="utf-8"></script>
+    <script type="text/javascript" src="~/Scripts/NewTemplate/scripts.d67766309aa9.js" charset="utf-8"></script>
+</body>
+</html>

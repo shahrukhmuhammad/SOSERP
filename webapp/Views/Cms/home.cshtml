@@ -1,0 +1,513 @@
+﻿@model CMS.Entity.CmsPage
+@{
+    ViewBag.Title = Model.BrowserTitle;
+    var homepageMetadata = ViewBag.WebsiteMetadata as List<CMS.Entity.CmsSeoMetadata>;
+    if (homepageMetadata != null)
+    {
+        if (homepageMetadata.Count() > 0)
+        {
+            homepageMetadata = homepageMetadata.Where(x => x.AllPages == false).ToList();
+        }
+    }
+}
+@section metadata{
+    @foreach (var x in homepageMetadata)
+    {
+        @Html.Raw(x.Metadata);
+    }
+    @Html.Raw(Model.Metadata)
+}
+
+@*@Html.Action("CmsSlides")
+
+@Html.Action("TenderSearch", new { q = "*" })*@
+
+
+<div class="wrapper clearfix">
+    <div class="box box-comm mobile">
+        <div class="box-content">
+            <h3>Jesteś lekarzem?</h3>
+            <h4>
+                Uruchom
+                <br />
+                kalendarz
+                <br />
+                online
+            </h4>
+            <div class="commb-w">
+                <a href="/rejestracja-lekarza/">Załóż darmowe konto <img src="~/Content/NewTemplate/img/calendar-np-next-white.d8959c03f9eb.svg" data-png="~/Content/NewTemplate/img/calendar-np-next-white.5dbfc722822c.png" /></a>
+            </div>
+        </div>
+        <div class="dummy"></div>
+    </div>
+    <div class="text">Industries</div>
+    <!--START OF CATEGORY SWITCHER-->
+    <ul class="cat-switch cat-switcher clearfix desktop">
+        <li data-show="all" class="active">All</li>
+        <li data-show="1">Engineering</li>
+        <li data-show="2">Agriculture</li>
+        <li data-show="3">Building Science & Architecture</li>
+        <li data-show="4">Accounting & Auditing</li>
+        <li data-show="5">Small Business Development</li>
+        <li data-show="6">Education & Training</li>
+        <li data-show="7">Communication, Public Relations & Advertising</li>
+        <li data-show="8">Human Resources & Labour</li>
+        <li data-show="9">Environmental Sciences</li>
+        <li data-show="10">Information Systems & Technology</li>
+        <li data-show="11">Landscaping</li>
+        <li data-show="12">Insurance</li>
+        <li data-show="13">Textiles</li>
+        <li data-show="14">Manufacturing</li>
+    </ul>
+    <div class="ch-select  cat-switcher mobile">
+        <select name="" data-placeholder="Engineering">
+            <option value="all">All</option>
+            <option value="1">Engineering</option>
+            <option value="2">Agriculture</option>
+            <option value="3">Building Science & Architecture</option>
+            <option value="4">Accounting & Auditing</option>
+            <option value="5">Small Business Development</option>
+            <option value="6">Education & Training</option>
+            <option value="7">Communication, Public Relations & Advertising</option>
+            <option value="8">Human Resources & Labour</option>
+            <option value="9">Environmental Sciences</option>
+            <option value="10">Information Systems & Technology</option>
+            <option value="11">Landscaping</option>
+            <option value="12">Insurance</option>
+            <option value="13">Textiles</option>
+            <option value="14">Manufacturing</option>
+        </select>
+    </div>
+    <!--END OF CATEGORY SWITCHER-->
+
+    <!--START OF COLUMN LEFT-->
+    <div class="column-left">
+        <!--START OF DOCTORS LIST (CATEGORY WRAPPER)-->
+        <!-- Category All -->
+        <div class='doctors-list active' id='cat-all'>
+            <!--START OF SINGLE DOCTOR ITEM-->
+            <div class="doctor clearfix">
+                <!--DOCTOR DATA-->
+                <div class="doctor-data">
+                    <div class="rating">
+                        <div class="mask" style="width:100%"></div>
+                        <div class="stars">
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                        </div>
+                    </div>
+                    <h2 class="name"><a href="javascript://">Supply And Distribution Of Liquid Chlorine</a></h2>
+                    <div class="speciality">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</div>
+                    <div class="action-Bar">
+                        <div class="inf">
+                            <i class="fa fa-industry"></i>
+                            Chemicals
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-location-arrow"></i>
+                            India
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-calendar-check-o"></i>
+                            @DateTime.UtcNow.ToString("dd MMM, yyyy")
+                        </div>
+                        <a href="javascript://" class="button">
+                            <i class="fa fa-list"></i>
+                            <span>View Details</span>
+                        </a>
+                        <a href="javascript://" class="button button-success">
+                            <i class="fa fa-check"></i>
+                            <span>Purchase Tender Documents</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--END OF SINGLE DOCTOR ITEM-->
+
+            <!--START OF SINGLE DOCTOR ITEM-->
+            <div class="doctor clearfix">
+                <!--DOCTOR DATA-->
+                <div class="doctor-data">
+                    <div class="rating">
+                        <div class="mask" style="width:100%"></div>
+                        <div class="stars">
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                        </div>
+                    </div>
+                    <h2 class="name"><a href="javascript://">Supply And Distribution Of Liquid Chlorine</a></h2>
+                    <div class="speciality">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</div>
+                    <div class="action-Bar">
+                        <div class="inf">
+                            <i class="fa fa-industry"></i>
+                            Chemicals
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-location-arrow"></i>
+                            India
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-calendar-check-o"></i>
+                            @DateTime.UtcNow.ToString("dd MMM, yyyy")
+                        </div>
+                        <a href="javascript://" class="button">
+                            <i class="fa fa-list"></i>
+                            <span>View Details</span>
+                        </a>
+                        <a href="javascript://" class="button button-success">
+                            <i class="fa fa-check"></i>
+                            <span>Purchase Tender Documents</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--END OF SINGLE DOCTOR ITEM-->
+
+            <!--START OF SINGLE DOCTOR ITEM-->
+            <div class="doctor clearfix">
+                <!--DOCTOR DATA-->
+                <div class="doctor-data">
+                    <div class="rating">
+                        <div class="mask" style="width:100%"></div>
+                        <div class="stars">
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                        </div>
+                    </div>
+                    <h2 class="name"><a href="javascript://">Supply And Distribution Of Liquid Chlorine</a></h2>
+                    <div class="speciality">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</div>
+                    <div class="action-Bar">
+                        <div class="inf">
+                            <i class="fa fa-industry"></i>
+                            Chemicals
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-location-arrow"></i>
+                            India
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-calendar-check-o"></i>
+                            @DateTime.UtcNow.ToString("dd MMM, yyyy")
+                        </div>
+                        <a href="javascript://" class="button">
+                            <i class="fa fa-list"></i>
+                            <span>View Details</span>
+                        </a>
+                        <a href="javascript://" class="button button-success">
+                            <i class="fa fa-check"></i>
+                            <span>Purchase Tender Documents</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--END OF SINGLE DOCTOR ITEM-->
+
+            <!--START OF SINGLE DOCTOR ITEM-->
+            <div class="doctor clearfix">
+                <!--DOCTOR DATA-->
+                <div class="doctor-data">
+                    <div class="rating">
+                        <div class="mask" style="width:100%"></div>
+                        <div class="stars">
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                        </div>
+                    </div>
+                    <h2 class="name"><a href="javascript://">Supply And Distribution Of Liquid Chlorine</a></h2>
+                    <div class="speciality">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</div>
+                    <div class="action-Bar">
+                        <div class="inf">
+                            <i class="fa fa-industry"></i>
+                            Chemicals
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-location-arrow"></i>
+                            India
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-calendar-check-o"></i>
+                            @DateTime.UtcNow.ToString("dd MMM, yyyy")
+                        </div>
+                        <a href="javascript://" class="button">
+                            <i class="fa fa-list"></i>
+                            <span>View Details</span>
+                        </a>
+                        <a href="javascript://" class="button button-success">
+                            <i class="fa fa-check"></i>
+                            <span>Purchase Tender Documents</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--END OF SINGLE DOCTOR ITEM-->
+        </div>
+        <!-- END Category All -->
+
+        <!-- Category 1 -->
+        <div class='doctors-list active' id='cat-1'>
+            <!--START OF SINGLE DOCTOR ITEM-->
+            <div class="doctor clearfix">
+                <!--DOCTOR DATA-->
+                <div class="doctor-data">
+                    <div class="rating">
+                        <div class="mask" style="width:100%"></div>
+                        <div class="stars">
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                        </div>
+                    </div>
+                    <h2 class="name"><a href="javascript://">Supply And Distribution Of Liquid Chlorine</a></h2>
+                    <div class="speciality">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</div>
+                    <div class="action-Bar">
+                        <div class="inf">
+                            <i class="fa fa-industry"></i>
+                            Engineering
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-location-arrow"></i>
+                            United States
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-calendar-check-o"></i>
+                            @DateTime.UtcNow.ToString("dd MMM, yyyy")
+                        </div>
+                        <a href="javascript://" class="button">
+                            <i class="fa fa-list"></i>
+                            <span>View Details</span>
+                        </a>
+                        <a href="javascript://" class="button button-success">
+                            <i class="fa fa-check"></i>
+                            <span>Purchase Tender Documents</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--END OF SINGLE DOCTOR ITEM-->
+            <!--START OF SINGLE DOCTOR ITEM-->
+            <div class="doctor clearfix">
+                <!--DOCTOR DATA-->
+                <div class="doctor-data">
+                    <div class="rating">
+                        <div class="mask" style="width:100%"></div>
+                        <div class="stars">
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                        </div>
+                    </div>
+                    <h2 class="name"><a href="javascript://">Supply And Distribution Of Liquid Chlorine</a></h2>
+                    <div class="speciality">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</div>
+                    <div class="action-Bar">
+                        <div class="inf">
+                            <i class="fa fa-industry"></i>
+                            Chemical Engineering
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-location-arrow"></i>
+                            India
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-calendar-check-o"></i>
+                            @DateTime.UtcNow.ToString("dd MMM, yyyy")
+                        </div>
+                        <a href="javascript://" class="button">
+                            <i class="fa fa-list"></i>
+                            <span>View Details</span>
+                        </a>
+                        <a href="javascript://" class="button button-success">
+                            <i class="fa fa-check"></i>
+                            <span>Purchase Tender Documents</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--END OF SINGLE DOCTOR ITEM-->
+            <!--START OF SINGLE DOCTOR ITEM-->
+            <div class="doctor clearfix">
+                <!--DOCTOR DATA-->
+                <div class="doctor-data">
+                    <div class="rating">
+                        <div class="mask" style="width:100%"></div>
+                        <div class="stars">
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                        </div>
+                    </div>
+                    <h2 class="name"><a href="javascript://">Supply And Distribution Of Liquid Chlorine</a></h2>
+                    <div class="speciality">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</div>
+                    <div class="action-Bar">
+                        <div class="inf">
+                            <i class="fa fa-industry"></i>
+                            Electrical Engineering
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-location-arrow"></i>
+                            Bangladesh
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-calendar-check-o"></i>
+                            @DateTime.UtcNow.ToString("dd MMM, yyyy")
+                        </div>
+                        <a href="javascript://" class="button">
+                            <i class="fa fa-list"></i>
+                            <span>View Details</span>
+                        </a>
+                        <a href="javascript://" class="button button-success">
+                            <i class="fa fa-check"></i>
+                            <span>Purchase Tender Documents</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--END OF SINGLE DOCTOR ITEM-->
+            <!--START OF SINGLE DOCTOR ITEM-->
+            <div class="doctor clearfix">
+                <!--DOCTOR DATA-->
+                <div class="doctor-data">
+                    <div class="rating">
+                        <div class="mask" style="width:100%"></div>
+                        <div class="stars">
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                            <img src="~/Content/NewTemplate/img/single-star.png" alt="" />
+                        </div>
+                    </div>
+                    <h2 class="name"><a href="javascript://">Supply And Distribution Of Liquid Chlorine</a></h2>
+                    <div class="speciality">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</div>
+                    <div class="action-Bar">
+                        <div class="inf">
+                            <i class="fa fa-industry"></i>
+                            Chemicals
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-location-arrow"></i>
+                            India
+                        </div>
+                        <div class="inf">
+                            <i class="fa fa-calendar-check-o"></i>
+                            @DateTime.UtcNow.ToString("dd MMM, yyyy")
+                        </div>
+                        <a href="javascript://" class="button">
+                            <i class="fa fa-list"></i>
+                            <span>View Details</span>
+                        </a>
+                        <a href="javascript://" class="button button-success">
+                            <i class="fa fa-check"></i>
+                            <span>Purchase Tender Documents</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--END OF SINGLE DOCTOR ITEM-->
+        </div>
+        <!-- END Category 1 -->
+    </div>
+    <!--END OF COLUMN LEFT-->
+
+    <!--START OF RIGHT COLUMN-->
+    <div class="column-right clearfix">
+        <div class="box box-comm">
+            <div class="box-content">
+                <h3>Jesteś lekarzem?</h3>
+                <h4>
+                    Uruchom
+                    <br />
+                    kalendarz
+                    <br />
+                    online
+                </h4>
+            <div class="commb-w">
+                    <a href="/rejestracja-lekarza/">Załóż darmowe konto <img src="~/Content/NewTemplate/img/calendar-np-next-white.svg" data-png="~/Content/NewTemplate/img/calendar-np-next-white.png" /></a></div></div><div class="dummy"></div></div><img src="~/Content/NewTemplate/img/box-comm-2.jpg" alt="czy wiesz, że..." />
+    </div>
+    <!--END OF COLUMN RIGHT-->
+    <div class="clearfix"></div>
+    <!--PROFITY LEKARZA-->
+    <div id="profity-lekarza" class="profit">
+        <h3>Profity dla lekarza</h3><ul class="profits-items">
+            <li>
+                <span class="profit-icon"><svg version="1.1" class="icon-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="42px" height="33px" viewBox="0 0 42 33" enable-background="new 0 0 42 33" xml:space="preserve"><path d="M7.797,8.127c0.118,0.08,0.247,0.136,0.372,0.201C8.271,8.382,8.367,8.45,8.474,8.493c0.125,0.052,0.26,0.079,0.391,0.117 C8.98,8.643,9.091,8.69,9.211,8.712C9.33,8.735,9.459,8.735,9.582,8.747C9.724,8.76,9.86,8.786,10.008,8.786 c0.001,0,0.003,0,0.003,0c1.108-0.001,2.052-0.391,2.831-1.17c0.78-0.779,1.17-1.723,1.17-2.83c0-1.106-0.39-2.05-1.17-2.829 c-0.779-0.779-1.723-1.17-2.83-1.171c0,0-0.003,0-0.004,0c-0.147,0-0.284,0.025-0.426,0.039C9.459,0.836,9.33,0.836,9.211,0.859 c-0.12,0.022-0.231,0.069-0.348,0.104C8.733,1,8.598,1.027,8.474,1.079C8.367,1.123,8.271,1.19,8.168,1.244 c-0.124,0.065-0.253,0.12-0.371,0.2C7.582,1.59,7.377,1.761,7.182,1.957c-0.779,0.779-1.17,1.723-1.17,2.829s0.391,2.05,1.17,2.83 C7.377,7.811,7.582,7.981,7.797,8.127z" /><path d="M11.423,22.135c-0.519-0.52-0.792-1.184-0.792-1.92v-7.429c0-1.225,0.436-2.279,1.293-3.137 c0.111-0.111,0.235-0.195,0.353-0.292H4.299c-0.952,0-1.762,0.334-2.429,1s-1,1.477-1,2.429v7.429c0,0.477,0.167,0.881,0.5,1.215 c0.333,0.332,0.737,0.5,1.214,0.5s0.881-0.168,1.215-0.5c0.332-0.334,0.5-0.738,0.5-1.215v-6.286h1.143v16.286 c0,0.549,0.196,1.02,0.589,1.412c0.393,0.391,0.862,0.588,1.411,0.588c0.548,0,1.018-0.195,1.41-0.588 c0.393-0.395,0.59-0.865,0.59-1.412V21.93h1.143v8.285c0,0.549,0.196,1.02,0.59,1.412c0.393,0.391,0.862,0.588,1.41,0.588 c0.549,0,1.019-0.195,1.411-0.588c0.393-0.395,0.589-0.865,0.589-1.412v-7.592c-0.378,0.195-0.793,0.307-1.239,0.307 C12.608,22.93,11.944,22.656,11.423,22.135z" /><path d="M37.777,15.383v-3.353h-2.235v3.353H32.19v2.236h3.352v3.352h2.235v-3.352h3.353v-2.236H37.777z" /><path d="M18.558,8.127c0.118,0.08,0.248,0.136,0.372,0.201c0.102,0.054,0.198,0.121,0.305,0.164c0.125,0.052,0.26,0.079,0.391,0.117 c0.116,0.033,0.227,0.08,0.347,0.103c0.119,0.022,0.248,0.022,0.371,0.034c0.142,0.014,0.278,0.039,0.426,0.039 c0.001,0,0.003,0,0.003,0c1.108-0.001,2.052-0.391,2.831-1.17c0.78-0.779,1.17-1.723,1.17-2.83c0-1.106-0.39-2.05-1.17-2.829 c-0.779-0.779-1.723-1.17-2.83-1.171c0,0-0.003,0-0.004,0c-0.147,0-0.284,0.025-0.426,0.039c-0.123,0.012-0.252,0.012-0.371,0.034 c-0.12,0.022-0.231,0.069-0.348,0.104c-0.13,0.038-0.266,0.064-0.39,0.116c-0.106,0.044-0.203,0.111-0.306,0.165 c-0.124,0.065-0.253,0.12-0.371,0.2c-0.215,0.146-0.42,0.317-0.615,0.513c-0.779,0.779-1.17,1.723-1.17,2.829s0.391,2.05,1.17,2.83 C18.138,7.811,18.343,7.981,18.558,8.127z" /><path d="M26.489,9.357h-7.978h-2.783H15.06c-0.952,0-1.762,0.334-2.429,1s-1,1.477-1,2.429v7.429c0,0.477,0.167,0.881,0.5,1.215 c0.333,0.332,0.737,0.5,1.214,0.5s0.881-0.168,1.215-0.5c0.01-0.01,0.016-0.021,0.024-0.029c0.313-0.33,0.476-0.723,0.476-1.186 v-6.286h0.667h0.476V21.4v1.223v7.592c0,0.549,0.196,1.02,0.589,1.412c0.393,0.391,0.862,0.588,1.411,0.588 c0.548,0,1.018-0.195,1.41-0.588c0.393-0.395,0.59-0.865,0.59-1.412V21.93h1.143v8.285c0,0.549,0.196,1.02,0.59,1.412 c0.393,0.391,0.862,0.588,1.41,0.588c0.549,0,1.019-0.195,1.411-0.588c0.393-0.395,0.589-0.865,0.589-1.412V13.929h1.143v6.286 c0,0.477,0.168,0.881,0.5,1.215c0.334,0.332,0.738,0.5,1.215,0.5c0.476,0,0.881-0.168,1.214-0.5c0.333-0.334,0.5-0.738,0.5-1.215 v-7.429h0.002c0-0.952-0.333-1.763-1-2.429S27.441,9.357,26.489,9.357z" /></svg></span><span class="profit-description">
+                    Więcej pacjentów w gabinecie
+                </span>
+            </li>
+            <li>
+                <span class="profit-icon"><svg version="1.1" class="icon-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="56.216px" height="30.521px" viewBox="0 0 56.216 30.521" enable-background="new 0 0 56.216 30.521" xml:space="preserve"><path d="M17.023,11.765v6.992c0,0.449-0.155,0.829-0.466,1.143c-0.31,0.313-0.687,0.471-1.13,0.471  c-0.444,0-0.82-0.158-1.131-0.471c-0.309-0.314-0.465-0.694-0.465-1.143v-5.916h-1.064v15.328c0,0.514-0.183,0.958-0.548,1.329  c-0.365,0.369-0.803,0.553-1.314,0.553c-0.51,0-0.947-0.186-1.313-0.553c-0.366-0.37-0.549-0.813-0.549-1.329v-7.798H7.979v7.798  c0,0.514-0.184,0.958-0.549,1.329c-0.365,0.369-0.803,0.553-1.313,0.553c-0.511,0-0.948-0.186-1.314-0.553  c-0.365-0.37-0.548-0.813-0.548-1.329V12.841H3.192v5.916c0,0.449-0.156,0.829-0.466,1.143c-0.311,0.313-0.687,0.471-1.131,0.471  c-0.444,0-0.82-0.158-1.13-0.471C0.155,19.586,0,19.206,0,18.757v-6.992c0-0.896,0.31-1.659,0.931-2.286  c0.621-0.627,1.375-0.941,2.261-0.941h10.641c0.886,0,1.64,0.314,2.261,0.941c0.621,0.627,0.931,1.39,0.931,2.286H17.023z  M12.234,4.235c0,1.042-0.363,1.93-1.089,2.664C10.42,7.632,9.541,8,8.51,8C7.48,8.001,6.602,7.633,5.876,6.899  C5.15,6.165,4.787,5.277,4.787,4.235S5.15,2.306,5.876,1.573C6.602,0.837,7.48,0.47,8.51,0.471c1.031,0.001,1.909,0.369,2.635,1.102  C11.872,2.306,12.234,3.194,12.234,4.235z" /><path d="M30.546,30.521c-0.634,0-1.186-0.232-1.641-0.69c-0.456-0.459-0.687-1.019-0.687-1.663v-7.328h-0.133v7.328 c0,0.641-0.23,1.199-0.685,1.661c-0.908,0.918-2.373,0.918-3.285,0.002c-0.456-0.46-0.686-1.02-0.686-1.663V13.312h-0.133v5.445 c0,0.573-0.202,1.07-0.601,1.475c-0.805,0.811-2.118,0.807-2.92,0.002c-0.399-0.406-0.602-0.903-0.602-1.477v-6.992 c0-1.023,0.359-1.904,1.067-2.619c0.709-0.716,1.581-1.079,2.59-1.079h3.504c-0.415-0.203-0.799-0.482-1.149-0.835 c-0.814-0.824-1.226-1.831-1.226-2.997s0.413-2.174,1.226-2.996C26.001,0.417,26.996,0,28.148,0c1.157,0.001,2.155,0.418,2.968,1.24 s1.226,1.829,1.226,2.996c0,1.167-0.413,2.176-1.226,2.997c-0.35,0.354-0.734,0.632-1.151,0.835h3.509 c1.009,0,1.881,0.363,2.59,1.079c0.675,0.682,1.033,1.515,1.065,2.479c0.013,0.044,0.02,0.091,0.02,0.14 c0,0.046-0.007,0.09-0.018,0.132l-0.002,6.86c0,0.574-0.203,1.071-0.601,1.476c-0.804,0.807-2.117,0.808-2.919,0.001 c-0.401-0.407-0.603-0.904-0.603-1.477v-5.445h-0.133v14.857c0,0.642-0.23,1.2-0.684,1.661 C31.736,30.289,31.183,30.521,30.546,30.521z M27.621,19.9h1.064c0.257,0,0.466,0.211,0.466,0.471v7.798 c0,0.391,0.135,0.716,0.413,0.996c0.556,0.561,1.416,0.557,1.968,0c0.277-0.281,0.412-0.607,0.412-0.996V12.841 c0-0.26,0.208-0.471,0.466-0.471h1.064c0.257,0,0.465,0.21,0.465,0.471v5.916c0,0.32,0.108,0.585,0.33,0.812 c0.444,0.445,1.158,0.447,1.602-0.002c0.224-0.227,0.329-0.484,0.329-0.81v-6.992c0.002-0.775-0.258-1.413-0.793-1.953 c-0.536-0.541-1.167-0.804-1.932-0.804H22.833c-0.764,0-1.396,0.263-1.932,0.804c-0.534,0.539-0.794,1.178-0.794,1.953v6.992 c0,0.325,0.104,0.583,0.33,0.811c0.442,0.447,1.156,0.448,1.603-0.001c0.22-0.224,0.328-0.49,0.328-0.81v-5.916 c0-0.26,0.208-0.471,0.465-0.471h1.064c0.257,0,0.465,0.21,0.465,0.471v15.328c0,0.391,0.135,0.716,0.412,0.996 c0.555,0.559,1.417,0.559,1.968,0c0.277-0.282,0.413-0.608,0.413-0.996v-7.798C27.155,20.111,27.364,19.9,27.621,19.9z M28.152,0.941c-0.912,0-1.665,0.315-2.305,0.964c-0.641,0.648-0.953,1.41-0.953,2.33c0,0.919,0.312,1.682,0.953,2.331 c0.641,0.648,1.394,0.963,2.302,0.963V8l0.004-0.47c0.911-0.001,1.666-0.316,2.306-0.963c0.641-0.647,0.953-1.41,0.953-2.331 c0-0.92-0.312-1.683-0.953-2.33C29.816,1.257,29.062,0.942,28.152,0.941z" /><path d="M56.214,11.765v6.992c0,0.449-0.156,0.829-0.465,1.143c-0.31,0.313-0.688,0.471-1.13,0.471  c-0.444,0-0.82-0.158-1.131-0.471c-0.309-0.314-0.465-0.694-0.465-1.143v-5.916h-1.064v15.328c0,0.514-0.183,0.958-0.548,1.329  c-0.365,0.369-0.803,0.553-1.313,0.553c-0.51,0-0.948-0.186-1.313-0.553c-0.366-0.37-0.549-0.813-0.549-1.329v-7.798h-1.064v7.798  c0,0.514-0.184,0.958-0.549,1.329c-0.365,0.369-0.803,0.553-1.313,0.553c-0.511,0-0.948-0.186-1.314-0.553  c-0.365-0.37-0.548-0.813-0.548-1.329V12.841h-1.064v5.916c0,0.449-0.156,0.829-0.465,1.143c-0.311,0.313-0.687,0.471-1.131,0.471  c-0.444,0-0.82-0.158-1.13-0.471c-0.31-0.314-0.466-0.694-0.466-1.143v-6.992c0-0.896,0.31-1.659,0.931-2.286  c0.621-0.627,1.375-0.941,2.261-0.941h10.641c0.886,0,1.64,0.314,2.261,0.941s0.931,1.39,0.931,2.286H56.214z M51.426,4.235  c0,1.042-0.363,1.93-1.089,2.664C49.611,7.632,48.733,8,47.702,8c-1.03,0.001-1.908-0.367-2.635-1.101  c-0.726-0.734-1.089-1.622-1.089-2.664s0.364-1.929,1.089-2.663c0.726-0.735,1.605-1.103,2.635-1.102  c1.031,0.001,1.909,0.369,2.635,1.102C51.063,2.306,51.426,3.194,51.426,4.235z" /></svg></span><span class="profit-description">
+                    Mniej nieobecnych pacjentów
+                </span>
+            </li>
+            <li>
+                <span class="profit-icon"><svg version="1.1" class="icon-3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="42.767px" height="50.066px" viewBox="0 0 42.767 50.066" enable-background="new 0 0 42.767 50.066" xml:space="preserve"><path d="M19.38,8.109h-2.826v10.849l6.872,6.729l1.998-1.957l-6.043-5.918V8.109z" /><path d="M18.594,0c10.113,0,18.335,7.934,18.582,17.812h5.59l-8.368,9.134l-8.367-9.134h6.496 C32.282,10.457,26.14,4.567,18.594,4.567c-7.702,0-13.946,6.134-13.946,13.701c0,7.568,6.244,13.701,13.946,13.701 c3.089,0,5.941-0.987,8.252-2.657l3.198,3.351c-3.156,2.426-7.131,3.874-11.449,3.874C8.324,36.536,0,28.357,0,18.268 C0,8.179,8.324,0,18.594,0z" /><path d="M27.892,42.146V45.1h0.021c0.28-0.473,0.739-0.709,1.375-0.709c0.462,0,0.817,0.123,1.066,0.37 c0.249,0.246,0.373,0.647,0.373,1.203v4.103h-1.449v-3.814c0-0.288-0.049-0.488-0.147-0.601c-0.098-0.113-0.256-0.17-0.473-0.17 c-0.511,0-0.766,0.305-0.766,0.915v3.67h-1.449v-7.92H27.892z" /><path d="M12.039,50.066c0-0.423,0.043-0.818,0.131-1.187c0.087-0.368,0.22-0.719,0.399-1.051c0.179-0.332,0.404-0.659,0.674-0.978 c0.271-0.318,0.585-0.64,0.943-0.963l0.799-0.728c0.22-0.189,0.397-0.364,0.53-0.526c0.133-0.162,0.236-0.323,0.31-0.485 c0.073-0.162,0.121-0.337,0.145-0.526c0.023-0.189,0.034-0.404,0.034-0.647c0-0.792-0.322-1.187-0.964-1.187 c-0.248,0-0.443,0.05-0.585,0.148c-0.143,0.099-0.253,0.234-0.331,0.405c-0.078,0.17-0.128,0.369-0.151,0.593 c-0.023,0.225-0.035,0.463-0.035,0.714h-1.9v-0.364c0-0.89,0.243-1.573,0.729-2.05c0.487-0.476,1.253-0.715,2.299-0.715 c0.991,0,1.725,0.226,2.202,0.675c0.477,0.449,0.716,1.092,0.716,1.928c0,0.306-0.027,0.591-0.083,0.856 c-0.055,0.266-0.143,0.52-0.262,0.762c-0.12,0.243-0.275,0.479-0.468,0.708c-0.192,0.229-0.427,0.466-0.702,0.708l-1.101,0.997 c-0.294,0.261-0.523,0.515-0.689,0.762c-0.165,0.248-0.271,0.461-0.317,0.64h3.676v1.511H12.039z" /><path d="M21.828,40.52h2.051v6.054h0.936v1.51h-0.936v1.982h-1.818v-1.982h-3.469v-1.59L21.828,40.52z M22.034,42.947l-1.9,3.627 h1.927v-3.627H22.034z" /></svg></span><span class="profit-description">
+                    Całodobowa automatyczna rejestracja
+                </span>
+            </li>
+            <li>
+                <span class="profit-icon"><svg version="1.1" class="icon-4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50.09px" height="43.954px" viewBox="0 0 50.09 43.954" enable-background="new 0 0 50.09 43.954" xml:space="preserve"><path d="M28.54,29.031h-7.002v5.463l-6.346-0.001l9.855,9.461l9.853-9.46l-6.361-0.001L28.54,29.031z" /><path d="M20.711,11.939h2.76l-2.894,4.324v1.432h5.088v-1.513H22.77l2.894-4.323v-1.432h-4.954V11.939z" /><path d="M28.532,8.049h-1.858v4.647l-0.808,0.567v1.189l0.808-0.567v3.809h1.858v-5.039l0.848-0.555v-1.188l-0.848,0.554V8.049z" /><path d="M46.874,0H3.216C1.443,0,0,1.469,0,3.273v19.925c0,1.805,1.443,3.273,3.216,3.273h43.658c1.774,0,3.216-1.468,3.216-3.273 V3.273C50.09,1.469,48.647,0,46.874,0z M25.045,22.11c-4.876,0-8.843-3.981-8.843-8.875c0-4.893,3.967-8.874,8.843-8.874 c4.875,0,8.843,3.98,8.843,8.874C33.888,18.128,29.921,22.11,25.045,22.11z M3.791,3.804h13.244 c-2.657,2.276-4.346,5.659-4.346,9.431c0,3.772,1.69,7.155,4.347,9.432H3.791V3.804z M46.299,22.667H33.055 c2.657-2.276,4.346-5.659,4.346-9.432c0-3.772-1.689-7.154-4.346-9.431h13.244V22.667z" /></svg></span><span class="profit-description">
+                    Możliwość pobrania przedpłaty
+                </span>
+            </li>
+            <li>
+                <span class="profit-icon"><svg version="1.1" class="icon-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="47.594px" height="36.593px" viewBox="0 0 47.594 36.593" enable-background="new 0 0 47.594 36.593" xml:space="preserve"><path d="M7.936,27.71h9.92v-3.6h-9.92V27.71z" /><path d="M22.023,24.91c-0.198,0-0.198,2.8-0.198,2.8h9.92c0,0,0-2.8-0.198-2.8c0,0-3.373-0.89-3.373-2.636 c0-1.665,2.182-2.365,2.182-5.765c0-2.762-0.832-4.4-3.571-4.4c-2.74,0-3.571,1.639-3.571,4.4c0,3.4,2.182,4.101,2.182,5.765 C25.395,24.021,22.023,24.91,22.023,24.91z" /><path d="M17.856,18.109h-9.92v3.601h9.92V18.109z" /><path d="M17.856,12.109h-9.92v3.601h9.92V12.109z" /><path d="M33.384,31.911H3.968V9.737h31.745v7.35l3.968,2.725V4c0-2.2-1.786-4-3.968-4H3.968C1.786,0,0,1.8,0,4v27.911 c0,2.2,1.786,4,3.968,4h29.949l-0.042-0.318L33.384,31.911z M14.255,2.795h20.756v4.236H14.255V2.795z M10.064,3.587 c0.522,0,0.946,0.427,0.946,0.953c0,0.527-0.423,0.953-0.946,0.953c-0.522,0-0.946-0.426-0.946-0.953 C9.119,4.014,9.542,3.587,10.064,3.587z M7.434,3.587c0.522,0,0.946,0.427,0.946,0.953c0,0.527-0.423,0.953-0.946,0.953 c-0.522,0-0.945-0.426-0.945-0.953C6.489,4.014,6.912,3.587,7.434,3.587z M3.817,4.54c0-0.526,0.423-0.953,0.946-0.953 S5.708,4.014,5.708,4.54c0,0.527-0.423,0.953-0.946,0.953S3.817,5.066,3.817,4.54z" /><path d="M47.594,27.668l-7.914-5.436l-3.968-2.725l-2.18-1.498l1.853,13.901l0.455,3.416l3.751-5.163l0.088,0.146l3.814,6.284 l1.903-1.174l-3.902-6.427L47.594,27.668z" /></svg></span><span class="profit-description">
+                    Wywiad lekarski online
+                </span>
+            </li>
+        </ul>
+    </div><!--END OF PROFITY LEKARZA--><!--PROFITY PACJENTA--><div id="profity-pacjenta" class="profit">
+        <h3>Profity dla pacjenta</h3><ul class="profits-items">
+            <li>
+                <span class="profit-icon"><svg version="1.1" class="icon-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="42.767px" height="37.846px" viewBox="0 0 42.767 37.846" enable-background="new 0 0 42.767 37.846" xml:space="preserve"><path d="M27.604,0h-2.721v6.497h2.721V0z" /><path d="M10.108,0H7.387v6.497h2.722V0z" /><path d="M3.888,31.898V15.286h26.783c0.513-0.063,1.035-0.099,1.565-0.099c0.947,0,1.867,0.106,2.754,0.302V7.643 c0-2.102-1.75-3.822-3.888-3.822h-1.75v3.822h-6.22V3.821H11.858v3.822H5.637V3.821h-1.75C1.75,3.821,0,5.541,0,7.643v24.255 C0,34,1.75,35.719,3.888,35.719h18.979c-1.008-1.112-1.813-2.404-2.361-3.821H3.888z" /><path d="M34.991,17.548c-0.871-0.23-1.786-0.355-2.73-0.355c-0.392,0-0.777,0.022-1.158,0.064c-5.25,0.569-9.348,4.954-9.348,10.263 c0,1.565,0.357,3.048,0.994,4.378c0.722,1.508,1.804,2.818,3.137,3.821c1.77,1.333,3.979,2.126,6.375,2.126 c5.792,0,10.506-4.632,10.506-10.326C42.767,22.754,39.464,18.733,34.991,17.548z M32.261,36.039c-0.813,0-1.599-0.113-2.345-0.32 c-2.148-0.594-3.961-1.982-5.087-3.821c-0.784-1.281-1.235-2.779-1.235-4.378c0-4.311,3.276-7.883,7.51-8.441 C31.482,19.028,31.868,19,32.261,19c0.954,0,1.871,0.155,2.73,0.436c3.445,1.127,5.937,4.324,5.937,8.084 C40.928,32.217,37.04,36.039,32.261,36.039z" /><path d="M37.453,28.576c-0.487-0.141-0.999,0.13-1.144,0.608c-0.238,0.786-0.707,1.464-1.318,1.976 c-0.753,0.63-1.725,1.005-2.754,1.005c-0.514,0-1.012-0.096-1.477-0.267c-1.224-0.451-2.21-1.442-2.596-2.714 c-0.145-0.478-0.657-0.749-1.144-0.608c-0.486,0.144-0.763,0.646-0.618,1.125c0.25,0.827,0.681,1.57,1.237,2.198 c1.135,1.281,2.804,2.075,4.597,2.075c0.841,0,1.654-0.175,2.398-0.491c1.621-0.69,2.914-2.058,3.436-3.781 C38.216,29.222,37.939,28.718,37.453,28.576z" /><path d="M34.991,26.154c0.197,0.087,0.416,0.139,0.646,0.139c0.871,0,1.576-0.693,1.576-1.549s-0.706-1.549-1.576-1.549 c-0.23,0-0.449,0.051-0.646,0.139c-0.547,0.243-0.929,0.782-0.929,1.41C34.062,25.373,34.444,25.911,34.991,26.154z" /><path d="M28.835,26.293c0.87,0,1.576-0.693,1.576-1.549s-0.706-1.549-1.576-1.549s-1.576,0.693-1.576,1.549 S27.965,26.293,28.835,26.293z" /></svg></span><span class="profit-description">
+                    Wizyty w dogodnym terminie
+                </span>
+            </li>
+            <li>
+                <span class="profit-icon"><svg version="1.1" class="icon-7" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="36.646px" height="36.631px" viewBox="0 0 36.646 36.631" enable-background="new 0 0 36.646 36.631" xml:space="preserve"><path d="M26.321,11.849c0.035-0.044,0.071-0.087,0.109-0.126C26.392,11.762,26.356,11.805,26.321,11.849z" /><path d="M26.199,12.021c0.031-0.049,0.064-0.096,0.098-0.141C26.263,11.925,26.229,11.972,26.199,12.021z" /><path d="M14.835,20.452c0.016,0.015,0.033,0.031,0.048,0.047C14.868,20.483,14.852,20.467,14.835,20.452z" /><path d="M14.671,20.308c0.021,0.016,0.041,0.032,0.061,0.049C14.712,20.34,14.691,20.324,14.671,20.308z" /><path d="M14.5,20.19c0.023,0.014,0.045,0.028,0.067,0.042C14.545,20.218,14.523,20.204,14.5,20.19z" /><path d="M14.322,20.094c0.022,0.01,0.044,0.021,0.065,0.033C14.366,20.116,14.344,20.104,14.322,20.094z" /><path d="M26.879,11.374c0.046-0.026,0.093-0.05,0.141-0.072C26.972,11.324,26.925,11.348,26.879,11.374z" /><path d="M26.729,11.468c0.039-0.028,0.079-0.053,0.12-0.077C26.808,11.415,26.768,11.44,26.729,11.468z" /><path d="M26.58,11.581c0.041-0.035,0.083-0.069,0.127-0.099C26.663,11.512,26.621,11.546,26.58,11.581z" /><path d="M26.441,11.71c0.036-0.037,0.073-0.071,0.11-0.105C26.514,11.639,26.477,11.674,26.441,11.71z" /><path d="M12.738,20.083c0.035-0.016,0.07-0.03,0.105-0.044C12.808,20.052,12.773,20.067,12.738,20.083z" /><path d="M12.9,20.017c0.04-0.014,0.081-0.026,0.122-0.038C12.98,19.991,12.939,20.003,12.9,20.017z" /><path d="M27.049,11.29c0.043-0.019,0.086-0.036,0.13-0.051C27.135,11.254,27.092,11.271,27.049,11.29z" /><path d="M14.138,20.018c0.016,0.006,0.032,0.014,0.048,0.019C14.169,20.031,14.153,20.023,14.138,20.018z" /><path d="M12.379,20.295c0.048-0.037,0.097-0.069,0.147-0.101C12.477,20.226,12.427,20.259,12.379,20.295z" /><path d="M13.063,19.968c0.055-0.013,0.11-0.024,0.165-0.033C13.172,19.944,13.117,19.955,13.063,19.968z" /><path d="M13.267,19.93c0.042-0.005,0.084-0.01,0.127-0.013C13.352,19.92,13.309,19.925,13.267,19.93z" /><path d="M13.902,19.954c0.015,0.002,0.03,0.005,0.044,0.008C13.932,19.959,13.917,19.957,13.902,19.954z" /><path d="M13.68,19.922c0.023,0.001,0.047,0.003,0.07,0.006C13.727,19.925,13.703,19.924,13.68,19.922z" /><path d="M13.517,19.913c-0.021,0-0.042,0.002-0.063,0.002c0.033,0,0.065,0,0.097,0C13.539,19.915,13.528,19.913,13.517,19.913z" /><path d="M12.575,20.167c0.034-0.021,0.07-0.04,0.106-0.058C12.646,20.127,12.609,20.146,12.575,20.167z" /><path d="M27.92,11.137c0.054,0.003,0.107,0.009,0.161,0.018C28.027,11.146,27.974,11.141,27.92,11.137z" /><path d="M28.646,11.334c0.05,0.026,0.101,0.053,0.15,0.083C28.748,11.387,28.697,11.36,28.646,11.334z" /><path d="M27.557,11.149c0.052-0.007,0.105-0.011,0.159-0.013C27.662,11.139,27.609,11.142,27.557,11.149z" /><path d="M28.475,11.258c0.043,0.017,0.087,0.035,0.129,0.056C28.563,11.293,28.519,11.275,28.475,11.258z" /><path d="M28.289,11.198c0.053,0.014,0.106,0.031,0.158,0.049C28.395,11.229,28.342,11.212,28.289,11.198z" /><path d="M28.121,11.162c0.043,0.007,0.086,0.016,0.129,0.027C28.207,11.178,28.164,11.168,28.121,11.162z" /><path d="M27.802,11.133c-0.017,0-0.033,0.001-0.05,0.001c0.046-0.001,0.093,0,0.139,0.001 C27.862,11.135,27.832,11.133,27.802,11.133z" /><path d="M27.208,11.229c0.05-0.016,0.101-0.03,0.152-0.043C27.309,11.199,27.258,11.213,27.208,11.229z" /><path d="M27.394,11.178c0.047-0.01,0.094-0.019,0.14-0.025C27.487,11.16,27.44,11.168,27.394,11.178z" /><path d="M28.797,11.417c-0.049-0.031-0.1-0.058-0.15-0.083c-0.014-0.007-0.028-0.013-0.042-0.02 c-0.042-0.021-0.086-0.04-0.129-0.056c-0.009-0.003-0.019-0.008-0.029-0.011c-0.052-0.019-0.104-0.035-0.158-0.049 c-0.012-0.003-0.026-0.006-0.039-0.009c-0.043-0.011-0.086-0.02-0.129-0.027c-0.014-0.002-0.027-0.005-0.041-0.007 c-0.053-0.008-0.107-0.014-0.161-0.018c-0.01,0-0.019,0-0.028-0.001c-0.046-0.002-0.093-0.003-0.139-0.001 c-0.012,0-0.025,0-0.037,0.001c-0.053,0.002-0.106,0.006-0.159,0.013c-0.008,0-0.015,0.002-0.023,0.003 c-0.046,0.007-0.093,0.016-0.14,0.025c-0.011,0.002-0.022,0.005-0.034,0.008c-0.051,0.013-0.102,0.027-0.152,0.043 c-0.01,0.003-0.019,0.007-0.028,0.01c-0.044,0.015-0.087,0.032-0.13,0.051c-0.009,0.003-0.019,0.008-0.029,0.012 c-0.048,0.022-0.095,0.046-0.141,0.072c-0.011,0.006-0.02,0.012-0.03,0.017c-0.041,0.024-0.081,0.049-0.12,0.077 c-0.007,0.004-0.015,0.009-0.021,0.014c-0.044,0.03-0.086,0.064-0.127,0.099c-0.01,0.008-0.019,0.017-0.029,0.024 c-0.038,0.034-0.074,0.068-0.11,0.105c-0.003,0.004-0.007,0.008-0.011,0.012c-0.038,0.04-0.074,0.083-0.109,0.126 c-0.007,0.011-0.016,0.021-0.024,0.032c-0.034,0.045-0.067,0.092-0.098,0.141l-7.998,12.835l-3.18-4.196 c-0.043-0.056-0.089-0.11-0.138-0.16c-0.016-0.017-0.032-0.032-0.048-0.047c-0.034-0.033-0.068-0.065-0.104-0.095 c-0.02-0.017-0.041-0.033-0.061-0.049c-0.034-0.026-0.069-0.051-0.104-0.076c-0.022-0.014-0.043-0.028-0.067-0.042 c-0.037-0.022-0.074-0.042-0.112-0.063c-0.021-0.012-0.043-0.023-0.065-0.033c-0.045-0.021-0.091-0.04-0.137-0.058 c-0.016-0.005-0.032-0.013-0.048-0.019c-0.063-0.021-0.127-0.041-0.191-0.055c-0.015-0.003-0.03-0.006-0.044-0.008 c-0.05-0.01-0.101-0.02-0.151-0.026c-0.023-0.003-0.047-0.004-0.07-0.006c-0.043-0.004-0.086-0.007-0.13-0.008 c-0.032,0-0.064,0-0.097,0c-0.02,0-0.039,0.001-0.059,0.002c-0.043,0.003-0.085,0.008-0.127,0.013 c-0.013,0.002-0.027,0.003-0.04,0.005c-0.055,0.009-0.11,0.02-0.165,0.033c-0.014,0.003-0.028,0.008-0.041,0.011 c-0.041,0.012-0.082,0.024-0.122,0.038c-0.019,0.007-0.038,0.015-0.057,0.021c-0.036,0.014-0.07,0.028-0.105,0.044 c-0.019,0.009-0.038,0.018-0.057,0.027c-0.036,0.018-0.072,0.037-0.106,0.058c-0.017,0.009-0.032,0.018-0.049,0.028 c-0.05,0.031-0.099,0.064-0.147,0.101c-0.83,0.628-0.994,1.81-0.366,2.64l4.835,6.382c0.357,0.472,0.915,0.748,1.503,0.748 c0.029,0,0.057,0,0.086-0.002c0.62-0.028,1.187-0.359,1.515-0.887l9.447-15.162C29.951,13.13,29.682,11.968,28.797,11.417z" /><path d="M28.91,0h-2.85v6.918h2.85V0z" /><path d="M10.587,0h-2.85v6.918h2.85V0z" /><path d="M29.401,14.014c0.55-0.884,0.281-2.046-0.604-2.597c-0.049-0.031-0.1-0.058-0.15-0.083c-0.014-0.007-0.028-0.013-0.042-0.02 c-0.042-0.021-0.086-0.04-0.129-0.056c-0.009-0.003-0.019-0.008-0.029-0.011c-0.052-0.019-0.104-0.035-0.158-0.049 c-0.012-0.003-0.026-0.006-0.039-0.009c-0.043-0.011-0.086-0.02-0.129-0.027c-0.014-0.002-0.027-0.005-0.041-0.007 c-0.053-0.008-0.107-0.014-0.161-0.018c-0.01,0-0.019,0-0.028-0.001c-0.03-0.001-0.06-0.003-0.089-0.003 c-0.017,0-0.033,0.001-0.05,0.001c-0.012,0-0.025,0-0.037,0.001c-0.053,0.002-0.106,0.006-0.159,0.013 c-0.008,0-0.015,0.002-0.023,0.003c-0.046,0.007-0.093,0.016-0.14,0.025c-0.011,0.002-0.022,0.005-0.034,0.008 c-0.051,0.013-0.102,0.027-0.152,0.043c-0.01,0.003-0.019,0.007-0.028,0.01c-0.044,0.015-0.087,0.032-0.13,0.051 c-0.009,0.003-0.019,0.008-0.029,0.012c-0.048,0.022-0.095,0.046-0.141,0.072c-0.011,0.006-0.02,0.012-0.03,0.017 c-0.041,0.024-0.081,0.049-0.12,0.077c-0.007,0.004-0.015,0.009-0.021,0.014c-0.044,0.03-0.086,0.064-0.127,0.099 c-0.01,0.008-0.019,0.017-0.029,0.024c-0.038,0.034-0.074,0.068-0.11,0.105c-0.003,0.004-0.007,0.008-0.011,0.012 c-0.038,0.04-0.074,0.083-0.109,0.126c-0.007,0.011-0.016,0.021-0.024,0.032c-0.034,0.045-0.067,0.092-0.098,0.141l-2.654,4.259 h4.443L29.401,14.014z" /><path d="M32.575,4.07h-1.833v4.07h-6.516V4.07H12.419v4.07H5.904V4.07H4.072C1.833,4.07,0,5.902,0,8.14v24.421 c0,2.239,1.833,4.07,4.072,4.07h28.503c2.239,0,4.071-1.832,4.071-4.07V8.14C36.646,5.902,34.814,4.07,32.575,4.07z M32.575,32.561 H4.072V16.28h18.097l3.039-4.876c0.562-0.901,1.531-1.438,2.594-1.438c0.569,0,1.125,0.159,1.612,0.46 c0.692,0.431,1.175,1.105,1.36,1.9c0.185,0.794,0.049,1.613-0.383,2.305l-1.027,1.649h3.211V32.561z" /><path d="M28.446,11.247c0.01,0.003,0.02,0.008,0.029,0.011C28.466,11.255,28.456,11.25,28.446,11.247z" /><path d="M13.55,19.915c0.043,0.001,0.087,0.003,0.13,0.008C13.637,19.918,13.594,19.916,13.55,19.915z" /><path d="M12.526,20.195c0.017-0.01,0.032-0.019,0.049-0.028C12.559,20.176,12.543,20.185,12.526,20.195z" /><path d="M13.395,19.917c0.02-0.001,0.039-0.001,0.059-0.002C13.433,19.916,13.415,19.916,13.395,19.917z" /><path d="M13.75,19.928c0.05,0.006,0.101,0.016,0.151,0.026C13.852,19.944,13.801,19.935,13.75,19.928z" /><path d="M12.681,20.109c0.019-0.009,0.038-0.018,0.057-0.027C12.719,20.091,12.7,20.1,12.681,20.109z" /><path d="M28.25,11.188c0.013,0.003,0.026,0.006,0.039,0.009C28.276,11.194,28.263,11.191,28.25,11.188z" /><path d="M12.843,20.039c0.019-0.007,0.038-0.015,0.057-0.021C12.881,20.024,12.862,20.032,12.843,20.039z" /><path d="M13.021,19.979c0.013-0.003,0.027-0.008,0.041-0.011C13.048,19.971,13.035,19.977,13.021,19.979z" /><path d="M13.228,19.935c0.013-0.001,0.026-0.002,0.04-0.005C13.254,19.933,13.24,19.934,13.228,19.935z" /><path d="M28.604,11.314c0.014,0.006,0.028,0.013,0.042,0.02C28.633,11.327,28.619,11.321,28.604,11.314z" /><path d="M14.567,20.232c0.035,0.024,0.07,0.049,0.104,0.076C14.637,20.282,14.602,20.257,14.567,20.232z" /><path d="M27.534,11.153c0.008-0.001,0.015-0.003,0.023-0.003C27.549,11.15,27.542,11.151,27.534,11.153z" /><path d="M26.708,11.482c0.006-0.005,0.014-0.01,0.021-0.014C26.722,11.472,26.714,11.477,26.708,11.482z" /><path d="M26.551,11.605c0.01-0.007,0.019-0.017,0.029-0.024C26.57,11.589,26.561,11.598,26.551,11.605z" /><path d="M26.43,11.722c0.004-0.004,0.008-0.008,0.011-0.012C26.438,11.714,26.434,11.718,26.43,11.722z" /><path d="M26.849,11.391c0.01-0.005,0.02-0.011,0.03-0.017C26.868,11.38,26.859,11.386,26.849,11.391z" /><path d="M27.02,11.302c0.01-0.004,0.02-0.009,0.029-0.012C27.04,11.293,27.03,11.298,27.02,11.302z" /><path d="M26.297,11.88c0.008-0.011,0.017-0.021,0.024-0.032C26.313,11.859,26.305,11.87,26.297,11.88z" /><path d="M13.946,19.962c0.064,0.015,0.128,0.034,0.191,0.055C14.075,19.996,14.011,19.977,13.946,19.962z" /><path d="M27.36,11.186c0.011-0.003,0.023-0.005,0.034-0.008C27.383,11.181,27.371,11.183,27.36,11.186z" /><path d="M27.179,11.239c0.009-0.003,0.019-0.007,0.028-0.01C27.198,11.232,27.188,11.236,27.179,11.239z" /><path d="M14.388,20.127c0.038,0.02,0.076,0.041,0.112,0.063C14.463,20.168,14.426,20.147,14.388,20.127z" /><path d="M27.715,11.136c0.012-0.001,0.025-0.001,0.037-0.001C27.74,11.135,27.728,11.135,27.715,11.136z" /><path d="M14.186,20.037c0.046,0.018,0.092,0.036,0.137,0.058C14.277,20.073,14.231,20.054,14.186,20.037z" /><path d="M28.081,11.155c0.013,0.001,0.027,0.004,0.041,0.007C28.107,11.159,28.094,11.156,28.081,11.155z" /><path d="M14.884,20.5c0.048,0.05,0.095,0.104,0.138,0.16C14.979,20.604,14.932,20.55,14.884,20.5z" /><path d="M27.892,11.136c0.01,0,0.019,0,0.028,0.001C27.91,11.137,27.901,11.137,27.892,11.136z" /><path d="M14.732,20.357c0.036,0.03,0.07,0.063,0.104,0.095C14.802,20.419,14.768,20.387,14.732,20.357z" /></svg></span><span class="profit-description">
+                    Łatwa i szybka rejestracja
+                </span>
+            </li>
+            <li>
+                <span class="profit-icon"><svg version="1.1" class="icon-8" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28.104px" height="47.627px" viewBox="0 0 28.104 47.627" enable-background="new 0 0 28.104 47.627" xml:space="preserve"><path d="M23.258,0H4.846C2.181,0,0,2.187,0,4.86v37.907c0,2.673,2.181,4.86,4.846,4.86h18.413c2.665,0,4.846-2.187,4.846-4.86V4.86 C28.104,2.187,25.923,0,23.258,0z M14.052,45.683c-1.873,0-3.392-1.087-3.392-2.43c0-1.342,1.52-2.43,3.392-2.43 s3.392,1.088,3.392,2.43C17.444,44.596,15.925,45.683,14.052,45.683z M24.228,38.393H3.876V6.318h20.351V38.393z" /><path d="M8.8,22.835c0,0.126,0.01,0.241,0.03,0.344s0.058,0.19,0.112,0.261c0.056,0.07,0.13,0.126,0.223,0.166 c0.093,0.041,0.21,0.061,0.351,0.061c0.166,0,0.315-0.054,0.448-0.162c0.133-0.108,0.2-0.276,0.2-0.503 c0-0.121-0.016-0.225-0.048-0.313c-0.033-0.088-0.087-0.168-0.163-0.238c-0.075-0.071-0.174-0.135-0.297-0.193 C9.533,22.199,9.38,22.14,9.2,22.079c-0.241-0.08-0.45-0.168-0.626-0.264c-0.176-0.096-0.323-0.208-0.44-0.336 s-0.205-0.277-0.26-0.446c-0.056-0.169-0.083-0.364-0.083-0.586c0-0.534,0.148-0.933,0.444-1.194 c0.297-0.262,0.704-0.393,1.221-0.393c0.242,0,0.463,0.027,0.667,0.079c0.204,0.053,0.379,0.139,0.528,0.257 c0.148,0.119,0.263,0.27,0.347,0.454c0.083,0.184,0.124,0.404,0.124,0.661v0.151h-1.04c0-0.257-0.045-0.455-0.136-0.593 c-0.09-0.138-0.242-0.208-0.453-0.208c-0.12,0-0.221,0.018-0.301,0.053c-0.08,0.036-0.145,0.083-0.192,0.14s-0.081,0.125-0.098,0.2 c-0.018,0.075-0.026,0.153-0.026,0.234c0,0.166,0.035,0.306,0.105,0.419s0.221,0.218,0.452,0.313l0.836,0.363 c0.206,0.091,0.375,0.186,0.505,0.283c0.13,0.099,0.234,0.205,0.313,0.317c0.078,0.114,0.132,0.238,0.162,0.374 c0.03,0.137,0.045,0.288,0.045,0.454c0,0.569-0.165,0.983-0.494,1.243c-0.33,0.26-0.788,0.389-1.376,0.389 c-0.612,0-1.051-0.133-1.314-0.4c-0.264-0.267-0.396-0.65-0.396-1.149v-0.219H8.8V22.835z" /><path d="M13.472,18.965l0.769,3.81h0.016l0.776-3.81h1.605v5.396h-0.995v-4.308h-0.015l-0.957,4.308h-0.844l-0.957-4.308h-0.015 v4.308H11.86v-5.396H13.472z" /><path d="M18.288,22.835c0,0.126,0.01,0.241,0.03,0.344c0.02,0.104,0.058,0.19,0.113,0.261s0.129,0.126,0.223,0.166 c0.093,0.041,0.209,0.061,0.351,0.061c0.165,0,0.314-0.054,0.448-0.162c0.133-0.108,0.2-0.276,0.2-0.503 c0-0.121-0.017-0.225-0.049-0.313s-0.086-0.168-0.162-0.238c-0.076-0.071-0.174-0.135-0.297-0.193 c-0.124-0.058-0.275-0.117-0.456-0.178c-0.242-0.08-0.45-0.168-0.625-0.264c-0.176-0.096-0.323-0.208-0.441-0.336 s-0.204-0.277-0.26-0.446c-0.055-0.169-0.083-0.364-0.083-0.586c0-0.534,0.148-0.933,0.444-1.194s0.704-0.393,1.221-0.393 c0.242,0,0.464,0.027,0.667,0.079c0.204,0.053,0.379,0.139,0.528,0.257c0.148,0.119,0.264,0.27,0.346,0.454 c0.083,0.184,0.125,0.404,0.125,0.661v0.151h-1.04c0-0.257-0.045-0.455-0.136-0.593c-0.09-0.138-0.241-0.208-0.452-0.208 c-0.121,0-0.221,0.018-0.302,0.053c-0.08,0.036-0.145,0.083-0.192,0.14c-0.048,0.058-0.081,0.125-0.098,0.2 c-0.018,0.075-0.026,0.153-0.026,0.234c0,0.166,0.035,0.306,0.105,0.419c0.07,0.113,0.221,0.218,0.452,0.313l0.837,0.363 c0.206,0.091,0.374,0.186,0.505,0.283c0.13,0.099,0.234,0.205,0.312,0.317c0.078,0.114,0.132,0.238,0.163,0.374 c0.03,0.137,0.045,0.288,0.045,0.454c0,0.569-0.165,0.983-0.494,1.243c-0.329,0.26-0.787,0.389-1.375,0.389 c-0.613,0-1.051-0.133-1.315-0.4c-0.264-0.267-0.396-0.65-0.396-1.149v-0.219h1.085V22.835z" /></svg></span><span class="profit-description">
+                    Przypomnienia SMS przed wizytą
+                </span>
+            </li>
+            <li>
+                <span class="profit-icon"><svg version="1.1" class="icon-9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="41.545px" height="41.521px" viewBox="0 0 41.545 41.521" enable-background="new 0 0 41.545 41.521" xml:space="preserve"><path d="M20.495,0.002C9.023,0.155-0.151,9.573,0.002,21.038C0.155,32.502,9.579,41.672,21.05,41.519 c11.471-0.153,20.646-9.572,20.493-21.037C41.39,9.018,31.965-0.151,20.495,0.002z M20.991,37.148 C11.936,37.269,4.496,30.03,4.374,20.979c-0.121-9.05,7.123-16.486,16.179-16.606c9.056-0.122,16.496,7.117,16.617,16.168 C37.291,29.592,30.047,37.027,20.991,37.148z M10.933,30.502c0,0,9.886-1.357,14.104-5.572c4.217-4.215,5.575-14.096,5.575-14.096 s-9.886,1.358-14.103,5.572C12.292,20.621,10.933,30.502,10.933,30.502z M18.641,18.537c1.772-1.772,5.163-3.03,8.069-3.811 c-0.782,2.9-2.046,6.313-3.806,8.072c-1.176,1.177-3.085,1.177-4.263,0C17.463,21.622,17.463,19.714,18.641,18.537z" /></svg></span><span class="profit-description">
+                    Wskazówki i droga dojazdu
+                </span>
+            </li>
+            <li>
+                <span class="profit-icon"><svg version="1.1" class="icon-10" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="34.22px" height="41.526px" viewBox="0 0 34.22 41.526" enable-background="new 0 0 34.22 41.526" xml:space="preserve"><path d="M8.655,29.054c0.019,0.014,0.04,0.026,0.059,0.042C8.695,29.08,8.674,29.067,8.655,29.054z" /><path d="M7.409,19.58c0.051-0.039,0.106-0.071,0.163-0.1C7.515,19.509,7.46,19.541,7.409,19.58z" /><path d="M8.232,19.396c0.027,0.005,0.054,0.012,0.081,0.019C8.286,19.408,8.26,19.401,8.232,19.396z" /><path d="M8.232,9.91c0.027,0.005,0.054,0.012,0.081,0.019C8.286,9.921,8.26,9.915,8.232,9.91z" /><path d="M8.449,9.976C8.475,9.986,8.5,9.997,8.524,10.009C8.5,9.997,8.475,9.986,8.449,9.976z" /><path d="M8.449,28.938c0.026,0.01,0.051,0.021,0.075,0.033C8.5,28.958,8.475,28.948,8.449,28.938z" /><path d="M7.629,19.457c0.039-0.016,0.079-0.031,0.119-0.042C7.708,19.426,7.668,19.44,7.629,19.457z" /><path d="M7.816,19.398c0.04-0.008,0.08-0.014,0.121-0.018C7.896,19.384,7.856,19.39,7.816,19.398z" /><path d="M7.409,10.094c0.051-0.04,0.106-0.071,0.163-0.1C7.515,10.022,7.46,10.054,7.409,10.094z" /><path d="M8.031,19.374c-0.009,0-0.019,0.002-0.028,0.002c0.027,0,0.054,0.002,0.082,0.004C8.066,19.379,8.049,19.374,8.031,19.374z" /><path d="M8.232,28.872c0.027,0.005,0.054,0.012,0.081,0.019C8.286,28.884,8.26,28.877,8.232,28.872z" /><path d="M7.816,9.912c0.04-0.008,0.08-0.014,0.121-0.017C7.896,9.898,7.856,9.904,7.816,9.912z" /><path d="M7.629,9.97c0.039-0.017,0.079-0.031,0.119-0.042C7.708,9.939,7.668,9.954,7.629,9.97z" /><path d="M8.031,9.887c-0.009,0-0.019,0.002-0.028,0.002c0.027,0,0.054,0.002,0.082,0.004C8.066,9.893,8.049,9.887,8.031,9.887z" /><path d="M7.816,28.874c0.04-0.008,0.08-0.014,0.121-0.018C7.896,28.86,7.856,28.866,7.816,28.874z" /><path d="M7.629,28.932c0.039-0.016,0.079-0.031,0.119-0.042C7.708,28.901,7.668,28.916,7.629,28.932z" /><path d="M7.409,29.056c0.051-0.04,0.106-0.072,0.163-0.1C7.515,28.984,7.46,29.017,7.409,29.056z" /><path d="M8.655,10.091c0.019,0.014,0.04,0.026,0.059,0.042C8.695,10.117,8.674,10.105,8.655,10.091z" /><path d="M8.655,19.578c0.019,0.014,0.04,0.026,0.059,0.042C8.695,19.604,8.674,19.592,8.655,19.578z" /><path d="M8.449,19.462c0.026,0.011,0.051,0.021,0.075,0.034C8.5,19.483,8.475,19.473,8.449,19.462z" /><path d="M8.031,28.849c-0.009,0-0.019,0.002-0.028,0.002c0.027,0,0.054,0.003,0.082,0.004C8.066,28.854,8.049,28.849,8.031,28.849z" /><path d="M30.191,0H4.028C1.813,0,0,1.839,0,4.086v33.355c0,2.247,1.813,4.085,4.028,4.085h26.164c2.216,0,4.028-1.838,4.028-4.085 V4.086C34.22,1.839,32.407,0,30.191,0z M30.191,37.441H4.028V4.086h26.164V37.441z" /><path d="M25.923,13.573v-3.395H15.104l-2.084,3.395H25.923z" /><path d="M13.206,10.178l1.343-2.188c0.303-0.496,0.153-1.15-0.335-1.46c-0.166-0.104-0.356-0.159-0.55-0.159 c-0.364,0-0.696,0.187-0.889,0.5L9.859,11.62l-0.986-1.321c-0.047-0.063-0.101-0.117-0.159-0.166 c-0.019-0.016-0.04-0.027-0.059-0.042c-0.042-0.03-0.085-0.059-0.131-0.082C8.5,9.997,8.475,9.986,8.449,9.976 C8.404,9.957,8.359,9.941,8.313,9.929C8.286,9.921,8.259,9.915,8.232,9.91C8.183,9.9,8.134,9.896,8.084,9.893 C8.057,9.892,8.03,9.889,8.003,9.889C7.981,9.89,7.958,9.893,7.937,9.895C7.896,9.898,7.856,9.904,7.816,9.912 c-0.023,0.005-0.046,0.01-0.068,0.016C7.708,9.939,7.668,9.954,7.629,9.97C7.61,9.978,7.59,9.985,7.572,9.994 c-0.057,0.028-0.112,0.06-0.163,0.1c-0.458,0.353-0.549,1.019-0.202,1.484l1.903,2.55c0.197,0.262,0.508,0.419,0.833,0.419 l0.047-0.001c0.344-0.016,0.658-0.202,0.839-0.498l1.185-1.93v-1.939H13.206z" /><path d="M12.015,10.178v1.939l1.191-1.939H12.015z" /><path d="M25.923,23.059v-3.395H15.104l-2.084,3.395H25.923z" /><path d="M13.206,19.665l1.343-2.188c0.303-0.496,0.153-1.15-0.335-1.46c-0.166-0.104-0.356-0.159-0.55-0.159 c-0.364,0-0.696,0.187-0.889,0.5l-2.916,4.749l-0.986-1.321c-0.047-0.063-0.101-0.117-0.159-0.166 c-0.019-0.015-0.04-0.027-0.059-0.042c-0.042-0.03-0.085-0.059-0.131-0.082c-0.024-0.013-0.049-0.023-0.075-0.034 c-0.044-0.019-0.089-0.035-0.136-0.047c-0.027-0.007-0.054-0.014-0.081-0.019c-0.049-0.009-0.098-0.014-0.147-0.017 c-0.027-0.001-0.055-0.004-0.082-0.004c-0.022,0.001-0.044,0.003-0.066,0.005c-0.041,0.003-0.081,0.009-0.121,0.018 c-0.023,0.004-0.046,0.01-0.068,0.016c-0.041,0.011-0.08,0.026-0.119,0.042C7.61,19.465,7.59,19.471,7.572,19.48 c-0.057,0.028-0.112,0.061-0.163,0.1c-0.458,0.353-0.549,1.019-0.202,1.484l1.903,2.551c0.197,0.262,0.508,0.418,0.833,0.418 l0.047-0.001c0.344-0.016,0.658-0.202,0.839-0.498l1.185-1.93v-1.939H13.206z" /><path d="M12.015,19.665v1.939l1.191-1.939H12.015z" /><path d="M25.923,32.535V29.14H15.104l-2.084,3.395H25.923z" /><path d="M13.206,29.14l1.343-2.187c0.303-0.496,0.153-1.151-0.335-1.46c-0.166-0.104-0.356-0.16-0.55-0.16 c-0.364,0-0.696,0.187-0.889,0.5l-2.916,4.749L8.873,29.26c-0.047-0.063-0.101-0.117-0.159-0.165 c-0.019-0.016-0.04-0.028-0.059-0.042c-0.042-0.03-0.085-0.059-0.131-0.083c-0.024-0.013-0.049-0.023-0.075-0.033 c-0.044-0.019-0.089-0.035-0.136-0.047c-0.027-0.007-0.054-0.014-0.081-0.019c-0.049-0.009-0.098-0.014-0.147-0.016 c-0.027-0.001-0.055-0.004-0.082-0.004c-0.022,0.001-0.044,0.003-0.066,0.005c-0.041,0.003-0.081,0.009-0.121,0.018 c-0.023,0.005-0.046,0.01-0.068,0.016c-0.041,0.011-0.08,0.026-0.119,0.042C7.61,28.94,7.59,28.947,7.572,28.956 c-0.057,0.028-0.112,0.061-0.163,0.1C6.95,29.409,6.86,30.074,7.207,30.54l1.903,2.55c0.197,0.262,0.508,0.418,0.833,0.418 l0.047-0.001c0.344-0.015,0.658-0.202,0.839-0.498l1.185-1.93V29.14H13.206z" /><path d="M12.015,29.14v1.939l1.191-1.939H12.015z" /></svg></span><span class="profit-description">
+                    Minimum zbędnych formalności
+                </span>
+            </li>
+        </ul>
+    </div><!--END OF PROFITY PACJENTA-->
+</div>
+
+@*<div class="container-fluid">
+    @Html.Raw(Model.Contents)
+
+    @foreach (var x in Model.PageSections.Where(x=>x.Status == CMS.Entity.CmsPageSectionStatus.Published).ToList())
+    {
+        @Html.Raw(x.Section)
+    }
+</div>*@

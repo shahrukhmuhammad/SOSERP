@@ -1,0 +1,201 @@
+﻿@model List<DmsItem>
+@{
+    Layout = null;
+    var viewMode = Request["viewMode"];
+    if (viewMode == null)
+    {
+        viewMode = "list";
+    }
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script>
+        if (window.self == window.top) parent.window.location = document.location.origin;
+    </script>
+
+    <title>Document Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (string.IsNullOrEmpty(CurrentUser.Theme))
+        {
+            <link rel="stylesheet" href="~/Content/Bootstrap/bootstrap-SpacelabTheme.css" />
+        }
+        else
+        {
+            <link rel="stylesheet" href="~/Content/Bootstrap/bootstrap-@(CurrentUser.Theme)Theme.css" />
+        }
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/Content/Bootstrap/bootstrap-SpacelabTheme.css" />
+    }
+
+    @Styles.Render("~/Content/BaseApp")
+    <link href="~/Content/DMS/bootstrap-dms.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        #dataTable_length, #dataTable_filter, #dataTable_info, #dataTable_paginate {
+            display:none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-Modal">
+        <div class="modal-content">
+            <div class="modal-header well well-sm ribbonBar">
+                <div class="btn-group">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-upload"></i>
+                            <span>Upload</span>
+                            <i class="fa fa-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="javascript://" type="button" id="DmsTbUpload" class="btn btn-link text-muted dms-fileupload" title="Upload">
+                                    <i class="fa fa-upload"></i>
+                                    <span>Upload from device</span>
+                                    <form method="post" enctype="multipart/form-data" action="@BaseUrl.GetBaseUrl()/DMS/Docs/upload/?parentId=@Request.RequestContext.RouteData.Values["id"]&prnt=@Request["p"]&mode=@Request["mode"]">
+                                        <input id="files" multiple="multiple" name="files" type="file" style="height:100px;" />
+                                    </form>
+                                </a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="javascript://"><i class="fa fa-camera"></i> Upload using Camera</a></li>
+                            <li><a href="javascript://"><i class="fa fa-inbox"></i> Upload using Scanner</a></a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-plus"></i>
+                            <span>New</span>
+                            <i class="fa fa-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="javascript://" class="dms-title-btn" data-title="New Folder" data-text="" data-id="" data-hint="Enter the folder name to create." data-target="#dmsTitleDialog" title="New Folder">
+                                    <i class="fa fa-folder"></i>
+                                    <span>New Folder</span>
+                                </a>
+                            </li>
+                            <li><a href="javascript://"><i class="fa fa-file"></i> Create Document</a></li>
+                        </ul>
+                    </div>
+                    
+                    <a href="javascript://" class="btn btn-link">
+                        <i class="fa fa-sticky-note-o"></i>
+                        <span>Add Note</span>
+                    </a>
+                    <button type="button" class="btn btn-link" id="dmsTbRefresh">
+                        <i class="fa fa-refresh"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-header" style="padding:15px 0;">
+                <div class="row" style="margin:0;">
+                    <div class="col-sm-8" style="padding:0;">
+                        @{ Html.RenderAction("Breadcrumb", "Docs", new { id = Request.RequestContext.RouteData.Values["Id"], p = Request["p"], mode = Request["mode"] }); }
+                    </div>
+                    <div class="col-sm-4" style="padding:0;">
+                        <div class="btn-group">
+                            <form id="dmsSearchForm" method="get" action="@BaseUrl.GetBaseUrl()/DMS/Docs/Search/@Request["p"]">
+                                <div class="input-group input-group-sm">
+                                    <input type="hidden" name="mode" value="@Request["mode"]" />
+                                    <input type="text" name="q" required class="form-control" placeholder="Search">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header well well-sm dms-toolbar">
+                <div class="col-xs-6 dms-tools">
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-info" id="dmsTbDownload" disabled title="Download" data-toggle="tooltip" data-placement="bottom"><span class="fa fa-download"></span></button>
+
+                        <button type="button" class="btn btn-info" id="dmsTbDelete" disabled title="Delete" data-toggle="tooltip" data-placement="bottom"><span class="glyphicon glyphicon-trash"></span></button>
+
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" id="dmsTbShare" disabled class="btn btn-info dropdown-toggle" title="Share" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-envelope"></i> Share <span class="caret"></span></button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li><a href="javascript://" class="dmsTbShare" data-type="Links"><i class="fa fa-chain fa-fw"></i>&nbsp; Email files as links</a></li>
+                                <li><a href="javascript://" class="dmsTbShare" data-type="Attachment"><i class="fa fa-paperclip fa-fw"></i>&nbsp; Email as attachment</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-primary @(viewMode == "list" ? "active" : "")" onclick="window.location.replace('@BaseUrl.GetBaseUrl()/DMS/Docs/Index/@Request["p"]?p=@Request["p"]&viewMode=list')" title="List View" data-toggle="tooltip" data-placement="bottom"><span class="fa fa-th-list"></span></button>
+                        <button type="button" class="btn btn-primary @(viewMode == "grid" ? "active" : "")" onclick="window.location.replace('@BaseUrl.GetBaseUrl()/DMS/Docs/Index/@Request["p"]?p=@Request["p"]&viewMode=grid')" title="Grid View" data-toggle="tooltip" data-placement="bottom"><span class="fa fa-th-large"></span></button>
+                    </div>
+                </div>
+            </div>
+
+            @{ Html.RenderAction("DmsItems", "Docs", new { model = Model }); }
+
+        </div>
+    </div>
+    
+    <div id="dms-mask"><i class='fa fa-refresh fa-spin fa-5x help-block'></i></div>
+    <div id="docUploadDock" class="help-block">
+        <div class="msg">
+            <i class="fa fa-cloud-upload fa-5x"></i>
+            <h4>Drag your files to upload</h4>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/Bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/BaseApp")
+
+    <script>
+        @if (viewMode == "list")
+        {
+            <text>
+                var dt = $("#dms-list-dataTable").DataTable({
+                    lengthMenu: [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
+                    columnDefs: [
+                        { targets: [1, 2, 3], type: "string" },
+                        { targets: [0, 4], sortable: false }
+                    ],
+                    order: [],
+                });
+                new $.fn.dataTable.CustomSearch(dt, {
+                    container: 'thead:after',
+                    fields: [1, 2, 3]
+                });
+                $('#dms-list-dataTable tbody').on('click', 'tr', function () {
+                    if ($(this).hasClass('selected')) {
+                        $(this).removeClass('selected');
+                    }
+                    else {
+                        dt.$('tr.selected').removeClass('selected');
+                        $(this).addClass('selected');
+                    }
+                });
+
+            </text>
+        }
+
+        var dmsPath = '@BaseUrl.GetBaseUrl()/DMS/Docs';
+        var parentId = '@Request.RequestContext.RouteData.Values["id"]';
+        var p = '@Request["p"]';
+        var mode = '@Request["mode"]';
+    </script>
+    <script src="~/Scripts/DMS/dmsbase.js"></script>
+    <script src="~/Scripts/jquery.filedrop.js"></script>
+</body>
+</html>

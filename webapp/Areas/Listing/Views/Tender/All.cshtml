@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "All Listings";
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleRoles")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/Listing/Tender/List" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Tender</a>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table id="listing-Tenders-dataTable" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Code" id="listing-Tenders-dataTable_0" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="listing-Tenders-dataTable_1" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Department" id="listing-Tenders-dataTable_2" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Status" id="listing-Tenders-dataTable_3" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Created On" id="listing-Tenders-dataTable_4" /></th>
+                            <th class="text-center" width="70px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleRoles")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/Listing/Tender/List" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Tender</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#listing-Tenders-dataTable", [1, 2, 3, 4, 5], [0, 6]);
+        });
+    </script>
+}

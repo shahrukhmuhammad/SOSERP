@@ -1,0 +1,109 @@
+﻿@model BaseApp.Entity.AppSMTP
+@{
+    //var Src = (Model.ShippingCompanyId != 0 ? "../../../Content/Uploads/Ecommerce/sc_" + Model.ShippingCompanyId + ".jpg" : "");
+}
+
+<link href="~/Content/materialDesignSwitch.css" rel="stylesheet" />
+
+
+<form id="frm" class="form-Modal" method="post" action="~/Secure/Ecommerce/ShippingCompanyRecord">
+    <div class="modal-content">
+        <input type="hidden" name="ShippingCompanyId" value="" />
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Configuration</h4>
+        </div>
+        <div class="modal-body" id="popup">
+            <div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Title</label>
+                <div class="col-sm-8">
+                    <input id="Title" name="Title" type="text" class="form-control input-sm" value="@Model.Title" required autofocus />
+                </div>
+            </div>
+            @*<div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Username</label>
+                <div class="col-sm-8">
+                    <input id="DefaultUsername" name="DefaultUsername" type="text" class="form-control input-sm" value="" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Password</label>
+                <div class="col-sm-8">
+                    <input id="DefaultPassword" name="DefaultPassword" type="password" class="form-control input-sm" value="" required />
+                </div>
+            </div>*@
+            <div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Description</label>
+                <div class="col-sm-8">
+                    <textarea id="Description" name="Description" class="form-control input-sm" rows="2">
+                        @Model.Description
+                    </textarea>
+                </div>
+            </div>
+            @*<div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Enable SSL</label>
+                <div class="col-sm-8">
+                    <select id="SSL" name="SSL" class="form-control input-sm" required>
+                        <option value="false" selected="@(!Model.SSL)">No</option>
+                        <option value="true" selected="@(Model.SSL)">Yes</option>
+                    </select>
+                </div>
+            </div>*@
+            <div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Outgoing Mail Server</label>
+                <div class="col-sm-5">
+                    <input id="OutgoingServer" name="OutgoingServer" type="text" class="form-control input-sm" value="@Model.OutgoingServer" required />
+                </div>
+                <div class="col-sm-3">
+                    <input id="OutgoingPort" placeholder="Outgoing Port" name="OutgoingPort" type="text" class="form-control input-sm numericMask" value="@Model.OutgoingPort" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Incoming Mail Server</label>
+                <div class="col-sm-5">
+                    <input id="IncomingServer" name="IncomingServer" type="text" class="form-control input-sm" value="@Model.IncomingServer" required />
+                </div>
+                <div class="col-sm-3">
+                    <input id="IncomingPort" placeholder="Incoming Port" name="IncomingPort" type="text" class="form-control input-sm numericMask" value="@Model.IncomingPort" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-offset-3 col-sm-8">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div class="material-switch pull-right">
+                                <input id="SSL" class="SSL" name="SSL" type="checkbox" data-val="@Model.SSL" value="@Model.SSL" @((Model.SSL) ? "checked" : "") disabled />
+                                <label for="SSL" class="label-success SSL"></label>
+                            </div>
+                            <h4 class="list-group-item-heading"> Enable SSL</h4>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="material-switch pull-right">
+                                <input id="TLS" class="TLS" name="TLS" type="checkbox" data-val="@Model.TLS" value="@Model.TLS" @((Model.TLS) ? "checked" : "") disabled />
+                                <label for="TLS" class="label-success TLS"></label>
+                            </div>
+                            <h4 class="list-group-item-heading">Enable TLS </h4>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                <a class="btn btn-sm btn-warning btnEdit"> Edit</a>
+                <button class="btn btn-sm btn-primary"> Save Settings</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(function(){
+        $('#popup').find('.form-control').attr('readonly', 'readonly');
+    });
+
+    $('.btnEdit').on('click', function () {
+        $('#popup').find('.form-control').removeAttr('readonly');
+    });
+</script>

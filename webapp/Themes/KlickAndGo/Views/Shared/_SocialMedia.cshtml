@@ -1,0 +1,7 @@
+﻿
+@foreach (var item in ViewBag.SocialMedia as IList<CMS.Entity.CmsSocialMedia>)
+{
+    <li class="@item.Name">
+        <a href="@item.LinkURL" target="_blank" title="@item.Name"><span class="@item.Icon"></span></a>
+    </li>
+}

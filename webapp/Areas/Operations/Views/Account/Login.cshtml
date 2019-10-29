@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+@section styles{
+    <link href="~/Content/parallaxLogin.css" rel="stylesheet" />
+}
+
+<div class="container">
+    <div class="row vertical-offset-100">
+        <div class="col-md-4 col-md-offset-4">
+            <form id="frm" method="post" class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="media">
+                        <div class="media-left">
+                            <img src="~/Content/Images/applogo.png" class="media-object" alt="@AppSettings.GetVal("app:Title")" />
+                        </div>
+                        <div class="media-body">
+                            <h1 class="media-heading" style="margin-top:15px;">@AppSettings.GetVal("app:Title")</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <input name="Username" type="text" class="form-control" placeholder="Username" required autofocus />
+                    </div>
+                    <div class="form-group">
+                        <input name="Password" type="password" class="form-control" placeholder="Password" required />
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="checkbox">
+                                <label style="font-size:13px;">
+                                    <input id="rememberMe" type="checkbox" value="false" name="rememberMe" style="margin-top:2px;" /> Remember me
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <a href="javascript://" role="button" style="margin-top:10px; float:right; font-size:13px;">Need help?</a>
+                        </div>
+                        <div id="rememberMe-Div" class="col-md-12" hidden>
+                            <select name="rememberMeTime" class="form-control input-sm">
+                                <option value="1 week">1 week</option>
+                                <option value="2 weeks">2 weeks</option>
+                                <option value="Until I sign out manually">Until I sign out manually</option>
+                            </select>
+                        </div>
+                    </div>
+                    @if (TempData["ErrorMsg"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <strong>Error!</strong> @TempData["ErrorMsg"]
+                        </div>
+                    }
+                </div>
+                <div class="panel-footer">
+                    <button type="submit" class="btn btn-lg btn-success fullWidth">Login <i class="fa fa-sign-in"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $('#rememberMe').change(function () {
+            if (this.checked)
+                $('#rememberMe-Div').show();
+            else
+                $('#rememberMe-Div').hide();
+        });
+    </script>
+}

@@ -1,0 +1,92 @@
+﻿@model CMS.Entity.CmsSlide
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    ViewBag.Title = (queryId == null ? "Add New Slide" : "Edit Slide");
+    var allSlides = ViewBag.AllSlides as List<CMS.Entity.CmsSlide>;
+    int orderLength = allSlides.Count() + (queryId == null ? 1 : 0);
+    var imgSrc = (queryId == null ? "../../Content/Images/img.png" : "../../../Content/Uploads/Slides/" + Model.FileName);
+}
+
+<form id="frm" method="post" class="form-Modal" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="thumbnail text-center">
+                        <img id="img-Preview" src="@imgSrc" alt="@Model.Title" class="img-responsive img-centre" style="max-height:200px;">
+                        <div class="caption">
+                            <input type="file" class="form-control input-sm" id="file" name="file" value="@Model.FileName" onchange="previewImage(this,'#img-Preview')" @(queryId == null ? "required" : "") />
+                            <input type="hidden" name="Extension" value="@Model.Extension" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" class="form-control input-sm" name="Title" value="@Model.Title" required autofocus />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select name="Status" class="form-control input-sm" required>
+                                    <option value="@((int)CMS.Entity.CmsSlideStatus.Draft)" @(Model.Status == CMS.Entity.CmsSlideStatus.Draft ? "selected" : "")>@CMS.Entity.CmsSlideStatus.Draft</option>
+                                    <option value="@((int)CMS.Entity.CmsSlideStatus.Published)" @(Model.Status == CMS.Entity.CmsSlideStatus.Published ? "selected" : "")>@CMS.Entity.CmsSlideStatus.Published</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label>Link</label>
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-addon">
+                                        <div class="checkbox no-margin" style="height:12px;"><label><input type="checkbox" name="HasLink" value="@(Model.HasLink ? "true" : "false")" @(Model.HasLink ? "checked" : "") /></label></div>
+                                    </div>
+                                    <input type="text" class="form-control input-sm" name="LinkUrl" value="@Model.LinkUrl" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Order</label>
+                                <select name="SlideOrder" class="form-control input-sm" required>
+                                    @for (int i = 1; i <= orderLength; i++)
+                                    {
+                                        <option value="@i" @(Model.SlideOrder == i ? "selected" : "" )>@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Details</label>
+                                <textarea name="Details" class="form-control input-sm" rows="5">@Model.Details</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info no-margin" role="alert"> <strong>Note: </strong> For better slide experience please upload every image with the same height. </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</form>

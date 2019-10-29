@@ -1,0 +1,158 @@
+﻿@model List<BaseApp.Entity.AppLog>
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    var allOffices = ViewBag.AllOffices as List<BaseApp.Entity.Office>;
+    var office = new BaseApp.Entity.Office();
+    if (queryId == null)
+    {
+        ViewBag.Title = "All Errors Logs";
+    }
+    else
+    {
+        office = ViewBag.Office as BaseApp.Entity.Office;
+        ViewBag.Title = office.Title + "'s Errors Logs";
+    }
+}
+
+<div class="well well-sm no-margin">
+    <fieldset>
+        <legend class="no-margin" style="font-size:12px;">
+            Showing Results from @(queryId == null ? "All Offices" : office.Title)
+            <div class="btn-group btn-group-xs pull-right" role="group" style="margin-top:-5px;">
+                @if (queryId != null)
+                {
+                    <a href="~/Secure/Office/Details/@office.Id" class="btn btn-default"><i class="fa fa-info"></i> Go to Details</a>
+                }
+                <a href="javascript://" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-building"></i> @(queryId == null ? "All Offices" : office.Title) <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="@(queryId == null ? "active" : "")"><a href="~/Secure/AppLog/Error">All Offices</a></li>
+                    @foreach (var x in allOffices)
+                    {
+                        <li class="@(queryId != null ? (queryId.ToString() == x.Id.ToString() ? "active" : "") : "")"><a href="~/Secure/AppLog/Error/@x.Id">@x.Code - @x.Title</a></li>
+                    }
+                </ul>
+            </div>
+        </legend>
+        <table class="table table-striped table-hover table-condensed">
+            @if (queryId != null)
+            {
+                <thead>
+                    <tr>
+                        <th>Office</th>
+                        <th>Manager</th>
+                        <th>Departments</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@office.Title</td>
+                        <td><a href="~/AccessControl/Contact/Details/@office.ContactId">@office.Contact.FullName</a></td>
+                        <td>
+                            @if (office.Children.Count() > 0)
+                            {
+                                <ul class="no-margin" style="padding:0 10px;">
+                                    @foreach (var dept in office.Children)
+                                    {
+                                        <li><a href="~/Secure/Office/DepartmentDetails/@dept.Id">@dept.Title</a></li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span>No department found.</span>
+                            }
+                        </td>
+                        <td>@office.Description</td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+    </fieldset>
+</div>
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Back"><i class="fa fa-angle-left"></i></a>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table id="dataTable" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            @if (queryId == null)
+                            {
+                                <th><input class="form-control input-sm input-tbl" type="text" placeholder="Office" id="dataTable_0" /></th>
+                            }
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Contact" id="@(queryId == null ? "dataTable_1" : "dataTable_0")" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="@(queryId == null ? "dataTable_2" : "dataTable_1")" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Module" id="@(queryId == null ? "dataTable_3" : "dataTable_2")" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Date Time" id="@(queryId == null ? "dataTable_4" : "dataTable_3")" /></th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                @if (queryId == null)
+                                {
+                                    if (x.OfficeId.HasValue)
+                                    {
+                                        <td><a href="~/Secure/Office/Details/@x.OfficeId">@x.Office.Title</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td>N / A</td>
+                                    }
+                                }
+                                @if (x.ContactId.HasValue)
+                                {
+                                    <td><a href="~/AccessControl/Contact/Details/@x.ContactId">@x.Contact.FullName</a></td>
+                                }
+                                else
+                                {
+                                    <td>N / A</td>
+                                }
+                                <td>@x.Title</td>
+                                <td>@x.Module</td>
+                                <td>@x.CreatedOn.ToString("dd/MM/yyyy hh:mm:ss tt")</td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <a href="~/Secure/AppLog/Details/@x.Id" class="btn btn-primary" title="View Details"><i class="fa fa-eye"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            @if (queryId == null)
+            {
+                @: filterDataTable("#dataTable", [0, 1, 2, 3, 4], [5]);
+            }
+            else
+            {
+                @: filterDataTable("#dataTable", [0, 1, 2, 3], [4]);
+            }
+        });
+    </script>
+}

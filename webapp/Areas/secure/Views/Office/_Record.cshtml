@@ -1,0 +1,240 @@
+﻿@model BaseApp.Entity.Office
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    ViewBag.Title = (queryId == null ? "Add New Office" : "Edit Office");
+    var allManagers = ViewBag.AllManagers as List<BaseApp.Entity.AppUser>;
+
+    var allOffices = ViewBag.AllOffices as List<BaseApp.Entity.Office>;
+    string acronym = string.Join(string.Empty, AppSettings.GetVal<string>("app:Title").Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0]));
+
+    if (Request["p"] != null)
+    {
+        Model.ParentId = new Guid(Request["p"].ToString());
+    }
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> @TempData["ErrorMsg"]
+    </div>
+}
+
+
+<form id="frm" class="form-Modal" method="post" action="~/Secure/Office/Record">
+    <div class="modal-content">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Vitals</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Parent</label>
+                        <select name="ParentId" class="form-control input-sm">
+                            <option value="">-No Parent-</option>
+                            @foreach (var x in allOffices)
+                            {
+                                <option value="@x.Id" @(Model.ParentId == x.Id ? "selected" : "")>@x.Title (@acronym-@x.Code)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input name="Title" type="text" class="form-control input-sm" value="@Model.Title" required autofocus />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Manager</label>
+                        <select name="ContactId" class="form-control input-sm" required>
+                            @foreach (var x in allManagers)
+                            {
+                                <option value="@x.Id" @(Model.ContactId == x.Id ? "selected" : "")>@x.FullName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="Description" class="form-control input-sm" style="height:93px;">@Model.Description</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-header">
+            <h4 class="modal-title">Address</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Address Line 1</label>
+                        <input name="AddressLine1" class="form-control input-sm" value="@Model.AddressLine1" required />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Address Line 2</label>
+                        <input name="AddressLine2" class="form-control input-sm" value="@Model.AddressLine2" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>City</label>
+                                <input name="City" type="text" class="form-control input-sm" value="@Model.City" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>State</label>
+                                <input name="State" type="text" class="form-control input-sm" value="@Model.State" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Zip Code</label>
+                                <input name="ZipCode" type="text" class="form-control input-sm" value="@Model.ZipCode" />
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Country</label>
+                                <select name="Country" class="form-control input-sm">
+                                    @foreach (var c in Html.CountriesListWithCode())
+                                    {
+                                        <option value="@c.Value" @(Model.Country == c.Value ? "selected" : "")>@c.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@*<div class="col-sm-4">
+    <div class="form-group">
+        <label>Currency</label>
+        <select name="Currency" class="form-control input-sm" required>
+            @foreach (var x in Html.CurrenciesList())
+            {
+                <option value="@x.Value" @(Model.Currency == x.Value ? "selected" : "")>@x.Value - @x.Text</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Time Zone</label>
+        <select name="TimeZone" class="form-control input-sm" required>
+            <option timezoneid="1" gmtadjustment="GMT-12:00" usedaylighttime="0" value="-12_(GMT-12:00) International Date Line West" @(Model.FullTimeZone == "-12_(GMT-12:00) International Date Line West" ? "selected" : "")>(GMT-12:00) International Date Line West</option>
+            <option timezoneid="2" gmtadjustment="GMT-11:00" usedaylighttime="0" value="-11_(GMT-11:00) Midway Island, Samoa" @(Model.FullTimeZone == "-11_(GMT-11:00) Midway Island, Samoa" ? "selected" : "")>(GMT-11:00) Midway Island, Samoa</option>
+            <option timezoneid="3" gmtadjustment="GMT-10:00" usedaylighttime="0" value="-10_(GMT-10:00) Hawaii" @(Model.FullTimeZone == "-10_(GMT-10:00) Hawaii" ? "selected" : "")>(GMT-10:00) Hawaii</option>
+            <option timezoneid="4" gmtadjustment="GMT-09:00" usedaylighttime="1" value="-9_(GMT-09:00) Alaska" @(Model.FullTimeZone == "-9_(GMT-09:00) Alaska" ? "selected" : "")>(GMT-09:00) Alaska</option>
+            <option timezoneid="5" gmtadjustment="GMT-08:00" usedaylighttime="1" value="-8_(GMT-08:00) Pacific Time (US & Canada)" @(Model.FullTimeZone == "-8_(GMT-08:00) Pacific Time (US & Canada)" ? "selected" : "")>(GMT-08:00) Pacific Time (US & Canada)</option>
+            <option timezoneid="6" gmtadjustment="GMT-08:00" usedaylighttime="1" value="-8_(GMT-08:00) Tijuana, Baja California" @(Model.FullTimeZone == "-8_(GMT-08:00) Tijuana, Baja California" ? "selected" : "")>(GMT-08:00) Tijuana, Baja California</option>
+            <option timezoneid="7" gmtadjustment="GMT-07:00" usedaylighttime="0" value="-7_(GMT-07:00) Arizona" @(Model.FullTimeZone == "-7_(GMT-07:00) Arizona" ? "selected" : "")>(GMT-07:00) Arizona</option>
+            <option timezoneid="8" gmtadjustment="GMT-07:00" usedaylighttime="1" value="-7_(GMT-07:00) Chihuahua, La Paz, Mazatlan" @(Model.FullTimeZone == "-7_(GMT-07:00) Chihuahua, La Paz, Mazatlan" ? "selected" : "")>(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
+            <option timezoneid="9" gmtadjustment="GMT-07:00" usedaylighttime="1" value="-7_(GMT-07:00) Mountain Time (US & Canada)" @(Model.FullTimeZone == "-7_(GMT-07:00) Mountain Time (US & Canada)" ? "selected" : "")>(GMT-07:00) Mountain Time (US & Canada)</option>
+            <option timezoneid="10" gmtadjustment="GMT-06:00" usedaylighttime="0" value="-6_(GMT-06:00) Central America" @(Model.FullTimeZone == "-6_(GMT-06:00) Central America" ? "selected" : "")>(GMT-06:00) Central America</option>
+            <option timezoneid="11" gmtadjustment="GMT-06:00" usedaylighttime="1" value="-6_(GMT-06:00) Central Time (US & Canada)" @(Model.FullTimeZone == "-6_(GMT-06:00) Central Time (US & Canada)" ? "selected" : "")>(GMT-06:00) Central Time (US & Canada)</option>
+            <option timezoneid="12" gmtadjustment="GMT-06:00" usedaylighttime="1" value="-6_(GMT-06:00) Guadalajara, Mexico City, Monterrey" @(Model.FullTimeZone == "-6_(GMT-06:00) Guadalajara, Mexico City, Monterrey" ? "selected" : "")>(GMT-06:00) Guadalajara, Mexico City, Monterrey</option>
+            <option timezoneid="13" gmtadjustment="GMT-06:00" usedaylighttime="0" value="-6_(GMT-06:00) Saskatchewan" @(Model.FullTimeZone == "-6_(GMT-06:00) Saskatchewan" ? "selected" : "")>(GMT-06:00) Saskatchewan</option>
+            <option timezoneid="14" gmtadjustment="GMT-05:00" usedaylighttime="0" value="-5_(GMT-05:00) Bogota, Lima, Quito, Rio Branco" @(Model.FullTimeZone == "-5_(GMT-05:00) Bogota, Lima, Quito, Rio Branco" ? "selected" : "")>(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
+            <option timezoneid="15" gmtadjustment="GMT-05:00" usedaylighttime="1" value="-5_(GMT-05:00) Eastern Time (US & Canada)" @(Model.FullTimeZone == "-5_(GMT-05:00) Eastern Time (US & Canada)" ? "selected" : "")>(GMT-05:00) Eastern Time (US & Canada)</option>
+            <option timezoneid="16" gmtadjustment="GMT-05:00" usedaylighttime="1" value="-5_(GMT-05:00) Indiana (East)" @(Model.FullTimeZone == "-5_(GMT-05:00) Indiana (East)" ? "selected" : "")>(GMT-05:00) Indiana (East)</option>
+            <option timezoneid="17" gmtadjustment="GMT-04:00" usedaylighttime="1" value="-4_(GMT-04:00) Atlantic Time (Canada)" @(Model.FullTimeZone == "-4_(GMT-04:00) Atlantic Time (Canada)" ? "selected" : "")>(GMT-04:00) Atlantic Time (Canada)</option>
+            <option timezoneid="18" gmtadjustment="GMT-04:00" usedaylighttime="0" value="-4_(GMT-04:00) Caracas, La Paz" @(Model.FullTimeZone == "-4_(GMT-04:00) Caracas, La Paz" ? "selected" : "")>(GMT-04:00) Caracas, La Paz</option>
+            <option timezoneid="19" gmtadjustment="GMT-04:00" usedaylighttime="0" value="-4_(GMT-04:00) Manaus" @(Model.FullTimeZone == "-4_(GMT-04:00) Manaus" ? "selected" : "")>(GMT-04:00) Manaus</option>
+            <option timezoneid="20" gmtadjustment="GMT-04:00" usedaylighttime="1" value="-4_(GMT-04:00) Santiago" @(Model.FullTimeZone == "-4_(GMT-04:00) Santiago" ? "selected" : "")>(GMT-04:00) Santiago</option>
+            <option timezoneid="21" gmtadjustment="GMT-03:30" usedaylighttime="1" value="-3.5_(GMT-03:30) Newfoundland" @(Model.FullTimeZone == "-3.5_(GMT-03:30) Newfoundland" ? "selected" : "")>(GMT-03:30) Newfoundland</option>
+            <option timezoneid="22" gmtadjustment="GMT-03:00" usedaylighttime="1" value="-3_(GMT-03:00) Brasilia" @(Model.FullTimeZone == "-3_(GMT-03:00) Brasilia" ? "selected" : "")>(GMT-03:00) Brasilia</option>
+            <option timezoneid="23" gmtadjustment="GMT-03:00" usedaylighttime="0" value="-3_(GMT-03:00) Buenos Aires, Georgetown" @(Model.FullTimeZone == "-3_(GMT-03:00) Buenos Aires, Georgetown" ? "selected" : "")>(GMT-03:00) Buenos Aires, Georgetown</option>
+            <option timezoneid="24" gmtadjustment="GMT-03:00" usedaylighttime="1" value="-3_(GMT-03:00) Greenland" @(Model.FullTimeZone == "-3_(GMT-03:00) Greenland" ? "selected" : "")>(GMT-03:00) Greenland</option>
+            <option timezoneid="25" gmtadjustment="GMT-03:00" usedaylighttime="1" value="-3_(GMT-03:00) Montevideo" @(Model.FullTimeZone == "-3_(GMT-03:00) Montevideo" ? "selected" : "")>(GMT-03:00) Montevideo</option>
+            <option timezoneid="26" gmtadjustment="GMT-02:00" usedaylighttime="1" value="-2_(GMT-02:00) Mid-Atlantic" @(Model.FullTimeZone == "-2_(GMT-02:00) Mid-Atlantic" ? "selected" : "")>(GMT-02:00) Mid-Atlantic</option>
+            <option timezoneid="27" gmtadjustment="GMT-01:00" usedaylighttime="0" value="-1_(GMT-01:00) Cape Verde Is." @(Model.FullTimeZone == "-1_(GMT-01:00) Cape Verde Is." ? "selected" : "")>(GMT-01:00) Cape Verde Is.</option>
+            <option timezoneid="28" gmtadjustment="GMT-01:00" usedaylighttime="1" value="-1_(GMT-01:00) Azores" @(Model.FullTimeZone == "-1_(GMT-01:00) Azores" ? "selected" : "")>(GMT-01:00) Azores</option>
+            <option timezoneid="29" gmtadjustment="GMT+00:00" usedaylighttime="0" value="0_(GMT+00:00) Casablanca, Monrovia, Reykjavik" @(Model.FullTimeZone == "0_(GMT+00:00) Casablanca, Monrovia, Reykjavik" ? "selected" : "")>(GMT+00:00) Casablanca, Monrovia, Reykjavik</option>
+            <option timezoneid="30" gmtadjustment="GMT+00:00" usedaylighttime="1" value="0_(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London" @(Model.FullTimeZone == "0_(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London" ? "selected" : "")>(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London</option>
+            <option timezoneid="31" gmtadjustment="GMT+01:00" usedaylighttime="1" value="1_(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna" @(Model.FullTimeZone == "1_(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna" ? "selected" : "")>(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</option>
+            <option timezoneid="32" gmtadjustment="GMT+01:00" usedaylighttime="1" value="1_(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague" @(Model.FullTimeZone == "1_(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague" ? "selected" : "")>(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>
+            <option timezoneid="33" gmtadjustment="GMT+01:00" usedaylighttime="1" value="1_(GMT+01:00) Brussels, Copenhagen, Madrid, Paris" @(Model.FullTimeZone == "1_(GMT+01:00) Brussels, Copenhagen, Madrid, Paris" ? "selected" : "")>(GMT+01:00) Brussels, Copenhagen, Madrid, Paris</option>
+            <option timezoneid="34" gmtadjustment="GMT+01:00" usedaylighttime="1" value="1_(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb" @(Model.FullTimeZone == "1_(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb" ? "selected" : "")>(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb</option>
+            <option timezoneid="35" gmtadjustment="GMT+01:00" usedaylighttime="1" value="1_(GMT+01:00) West Central Africa" @(Model.FullTimeZone == "1_(GMT+01:00) West Central Africa" ? "selected" : "")>(GMT+01:00) West Central Africa</option>
+            <option timezoneid="36" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Amman" @(Model.FullTimeZone == "2_(GMT+02:00) Amman" ? "selected" : "")>(GMT+02:00) Amman</option>
+            <option timezoneid="37" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Athens, Bucharest, Istanbul" @(Model.FullTimeZone == "2_(GMT+02:00) Athens, Bucharest, Istanbul" ? "selected" : "")>(GMT+02:00) Athens, Bucharest, Istanbul</option>
+            <option timezoneid="38" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Beirut" @(Model.FullTimeZone == "2_(GMT+02:00) Beirut" ? "selected" : "")>(GMT+02:00) Beirut</option>
+            <option timezoneid="39" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Cairo" @(Model.FullTimeZone == "2_(GMT+02:00) Cairo" ? "selected" : "")>(GMT+02:00) Cairo</option>
+            <option timezoneid="40" gmtadjustment="GMT+02:00" usedaylighttime="0" value="2_(GMT+02:00) Harare, Pretoria" @(Model.FullTimeZone == "2_(GMT+02:00) Harare, Pretoria" ? "selected" : "")>(GMT+02:00) Harare, Pretoria</option>
+            <option timezoneid="41" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius" @(Model.FullTimeZone == "2_(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius" ? "selected" : "")>(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
+            <option timezoneid="42" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Jerusalem" @(Model.FullTimeZone == "2_(GMT+02:00) Jerusalem" ? "selected" : "")>(GMT+02:00) Jerusalem</option>
+            <option timezoneid="43" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Minsk" @(Model.FullTimeZone == "2_(GMT+02:00) Minsk" ? "selected" : "")>(GMT+02:00) Minsk</option>
+            <option timezoneid="44" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Windhoek" @(Model.FullTimeZone == "2_(GMT+02:00) Windhoek" ? "selected" : "")>(GMT+02:00) Windhoek</option>
+            <option timezoneid="45" gmtadjustment="GMT+03:00" usedaylighttime="0" value="3_(GMT+03:00) Kuwait, Riyadh, Baghdad" @(Model.FullTimeZone == "3_(GMT+03:00) Kuwait, Riyadh, Baghdad" ? "selected" : "")>(GMT+03:00) Kuwait, Riyadh, Baghdad</option>
+            <option timezoneid="46" gmtadjustment="GMT+03:00" usedaylighttime="1" value="3_(GMT+03:00) Moscow, St. Petersburg, Volgograd" @(Model.FullTimeZone == "3_(GMT+03:00) Moscow, St. Petersburg, Volgograd" ? "selected" : "")>(GMT+03:00) Moscow, St. Petersburg, Volgograd</option>
+            <option timezoneid="47" gmtadjustment="GMT+03:00" usedaylighttime="0" value="3_(GMT+03:00) Nairobi" @(Model.FullTimeZone == "3_(GMT+03:00) Nairobi" ? "selected" : "")>(GMT+03:00) Nairobi</option>
+            <option timezoneid="48" gmtadjustment="GMT+03:00" usedaylighttime="0" value="3_(GMT+03:00) Tbilisi" @(Model.FullTimeZone == "3_(GMT+03:00) Tbilisi" ? "selected" : "")>(GMT+03:00) Tbilisi</option>
+            <option timezoneid="49" gmtadjustment="GMT+03:30" usedaylighttime="1" value="3.5_(GMT+03:30) Tehran" @(Model.FullTimeZone == "3.5_(GMT+03:30) Tehran" ? "selected" : "")>(GMT+03:30) Tehran</option>
+            <option timezoneid="50" gmtadjustment="GMT+04:00" usedaylighttime="0" value="4_(GMT+04:00) Abu Dhabi, Muscat" @(Model.FullTimeZone == "4_(GMT+04:00) Abu Dhabi, Muscat" ? "selected" : "")>(GMT+04:00) Abu Dhabi, Muscat</option>
+            <option timezoneid="51" gmtadjustment="GMT+04:00" usedaylighttime="1" value="4_(GMT+04:00) Baku" @(Model.FullTimeZone == "4_(GMT+04:00) Baku" ? "selected" : "")>(GMT+04:00) Baku</option>
+            <option timezoneid="52" gmtadjustment="GMT+04:00" usedaylighttime="1" value="4_(GMT+04:00) Yerevan" @(Model.FullTimeZone == "4_(GMT+04:00) Yerevan" ? "selected" : "")>(GMT+04:00) Yerevan</option>
+            <option timezoneid="53" gmtadjustment="GMT+04:30" usedaylighttime="0" value="4.5_(GMT+04:30) Kabul" @(Model.FullTimeZone == "4.5_(GMT+04:30) Kabul" ? "selected" : "")>(GMT+04:30) Kabul</option>
+            <option timezoneid="54" gmtadjustment="GMT+05:00" usedaylighttime="1" value="5_(GMT+05:00) Yekaterinburg" @(Model.FullTimeZone == "5_(GMT+05:00) Yekaterinburg" ? "selected" : "")>(GMT+05:00) Yekaterinburg</option>
+            <option timezoneid="55" gmtadjustment="GMT+05:00" usedaylighttime="0" value="5_(GMT+05:00) Islamabad, Karachi, Tashkent" @(Model.FullTimeZone == "5_(GMT+05:00) Islamabad, Karachi, Tashkent" ? "selected" : "")>(GMT+05:00) Islamabad, Karachi, Tashkent</option>
+            <option timezoneid="56" gmtadjustment="GMT+05:30" usedaylighttime="0" value="5.5_(GMT+05:30) Sri Jayawardenapura" @(Model.FullTimeZone == "5.5_(GMT+05:30) Sri Jayawardenapura" ? "selected" : "")>(GMT+05:30) Sri Jayawardenapura</option>
+            <option timezoneid="57" gmtadjustment="GMT+05:30" usedaylighttime="0" value="5.5_(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi" @(Model.FullTimeZone == "5.5_(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi" ? "selected" : "")>(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi</option>
+            <option timezoneid="58" gmtadjustment="GMT+05:45" usedaylighttime="0" value="5.75_(GMT+05:45) Kathmandu" @(Model.FullTimeZone == "5.75_(GMT+05:45) Kathmandu" ? "selected" : "")>(GMT+05:45) Kathmandu</option>
+            <option timezoneid="59" gmtadjustment="GMT+06:00" usedaylighttime="1" value="6_(GMT+06:00) Almaty, Novosibirsk" @(Model.FullTimeZone == "6_(GMT+06:00) Almaty, Novosibirsk" ? "selected" : "")>(GMT+06:00) Almaty, Novosibirsk</option>
+            <option timezoneid="60" gmtadjustment="GMT+06:00" usedaylighttime="0" value="6_(GMT+06:00) Astana, Dhaka" @(Model.FullTimeZone == "6_(GMT+06:00) Astana, Dhaka" ? "selected" : "")>(GMT+06:00) Astana, Dhaka</option>
+            <option timezoneid="61" gmtadjustment="GMT+06:30" usedaylighttime="0" value="6.5_(GMT+06:30) Yangon (Rangoon)" @(Model.FullTimeZone == "6.5_(GMT+06:30) Yangon (Rangoon)" ? "selected" : "")>(GMT+06:30) Yangon (Rangoon)</option>
+            <option timezoneid="62" gmtadjustment="GMT+07:00" usedaylighttime="0" value="7_(GMT+07:00) Bangkok, Hanoi, Jakarta" @(Model.FullTimeZone == "7_(GMT+07:00) Bangkok, Hanoi, Jakarta" ? "selected" : "")>(GMT+07:00) Bangkok, Hanoi, Jakarta</option>
+            <option timezoneid="63" gmtadjustment="GMT+07:00" usedaylighttime="1" value="7_(GMT+07:00) Krasnoyarsk" @(Model.FullTimeZone == "7_(GMT+07:00) Krasnoyarsk" ? "selected" : "")>(GMT+07:00) Krasnoyarsk</option>
+            <option timezoneid="64" gmtadjustment="GMT+08:00" usedaylighttime="0" value="8_(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi" @(Model.FullTimeZone == "8_(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi" ? "selected" : "")>(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
+            <option timezoneid="65" gmtadjustment="GMT+08:00" usedaylighttime="0" value="8_(GMT+08:00) Kuala Lumpur, Singapore" @(Model.FullTimeZone == "8_(GMT+08:00) Kuala Lumpur, Singapore" ? "selected" : "")>(GMT+08:00) Kuala Lumpur, Singapore</option>
+            <option timezoneid="66" gmtadjustment="GMT+08:00" usedaylighttime="0" value="8_(GMT+08:00) Irkutsk, Ulaan Bataar" @(Model.FullTimeZone == "8_(GMT+08:00) Irkutsk, Ulaan Bataar" ? "selected" : "")>(GMT+08:00) Irkutsk, Ulaan Bataar</option>
+            <option timezoneid="67" gmtadjustment="GMT+08:00" usedaylighttime="0" value="8_(GMT+08:00) Perth" @(Model.FullTimeZone == "8_(GMT+08:00) Perth" ? "selected" : "")>(GMT+08:00) Perth</option>
+            <option timezoneid="68" gmtadjustment="GMT+08:00" usedaylighttime="0" value="8_(GMT+08:00) Taipei" @(Model.FullTimeZone == "8_(GMT+08:00) Taipei" ? "selected" : "")>(GMT+08:00) Taipei</option>
+            <option timezoneid="69" gmtadjustment="GMT+09:00" usedaylighttime="0" value="9_(GMT+09:00) Osaka, Sapporo, Tokyo" @(Model.FullTimeZone == "9_(GMT+09:00) Osaka, Sapporo, Tokyo" ? "selected" : "")>(GMT+09:00) Osaka, Sapporo, Tokyo</option>
+            <option timezoneid="70" gmtadjustment="GMT+09:00" usedaylighttime="0" value="9_(GMT+09:00) Seoul" @(Model.FullTimeZone == "9_(GMT+09:00) Seoul" ? "selected" : "")>(GMT+09:00) Seoul</option>
+            <option timezoneid="71" gmtadjustment="GMT+09:00" usedaylighttime="1" value="9_(GMT+09:00) Yakutsk" @(Model.FullTimeZone == "9_(GMT+09:00) Yakutsk" ? "selected" : "")>(GMT+09:00) Yakutsk</option>
+            <option timezoneid="72" gmtadjustment="GMT+09:30" usedaylighttime="0" value="9.5_(GMT+09:30) Adelaide" @(Model.FullTimeZone == "9.5_(GMT+09:30) Adelaide" ? "selected" : "")>(GMT+09:30) Adelaide</option>
+            <option timezoneid="73" gmtadjustment="GMT+09:30" usedaylighttime="0" value="9.5_(GMT+09:30) Darwin" @(Model.FullTimeZone == "9.5_(GMT+09:30) Darwin" ? "selected" : "")>(GMT+09:30) Darwin</option>
+            <option timezoneid="74" gmtadjustment="GMT+10:00" usedaylighttime="0" value="10_(GMT+10:00) Brisbane" @(Model.FullTimeZone == "10_(GMT+10:00) Brisbane" ? "selected" : "")>(GMT+10:00) Brisbane</option>
+            <option timezoneid="75" gmtadjustment="GMT+10:00" usedaylighttime="1" value="10_(GMT+10:00) Canberra, Melbourne, Sydney" @(Model.FullTimeZone == "10_(GMT+10:00) Canberra, Melbourne, Sydney" ? "selected" : "")>(GMT+10:00) Canberra, Melbourne, Sydney</option>
+            <option timezoneid="76" gmtadjustment="GMT+10:00" usedaylighttime="1" value="10_(GMT+10:00) Hobart" @(Model.FullTimeZone == "10_(GMT+10:00) Hobart" ? "selected" : "")>(GMT+10:00) Hobart</option>
+            <option timezoneid="77" gmtadjustment="GMT+10:00" usedaylighttime="0" value="10_(GMT+10:00) Guam, Port Moresby" @(Model.FullTimeZone == "10_(GMT+10:00) Guam, Port Moresby" ? "selected" : "")>(GMT+10:00) Guam, Port Moresby</option>
+            <option timezoneid="78" gmtadjustment="GMT+10:00" usedaylighttime="1" value="10_(GMT+10:00) Vladivostok" @(Model.FullTimeZone == "10_(GMT+10:00) Vladivostok" ? "selected" : "")>(GMT+10:00) Vladivostok</option>
+            <option timezoneid="79" gmtadjustment="GMT+11:00" usedaylighttime="1" value="11_(GMT+11:00) Magadan, Solomon Is., New Caledonia" @(Model.FullTimeZone == "11_(GMT+11:00) Magadan, Solomon Is., New Caledonia" ? "selected" : "")>(GMT+11:00) Magadan, Solomon Is., New Caledonia</option>
+            <option timezoneid="80" gmtadjustment="GMT+12:00" usedaylighttime="1" value="12_(GMT+12:00) Auckland, Wellington" @(Model.FullTimeZone == "12_(GMT+12:00) Auckland, Wellington" ? "selected" : "")>(GMT+12:00) Auckland, Wellington</option>
+            <option timezoneid="81" gmtadjustment="GMT+12:00" usedaylighttime="0" value="12_(GMT+12:00) Fiji, Kamchatka, Marshall Is." @(Model.FullTimeZone == "12_(GMT+12:00) Fiji, Kamchatka, Marshall Is." ? "selected" : "")>(GMT+12:00) Fiji, Kamchatka, Marshall Is.</option>
+            <option timezoneid="82" gmtadjustment="GMT+13:00" usedaylighttime="0" value="13_(GMT+13:00) Nuku'alofa" @(Model.FullTimeZone == "13_(GMT+13:00) Nuku'alofa" ? "selected" : "")>(GMT+13:00) Nuku'alofa</option>
+        </select>
+    </div>
+</div>*@

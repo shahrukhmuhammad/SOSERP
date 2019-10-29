@@ -1,0 +1,148 @@
+﻿@model Ecommerce.Entity.ShippingPackageModel
+@{ 
+
+}
+<style>
+    .setpadding {
+        margin-bottom: 10px !important;
+    }
+    .pnlHeading {
+        padding: 5px 10px !important;
+    }
+</style>
+<form id="frm" class="form-Modal" method="post" action="~/Secure/Ecommerce/ShippingPackageRecord">
+    <div class="modal-content">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Shipping Package</h4>
+        </div>
+        <div class="modal-body" style="padding:0px !important;">
+            <div class="col-sm-6" style="padding-top: 5px;">
+                <div class="row form-group setpadding">
+                    <label class="col-sm-3 horizontal-label">Type</label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(x => x.PackageType, (SelectList)ViewBag.PackageTypeList, "-Select Package Type-", new { @class = "form-control input-sm" })
+                    </div>
+                </div>
+                <div class="row form-group setpadding">
+                    <label class="col-sm-3 horizontal-label">Priority Level:</label>
+                    <div class="col-sm-8">
+                        <label> <input type="radio" id="PriorityLevel" name="PriorityLevel" value="@PriorityLevel.Economy" /> Economy </label>
+                        <label><input type="radio" id="PriorityLevel" name="PriorityLevel" value="Express" /> Express </label>
+                        <label><input type="radio" id="PriorityLevel" name="PriorityLevel" value="Standard" /> Standard </label>
+                    </div>
+                </div>
+                <div class="row form-group setpadding">
+                    <label class="col-sm-3 horizontal-label">Delivery Time:</label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(x => x.DeliveryTime, new { @class = "form-control input-sm" })
+                    </div>
+                </div>
+                <div class="row form-group setpadding">
+                    <label class="col-sm-3 horizontal-label">Shipping Company:</label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(x => x.ShippingCompanyId, (SelectList)ViewBag.ShippingCompanyList, "-Select Shipping Company-", new { @class = "form-control input-sm" })
+                    </div>
+                </div>
+                <div class="row form-group setpadding">
+                    <label class="col-sm-3 horizontal-label">Weight From <br /> <span style="font-size:11px;margin-left: 53px; font-weight:bold">(kg) </span></label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(x => x.WeightFrom, new { @class = "form-control input-sm", @type = "number" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6" style="padding-top: 5px;">
+                <div class="row form-group">
+                    <label class="col-md-3">Title: </label>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(x => x.Title, new { @class = "form-control input-sm" })
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="col-md-3">Details: </label>
+                    <div class="col-md-9">
+                        @Html.TextAreaFor(x => x.Details, new { @class = "form-control input-sm", @style = "height:95px;" })
+                    </div>
+                </div>
+                <div class="row form-group-sm">
+                    <label class="col-md-3">Weight To <br /> <span style="font-size:11px;margin-left: 35px;font-weight:bold">(kg) </span> </label>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(x => x.WeightTo, new { @class = "form-control input-sm", @type = "number" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <div class="panel panel-info" style="margin-bottom: 5px !important;">
+                            <div class="panel-heading pnlHeading">
+                                <strong>Regular Postage Prices</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <label class="col-md-3">Package Postage: </label>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(x => x.Price, new { @class = "form-control input-sm", @type = "number" })
+                        @Html.ValidationMessageFor(x => x.Price)
+                    </div>
+                    <label class="col-md-3">Each Additional Item Postage: </label>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(x => x.AdditionalPrice, new { @class = "form-control input-sm", @type = "number" })
+                        @Html.ValidationMessageFor(x => x.AdditionalPrice)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <div class="panel panel-info" style="margin-bottom: 5px !important;">
+                            <div class="panel-heading pnlHeading">
+                                <strong>Restricted Postcode Postage Prices</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <label class="col-md-3">Restricted Postcode Postage: </label>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(x => x.RestrictedPostagePrice, new { @class = "form-control input-sm", @type = "number" })
+                        @Html.ValidationMessageFor(x => x.RestrictedPostagePrice)
+                    </div>
+                    <label class="col-md-3">Each Additional Item Restricted Postcode Postage: </label>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(x => x.AdditionalRestrictedPostagePrice, new { @class = "form-control input-sm", @type = "number" })
+                        @Html.ValidationMessageFor(x => x.AdditionalRestrictedPostagePrice)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <div class="panel panel-info" style="margin-bottom: 5px !important;">
+                            <div class="panel-heading pnlHeading">
+                                <strong>Bulk Postage Prices</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <label class="col-md-3">Per Pallet Price: </label>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(x => x.PerPalletPrice, new { @class = "form-control input-sm", @type = "number" })
+                        @Html.ValidationMessageFor(x => x.PerPalletPrice)
+                    </div>
+                    <label class="col-md-3">Each Additional Pallet Price </label>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(x => x.AdditionalPalletPrice, new { @class = "form-control input-sm", @type = "number" })
+                        @Html.ValidationMessageFor(x => x.AdditionalPalletPrice)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</form>

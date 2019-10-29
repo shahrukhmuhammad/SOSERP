@@ -1,0 +1,77 @@
+﻿@model List<CMS.Entity.CmsContent>
+@{
+    ViewBag.Title = "All Contents";
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/CMS/WebContent/Record" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Content</a>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table id="cms-Contents-dataTable" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Name" id="dataTable_0" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Status" id="dataTable_1" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Updated" id="dataTable_2" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Created" id="dataTable_3" /></th>
+                            <th class="text-center" width="100px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@foreach (var x in Model)
+                        {
+                            <tr>
+                                <td><input type="checkbox" class="checkIt" value="@x.Id" /></td>
+                                <td>@x.Name</td>
+                                <td>
+                                    @if (x.Status == CMS.Entity.CmsContentStatus.Published)
+                                    {
+                                        <label class="label label-success">Published</label>
+                                    }
+                                    else
+                                    {
+                                        <label class="label label-warning">Draft</label>
+                                    }
+                                </td>
+                                <td>@x.UpdatedOn</td>
+                                <td>@x.CreatedOn</td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <a href="~/CMS/WebContent/Record/@x.Id" class="btn btn-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                        <a href="javascript://" onclick="changeStatus('@Url.Action("ChangeContentStatus")', '@x.Id')" class="btn @(x.Status == CMS.Entity.CmsContentStatus.Published ? "btn-warning" : "btn-success")" title="@(x.Status == CMS.Entity.CmsContentStatus.Published ? "Draft Now" : "Publish Now")"><i class="fa @(x.Status == CMS.Entity.CmsContentStatus.Published ? "fa-ban" : "fa-check")"></i></a>
+                                        <a href="javascript://" onclick="deleteRecord('@Url.Action("Delete")', '@x.Id')" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/CMS/WebContent/Record" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Content</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#cms-Contents-dataTable", [1, 2, 3, 4], [0, 5]);
+            getCmsContents("#cms-Contents-dataTable");
+        });
+    </script>
+}

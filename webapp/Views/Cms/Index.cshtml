@@ -1,0 +1,36 @@
+﻿@model CMS.Entity.CmsPage
+@{
+    ViewBag.Title = Model.BrowserTitle;
+    var homepageMetadata = ViewBag.WebsiteMetadata as List<CMS.Entity.CmsSeoMetadata>;
+    if (homepageMetadata != null)
+    {
+        if (homepageMetadata.Count() > 0)
+        {
+            homepageMetadata = homepageMetadata.Where(x => x.AllPages == true).ToList();
+        }
+    }
+}
+
+@section metadata{
+    @foreach (var x in homepageMetadata)
+    {
+        @Html.Raw(x.Metadata);
+    }
+
+    @Html.Raw(Model.Metadata)
+}
+
+<div id="page-content">
+    <!--START OF PAGE WRAPPER-->
+    <div class="wrapper clearfix">
+        <div class="text-wrapper clearfix" style="margin-bottom:50px;">
+            @Html.Raw(Model.Contents)
+
+            @foreach (var x in Model.PageSections.Where(x => x.Status == CMS.Entity.CmsPageSectionStatus.Published).ToList())
+            {
+                @Html.Raw(x.Section)
+            }
+        </div>
+    </div>
+    <!--END OF PAGE WRAPPER-->
+</div>

@@ -1,0 +1,25 @@
+@model List<BaseApp.Entity.AppUser>
+
+<form method="post" id="dmsPermissionsForm">
+    <div style="max-height:430px;overflow-y:auto;margin-bottom:10px">
+        <table class="table table-condensed">
+            @foreach (var u in Model)
+            {
+                <tr>
+                    <td style="width:18px" class="bg-info"><input type="checkbox" checked="checked" class="dms-doc-user" data-user="@u.Id" /></td>
+                    <td>@u.FirstName @u.MiddleName @u.LastName <small class="text-muted">@u.Role.Code @u.Role.Title</small></td>
+                </tr>
+            }
+            @foreach (var u in (List<BaseApp.Entity.AppUser>)ViewBag.Users)
+            {
+                <tr>
+                    <td style="width:18px" class="bg-info"><input type="checkbox" class="dms-doc-user" data-user="@u.Id" /></td>
+                    <td>@u.FirstName @u.MiddleName @u.LastName <small class="text-muted">@u.Role.Code @u.Role.Title</small></td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="text-center">
+        <button class="btn btn-success" onclick="setPermissions('@Request.RequestContext.RouteData.Values["id"]')" type="button"><i class="fa fa-check-square-o"></i> Update Permissions</button>
+    </div>
+</form>

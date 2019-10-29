@@ -1,0 +1,38 @@
+﻿<form class="col-md-12" role="form">
+    <div class="form-group" style="margin-top:8px; font-size:15px;">
+        <span><i class="fa fa-lightbulb-o"></i><a href="javascript://" style="margin:6px;" id="suggested-link">Suggested</a> |</span>
+        <span style="margin-left:8px;"> <i class="fa fa-search-plus"></i><a href="javascript://" style="margin:6px;" id="browse-link">Browse</a> </span>
+    </div>
+    <input type="hidden" value="" class="box-section" />
+    <div id="suggested-box" style="display:none;"></div>
+    <div id="browse-box" style="display:none;"></div>
+</form>
+
+<script src="~/Scripts/jquery-2.2.3.js"></script>
+<script src="~/Scripts/jQuery DataTable/dataTable-original.js"></script>
+<script src="~/Scripts/jQuery DataTable/jquery.datatables.customsearch.js"></script>
+<script src="~/Content/SelectJS/js/selectize.js"></script>
+<script src="~/Content/SelectJS/js/index.js"></script>
+<script>
+    $(function () {
+        $('#suggested-link').on('click', function () {
+            $('#suggested-box').toggle(300, function () {
+                $.get("/Secure/TaskManagement/_SuggestedList", function (d) {
+                    $('#browse-box').hide();
+                    $('#suggested-box').html(d);
+                    filterDataTable("#tasks-dataTable", [0, 1, 2, 3, 4]);
+                });
+            });
+        });
+
+        $('#browse-link').on('click', function () {
+            $('#browse-box').toggle(300, function () {
+                $.get("/Secure/TaskManagement/_BrowsePanel", function (d) {
+                    $('#suggested-box').hide();
+                    $('#browse-box').html(d);
+                    //filterDataTable("#tasks-dataTable", [0, 1, 2, 3, 4]);
+                });
+            });
+        });
+    });
+</script>

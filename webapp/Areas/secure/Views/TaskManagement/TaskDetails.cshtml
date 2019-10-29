@@ -1,0 +1,514 @@
+﻿
+@{
+    ViewBag.Title = "Task Details";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link href="~/Content/activityStream.css" rel="stylesheet" />
+<link href="~/Content/SelectJS/css/normalize.css" rel="stylesheet" />
+<link href="~/Content/SelectJS/css/selectize.default.css" rel="stylesheet" />
+<link href="~/Content/DMS/dms.css" rel="stylesheet" />
+<style>
+    .dms-frame {
+        height: 330px !important;
+    }
+</style>
+    <style>
+        @@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+ #sidebar-cards-archive ul li {
+    list-style: none;
+}
+/*** custom checkboxes ***/
+ .favourite-check > input[type=checkbox] {
+     position: relative;
+}
+/* to hide the checkbox itself */
+ .favourite-check>input[type=checkbox]:before {
+     position: absolute;
+    background-color: #FFFFFF;
+    height: 100%;
+width: 100%;
+    font-family: FontAwesome;
+    display: inline-block;
+    content: "\f006";
+    letter-spacing: 10px;
+}
+/* space between checkbox and label */
+ .favourite-check > input[type=checkbox]:checked:before {
+     font-family: FontAwesome;
+    display: inline-block;
+    content: "\f005";
+    letter-spacing: 5px;
+}
+/* allow space for check mark */
+
+    /*** custom checkboxes ***/
+ .following-check > input[type=checkbox] {
+     position: relative;
+}
+/* to hide the checkbox itself */
+ .following-check>input[type=checkbox]:before {
+     position: absolute;
+    background-color: #FFFFFF;
+    height: 100%;
+width: 100%;
+    font-family: FontAwesome;
+    display: inline-block;
+    content: "\f045";
+    letter-spacing: 10px;
+}
+/* space between checkbox and label */
+ .following-check > input[type=checkbox]:checked:before {
+     font-family: FontAwesome;
+    display: inline-block;
+    content: "\f14d";
+    letter-spacing: 5px;
+}
+/* allow space for check mark */
+        /*** custom checkboxes ***/
+ .rss-check > input[type=checkbox] {
+     position: relative;
+}
+/* to hide the checkbox itself */
+ .rss-check>input[type=checkbox]:before {
+     position: absolute;
+    background-color: #FFFFFF;
+    height: 100%;
+width: 100%;
+    font-family: FontAwesome;
+    display: inline-block;
+    content: "\f09e";
+    letter-spacing: 10px;
+}
+/* space between checkbox and label */
+ .rss-check > input[type=checkbox]:checked:before {
+     font-family: FontAwesome;
+    display: inline-block;
+    content: "\f143";
+    letter-spacing: 5px;
+}
+/* allow space for check mark */
+</style>
+}
+
+<div class="user-Profile" style="padding: 6px;">
+    <div class="row tb-padding" style="margin-top:15px;">
+        <div class="col-sm-12">
+            <div class="progress">
+                <div class="dropdown">
+                    <a href="javascript://" class="progress-bar progress-bar-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 16.66%; position:relative;"><img src="~/Content/Images/tick.png" style="position: absolute; height: 25px;left: 10px;top: 5px;" /> New</a>
+                    <ul class="dropdown-menu" style="top:-122px; width:auto;">
+                        <li><a href="javascript://"><img src="~/Content/Images/tick.png" style="height: 20px;" />  Created On: @DateTime.UtcNow by Super Admin</a></li>
+                        <li><a href="javascript://" style="text-align:center">Scheduled to Start On: @DateTime.UtcNow</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="javascript://" class="btn btn-primary"><i class="fa fa-share"></i> Assign Task</a></li>
+                    </ul>
+                </div>
+                @*<div class="dropdown">
+                    <a href="javascript://" class="progress-bar progress-bar-muted dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 12.50%; position:relative;">Awaiting</a>
+                    <ul class="dropdown-menu" style="top:-122px; width:auto;">
+                        <li><a href="javascript://"><img src="~/Content/Images/tick.png" style="height: 20px;" />  Status asdasd On: @DateTime.UtcNow by Super Admin</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="javascript://" class="btn btn-primary"><i class="fa fa-share"></i> Send Reminder</a></li>
+                    </ul>
+                </div>*@
+                <div class="dropdown">
+                    <a href="javascript://" class="progress-bar progress-bar-muted dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 16.66%; position:relative;">Assigned</a>
+                    <ul class="dropdown-menu" style="top:-122px; left:100px; width:auto; display:none">
+                        <li><a href="javascript://"><img src="~/Content/Images/tick.png" style="height: 20px;" />  Assigned On: @DateTime.UtcNow by Super Admin</a></li>
+                        <li><a href="javascript://" style="text-align:center">Assigned To: Reyan Cambel</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="javascript://" class="btn btn-primary"><i class="fa fa-share"></i> In Progress</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="javascript://" class="progress-bar progress-bar-muted dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 16.66%; position:relative;">In Progress</a>
+                    <ul class="dropdown-menu" style="top:-122px; left:292px; width:auto; display:none">
+                        <li><a href="javascript://"><img src="~/Content/Images/tick.png" style="height: 20px;" />  Started On: @DateTime.UtcNow</a></li>
+                        <li><a href="javascript://" style="text-align:center">18% Completed</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="javascript://" class="btn btn-primary"><i class="fa fa-share"></i> Completed</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="javascript://" class="progress-bar progress-bar-muted dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 16.66%; position:relative;">Completed</a>
+                    <ul class="dropdown-menu" style="top:-82px; left:445px; width:auto; display:none">
+                        <li><a href="javascript://"><img src="~/Content/Images/tick.png" style="height: 20px;" />  Completd On: @DateTime.UtcNow</a></li>
+                        <li><a href="javascript://" style="text-align:center">&nbsp;</a></li>
+                        <li role="separator" class="divider"></li>
+                        @*<li><a href="javascript://" class="btn btn-primary"><i class="fa fa-share"></i>&nbsp;</a></li>*@
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a href="javascript://" class="progress-bar progress-bar-muted dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 16.66%; position:relative;">Backlocked</a>
+                    <ul class="dropdown-menu" style="top:-82px; left:600px; width:auto; display:none">
+                        <li><a href="javascript://"><img src="~/Content/Images/tick.png" style="height: 20px;" />  Backlocked On: @DateTime.UtcNow</a></li>
+                        <li><a href="javascript://" style="text-align:center">Reason: Lorem ipsem dolor sit emit</a></li>
+                        <li role="separator" class="divider"></li>
+                        @*<li><a href="javascript://" class="btn btn-primary"><i class="fa fa-share"></i>&nbsp;</a></li>*@
+                    </ul>
+                </div>
+                @*<div class="dropdown">
+                    <a href="javascript://" class="progress-bar progress-bar-muted dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 14.28%; position:relative;">Overdue</a>
+                </div>*@
+                <div class="dropdown">
+                    <a href="javascript://" class="progress-bar progress-bar-muted dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 16.66%; position:relative;">Cancelled</a>
+                    <ul class="dropdown-menu" style="top:-82px; left:710px; width:auto; display:none">
+                        <li><a href="javascript://"><img src="~/Content/Images/tick.png" style="height: 20px;" />  Cancelled On: @DateTime.UtcNow</a></li>
+                        <li><a href="javascript://" style="text-align:center">Reason: Lorem ipsem dolor sit emit</a></li>
+                        <li role="separator" class="divider"></li>
+                        @*<li><a href="javascript://" class="btn btn-primary"><i class="fa fa-share"></i>&nbsp;</a></li>*@
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="font-size:18px;">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <b> Priority Level: </b> <i class="fa fa-tint text-danger" style="font-size:25px;"></i>
+            </div>
+            <div class="col-md-2 col-md-offset-1">
+                <b> Score: </b> <span style="font-size:16px;">None</span>
+            </div>
+            <div class="col-md-3 col-md-offset-2" style="margin-top:-3px">
+                <div class="pull-right" style="margin-right:15px;"> 
+                    <a href="javascript://" title="Edit Task"><i class="fa fa-edit fa-2x pull-left"></i></a>
+                    <a href="javascript://" title="Duplicate Task"><i class="fa fa-files-o fa-2x pull-left"></i></a>
+                    @*<a href="javascript://" title="Duplicate Task"><i class="fa fa-rss-square fa-2x pull-left"></i></a>*@
+                    <div style="margin-top:-6px;" class="pull-left">
+                        <label class="rss-check">
+                            <input type="checkbox" title="Follow this" style="color:#f99d3c; font-size:2em; margin-right: 28px" class="fa fa-rss" />
+                        </label>
+                    </div>
+                    @*<i class="fa fa-share-square-o fa-2x pull-left"></i>*@
+                    <div style="margin-top:-6px;" class="pull-left">
+                        <label class="following-check">
+                            <input type="checkbox" title="Share it" style="color:#f96868; font-size:2em; margin-right: 28px" class="fa fa-share-square-o" />
+                        </label>
+                    </div>
+                    <div style="margin-top:-6px;" class="pull-left">
+                        <label class="favourite-check">
+                            <input type="checkbox" title="Add to favorite" style="color:#3db728; font-size:2em;" class="fa fa-star-o" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top:8px;">
+        <div class="col-sm-7">
+            <h4 class="panel-heading panel panel-warning" style="background-color:#ff9393; margin-bottom:0;">
+                Fill in profile data <i class="fa fa-edit pull-right"></i> 
+            </h4>
+            <div class="panel-body" style="padding:3px;">
+                <div class="pull-left">
+                    <b>Creation Date:</b> 18/12/2016
+                </div>
+                <div class="pull-right">
+                    <b> <i class="fa fa-edit"></i> Deadline:</b> 25/02/2017
+                </div>
+                <div class="clearfix"></div>
+                <div style="padding:6px 0;">
+                    <i class="fa fa-edit pull-right"></i>
+                    <p class="text-left text-justify"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+            </div>
+            <div class="panel-body" style="padding:3px; margin-top:15px;">
+                <div class="col-md-6">
+                    <h4 class="text-center">Percentage Completion</h4>
+                    <div align="center" style="margin-top:15px;">
+                        <canvas id="demo-3" style="height:160px;"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h4 class="text-center">Time</h4>
+                    <div align="center" style="margin-top:15px;">
+                        <h5 class="text-center">Planned Hours</h5>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="45" style="width: 100%;">
+                                45
+                            </div>
+                        </div>
+                        <h5 class="text-center">Actual Hours</h5>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="45" style="width: 25%; background-color:#ff0000">
+                                25
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5" style="padding-left:0px;">
+            <h4 class="panel-heading panel panel-warning" style="background-color:#8aaac7; margin-bottom:0;">
+                Summary <span class="pull-right badge" style="font-size:15px;"># Ab45aRewe4MN</span>
+            </h4>
+            <div class="panel-body" style="padding:0;">
+                <table class="table table-condensed table-striped">
+                    <tr>
+                        <th style="padding-left:25px;">Created By: </th>
+                        <td style="padding-right:25px;"> <i class="fa fa-user"></i> Super Admin</td>
+                    </tr>
+                    <tr>
+                        <th style="padding-left:25px; width:165px;">Managed By: </th>
+                        <td style="padding-right:25px;">
+                            <table class="table table-striped table-condensed">
+                                <tr>
+                                    <td>
+                                        <select id="select-ManagedBy" name="assignees[]" multiple class="demo-default col-sm-12 col-xs-12 no-padding" placeholder="Type employees name to assign">
+                                            <option selected value="Reyan Cambel">Reyan Cambel</option>
+                                            <option selected value="Luis Hycks">Luis Hycks</option>
+                                            <option selected value="Voughan Thomas">Voughan Thomas</option>
+                                            <option selected value="Lee Marshal">Lee Marshal</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding-left:25px;">Assigned To: </th>
+                        <td style="padding-right:25px;">
+                            <table class="table table-striped table-condensed">
+                                <tr>
+                                    <td>
+                                        <select id="select-AssignTo" name="assignees[]" multiple class="demo-default col-sm-12 col-xs-12 no-padding" placeholder="Type employees name to assign">
+                                            <option value="Reyan Cambel">Reyan Cambel</option>
+                                            <option value="Luis Hycks">Luis Hycks</option>
+                                            <option selected value="Voughan Thomas">Voughan Thomas</option>
+                                            <option selected value="Lee Marshal">Lee Marshal</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding-left:25px;">Observer: </th>
+                        <td style="padding-right:25px;">
+                            <table class="table table-striped table-condensed">
+                                <tr>
+                                    <td>
+                                        <select id="select-Observer" name="assignees[]" multiple class="demo-default col-sm-12 col-xs-12 no-padding" placeholder="Type employees name to assign">
+                                            <option value="Reyan Cambel">Reyan Cambel</option>
+                                            <option value="Luis Hycks">Luis Hycks</option>
+                                            <option value="Voughan Thomas">Voughan Thomas</option>
+                                            <option selected value="Lee Marshal">Lee Marshal</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-7">
+            <h4 class="text-left">Checklist</h4>
+            <div class="panel-body" style="padding:0;">
+                @{ Html.RenderPartial("~/Areas/Secure/Views/TaskManagement/_Checklist.cshtml");}
+            </div>
+            <h4 class="text-left">
+                Task Activity Stream
+                <span class="pull-right" style="margin-right:8px;">
+                    <a href="javascript://"><span class=""><i class="fa fa-plus-circle fa-2x"></i></span></a>
+                </span>
+            </h4>
+            <div class="panel-body" style="padding:3px;">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="activity-feed">
+                            <div class="feed-item">
+                                <div class="date">Sep 25</div>
+                                <div class="text">Responded to need <a href="javascript://">“Volunteer opportunity”</a></div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="date">Sep 24</div>
+                                <div class="text">Added an interest “Volunteer Activities”</div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="date">Sep 23</div>
+                                <div class="text">Joined the group <a href="javascript://">“Boardsmanship Forum”</a></div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="date">Sep 21</div>
+                                <div class="text">Responded to need <a href="javascript://">“In-Kind Opportunity”</a></div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="date">Sep 18</div>
+                                <div class="text">Created need <a href="javascript://">“Volunteer Opportunity”</a></div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="date">Sep 17</div>
+                                <div class="text">Attending the event <a href="javascript://">“Some New Event”</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5" style="padding-left:0px;">
+            <h4 class="text-left">CRM</h4>
+            <div class="panel-body" style="padding:0;">
+                <div>
+                    <table class="table table-condensed table-striped">
+                        <tr>
+                            <th style="padding:15px; text-align:left"> <a href="javascript://">Zulf Khan</a> </th>
+                        </tr>
+                    </table>
+                    <div style="padding:15px;">
+                        <div>
+                            <label> <i class="fa fa-check-circle text-success"></i> Allow client to check task status </label>
+                        </div>
+                        <div>
+                            <label> <i class="fa fa-check-circle text-success"></i> Allow client to send feedback </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="text-left">Event Management</h4>
+            <div class="panel-body" style="padding:0;">
+                <table class="table table-condensed table-striped">
+                    <tr>
+                        <th style="padding-left:25px; width:165px;">Title: </th>
+                        <td style="padding-right:25px;">
+                            Event title section area 
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding-left:25px;">Event Type: </th>
+                        <td style="padding-right:25px;">
+                            Appointment
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding-left:25px;">Details: </th>
+                        <td style="padding-right:25px;">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding-left:25px;">Event Organizer: </th>
+                        <td style="padding-right:25px;">
+                            Reyan Cambel
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding-left:25px;">Show Organizer's Contact Detail to RSVP: </th>
+                        <td style="padding-right:25px;">
+                            Yes
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding-left:25px;">Location: </th>
+                        <td style="padding-right:25px;">
+                            Vienna, Virginia USA
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding-left:25px;">Event Schedule: </th>
+                        <td style="">
+                            <table class="table table-condensed table-striped">
+                                <tr>
+                                    <th>Start Date</th>
+                                    <td>20/11/2016</td>
+                                </tr>
+                                <tr>
+                                    <th>Start Time</th>
+                                    <td>08:00 am</td>
+                                </tr>
+                                <tr>
+                                    <th>End Time</th>
+                                    <td>04:00 pm</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding-left:25px;">RSVP: </th>
+                        <td style="">
+                            <table class="table table-condensed table-striped">
+                                <tr>
+                                    <td>Farhan Zafar <span class="badge"> Pending </span> </td>
+                                </tr>
+                                <tr>
+                                    <td> Mark Zu <span class="badge" style="background-color: #398439;"> Accept </span></td>
+                                </tr>
+                                <tr>
+                                    <td> Linda Miral <span class="badge" style="background-color:#d43f3a;"> Reject </span> </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"> <a href="javascript://"><i class="fa fa-plus-square text-primary"></i> <b>Invite more</b></a> </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <h4 class="text-left">Documents</h4>
+            <div class="panel-body" style="padding:0;">
+                <div>@Html.Action("RenderDms", "Docs", new { path = "/dms/Users/" + CurrentUser.Code + "/", viewMode = "list", area = "DMS" })</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script src="~/Scripts/waterbubble.js"></script>
+<script src="~/Content/SelectJS/js/selectize.js"></script>
+<script src="~/Content/SelectJS/js/index.js"></script>
+<script src="~/Scripts/flowplayer/flowplayer-3.2.13.min.js"></script>
+<script src="~/Scripts/DMS/dms.js"></script>
+    <script>
+
+        $(function () {
+            $('#select-AssignTo').selectize({
+                plugins: ['remove_button'],
+                openOnFocus: false
+            });
+            $('#select-ManagedBy').selectize({
+                plugins: ['remove_button'],
+                openOnFocus: false
+            });
+            $('#select-Observer').selectize({
+                plugins: ['remove_button'],
+                openOnFocus: false
+            });
+            $('#demo-3').waterbubble({ txt: '50%', });
+            $(document).ready(function () {
+                $('.raphael-group-48-creditgroup').css('display', 'none');
+            });
+        });
+    </script>
+    }
+
+@*<div class="col-sm-8 no-padding">
+    <div style="padding:3px;">
+        <div class="panel panel-warning" style="margin-bottom: 8px;">
+            <h4 class="panel-heading">
+                Task Name v1.1
+            </h4>
+            <div class="panel-body">
+                <h5 class="text-center"> Task Details Display..... </h5>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-sm-4 no-padding">
+    <div style="padding:3px;">
+        <div class="panel panel-info" style="margin-bottom: 8px;">
+            <h4 class="panel-heading">
+                Task Summary
+            </h4>
+            <div class="panel-body">
+                <h5 class="text-center"> Task Summary Display..... </h5>
+            </div>
+        </div>
+    </div>
+</div>*@

@@ -1,0 +1,105 @@
+﻿@model List<BaseApp.Entity.AppRole>
+@{
+    ViewBag.Title = "All Roles";
+}
+@section styles{
+    <style>
+        .roleTitle {
+            text-decoration: none !important;
+        }
+    </style>
+
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Role and Permissions</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-Modal">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">@ViewBag.Title</h4>
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            @*<a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Back"><i class="fa fa-angle-left"></i></a>*@
+                                            @*<a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleRoles")', '.checkIt')" class="btn btn-danger forceRedirect" title="Delete"><i class="fa fa-trash"></i></a>*@
+                                            <a href="~/Secure/AccessControl/Role" class="btn btn-primary" title="Add New Role"><i class="fa fa-plus"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="table-responsive">
+                                            <table id="acl-Roles-dataTable" class="table table-hover table-condensed">
+                                                <thead>
+                                                    <tr>
+                                                        @*<th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                                                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Code" id="dataTable_0" /></th>*@
+                                                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_1" /></th>
+                                                        @*<th><input class="form-control input-sm input-tbl" type="text" placeholder="Description" id="dataTable_2" /></th>
+                                                            <th class="col-sm-3"><input class="form-control input-sm input-tbl" type="text" placeholder="Permissions" id="dataTable_3" /></th>
+                                                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Created On" id="dataTable_4" /></th>
+                                                            <th class="text-center" width="70px">Action</th>*@
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var x in Model)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <a href="javascript://" class="active roleTitle" data-id="@x.Id" title="Select">@x.Code @x.Title <i class="fa fa-share fa-2x pull-right"></i></a>
+
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7" id="modalBody">
+                            <div class="form-Modal">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Permissions</h4>
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            <button type="submit" class="btn btn-success" title="Submit"><i class="fa fa-check"> Save</i></button>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
+                @*<a href="javascript://" class="btn btn-success">Save <i class="fa fa-chevron-right"></i></a>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#acl-Roles-dataTable", [0]);
+            //getAppUserRoles("#acl-Roles-dataTable");
+            $('#acl-Roles-dataTable_length,#acl-Roles-dataTable_filter').css('display', 'none');
+        });
+    </script>
+}

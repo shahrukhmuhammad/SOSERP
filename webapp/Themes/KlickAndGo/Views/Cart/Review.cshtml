@@ -1,0 +1,345 @@
+﻿@model Framework.Data.Order
+@{
+    ViewBag.Title = "Review";
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_CheckoutLayout.cshtml";
+}
+@section head{
+    <link href='//fonts.googleapis.com/css?family=Open Sans:400,600' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open Sans:400,600' rel='stylesheet' type='text/css'>
+    <link href="~/Themes/KlickAndGo/Content/cdn.shopify.com/app/services/8825910/assets/v2-ltr-2017-09-19-0b20e000d80995df86f7fbc195bf4962-16094182073911761634.css" rel="stylesheet" media="all" />
+    <script src="~/Themes/KlickAndGo/Content/cdn.shopify.com/s/assets/checkout_2017-09-19-3bb09355085bf13b64bea607e9196470733e44061824553835d1c1338d06c156.js"></script>
+
+}
+
+
+<div class="content">
+    <div class="wrap">
+        <div class="sidebar" style="padding-top:9em;">
+
+            <div class="sidebar__content" style="width:380px;">
+                <div class="order-summary order-summary--is-collapsed">
+                    @*<h2 class="visually-hidden">Order summary</h2>*@
+                   
+                     <div class="order-summary__sections">
+                        <h3 class="text-center" style="text-align:center">Order Details</h3>
+                        <table class="table table-bordered table-responsive table-striped">
+                            <thead style="background-color:#215d9f; color:white">
+                                <tr>
+                                    <td>Sku</td>
+                                    <td>Product</td>
+                                    <td>Qty</td>
+                                    <td>Price</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               @foreach( var a in ViewBag.CartDetails as List<Framework.Data.CartItem>)
+                               {
+                                   <tr>
+                                       <td>@a.Sku</td>
+                                       <td>@a.Title</td>
+                                       <td>@a.Quantity</td>
+                                       <td>@a.RetailPrice</td>
+                                   </tr>
+                               }
+                            </tbody>
+                        </table>
+                        @*<div class="order-summary__section order-summary__section--product-list">
+                            <div class="order-summary__section__content">
+                                <table class="product-table table ">
+
+                                    <thead style="background-color:#215d9f">
+                                        <tr>
+                                            <th style="word-break:initial;">SKU</th>
+
+                                            <th style="word-break:initial;">Product@((Model.Details.Count > 1) ? "s" : String.Empty)</th>
+                                            <th style="word-break:initial;">Quantity</th>
+                                            @*<th style="word-break:initial;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var a in Model.Details)
+                                        {
+                                            <tr class="product ">
+                                                <td class="product__image order-summary__emphasis">
+                                                    <div style="width:5em;">
+                                                        @a.Sku
+
+                                                    </div>
+                                                </td>
+                                                <td class="product__description">
+                                                    <span class="product__description__name order-summary__emphasis">
+                                                        @a.Description
+                                                    </span>
+                                                </td>
+                                                <td style="text-align:center" class="product__quantity order-summary__emphasis">
+                                                    @a.Quantity
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                <div class="order-summary__scroll-indicator">
+                                    Scroll for more items
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="12" viewBox="0 0 10 12"><path d="M9.817 7.624l-4.375 4.2c-.245.235-.64.235-.884 0l-4.375-4.2c-.244-.234-.244-.614 0-.848.245-.235.64-.235.884 0L4.375 9.95V.6c0-.332.28-.6.625-.6s.625.268.625.6v9.35l3.308-3.174c.122-.117.282-.176.442-.176.16 0 .32.06.442.176.244.234.244.614 0 .848"></path></svg>
+                                </div>
+                            </div>
+                        </div>*@
+
+                        <div class="order-summary__section order-summary__section--discount">
+
+                            <div class="fieldset">
+                                <div class="field">
+                                    <div>Enter Coupon Code:</div>
+                                    @if (Model.Discount == 0 && Model.OrderStatus == OrderStatus.PendingPayment)
+                                    {
+                                        using (Html.BeginForm("ValidateCoupon", "Cart", new { id = Model.OrderId, orderid = Model.OrderId }, FormMethod.Post, new { @id = "frm", @name = "frm", enctype = "multipart/form-data" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+
+                                            <div class="field__input-btn-wrapper">
+
+
+                                                <div class="field__input-wrapper">
+
+                                                    <input placeholder="Enter coupon code" type="text" name="CouponCode" id="CouponCode" class="field__input" style="min-width:0" maxlength="10" />
+                                                </div>
+                                                <input type="submit" value="Submit" class="field__input-btn btn btn--disabled" />
+
+                                            </div>
+                                            <div class="row">
+                                                @Html.Raw(TempData["StatusMessage"] == null ? "" : TempData["StatusMessage"].ToString())
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="order-summary__section order-summary__section--total-lines">
+                            <table class="total-line-table" aria-live="polite" aria-atomic="true">
+
+                                <tbody class="total-line-table__tbody">
+                                    <tr class="total-line total-line--shipping">
+                                        <td class="total-line__name">Order Code</td>
+                                        <td class="total-line__price">
+                                            <span class="order-summary__emphasis">@Model.OrderCode</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="total-line total-line--subtotal">
+                                        <td class="total-line__name">Subtotal</td>
+                                        <td class="total-line__price">
+                                            <span class="order-summary__emphasis">@Model.Details.Sum(x => x.Total).ToString("c")</span>
+                                        </td>
+                                        
+                                          
+                                    </tr>
+                                    <tr class="total-line total-line--subtotal">
+                                        <td class="total-line__name">Shipping Cost</td>
+                                        <td class="total-line__price">
+                                            <span class="order-summary__emphasis">@Model.ShippingCost.ToString("c")</span>
+                                        </td>
+                                        </tr>
+                                        @if (Model.Discount > 0)
+                                        {
+                                            <tr class="total-line total-line--shipping">
+
+                                            <td class="total-line__name">Discount</td>
+                                            <td class="total-line__price">
+                                                <span class="order-summary__emphasis">@Model.Discount.ToString("c")</span>
+                                            </td>
+                                        </tr>
+                                    }
+
+
+                                </tbody>
+                                <tfoot class="total-line-table__footer">
+                                    <tr class="total-line">
+                                        <td class="total-line__name payment-due-label">
+                                            <span class="payment-due-label__total">Grand Total</span>
+
+                                        </td>
+                                        <td class="total-line__price payment-due">
+                                            <span class="payment-due__price">@Model.GrandTotal.ToString("c")</span>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main" role="main" style="padding-top:6em;">
+            <div class="main__header">
+
+                <ul class="breadcrumb ">
+                    <li class="breadcrumb__item breadcrumb__item--completed">
+                        <a class="breadcrumb__link" href="@Url.Action("Index","Cart")">Cart</a>
+                        <svg class="icon-svg icon-svg--size-10 breadcrumb__chevron-icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M2 1l1-1 4 4 1 1-1 1-4 4-1-1 4-4"></path></svg>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--current">
+                        <a class="breadcrumb__link" href="@Url.Action("Checkout","Cart")">
+                            Customer information
+                        </a>
+                        <svg class="icon-svg icon-svg--size-10 breadcrumb__chevron-icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M2 1l1-1 4 4 1 1-1 1-4 4-1-1 4-4"></path></svg>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--blank">
+                        <span class="breadcrumb__text">Order Detail</span>
+                        <svg class="icon-svg icon-svg--size-10 breadcrumb__chevron-icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M2 1l1-1 4 4 1 1-1 1-4 4-1-1 4-4"></path></svg>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--blank">
+                        <span class="breadcrumb__text">Payment method</span>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="main__content">
+                <div class="step" data-step="shipping_method">
+
+                    <div class="step__sections">
+                        <div class="section">
+                            <div class="content-box">
+                                <div class="content-box__row content-box__row--tight-spacing-vertical content-box__row--secondary">
+                                    <div class="review-block">
+                                        <div class="review-block__inner">
+                                            <div class="review-block__label">
+                                                Order Date:
+                                            </div>
+                                            <div class="review-block__content">
+                                                @Model.DateTime.ToString("MMM dd, yyyy hh:mm tt")
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section section--shipping-method">
+                            <div class="section__header">
+                                <h2 class="section__title">Shipping Info</h2>
+                            </div>
+                            <div class="section__content">
+
+                                <div class="content-box" data-shipping-methods="">
+
+                                    <div class="content-box__row">
+                                        @if (Model.IsLocalPickup == LocalPickup.No)
+                                        {
+                                            <span class="content-box__emphasis">
+                                                @Html.Raw(Model.ShippingDetails.Replace("\n", "<br />"))
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="content-box__emphasis">
+                                                Local pickups can be collected at:
+                                                @Settings.Get.LocalPickupAddress
+                                            </span>
+                                        }
+                                        @*<div class="radio-wrapper" data-shipping-method="shopify-Standard%20Shipping%202-3%20Days-2.99">
+                                                <div class="radio__input">
+                                                    <input class="input-radio" data-checkout-total-shipping="£2.99" data-checkout-total-shipping-cents="299" data-checkout-shipping-rate="£2.99" data-checkout-original-shipping-rate="£2.99" data-checkout-total-taxes="£4.91" data-checkout-total-taxes-cents="491" data-checkout-total-price="£29.49" data-checkout-total-price-cents="2949" data-checkout-payment-due="£29.49" data-checkout-payment-due-cents="2949" data-checkout-payment-subform="required" data-checkout-subtotal-price="£26.50" data-checkout-subtotal-price-cents="2650" data-backup="shopify-Standard%20Shipping%202-3%20Days-2.99" type="radio" value="shopify-Standard%20Shipping%202-3%20Days-2.99" name="checkout[shipping_rate][id]" id="checkout_shipping_rate_id_shopify-standard20shipping202-320days-299" checked="checked">
+                                                </div>
+                                                <label class="radio__label" for="checkout_shipping_rate_id_shopify-standard20shipping202-320days-299">
+                                                   data-shipping-method-label-title="Standard Shipping 2-3 Days">
+                                                        Standard Shipping 2-3 Days
+                                                    </span>
+                                                    <span class="radio__label__accessory">
+                                                        <span class="content-box__emphasis">
+                                                            £2.99
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                            </div>*@ <!-- /radio-wrapper-->
+                                    </div>
+
+
+                                    @if (Model.IsLocalPickup == LocalPickup.No)
+                                    {
+                                        <div class="content-box__row">
+                                            <span class="content-box__emphasis">
+                                                
+                                            </span>
+                                        </div>
+                                    }
+                                    @*<div class="radio-wrapper" data-shipping-method="shopify-Next%20Working%20Day%20Delivery%20(order%20before%202pm%20Mon-Fri)-4.99">
+                                            <div class="radio__input">
+                                                <input class="input-radio" data-checkout-total-shipping="£4.99" data-checkout-total-shipping-cents="499" data-checkout-shipping-rate="£4.99" data-checkout-original-shipping-rate="£4.99" data-checkout-total-taxes="£5.25" data-checkout-total-taxes-cents="525" data-checkout-total-price="£31.49" data-checkout-total-price-cents="3149" data-checkout-payment-due="£31.49" data-checkout-payment-due-cents="3149" data-checkout-payment-subform="required" data-checkout-subtotal-price="£26.50" data-checkout-subtotal-price-cents="2650" data-backup="shopify-Next%20Working%20Day%20Delivery%20(order%20before%202pm%20Mon-Fri)-4.99" type="radio" value="shopify-Next%20Working%20Day%20Delivery%20(order%20before%202pm%20Mon-Fri)-4.99" name="checkout[shipping_rate][id]" id="checkout_shipping_rate_id_shopify-next20working20day20delivery20order20before202pm20mon-fri-499">
+                                            </div>
+                                            <label class="radio__label" for="checkout_shipping_rate_id_shopify-next20working20day20delivery20order20before202pm20mon-fri-499">
+                                                <span class="radio__label__primary" data-shipping-method-label-title="Next Working Day Delivery (order before 2pm Mon-Fri)">
+                                                    Next Working Day Delivery (order before 2pm Mon-Fri)
+                                                </span>
+                                                <span class="radio__label__accessory">
+                                                    <span class="content-box__emphasis">
+                                                        £4.99
+                                                    </span>
+                                                </span>
+                                            </label>
+                                        </div>*@ <!-- /radio-wrapper-->
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step__footer" data-step-footer="">
+                        <button name="button" type="submit" class="step__footer__continue-btn btn" value="Confirm Order &#9658;" onclick="window.location='@Url.Action("PaymentOptions","Cart", new {id = Model.OrderId})'">
+                            <span class="btn__content">Continue to payment method</span>
+                            <i class="btn__spinner icon icon--button-spinner"></i>
+                        </button>
+                        <a class="step__footer__previous-link" href="@Url.Action("Checkout","Cart")">
+                            <svg class="icon-svg icon-svg--color-accent icon-svg--size-10 previous-link__icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M8 1L7 0 3 4 2 5l1 1 4 4 1-1-4-4"></path></svg><span class="step__footer__previous-link-content">Return to customer information</span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            @*<div class="main__footer">
+                    <div class="modals">
+                        <div class="modal-backdrop" role="dialog" id="policy-6100867" aria-labelledby="policy-6100867-title" data-modal-backdrop="">
+                            <div class="modal">
+                                <div class="modal__header">
+                                    <h1 class="modal__header__title" id="policy-6100867-title">
+                                        Refund policy
+                                    </h1>
+                                    <div class="modal__close">
+                                        <button type="button" class="icon icon--close-modal" data-modal-close="">
+                                            <span class="visually-hidden">
+                                                Close
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="modal__content">
+                                    <svg class="modal__loading-icon icon icon--spinner" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><path d="M32 16c0 8.837-7.163 16-16 16S0 24.837 0 16 7.163 0 16 0v2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14h2z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div role="contentinfo" aria-label="Footer">
+                        <ul class="policy-list">
+                            <li class="policy-list__item">
+                                <a title="Refund policy" data-modal="policy-6100867" data-close-text="Close" href="https://www.rinkit.com/8825910/policies/6100867.html">Refund policy</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+</div>
+
+@section foot{
+    <script type="text/javascript" src="~/Scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
+
+
+

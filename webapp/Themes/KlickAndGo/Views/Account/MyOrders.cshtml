@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Framework.Data.Order>
+@using Framework.Services
+@{
+    ViewBag.Title = "My Account";
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_Layout.cshtml";
+}
+<section id="content">
+    <div class="container">
+
+
+        <ol class="breadcrumb">
+            <li><a href="~/" title="Home">Home</a></li>
+
+            <li>Account</li>
+
+        </ol>
+        @*<div class="row">
+            <div class="col-sm-12">
+                <div class="title clearfix">
+                    <h1>My Account</h1>
+                </div>
+            </div>
+        </div>*@
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="sfbox box-order-history">
+                    <h4 class="sfbox-title">Order History</h4>
+
+
+                    @if (@Model.Any())
+                        {
+                    <ul class="orderSummary">
+                        <li>Payment Done: <strong>@Model.Count(x => x.OrderStatus == OrderStatus.PaymentDone)</strong></li>
+                        <li>Completed: <strong>@Model.Count(x => x.OrderStatus == OrderStatus.Completed)</strong></li>
+                        <li>Awaiting Dispatch: <strong>@Model.Count(x => x.OrderStatus == OrderStatus.AwaitingShipment)</strong></li>
+                        <li>Cancelled: <strong>@Model.Count(x => x.OrderStatus == OrderStatus.Cancelled)</strong></li>
+                        @*<li>Pending Payments: <strong>@Model.Count(x => x.OrderStatus == OrderStatus.PendingOrders)</strong></li>*@
+                        <li>Total Orders: <strong>@Model.Count()</strong></li>
+                    </ul>
+                   
+                    <table border="1" class="table-responsive col-md-12">
+                        <tr>
+                            <td style="width: 30%;text-align:center;"><strong>Order # </strong></td>
+                            <td style="width: 20%;text-align:center;"><strong>Date </strong></td>
+                            <td style="width: 20%;text-align:center;"><strong> Amount </strong></td>
+                            <td style="width: 20%;text-align:center;"><strong>Status </strong></td>
+                            <td style="width: 20%;text-align:center;">&nbsp;</td>
+                        </tr>
+                        @foreach (var o in Model)
+                        {
+                            <tr>
+                                <td style="width: 30%;text-align:center; ">@o.OrderCode</td>
+                                <td style="width: 20%;text-align:center;">@o.DateTime.ToString("MMM-dd-yyy")</td>
+                                <td style="width: 20%;text-align:center;">@o.GrandTotal.ToString("c")</td>
+                                <td style="width: 20%;text-align:center;">@o.OrderStatus.ToString().SplitCamelCase()</td>
+                                <td style="width: 20%; text-align:center;"><a href="@Url.Action("OrderDetail", "Account", new { id = @o.OrderId })" class="colorbox">Details</a></td>
+                            </tr>
+                        }
+                    </table>
+                    }
+                    else
+                    {
+
+                    <div class="text-center page-404 mgb-30" style="padding-top:30px;">
+
+                        <h2 class="title">You don't have any order yet.</h2>
+                    </div>
+                    }
+                    
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

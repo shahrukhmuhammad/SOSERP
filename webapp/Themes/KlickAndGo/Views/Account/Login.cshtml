@@ -1,0 +1,175 @@
+﻿@model WebsiteUI.Models.LoginModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_Layout.cshtml";
+}
+@section head{
+    <style type="text/css">
+ 
+.validator{
+    color:red;
+}
+        #content
+        {
+            background-color: #f3f6f6;
+            padding: 0px 0 0px 0;
+        }
+        .sfbox {
+    background: none repeat scroll 0 0 #fff;
+    border-radius: 0px;
+    box-shadow: none;
+    /* box-shadow: 0 2px 2px rgba(11, 25, 28, 0.1); */
+    font-size: 14px;
+    line-height: 26px;
+    margin: 0 0 30px;
+    overflow: hidden;
+    padding: 20px 20px 30px 20px;
+    position: relative;
+    border-left: 1px solid rgba(11, 25, 28, 0.1);
+}
+        .btn_c {
+    height: 40px;
+    font-size: 14px;
+    line-height: 40px;
+    color: #ffffff;
+    display: block;
+    margin: 30px auto 0;
+    padding: 0 58px;
+    font-weight: 700;
+    max-width: 288px;
+    background: #04468d;
+    border-radius: 6px;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    -moz-transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+}
+        #content .frm .txtbox, #content .sidebar .txtbox {
+    width: 100%;
+    border: 1px solid #d7dbdb;
+    height: 30px;
+    display: block;
+    padding: 0 15px;
+    border-radius: 6px;
+    margin: 0;
+    font-size: 14px;
+    color: #000000;
+    font-weight: 400;
+}
+ </style>}
+<div id="content" style="background-color: #ffffff;">
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="~/" title="Home">Home</a></li>
+
+            <li>Account</li>
+
+        </ol>
+      
+        <div class="row">
+            @*<div class="col-sm-12">
+                <div class="title clearfix">
+                    <h1>Login</h1>
+                </div>
+            </div>*@
+        </div>
+        <div class="row mt20">
+    <div class="col-md-7 col-sm-8">
+        <div class="sfbox box-login" style="border-left:none;">
+           
+               <p style="font-weight:500;color:#04468d;font-size:36px;">
+                   Welcome!
+               </p>
+            <div style="margin-top:30px;">
+                <strong>Profile</strong><br />
+                Create a profile to use for all upcoming purchases. It's a safe, easy way to store payment information and product preferences. Login now to set up your profile!
+            </div>
+                 <p style="margin-top: 10px;line-height: 65px;">
+
+            </p>
+            <div class="row" style="margin-top:30px;">
+                @if (Request["ReturnUrl"] == "/Cart/Checkout")
+
+                {
+                    <div class="col-sm-5 col-ms-6 col-xs-4">
+                        <input type="submit" class="btn_c btn_close" name="Checkout as a Guest" style="margin:0px 0px 0px 0px;" value="Checkout as a Guest" onclick="window.location = '@Url.Action("Checkout", "Cart", new { guestcheckout = "true" })';">
+                    </div>
+                }
+                @*<div class="col-sm-5 col-ms-6 col-xs-4"><p><a href=""></a></p></div>*@
+                @*<p class="text-right"></p>*@
+                <div class="col-sm-7 col-ms-6 col-xs-8 text-right">New Customer? <a href="~/account/register">Sign up &rarr;</a></div>
+                <div class="col-sm-7 col-ms-6 col-xs-8 col-md-12 text-right">Trade portal Account? <a href="~/account/register?type=tradeportal">Sign up &rarr;</a></div>
+
+            </div>
+
+        </div>
+    </div>
+            <div class="col-md-5 col-sm-8">
+                <div class="sfbox box-login">
+                    @using (Html.BeginForm())
+                    { @Html.AntiForgeryToken()
+                        @Html.Raw(TempData["StatusMessage"] == null ? "" : TempData["StatusMessage"].ToString())
+                        @*<input type="hidden" value="customer_login" name="form_type" /><input type="hidden" name="utf8" value="✓" />*@
+
+                        <div class="frm">
+                            <label for="customer_email" class="lbltxt">Email</label>
+                            @Html.TextBoxFor(x => x.Email, new { @type = "email", @class = "txtbox" })
+                            @Html.ValidationMessageFor(m => m.Email, null, new { @class = "validator" })
+                        </div>
+
+
+                        <div class="frm">
+                            <label for="customer_password" class="lbltxt">Password</label>
+                            @Html.PasswordFor(x => x.Password, new { @class = "txtbox" })
+                            @Html.ValidationMessageFor(m => m.Password, null, new { @class = "validator" })
+                        </div>
+                       
+                            <div class="col-sm-5 col-ms-6 col-xs-4 pull-right">
+                    <input type="submit" class="btn_c" value="Sign In"></div>
+                      
+                    }
+
+
+
+                    @*<div class="row">*@
+                        <div class="col-sm-5 col-ms-6 col-xs-4" style="width:200px;">
+                            <a href="@Url.Action("Recovery","Account")">Forgot your password?</a>
+                 </div>
+                        @*<p class="text-right"></p>*@
+                        @*<div class="col-sm-7 col-ms-6 col-xs-8 text-right">New Customer? <a href="~/account/register">Sign up &rarr;</a></div>
+                        <div class="col-sm-7 col-ms-6 col-xs-8 col-md-12 text-right">Trade portal Account? <a href="~/account/register?type=tradeportal">Sign up &rarr;</a></div>*@
+
+                    @*</div>*@
+
+                </div>
+            </div>
+</div>
+
+        <div class="row mt20">
+           
+        </div>
+    </div>
+</div>
+
+@*@if (Request["ReturnUrl"] == "/Cart/Checkout")
+
+{
+    <div id="content">
+        <div class="container" >
+            <div class="row mt20" style="margin-top:0px;">
+                <div class="col-md-6 col-sm-8 col-md-offset-3 col-sm-offset-2">
+                    <div class="sfbox box-login">
+                        <div class="col-md-9 pull-right" >
+                            <input type="submit" class="btn_c btn_close" name="Checkout as a Guest" style="margin:0px 0px 0px 0px;" value="Checkout as a Guest" onclick="window.location = '@Url.Action("Checkout", "Cart", new { guestcheckout = "true" })';">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}*@

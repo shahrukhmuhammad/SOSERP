@@ -1,0 +1,291 @@
+﻿@model WebsiteUI.Models.RegisterModel
+@{
+    ViewBag.Title = "My Account";
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_Layout.cshtml";
+}
+
+ 
+@section head{
+<style type="text/css">
+    .validator
+    {
+        color: red;
+    }
+
+        #content
+        {
+            background-color: #f3f6f6;
+            padding: 0px 0 0px 0;
+        }
+
+        .sfbox
+        {
+            background: none repeat scroll 0 0 #fff;
+            border-radius: 0px;
+            box-shadow: none;
+            /* box-shadow: 0 2px 2px rgba(11, 25, 28, 0.1); */
+            font-size: 14px;
+            line-height: 26px;
+            margin: 0 0 30px;
+            overflow: hidden;
+            padding: 20px 20px 30px 20px;
+            position: relative;
+            /*border-left: 1px solid rgba(11, 25, 28, 0.1);*/
+        }
+
+        .btn_c
+        {
+            height: 40px;
+            font-size: 14px;
+            line-height: 40px;
+            color: #ffffff;
+            display: block;
+            margin: 30px auto 0;
+            padding: 0 58px;
+            font-weight: 700;
+            max-width: 288px;
+            background: #04468d;
+            border-radius: 6px;
+            border: none;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            -moz-transition: all 0.3s;
+            -webkit-transition: all 0.3s;
+            -o-transition: all 0.3s;
+        }
+
+       #content .box-registration .lbltxt, #content .box-login .lbltxt
+        {
+            padding: 20px 0 0 0;
+            width: 165px;
+        }
+
+        #content .frm .txtbox, #content .sidebar .txtbox
+        {
+            width: 65%;
+            border: 1px solid #d7dbdb;
+            height: 30px;
+            display: inline-block;
+            padding: 0 15px;
+            border-radius: 6px;
+            margin: 0;
+            font-size: 14px;
+            color: #000000;
+            font-weight: 400;
+        }
+</style>
+
+    <link type="text/css" rel="stylesheet" href="~/Content/zebra_datepicker.css" />
+<link href="~/Themes/KlickAndGo/Content/ProfileView.css"type="text/css" rel="stylesheet" />
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
+            <div class="well profile">
+                <div class="col-sm-12">
+                    <div class="col-xs-12 col-sm-8">
+                        <h2 style="text-transform:capitalize;">@User.Identity.Name</h2>
+                        @*<p><strong>About: </strong> Web Designer / UI. </p>
+                        <p><strong>Hobbies: </strong> Read, out with friends, listen to music, draw and learn new things. </p>
+                        <p>
+                            <strong>Skills: </strong>
+                            <span class="tags">html5</span>
+                            <span class="tags">css3</span>
+                            <span class="tags">jquery</span>
+                            <span class="tags">bootstrap3</span>
+                        </p>*@
+                    </div>
+                    <div class="col-xs-12 col-sm-4 text-center">
+                        @*<figure>
+                            <img src="http://www.localcrimenews.com/wp-content/uploads/2013/07/default-user-icon-profile.png" alt="" class="img-circle img-responsive">
+                            <figcaption class="ratings">
+                                <p>
+                                    Ratings
+                                    <a href="#">
+                                        <span class="fa fa-star"></span>
+                                    </a>
+                                    <a href="#">
+                                        <span class="fa fa-star"></span>
+                                    </a>
+                                    <a href="#">
+                                        <span class="fa fa-star"></span>
+                                    </a>
+                                    <a href="#">
+                                        <span class="fa fa-star"></span>
+                                    </a>
+                                    <a href="#">
+                                        <span class="fa fa-star-o"></span>
+                                    </a>
+                                </p>
+                            </figcaption>
+                        </figure>*@
+                    </div>
+                </div>
+                <div class="col-xs-12 divider text-center">
+                    <div class="col-xs-12 col-sm-4 emphasis">
+                        <h2><strong> </strong></h2>
+                        <p><small></small></p>
+                        <button class="btn btn-success btn-block"> Change Password </button>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 emphasis active">
+                        <h2><strong> </strong></h2>
+                        <p><small></small></p>
+                        <button class="btn btn-info btn-block">
+                        <span class="fa fa-user"></span> View Profile </button>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 emphasis">
+                        <h2><strong> </strong></h2>
+                        <p><small></small></p>
+                        <div class="btn-group dropup btn-block">
+                            <button type="button" class="btn btn-primary">My Orders </button>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu text-left" role="menu">
+                                <li><a href="#"><span class="fa fa-envelope pull-right"></span> Send an email </a></li>
+                                <li><a href="#"><span class="fa fa-list pull-right"></span> Add or remove from a list  </a></li>
+                                <li class="divider"></li>
+                                <li><a href="#"><span class="fa fa-warning pull-right"></span>Report this user for spam</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#" class="btn disabled" role="button"> Unfollow </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="content"style="background-color: #ffffff;">
+    <div class="container">
+
+
+            <div class="row mt20">
+
+             
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Raw(TempData["StatusMessage"] == null ? "" : TempData["StatusMessage"].ToString())
+                    
+                    <div class="sfbox box-registration">
+                        <div class="col-md-6  col-sm-8 ">
+
+                            <div class="frm">
+                                <label class="lbltxt">
+                                    @Html.LabelFor(x => x.Email)
+                                </label>
+                                @Html.TextBoxFor(x => x.Email, new { @class = "txtbox" })
+                                @Html.ValidationMessageFor(x => x.Email, null, new { @class = "validator" })
+                            </div>
+
+                            <div class="frm">
+                                <label class="lbltxt">
+                                    @Html.LabelFor(x => x.Gender)
+                                </label>
+                                <label>@Html.RadioButtonFor(x => x.Gender, Gender.Male) Male</label>
+                                <label>@Html.RadioButtonFor(x => x.Gender, Gender.Female) Female</label>
+                                @Html.ValidationMessageFor(x => x.Gender, null, new { @class = "validator" })
+                            </div>
+                            <div class="frm" style="margin-top:11px;">
+                                <label class="lbltxt">@Html.LabelFor(x => x.DateOfBirth, new { @type = "datetime" })</label>
+                                @Html.TextBoxFor(x => x.DateOfBirth, new { @class = "txtbox" })
+                                @Html.ValidationMessageFor(x => x.DateOfBirth, null, new { @class = "validator" })
+
+
+                            </div>
+
+                            <div class="frm">
+                                <label class="lbltxt">@Html.LabelFor(x => x.Country)</label>
+                                @Html.DropDownListFor(x => x.Country, Framework.Mvc.MvcHelper.CountryList(), new { @class = "txtbox" })
+                            </div>
+                            <div class="frm">
+                                <label class="lbltxt">
+                                    @Html.LabelFor(x => x.City)
+                                </label>
+                                @Html.TextBoxFor(x => x.City, new { @class = "txtbox" })
+                                @Html.ValidationMessageFor(x => x.City, null, new { @class = "validator" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6  col-sm-8 ">
+
+                            <div class="frm">
+                                <label class="lbltxt">
+                                    @Html.LabelFor(x => x.Phone)
+                                </label>
+                                @Html.TextBoxFor(x => x.Phone, new { @class = "txtbox", maxlength = "21" })
+                                @Html.ValidationMessageFor(x => x.Phone, null, new { @class = "validator" })
+                            </div>
+                            <div class="frm">
+                                <label class="lbltxt">
+                                    @Html.LabelFor(x => x.PostalCode)
+                                </label>
+                                @Html.TextBoxFor(x => x.PostalCode, new { @maxlength = "6", @class = "txtbox" })
+                                @Html.ValidationMessageFor(x => x.PostalCode, null, new { @class = "validator" })
+                            </div>
+                            <div class="frm">
+                                <label class="lbltxt">
+                                    @Html.LabelFor(x => x.PostalAddress)
+                                </label>
+                                @Html.TextBoxFor(x => x.PostalAddress, new { @class = "txtbox" })
+
+                                @Html.ValidationMessageFor(x => x.PostalAddress, null, new { @class = "validator" })
+                            </div>
+                            <div class="frm">
+                                <label class="lbltxt">
+                                    @Html.LabelFor(x => x.Password)
+                                </label>
+                                @Html.PasswordFor(x => x.Password, new { @class = "txtbox" })
+                                @Html.ValidationMessageFor(x => x.Password, null, new { @class = "validator" })
+                            </div>
+                            <div class="frm">
+                                <label class="lbltxt">
+                                    @Html.LabelFor(x => x.ConfirmPassword)
+                                </label>
+                                @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "txtbox" })
+                                @Html.ValidationMessageFor(x => x.ConfirmPassword, null, new { @class = "validator" })
+
+
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <input type="submit" class="btn_c" style="float:right;" value="Save" />
+
+                        </div>
+                    </div>
+                 
+                       
+
+
+                }
+            </div>
+
+   
+                    </div>
+
+          
+
+</div>
+
+@section foot{
+<script type="text/javascript" src="~/Scripts/jquery.validate.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.validate.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script type="text/javascript" src="~/Scripts/zebra_datepicker.js"></script>
+<script type="text/javascript">
+        $(function () {
+            $('#DateOfBirth').Zebra_DatePicker({
+                view: 'years',
+                format: 'M d, Y'
+            });
+        });
+</script>
+}

@@ -1,0 +1,251 @@
+﻿
+@{
+    ViewBag.Title = "Configurations";
+    var allOffices = ViewBag.AllOffices as List<BaseApp.Entity.Office>;
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <i class="fa fa-5x fa-wrench" style="max-height:140px;"></i>
+        <h3>Configurations</h3>
+        <h3>Control, protect and secure your application settings, all in one place</h3>
+        <p>This section gives you quick access to settings and tools that let you safeguard your data, protect your privacy and decide how your information can make <strong>@AppSettings.GetVal("app:Title") @AppSettings.GetVal("app:Version")</strong> services work better for you.</p>
+    </div>
+    <div class="col-md-6">
+        @*<div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Office" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-building text-info"></i> Offices <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Manage your application offices, settings and the data we use to personalise your experience.
+                </div>
+                <a href="~/Secure/Office" class="btn btn-link">Manage offices</a>
+                <table class="table table-striped table-condensed no-margin">
+                    @if (allOffices.Count == 0)
+                    {
+                        <tr>
+                            <td>No office found.</td>
+                            <td><a href="~/Secure/Office/Record"><i class="fa fa-plus"></i> Create an office</a></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <th>Office</th>
+                            <th>Manager</th>
+                        </tr>
+                    }
+                    @foreach (var x in allOffices)
+                    {
+                        <tr>
+                            <td><a href="~/Secure/Office/Details/@x.Id">@x.Title</a></td>
+                            <td><a href="~/AccessControl/Contact/Details/@x.ContactId">@x.Contact.FullName</a></td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>*@
+
+        <div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Setting/System" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-server text-info"></i> System Information<i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Manage your system settings and the data we use to personalise your experience.
+                </div>
+                <a href="~/Secure/Setting/System" class="btn btn-link">Change system settings</a>
+                <table class="table table-striped table-condensed no-margin">
+                    <tr>
+                        <th class="text-right">System Title</th>
+                        <td>@AppSettings.GetVal("app:Title")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">System Version</th>
+                        <td>@AppSettings.GetVal("app:Version")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Browser Title</th>
+                        <td>@AppSettings.GetVal("website:BrowserTitle")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Contact Email</th>
+                        <td>@AppSettings.GetVal("contact:Email")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Contact Phone</th>
+                        <td>@AppSettings.GetVal("contact:Phone")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Contact Address</th>
+                        <td>@AppSettings.GetVal("contact:Address")</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Config/Smtps" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-envelope text-info"></i> SMTP Controls <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Control your application SMTP settings.
+                    <br />
+                    Check your application SMTP setttings by sending a test email.
+                </div>
+                <a href="~/Secure/Config/Smtps" class="btn btn-link">Change SMTP Settings</a>
+                <table class="table table-striped table-condensed no-margin">
+                    <tr>
+                        <th class="text-right">From Name</th>
+                        <td>@AppSettings.GetVal("Email:FromName")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">From Email</th>
+                        <td>@AppSettings.GetVal("Email:From")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Host</th>
+                        <td>@AppSettings.GetVal("Smtp:Host")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Port</th>
+                        <td>@AppSettings.GetVal("Smtp:Port")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">SSL</th>
+                        <td>@(AppSettings.GetVal<bool>("Smtp:Ssl"))</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Username</th>
+                        <td>@AppSettings.GetVal("Smtp:Username")</td>
+                    </tr>
+                    @*<tr>
+                            <th class="text-right">Password</th>
+                            <td>
+                                @{ string newString = new string('*', AppSettings.GetVal("Smtp:Password").Length); }
+                                @newString
+                            </td>
+                        </tr>*@
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default panel-Custom">
+            <a href="~/Secure/AccessControl/Home" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-lock text-info"></i> System Access Control<i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding" style="min-height:250px;">
+                <div class="caption">
+                    Manage all roles related to specific set of permissions to access your modules.
+                </div>
+                <a href="~/Secure/AccessControl" class="btn btn-link">View System Access Control</a>
+                <table class="table table-striped no-margin">
+                    <tr><th class="text-center">Access Control Details</th></tr>
+                    <tr><td><a href="javascript://">System Ownership Details</a></td></tr>
+                    <tr><td><a href="javascript://">System Administrator Details</a></td></tr>
+                    <tr><td><a href="javascript://"> List of Active Users</a></td></tr>
+                    <tr><td><a href="javascript://">List of Active Roles</a></td></tr>
+                    <tr><td><a href="javascript://">List of Active Permission</a></td></tr>
+                </table>
+            </div>
+        </div>
+
+        @*<div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Setting/EmailTemplate" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-envelope-o text-info"></i> Email Templates <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Manage your email templates and set which details should send on each email template.
+                </div>
+                <a href="~/Secure/Setting/EmailTemplate" class="btn btn-link">Edit email templates</a>
+                <table class="table table-striped no-margin">
+                    <tr><th class="text-center">Available Email Templates</th></tr>
+                    <tr><td>@BaseApp.Entity.EmailTemplateType.FormSubmission</td></tr>
+                    <tr><td>@BaseApp.Entity.EmailTemplateType.PasswordRecovery</td></tr>
+                    <tr><td>@BaseApp.Entity.EmailTemplateType.UserSignup</td></tr>
+                </table>
+            </div>
+        </div>*@
+
+        <div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Notification/" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-envelope-o text-info"></i> Notification Setttings <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Manage your notification settings.
+                </div>
+                <table class="table table-striped no-margin">
+                    <tr><th class="text-center" colspan="2">Available Module's Notification</th></tr>
+                    <tr>
+                        <td>
+                            @if (AppModule.GetById("CMS").Status)
+                            {
+                                <span>CMS</span>
+                            }
+                        </td>
+                        <td>
+                            @if (AppModule.GetById("Employees").Status)
+                            {
+                                <span>HRM</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @if (AppModule.GetById("TaskManager").Status)
+                            {
+                                <span>TaskManager</span>
+                            }
+                        </td>
+                        <td>
+                            @if (AppModule.GetById("CRM").Status)
+                            {
+                                <span>CRM</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @if (AppModule.GetById("Financials").Status)
+                            {
+                                <span>Financials</span>
+                            }
+                        </td>
+                        <td>
+                            @if (AppModule.GetById("DMS").Status)
+                            {
+                                <span>Company Drive</span>
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Config/Info" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-info-circle text-info"></i> System Information & Restart <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Want to see which facility is provided by your server?
+                    <br />
+                    See server information for a summary of facilities provided to you from your hostin server.
+                </div>
+                <div class="caption">
+                    Facing issues with system?
+                    <br />
+                    Seeing errors?
+                    <br />
+                    Give a try to restart application but with caution.
+                </div>
+                <a href="~/Secure/Config/Info" class="btn btn-link">System Information & Restart</a>
+            </div>
+        </div>
+    </div>
+</div>

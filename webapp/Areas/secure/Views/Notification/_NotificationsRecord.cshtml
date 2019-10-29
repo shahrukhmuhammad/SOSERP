@@ -1,0 +1,129 @@
+﻿@model BaseApp.Entity.NotificaitionSettings
+@{ 
+    var allRoles = ViewBag.AllRoles as List<BaseApp.Entity.AppRole>;
+}
+@*@if (Request.Browser.IsMobileDevice)
+{
+    @Styles.Render("~/Content/SummerNote")
+}
+else
+{
+    <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+        <style>
+            .ae-toolbar-add {
+                z-index: 999999999 !important;
+            }
+
+            .ae-toolbar-styles {
+                z-index: 99999999 !important;
+            }
+            /*.cke_editable {
+                min-height: 100px;
+            }*/
+        </style>
+}*@
+<link href="~/Content/chosen/chosen.css" rel="stylesheet" />
+<style>
+    .chosen-container {
+        width: 100% !important;
+    }
+</style>
+
+<form id="frm" class="form-Modal" method="post" action="~/Secure/Ecommerce/ShippingCompanyRecord">
+    <div class="modal-content">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="ShippingCompanyId" value="@Model.Id" />
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Configure Notification</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Notification Title</label>
+                <div class="col-sm-8">
+                    <input id="Title" name="Title" type="text" class="form-control input-sm" value="@Model.NotificationTitle" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-3 horizontal-label">Description</label>
+                <div class="col-sm-8">
+                    <textarea id="Description" name="Description" class="form-control input-sm"> @Model.Description</textarea>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-offset-3 col-sm-8">
+                    <div class="form-check">
+                        <input id="IsActive" name="IsActive" type="checkbox" @((Model.IsActive) ? "checked" : "") required />
+                        <label class="form-check-label" for="IsActive">Active this notification.</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-offset-3 col-sm-8">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="IsEmail" name="IsEmail" @((Model.IsEmail) ? "checked" : "") required>
+                        <label class="form-check-label" for="IsEmail">Send an mail.</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-offset-3 col-sm-4">
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" id="All" name="ApplyFor" value="All" @((Model.ApplyFor == ApplyFor.All) ? "checked" : "") required>
+                        <label class="form-check-label" for="All">Apply For All</label>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" id="Custom" name="ApplyFor" value="Custom" @((Model.ApplyFor == ApplyFor.Custom) ? "checked" : "") required>
+                        <label class="form-check-label" for="Custom">Apply For Custom</label>
+                    </div>
+                </div>
+            </div>
+            <div id="divUserRole" @(Model.ApplyFor == ApplyFor.All ? "style=display:none" : "")>
+                <div class="row form-group">
+                    <label class="col-sm-3 horizontal-label">Role</label>
+                    <div class="col-sm-8">
+                        <select name="RoleId" class="form-control input-sm select" multiple>
+                            @foreach (var x in allRoles)
+                            {
+                                <option value="@x.Id">@x.Code @x.Title</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@*@if (Request.Browser.IsMobileDevice)
+{
+    @Scripts.Render("~/bundles/SummerNote")
+    <script>
+                $(function () {
+                    $("#Description").summernote({ height: 150 });
+                });
+    </script>
+}
+else
+{
+    <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+    <script>
+        $(function () {
+            makeAlloyEditor('Description');
+        });
+    </script>
+}*@
+<script src="~/Content/chosen/chosen.jquery.js"></script>
+<script>
+    $(function () {
+            $(".select").chosen();
+        });
+</script>

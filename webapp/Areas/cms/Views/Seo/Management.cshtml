@@ -1,0 +1,233 @@
+﻿@model List<CMS.Entity.CmsSeoAccount>
+@{
+    ViewBag.Title = "Search Engine Tools";
+    var queryId = ViewContext.RouteData.Values["Id"];
+    CMS.Entity.CmsSeoAccount googleAcc = new CMS.Entity.CmsSeoAccount();
+    if (Model != null)
+    {
+        googleAcc = Model.Where(x => x.Provider == "Google").FirstOrDefault();
+    }
+}
+
+@section styles{
+    <link href="~/Content/Bhoechie-tabs.css" rel="stylesheet" />
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title"><i class="fa fa-search-plus"></i> @ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row no-margin">
+                <div class="col-lg-12 no-padding bhoechie-tab-container">
+                    <div class="col-lg-2 bhoechie-tab-menu">
+                        <div class="list-group">
+                            @foreach (var x in Model)
+                            {
+                                <a href="#" class="list-group-item @(queryId == null && x.Provider == "Google" ? "active" : (queryId != null && x.Provider.ToLowerInvariant() == queryId.ToString().ToLowerInvariant() ? "active" : "")) text-center">
+                                    <img src="~/Content/Images/@(x.Provider.ToLower()).png" style="height:80px;" />
+                                    <h4 class="no-margin">@x.Provider.ToUpperInvariant()</h4>
+                                    <h4><label class="label label-@(x.Status == CMS.Entity.CmsSeoAccountStatus.UnConfigured ? "danger" : "success")">@x.Status.ToSpacedTitleCase()</label></h4>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-lg-10 bhoechie-tab">
+                        @foreach (var x in Model)
+                        {
+                            <!-- flight section -->
+                            <div class="bhoechie-tab-content @(queryId == null && x.Provider == "Google" ? "active" : (queryId != null && x.Provider.ToLowerInvariant() == queryId.ToString().ToLowerInvariant() ? "active" : ""))">
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        @if (x.Status == CMS.Entity.CmsSeoAccountStatus.Configured)
+                                        {
+                                            <table class="table table-condensed table-hover">
+                                                <tr>
+                                                    <td class="text-right">Client ID</td>
+                                                    <th colspan="5">@x.ClientId</th>
+                                                </tr>
+                                            </table>
+                                        }
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <button type="button" class="btn btn-xs btn-primary fullWidth updateSeoAccount" data-id="@x.Id">@(x.Status == CMS.Entity.CmsSeoAccountStatus.UnConfigured ? "Configure Now" : "Change Configuration")</button>
+                                    </div>
+                                </div>
+
+                                @if (x.Status == CMS.Entity.CmsSeoAccountStatus.Configured)
+                                {
+                                    if (x.Provider == "Google")
+                                    {
+                                        <div class="well well-sm">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <i class="fa fa-shield text-success fa-2x"></i>
+                                                </div>
+                                                <div class="media-body">
+                                                    We guarantee that your privacy is absolutely safe. The login information remains confidential: it's saved on your computer and transferred straight to Google without any third party interfering.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top:50px;">
+                                            <div class="col-sm-8 col-sm-offset-2">
+                                                <ul class="list-group">
+                                                    @foreach (var g in x.Services)
+                                                    {
+                                                        var permUrl = "";
+                                                        <li class="list-group-item">
+                                                            <h5 style="margin-top:0;">Google @g.Title.ToSpacedTitleCase()</h5>
+                                                            <div class="row">
+                                                                <div class="col-sm-7">
+                                                                    <p class="list-group-item-text">
+                                                                        @(string.IsNullOrEmpty(g.AccessToken) ? "Please grant permission to enable services of " + g.Title.ToSpacedTitleCase() + "." : "You have granted the permission.")
+                                                                    </p>
+                                                                </div>
+                                                                <div class="col-sm-5">
+                                                                    @if (g.Title == "Webmaster")
+                                                                    {
+                                                                        permUrl = "https://www.googleapis.com/auth/webmasters";
+                                                                    }
+                                                                    @if (g.Title == "Analytics")
+                                                                    {
+                                                                        permUrl = "https://www.googleapis.com/auth/analytics";
+                                                                    }
+
+                                                                    @if (string.IsNullOrEmpty(g.AccessToken))
+                                                                    {
+                                                                        <button type="button" class="btn btn-xs fullWidth btn-warning" onclick="gOauth('@permUrl','@g.Title');"><i class="fa fa-check-circle"></i> Enable @g.Title.ToSpacedTitleCase()</button>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <button type="button" class="btn btn-xs fullWidth btn-danger" onclick="gdisableOauth('@g.Id','@g.Title');"><i class="fa fa-power-off"></i> Disable @g.Title.ToSpacedTitleCase()</button>
+                                                                        <a class="btn btn-default btn-xs" href="@(g.Title == "Analytics" ? "/CMS/Seo/Analytics" : "javascript://")" style="position:absolute; top:0; right:-114px">View Analytics</a>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <hr style="margin:20px 10px;" />
+                                                            <p class="text-muted text-center">Google @g.Title.ToSpacedTitleCase() is a powerful tool that you can integrate with our system.</p>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <h3 style="margin:200px 145px;">There is currently no linked @x.Provider Account. <a href="javascript://" class="updateSeoAccount" data-id="@x.Id">Click here</a> to link @x.Provider Account</h3>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="seoAccount-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
+    <div class="modal-dialog" role="document"></div>
+</div>
+
+<div class="modal fade" id="gOauth-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
+    <div class="modal-dialog" role="document"></div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/Bhoechie-tabs.js"></script>
+    <script>
+        $(function () {
+            //--- Update Seo Account
+            $(".updateSeoAccount").click(function (ev) {
+                $('#loading-mask').show();
+                ev.preventDefault();
+                var seoId = $(this).attr("data-id");
+                var targetURL = "/CMS/Seo/_SeoAccount/" + seoId;
+
+                // load the url and show modal on success
+                $("#seoAccount-Modal .modal-dialog").load(targetURL, function () {
+                    $("#seoAccount-Modal").modal("show");
+                    $('#loading-mask').hide();
+                });
+            });
+        });
+
+        function gAnalyticsSignOut() {
+            $("#gAnalyticsSignout-btn").hide();
+            gapi.analytics.auth.signOut();
+        };
+
+        function gOauth(permUrl, perm) {
+            var targetURL = "https://accounts.google.com/o/oauth2/v2/auth?scope=" + permUrl + "&redirect_uri=@(Request.IsSecureConnection ? "https" : "http")://@Request.Url.Authority/gOauth&response_type=token&client_id=@googleAcc.ClientId&state=" + perm;
+            popupWindow = window.open(targetURL, 'popUpWindow', 'height=700,width=800,left=10%,top=10%,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
+            if (perm === "Webmaster")
+            {
+                addWebmasterSite();
+            }
+        };
+
+        function gdisableOauth(serviceId, perm) {
+            googleDisableService('Disable Service', 'Are you sure you want to disable this service?', 'Disable Now', 'btn-danger', '@Url.Action("DisableGoogleService")', serviceId, perm);
+        };
+    </script>
+
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+        function init() {
+            gapi.auth2.init({
+                client_id: '@googleAcc.ClientId',
+                scope: 'https://www.googleapis.com/auth/webmasters https://www.googleapis.com/auth/analytics'
+            });
+        };
+        gapi.load('client:auth2', init);
+
+        function addWebmasterSite() {
+            gapi.client.load('webmasters', 'v3', function () {
+                var request = gapi.client.webmasters.sites.add({ 'siteUrl': '@(Request.IsSecureConnection ? "https" : "http")://live.tendersafrica.net@*@Request.Url.Authority*@' });
+                request.then(function (response) {
+                    $('#notifyMe').notify({
+                        message: { text: 'Website added successfully' },
+                        transition: 'fade',
+                        type: 'success'
+                    }).show();
+                }, function (reason) {
+                    $('#notifyMe').notify({
+                        message: { text: reason.result.error.message },
+                        transition: 'fade',
+                        type: 'error'
+                    }).show();
+                });
+            });
+        };
+
+        function deleteWebmasterSite() {
+            gapi.client.load('webmasters', 'v3', function () {
+                var request = gapi.client.webmasters.sites.delete({ 'siteUrl': '@(Request.IsSecureConnection ? "https" : "http")://live.tendersafrica.net@*@Request.Url.Authority*@' });
+                request.then(function (response) {
+                    $('#notifyMe').notify({
+                        message: { text: 'Website deleted successfully' },
+                        transition: 'fade',
+                        type: 'success'
+                    }).show();
+                }, function (reason) {
+                    $('#notifyMe').notify({
+                        message: { text: reason.result.error.message },
+                        transition: 'fade',
+                        type: 'error'
+                    }).show();
+                });
+            });
+        };
+    </script>
+}

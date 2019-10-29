@@ -1,0 +1,125 @@
+﻿@model List<BaseApp.Entity.AppRole>
+@{
+    ViewBag.Title = "All Roles";
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Back"><i class="fa fa-angle-left"></i></a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleRoles")', '.checkIt')" class="btn btn-danger forceRedirect" title="Delete"><i class="fa fa-trash"></i></a>
+                <a href="~/Secure/Office/Role" class="btn btn-primary" title="Add New Role"><i class="fa fa-plus"></i></a>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table id="acl-Roles-dataTable" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Code" id="dataTable_0" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_1" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Description" id="dataTable_2" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Permissions" id="dataTable_3" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Created On" id="dataTable_4" /></th>
+                            <th class="text-center" width="70px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (!x.IsSystem)
+                                        {
+                                            if (x.Contacts.Count() == 0)
+                                            {
+                                                <input type="checkbox" class="checkIt" value="@x.Id" />
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (x.IsSystem)
+                                        {
+                                            @x.Code
+                                        }
+                                        else
+                                        {
+                                            <a href="~/Secure/AccessControl/Role/@x.Id">@x.Code</a>
+                                        }
+                                    </td>
+                                    <td>@x.Title</td>
+                                    <td>@x.Description</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(x.Permissions))
+                                        {
+                                            if (x.Permissions == "All")
+                                            {
+                                                <span>All</span>
+                                            }
+                                            else
+                                            {
+
+                                                <ul class="no-padding no-margin" style="list-style:none;">
+                                                    @foreach (var p in x.PermissionsList)
+                                                    {
+                                                        if (!p.Contains("View"))
+                                                        {
+                                                            <li><i class="fa fa-check text-success"></i> Control @p.ToSpacedTitleCase()</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><i class="fa fa-check text-success"></i> @p.ToSpacedTitleCase()</li>
+                                                        }
+                                                    }
+                                                </ul>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>No permission</span>
+                                        }
+                                    </td>
+                                    <td>@x.CreatedOn.ToString("dd/MM/yyyy hh:mm tt")</td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            @if (x.IsSystem)
+                                            {
+                                                <a href="javascript://" class="btn btn-default" title="System Role"><i class="fa fa-lock"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a href="~/Secure/AccessControl/Role/@x.Id" class="btn btn-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                                if (x.Contacts.Count() == 0)
+                                                {
+                                                    <a href="javascript://" onclick="deleteRecord('@Url.Action("DeleteRole")', '@x.Id')" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                                }
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleRoles")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/Secure/Office/Role" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Role</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#acl-Roles-dataTable", [1, 2, 3, 4, 5], [0, 6]);
+            getAppUserRoles("#acl-Roles-dataTable");
+        });
+    </script>
+}

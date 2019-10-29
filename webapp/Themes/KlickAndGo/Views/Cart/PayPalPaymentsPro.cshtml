@@ -1,0 +1,164 @@
+﻿@model WebsiteUI.Models.CreditCardModel
+@{
+    ViewBag.Title = "Online Payment";
+    Layout = null;
+}
+
+
+@section head{
+<style type="text/css">
+    .btn:hover
+    {
+        background: #ffffff;
+        color: #04468d;
+    }
+</style>
+    <link href='//fonts.googleapis.com/css?family=Open Sans:400,600' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open Sans:400,600' rel='stylesheet' type='text/css'>
+    <link href="~/Themes/KlickAndGo/Content/cdn.shopify.com/app/services/8825910/assets/v2-ltr-2017-09-19-0b20e000d80995df86f7fbc195bf4962-16094182073911761634.css" rel="stylesheet" media="all" />
+    <script src="~/Themes/KlickAndGo/Content/cdn.shopify.com/s/assets/checkout_2017-09-19-3bb09355085bf13b64bea607e9196470733e44061824553835d1c1338d06c156.js"></script>
+<style type="text/css">
+.csspointerevents .field__input-wrapper--select::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+    </style>
+}
+
+<div id="content" data-content="">
+    <div class="wrap">
+       
+        <div class="main" role="main" style="width:100%;">
+            <div class="main__header">
+                <ul class="breadcrumb ">
+                    <li class="breadcrumb__item breadcrumb__item--completed">
+                        <a class="breadcrumb__link" href="@Url.Action("Index","Cart")">Cart</a>
+                        <svg class="icon-svg icon-svg--size-10 breadcrumb__chevron-icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M2 1l1-1 4 4 1 1-1 1-4 4-1-1 4-4"></path></svg>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--current">
+                        <a class="breadcrumb__link" href="@Url.Action("Checkout","Cart")">
+                            Customer information
+                        </a>
+                        <svg class="icon-svg icon-svg--size-10 breadcrumb__chevron-icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M2 1l1-1 4 4 1 1-1 1-4 4-1-1 4-4"></path></svg>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--blank">
+                        <a class="breadcrumb__link" href="@Url.Action("Review","Cart", new { @id = ViewContext.RouteData.Values["id"] })">
+                            Order Detail
+                        </a>
+                        <svg class="icon-svg icon-svg--size-10 breadcrumb__chevron-icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M2 1l1-1 4 4 1 1-1 1-4 4-1-1 4-4"></path></svg>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--blank">
+                        <a class="breadcrumb__link" href="@Url.Action("PaymentOptions","Cart", new { @id = ViewContext.RouteData.Values["id"] })">Payment method</a>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--blank">
+                        <span class="breadcrumb__text">Payment
+                        </span> 
+                    </li>
+                </ul>
+
+            </div>
+            <div class="main__content">
+
+                <div>
+                    @Html.Raw(@ViewBag.PPCode)
+                </div> 
+
+
+@*<div class="step" data-step="payment_method">
+                    
+    <div class="step__sections">
+                         
+        <div class="section section--payment-method" data-payment-method="">
+                                
+            <div class="section__content">
+                                  
+                    <div class="content-box">
+                @using (Html.BeginForm())
+                    {
+                    @Html.Raw(TempData["StatusMessage"] == null ? "" : TempData["StatusMessage"].ToString())
+
+                                           
+                        <div id="formDetails"class="radio-wrapper content-box__row content-box__row--secondary card-fields-container card-fields-container--loaded card-fields-container--transitioned">
+                                               
+                                <div class="fieldset" data-address-fields="">
+
+                                    <div class="field field--required" >
+                                        <div class="field__input-wrapper">
+                                        <label>@Html.LabelFor(x => x.CardType)</label>
+                                        <div class="field__input-wrapper field__input-wrapper--select">
+                                        @Html.DropDownListFor(x => x.CardType, new SelectList(Enum.GetValues(typeof(PayPal.PayPalAPIInterfaceService.Model.CreditCardTypeType))), new { @class = "field__input field__input--select", style = "min-width:0;width:99%" })
+                                        </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="field field--required" >
+
+                                        <div class="field__input-wrapper">
+                                            <label>@Html.LabelFor(x => x.CardNo)</label>
+                                                                
+                                                @Html.TextBoxFor(x => x.CardNo, new { @class = "field__input field__input" })
+                                    </div>
+                                    </div>
+                                    <div class="field field--required">
+
+                                        <div  class ="field__input-wrapper" >
+                                            <label >@Html.LabelFor(x => x.CardExpiryMonth, new { @class = "formLabel" })</label>
+                                            <div class="field__input">
+                                                <span><small>MM</small></span>
+                                                @Html.TextBoxFor(x => x.CardExpiryMonth, new { @class = "field__input field__input", maxlength = "2"})
+                                                <span><small>yyyy</small></span>
+                                                @Html.TextBoxFor(x => x.CardExpiryYear, new { @class = "field__input field__input", maxlength = "4" })
+                                                                   
+                                                <br />
+                                                @Html.ValidationMessageFor(x => x.CardExpiryMonth, null, new { @class = "validator" })
+                                                @Html.ValidationMessageFor(x => x.CardExpiryYear, null, new { @class = "validator" })</div>
+                                                                
+                                                               
+                                        </div>  
+                                        </div>
+                                                       
+                                                        <div class="field field--required">
+
+                                                            <div class="field__input-wrapper">
+                                                                <label>@Html.LabelFor(x => x.VerificationNo)</label>
+
+                                                               @Html.TextBoxFor(x => x.VerificationNo, new { @class = "field__input field__input" })
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <input type="submit"  value="Send" class="step__footer__continue-btn btn"style="margin-top:20px;">
+}
+                                         </div>
+                                   
+                                </div>
+                            </div>
+                           
+                        </div>
+
+                        <div class="step__footer" data-step-footer="">
+                            
+                            <a class="step__footer__previous-link" href="@Url.Action("PaymentOptions","Cart", new { @id = ViewContext.RouteData.Values["id"] })"><svg class="icon-svg icon-svg--color-accent icon-svg--size-10 previous-link__icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M8 1L7 0 3 4 2 5l1 1 4 4 1-1-4-4"></path></svg><span class="step__footer__previous-link-content">Return to shipping method</span></a>
+                        </div>
+
+                   
+                </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+@section foot{
+    <script type="text/javascript" src="~/Scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}

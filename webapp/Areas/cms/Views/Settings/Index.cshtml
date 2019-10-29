@@ -1,0 +1,190 @@
+﻿
+@{
+    ViewBag.Title = "CMS Settings";
+    var cms = AppModule.GetById("CMS");
+}
+
+@section styles{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+<style>
+    .top-padding {
+        padding-top: 10px !important;
+    }
+    ul.stage-Nav > li.list-group > a.list-group-item::after {
+            left: 93%;
+        }
+        .cke_textarea_inline .container{
+            width:965px;
+        }
+</style>
+}
+
+
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> @TempData["ErrorMsg"]
+    </div>
+}
+    
+
+<form id="frm" class="form-Modal" method="post" enctype="multipart/form-data">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                @ViewBag.Title
+                <span class="pull-right" style="font-size:16px">
+                    <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()" title="Cancel / Back"><i class="fa fa-close fa-2x"></i></a>
+                    <button type="submit" style="border:none; background:transparent" title="Save"><i class="fa fa-check-circle text-success fa-2x"></i></button>
+                </span>
+            </h4>
+        </div>
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="/CMS/Settings/Index" />
+        <div class="row top-padding">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Website Logo <a href="javascript://" title="For best experience use PNG format file type for logo."><i class="fa fa-info-circle"></i></a></label>
+                            <div class="thumbnail text-center">
+                                <img id="logo-Preview" src="~/Content/Images/logo.png" class="img-responsive img-centre" style="max-height:210px;">
+                                <div class="caption">
+                                    <input type="file" class="form-control input-sm" id="logo" name="logo" onchange="previewImage(this,'#logo-Preview')" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Website Favicon <a href="javascript://" title="Updated favicon icon can take upto 1 day to show in browser because of browser cache issue."><i class="fa fa-info-circle"></i></a></label>
+                            <div class="thumbnail text-center">
+                                <img id="favicon-Preview" src="~/favicon.ico" class="img-responsive img-centre" style="max-height:50px;">
+                                <div class="caption">
+                                    <input type="file" class="form-control input-sm" id="favicon" name="favicon" onchange="previewImage(this, '#favicon-Preview')" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Website Title</label>
+                            <input id="website-Title" name="website:Title" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:Title")" required autofocus />
+                        </div>
+                        <div class="form-group">
+                            <label>Browser Title</label>
+                            <input id="website-BrowserTitle" name="website:BrowserTitle" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:BrowserTitle")" required autofocus />
+                        </div>
+                        <div class="form-group">
+                            <label>Website Copyright</label>
+                            <input id="website-Copyright" name="website:Copyright" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:Copyright")" required autofocus />
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Email <a href="javascript://" title="This e-mail will be used for receiving e-mails."><i class="fa fa-info-circle"></i></a></label>
+                            <input id="website-Email" name="website:Email" type="email" class="form-control input-sm" value="@AppSettings.GetVal("website:Email")" required autofocus />
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Address Line 1</label>
+                            <textarea id="website-Address" name="website:Address" class="form-control input-sm" cols="3" required>@AppSettings.GetVal("website:Address")</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-bold">Address Line 2 <a href="javascript://" title="Optional"> <i class="fa fa-info-circle"></i></a></label>
+                            <input id="website-Address2" name="website:Address2" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:Address2")" autofocus />
+                        </div>
+                        <div class="form-group">
+                            <label class="text-bold">Town/City </label>
+                            <input id="website-City" name="website:City" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:City")" required autofocus />
+                        </div>
+                        <div class="form-group">
+                            <label class="text-bold">County/State </label>
+                            <input id="website-County" name="website:County" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:County")" required autofocus />
+                        </div>
+                        <div class="form-group">
+                            <label class="text-bold">Post Code/Zip Code </label>
+                            <input id="website-PostCode" name="website:PostCode" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:PostCode")" required autofocus />
+                        </div>
+                        <div class="form-group">
+                            <label class="text-bold">Country </label>
+                            <select id="website-Country" name="website:Country" class="form-control input-sm" required autofocus>
+                                @foreach (var c in Html.CountriesListWithCode())
+                                {
+                                    <option value="@c.Value" selected="@(AppSettings.GetVal("website:Country") == c.Value)">@c.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Phone</label>
+                            <input id="website-Phone" name="website:Phone" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:Phone")" required autofocus />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label style="margin-right:20px;">Website Status</label>
+                            <div class="btn-group btn-group-xs" data-toggle="buttons">
+                                <label id="website-Online" class="btn btn-success @(AppSettings.GetVal<bool>("website:Online") ? "active" : "")">
+                                    <input type="radio" value="True" name="website:Online" checked="@(AppSettings.GetVal<bool>("website:Online"))"> Online
+                                </label>
+                                <label id="website-Offline" class="btn btn-danger @(!AppSettings.GetVal<bool>("website:Online") ? "active" : "")">
+                                    <input type="radio" value="False" name="website:Online" checked="@(!AppSettings.GetVal<bool>("website:Online"))"> Offline
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Offline Message</label>
+                            <textarea id="offlineMessage" name="website:OfflineMessage" class="form-control input-sm" rows="10" required>@AppSettings.GetVal("website:OfflineMessage")</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer text-right">
+            <div class="pull-right" style="font-size:16px">
+                <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()" title="Cancel / Back"><i class="fa fa-close fa-2x"></i></a>
+                <button type="submit" style="border:none; background:transparent" title="Save"><i class="fa fa-check-circle text-success fa-2x"></i></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+@if (Request.Browser.IsMobileDevice)
+    {
+    @Scripts.Render("~/bundles/SummerNote")
+    <script>
+            $(function () {
+                $("#offlineMessage").summernote({ height: 200 });
+            });
+    </script>
+}
+else
+{
+    <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('offlineMessage');
+            });
+        </script>
+}
+}

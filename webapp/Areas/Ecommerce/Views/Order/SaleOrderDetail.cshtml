@@ -1,0 +1,179 @@
+﻿@model Ecommerce.Entity.Order
+
+@{
+    ViewBag.Title = "Sale Order Detail";
+}
+@section styles{
+    <link href="~/Content/App/Ecommerce.css" rel="stylesheet" />
+}
+<div class="user-Profile">
+    <div class="row">
+        <div class="col-sm-9">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="col-sm-8">Product Details</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col" class="text-center">Item Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var d in Model.Details)
+                    {
+                        <tr>
+                            <td>
+                                <div class="pull-left imgblock">
+                                    <img id="img-Preview" src="~/Content/Uploads/Ecommerce/p_@(d.ProductId).jpg" class="img-responsive grid-img" onerror="this.onerror = null; this.src = '/Content/Images/img.png';" />
+                                    @d.Sku
+                                </div>
+                                <a href="javascript://">@d.Description</a> <br /> @Html.Raw(d.ProductDetails)
+                            </td>
+                            <td>@AppSettings.GetVal("CurrencySymbol") @d.Price</td>
+                            <td>@d.Quantity</td>
+                            <td class="text-center">@AppSettings.GetVal("CurrencySymbol") @d.Total</td>
+                        </tr>
+                    }
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-sm-3 text-right">
+            <div class="btn-group btn-group-vertical fullWidth" role="group">
+                <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-plus"></i> Add Tracking No</a>
+                <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-plus"></i> Create Invoice</a>
+                <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-money"></i> Record Payment</a>
+                <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-times"></i> Cancel Order</a>
+                <a href="/Ecommerce/Order/Sale" class="btn btn-link text-muted"><i class="fa fa-angle-left"></i> Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="row tb-padding">
+        <div class="col-sm-9">
+            <div class="row col-sm-5 pull-right">
+                <ul class="list-group custom-padding">
+                    <li class="list-group-item">Subtotal: <span class="pull-right"> @AppSettings.GetVal("CurrencySymbol") @Model.SubTotal </span></li>
+                    <li class="list-group-item">Shipping: <span class="pull-right"> @AppSettings.GetVal("CurrencySymbol") @Model.ShippingCost</span></li>
+                    <li class="list-group-item"> VAT(@Model.Tax%): <span class="pull-right">@AppSettings.GetVal("CurrencySymbol") @Model.TaxAmount</span></li>
+                    <li class="list-group-item"> Grand Total: <span class="pull-right">@AppSettings.GetVal("CurrencySymbol") @Model.Total</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="summary">
+            <div class="row tb-padding">
+                <div class="col-sm-4">
+                    <div class="page-header">
+                        <h4>Postage Type</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            @Model.PostageType
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="page-header">
+                        <h4>Shipping Package</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            @Model.ShippingCompany, @Model.shippingpackagesTitle (@Model.shippingpackagesDeliveryTime)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="page-header">
+                        <h4>Tracking Details</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            @Model.ShippingCode <a href="javascript://">Add/Edit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row tb-padding">
+                <div class="col-sm-4">
+                    <div class="page-header">
+                        <h4>Order Source</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            @Model.OrderSource
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="page-header">
+                        <h4>Payment Mathod</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            @Model.PaymentMethod
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="page-header">
+                        <h4>Order Status</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            @Model.OrderStatus
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row tb-padding">
+                <div class="col-sm-6">
+                    <div class="page-header">
+                        <h4>Billing Details</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            @foreach (var item in Model.OrderAddressDetails)
+                            {
+                                if (item.AddressType == OrderAddressType.Billing)
+                                {
+                                    <p>@item.FirstName @item.LastName</p>
+                                    <p>@item.Company </p>
+                                    <p>@item.PostalAddress @item.PostalAddress2 </p>
+                                    <p> @item.City, @item.County (@item.PostalCode) </p>
+                                    <p> @item.County </p>
+                                    <p>Ph. @item.Phone </p>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="page-header">
+                        <h4>Shipping Details</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            @foreach (var item in Model.OrderAddressDetails)
+                            {
+                                if (item.AddressType == OrderAddressType.Shipping)
+                                {
+                                    <p>@item.FirstName @item.LastName</p>
+                                    <p>@item.Company </p>
+                                    <p>@item.PostalAddress @item.PostalAddress2 </p>
+                                    <p> @item.City, @item.County (@item.PostalCode) </p>
+                                    <p> @item.County </p>
+                                    <p>Ph. @item.Phone </p>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

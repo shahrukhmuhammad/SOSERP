@@ -1,0 +1,39 @@
+﻿@model IList<BaseApp.Entity.TaxTypes>
+
+<table id="DeductTaxes-Table" class="table table-condensed table-striped">
+    <tbody id="DeductTaxes-records"></tbody>
+    <tfoot>
+        <tr>
+            <th>Tax Name</th>
+            @*<th>Tax Type</th>*@
+            <th>% Deduction</th>
+            <th>Apply On</th>
+            <th>Action</th>
+        </tr>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td>@x.Taxname</td>
+                @*<td>@x.Taxtype</td>*@
+                <td>@x.PercentageDeduction</td>
+                <td>
+                    @if (x.FullTime == true)
+                    { <span>Full Time</span> }
+                    @if (x.PartTime == true)
+                    { <span>, Part Time</span> }
+                    @if (x.VaryingWeekly == true)
+                    { <span>, Varying Weekly </span> }
+                    @if (x.Contractor == true)
+                    { <span>, Contractor </span> }
+                    @if (x.PerDm == true)
+                    { <span>, Perdm </span> }
+                    @if (x.Freelance == true)
+                    { <span>, Freelance </span> }
+                </td>
+                <td style="width:80px;">
+                    <a href="javascript://" data-id="@x.Id" class="btn btn-xs btn-danger delDeductTaxesSection"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tfoot>
+</table>

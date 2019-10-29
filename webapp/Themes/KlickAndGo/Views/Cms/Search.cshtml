@@ -1,0 +1,275 @@
+﻿@model IEnumerable<Framework.Data.CatalogProduct>
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_Layout.cshtml";
+}
+@section Head{
+<link href="~/Themes/KlickAndGo/Content/SearchStyle.css" rel="stylesheet" type="text/css" />
+}
+
+<div id="content">
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="/" title="Home">Home</a></li>
+            <li>Search Results</li>
+        </ol>
+
+        <div class="title clearfix">
+            <h1>Search Results</h1>
+        </div>
+        <div class="page_content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="sfbox box-page animated rollIn animation-done" data-animation="rollIn">
+                        <div class="rte">
+                            <div id="findify_results" style="min-height: 400px;">
+                                <div class="findify-root">
+                                    <div data-reactroot="" scrolling="no" style="overflow: hidden; position: relative; width: 100%;  border: none;">
+                                        <div class="findify-component-root">
+
+
+                                            <div id="root">
+                                                <div data-reactroot="" class="frame-content" style="position: relative;">
+                                                    <div>
+                                                        <div class="findify-widget--bread-crumbs__wrap findify-layouts--results-layout__breadcrumbs">
+                                                            <p class="findify-widget--bread-crumbs__title">
+                                                                @*Showing results for*@ 
+                                                                @*<strong>@(Model.FirstOrDefault().CategoryTitle)</strong>:*@
+                                                            </p>
+                                                        </div>
+                                                        <div class="findify-widget--sorting findify-layouts--results-layout__sort">
+                                                            <p class="findify-widget--sorting__title">Sort by</p>
+                                                            <div class="undefined findify-widget--sorting__dropdown-root">
+                                                                <div class="findify-widget--sorting__dropdown-control ">
+                                                                    <div class="findify-widget--sorting__dropdown-placeholder">Popularity</div>
+                                                                    <span class="findify-widget--sorting__dropdown-arrow"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="findify-widget--grid__wrap">
+
+                                                            <div class="findify-widget--grid__column findify-widget--grid__column-3 findify-layouts--results-layout__facets">
+                                                                <div>
+                                                                    <div class="findify-block--generic-facet__wrap _2mIMY">
+
+                                                                        <div class="findify-block--generic-facet__toggle">
+                                                                            <h5 class="findify-block--generic-facet__title _20meW">Category</h5>
+                                                                           
+                                                                        </div>
+                                                                        <div class="findify-block--generic-facet__content">
+                                                                            <div class="findify-block--generic-facet__content">
+                                                                                <div>
+                                                                                    <div class="findify-block--category-body-facet__wrap findify-block--category-body-facet__root-item">
+                                                                                        <div class="findify-block--category-body-facet__list">
+
+@foreach (var item in ViewBag.SearchCategoryList as List<Category>)
+
+    {
+                                                                                            <li class="findify-block--category-body-facet__item _3--9h" style="margin-left:0px;">
+                                                                                                <p class="findify-block--category-body-facet__title" value="@item.CategoryId"> <a  style="color: #404040!important;display: table;list-style: none;font-size: 12px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;cursor: pointer;font-weight:500;" href="~/category/@(item.Title.ToString().UrlFriendly())">@item.Title</a></p>
+                                                                                                <span class="findify-block--category-body-facet__count">
+                                                                                                   </span>
+                                                                                            </li>
+}    </div>
+                                                                                    </div>
+                                                                                    @*<button class="findify-block--expand-button__wrap">
+                                                                                        <span class="findify-block--expand-button__sign">+</span><!-- react-text: 68 -->More<!-- /react-text -->
+                                                                                    </button>*@
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="findify-block--generic-facet__wrap _2mIMY">
+                                                                        <div class="findify-block--generic-facet__toggle">
+                                                                            <h5 class="findify-block--generic-facet__title _20meW">Price</h5>
+                                                                           
+                                                                        </div>
+                                                                        <div class="findify-block--generic-facet__content">
+                                                                            <div class="findify-block--generic-facet__content">
+                                                                                <div class="findify-block--checkbox-body-facet__wrap">
+                                                                                    <div class="findify-block--checkbox-body-facet__list">
+                                                                                        <div class="findify-block--checkbox-body-facet--checkbox__item _3--9h">
+                                                                                            
+                                                                                        </div>
+                                                                                        <div class="findify-block--checkbox-body-facet--checkbox__item _3--9h">
+                                                                                           
+                                                                                        </div>
+                                                                                        <div class="findify-block--checkbox-body-facet--checkbox__item _3--9h">
+                                                                                            
+                                                                                        </div>
+                                                                                        <div class="findify-block--checkbox-body-facet--checkbox__item _3--9h">
+                                                                                           
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                              
+                                                                                <form action="">
+                                                                                    <input type="hidden" id="search-keyword" name="keyword" value=""> 
+                                                                                    <input type="hidden" id="search-mid" name="mid" value=""> 
+                                                                                    <div class="findify-block--range-body-facet">
+                                                                                        <div class="findify-block--range-body-facet__input-wrap">
+                                                                                            <span class="findify-block--range-body-facet__currency findify-block--range-body-facet__pull-right">£</span>
+                                                                                           
+                                                                                     <input type="text" name="pf"  required value="@Request["pf"]" id="pf" maxlength="7"  class="findify-block--range-body-facet__input" />
+                                                                                        </div>
+                                                                                        <div class="findify-block--range-body-facet__separator">-</div>
+                                                                                        <div class="findify-block--range-body-facet__input-wrap">
+                                                                                            <span class="findify-block--range-body-facet__currency findify-block--range-body-facet__pull-right">£</span>
+                                                                                            <input type="text" name="pt" required id="pt" value="@Request["pt"]" maxlength="7" class="findify-block--range-body-facet__input" />
+                                                                                        </div>
+                                                                                        <div class="findify-block--range-body-facet__commit-wrap">
+                                                                                            <input type="submit" value="Filter" class="findify-block--range-body-facet__button" />
+                                                                                            </div>
+                                                                                            @*<div class="findify-block--range-body-facet__commit-wrap">
+                <button class="findify-block--range-body-facet__button" href="javascript:void(0)" onclick="window.location='@Url.Action("Search","Home")?keyword=&cid=&mid=&pf=' + $('#pf').val() + '&pt=' + $('#pt').val()&post_type=product'">go</button>
+            </div>*@
+                                                                                        </div>
+                                                                                    </form>
+                                                                             
+</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="findify-block--generic-facet__wrap _2mIMY">
+                                                                        <div class="findify-block--generic-facet__toggle">
+                                                                            <h5 class="findify-block--generic-facet__title _20meW">Brand</h5>
+                                                                         
+                                                                        </div>
+                                                                        <div class="findify-block--generic-facet__content">
+                                                                            <div class="findify-block--generic-facet__content">
+                                                                                <div class="findify-block--checkbox-body-facet__wrap">
+                                                                                    <div class="findify-block--checkbox-body-facet__list">
+                                                                                        @foreach (var item in ViewBag.Manufacturers)
+                                                                                        {
+                                                                                            <div class="findify-block--checkbox-body-facet--checkbox__item _3--9h">
+                                                                                                @*<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.8 18.8" class="findify-block--checkbox-body-facet--checkbox__checkbox" width="16" height="16">
+                                        <path d="M15 1.7H3.8c-.6 0-1.1.2-1.5.7s-.6.8-.6 1.4V15c0 .6.2 1.1.7 1.5s.9.6 1.5.6H15c.6 0 1.1-.2 1.5-.6s.7-.9.7-1.5V3.8c0-.6-.2-1.1-.7-1.5s-.9-.6-1.5-.6zm3.8 2.1V15c0 1-.4 2-1.1 2.7s-1.6 1.1-2.7 1.1H3.8c-1.1 0-2-.4-2.7-1.1S0 16 0 15V3.8c0-1.1.4-2 1.1-2.7S2.8 0 3.8 0H15c1.1 0 2 .4 2.7 1.1s1.1 1.7 1.1 2.7z"></path>
+                                    </svg>*@
+                                                                                                @*<a href="@Url.Action("Search","Home")?keyword=&cid=&mid=@item.ManufacturerId&pf=&pt=&post_type=product">*@
+                                                                                                <label>
+                                                                                                    <input type="radio" onclick="window.location.href = '@Url.Action("Search","Home")?keyword=&cid=&mid=@item.ManufacturerId&pf=&pt=&post_type=product'" @(Request.QueryString["mid"].ToString() == item.ManufacturerId.ToString() ? "checked" : "") /> @item.Title
+                                                                                                </label>
+                                                                                                @*</a>*@
+                                                                                                @*<span class="findify-block--checkbox-body-facet--checkbox__count">
+                                        <!-- react-text: 270 -->(<!-- /react-text --><!-- react-text: 271 -->97
+                                        <!-- /react-text --><!-- react-text: 272 -->)<!-- /react-text -->
+                                    </span>*@
+
+                                                                                            </div>
+                                                                                        }
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                        
+                                                                </div>
+                                                            </div>
+                                                           
+                                                            @Html.Raw(TempData["StatusMessage"] == null ? "" : TempData["StatusMessage"].ToString())
+                                                            <div class="findify-widget--grid__column findify-widget--grid__column-9">
+                                                                <div class="findify-layouts--results-layout__products findify-layouts--results-layout__productsWithPadding">
+                                                                    <div class="findify-lists--products-list" style="position: relative;">
+                                                                        <div class="findify-widget--grid__wrap">
+@foreach (var a in Model)
+{
+                                                                                <div class="findify-widget--grid__column findify-widget--grid__column-3">
+                                                                                    
+                                                                                        <a href="~/product/@a.Slug" class="findify-widget--product _1anW_" style="height:300px;">
+                                                                                            <div class="findify-widget--product__image-wrap">
+                                                                                                <img alt="@a.Title" class="findify-widget--product__image findify-block--image__loaded" src="@Url.Action("Img", "Cdn", new { id = a.ProductId, s = "s", t = "p", target = "Website" })" />
+                                                                                               
+                                                                                            </div>
+                                                                                           <br/>
+                                                                                            <div class="findify-widget--product__content">
+                                                                                                <h5 class="findify-widget--product__title _1TVYv">
+                                                                                                    <span class="findify-block--truncate" style="max-height: 3.9em; -webkit-line-clamp: 3;">
+                                                                                                        @a.Title
+                                                                                                    </span>
+                                                                                                </h5>
+                                                                                                <p class="findify-widget--product__description _3CQiE">
+                                                                                                    <span class="findify-block--truncate" style="max-height: 3.9em; -webkit-line-clamp: 3;">
+                                                                                                        @a.ShortDescription
+                                                                                                    </span>
+                                                                                                </p>
+                                                                                            </div>
+
+                                                                                       
+              
+                                                                                            <div class="findify-widget--product__price-wrap ybNII">
+                                                                                                <span class="findify-widget--product__price cgFaj _19m_S">@Settings.Get.CurrencySymbol@a.RetailPrice</span>
+                                                                                                <span class="findify-widget--product__compare">@Settings.Get.CurrencySymbol@a.OldPrice</span>
+                                                                                            </div>
+                                                                                        </a>
+                                                                                   
+                                                                            </div>
+}
+                                                                           
+                                                                         </div>
+                                                                        <div class="erd_scroll_detection_container erd_scroll_detection_container_animation_active" style="visibility: hidden; display: inline; width: 0px; height: 0px; z-index: -1; overflow: hidden; margin: 0px; padding: 0px;">
+                                                                        <div dir="ltr" class="erd_scroll_detection_container" style="position: absolute; flex: 0 0 auto; overflow: hidden; z-index: -1; visibility: hidden; width: 100%; height: 100%; left: 0px; top: 0px;">
+                                                                            <div class="erd_scroll_detection_container" style="position: absolute; flex: 0 0 auto; overflow: hidden; z-index: -1; visibility: hidden; left: -18px; top: -18px; right: -17px; bottom: -17px;">
+                                                                            <div style="position: absolute; flex: 0 0 auto; overflow: scroll; z-index: -1; visibility: hidden; width: 100%; height: 100%;"><div style="position: absolute; left: 0px; top: 0px; width: 818px; height: 1972px;">
+                                                                                </div>
+                                                                                </div>
+                                                                            <div style="position: absolute; flex: 0 0 auto; overflow: scroll; z-index: -1; visibility: hidden; width: 100%; height: 100%;"><div style="position: absolute; width: 200%; height: 200%;">
+                                                                                </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="page_c clearfix red5">
+
+                                                                        <a href="?keyword=&cid=&mid=&pf=&pt=&post_type=product&pagesize=24&pagenumber=@(Convert.ToInt32(Request.QueryString["pagenumber"])- 1)" class="prev disabled">
+                                                                            <span class="fa fa-chevron-left"></span>Previous
+                                                                        </a>
+                                                                        <a href="?keyword=&cid=&mid=&pf=&pt=&post_type=product&pagesize=24&pagenumber=@(Convert.ToInt32(Request.QueryString["pagenumber"]) + 1)" title="Next »" class="next">
+                                                                            Next
+                                                                            <span class="fa fa-chevron-right"></span>
+                                                                        </a>
+
+                                                                    </div>
+
+                                                                           </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden;">
+                                                        <div style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden;">
+                                                            <div style="position: absolute; left: 0px; top: 0px; width: 1060px; height: 2084px;">
+                                                            </div>
+                                                        </div>
+                                                        <div style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden;">
+                                                            <div style="position: absolute; left: 0px; top: 0px; width: 200%; height: 200%;">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section foot{
+<script src="~/Themes/KlickAndGo/Content/findify-assets-2bveeb6u8ag.netdna-ssl.com/analytics-js/prod/findify-analytics.1.1.43.min.js" async></script>
+
+<script src="~/Themes/KlickAndGo/Content/findify-assets-2bveeb6u8ag.netdna-ssl.com/mjs/prod/v3.2.83/extended.js" async></script>
+<script src="~/Themes/KlickAndGo/Content/cdn.ravenjs.com/3.14.2/raven.min.js" async></script>
+@*<script src="~/Themes/KlickAndGo/Content/findify-assets-2bveeb6u8ag.netdna-ssl.com/search/prod/rinkit-ltd.myshopify.com.min.js" async></script>*@
+
+@*<script type="text/javascript" src ="/Themes/KlickAndGo/Content/findify-assets-2bveeb6u8ag.netdna-ssl.com/mjs/prod/v3.2.83/components.js" async></script>*@
+   }

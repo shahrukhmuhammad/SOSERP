@@ -1,0 +1,314 @@
+﻿
+@{
+    ViewBag.Title = "Payment Gateways";
+}
+<style>
+    .top-padding {
+        padding-top: 10px !important;
+    }
+</style>
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                @ViewBag.Title
+                <span class="pull-right" style="font-size:16px">
+                    <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()" title="Cancel / Back"><i class="fa fa-close fa-2x"></i></a>
+                </span>
+            </h4>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="/Integration/PaymentGateway" />
+            <div class="row top-padding">
+                <div class="col-sm-12">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <label class="col-sm-4">
+                                PayPal Payments Pro
+                                @if (AppSettings.GetVal("PaymentGateway") == "PayPalPaymentsPro")
+                                {
+                                    <span class="label label-success"> Active </span>
+                                }
+                            </label>
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-xs" role="group">
+                                    <a href="javascript://" data-id="" class="btn btn-info" data-toggle="modal" data-target="#paypalPaymentsProDlg" title="Configure"><i class="fa fa-gear"></i> Configure</a>
+                                    <a href="javascript://" class="btn btn-warning btnApply" data-id="PayPalPaymentsPro" title="Apply Settings"><i class="fa fa-check"></i> Apply</a>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+                        <li class="list-group-item">
+                            <label class="col-sm-4">
+                                PayPal Advanced
+                                @if (AppSettings.GetVal("PaymentGateway") == "PayPalAdvanced")
+                                {
+                                    <span class="label label-success"> Active </span>
+                                }
+                            </label>
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-xs" role="group">
+                                    <a href="javascript://" data-id="" class="btn btn-info" data-toggle="modal" data-target="#paypalAdvancedDlg" title="Configure"><i class="fa fa-gear"></i> Configure</a>
+                                    <a href="javascript://" class="btn btn-warning btnApply" data-id="PayPalAdvanced" title="Apply Settings"><i class="fa fa-check"></i> Apply</a>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+                        <li class="list-group-item">
+                            <label class="col-sm-4">
+                                Authorize.Net
+                            </label>
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-xs" role="group">
+                                    <a href="javascript://" data-id="" class="btn btn-info disabled" data-toggle="modal" data-target="#authorizeNetDlg" title="Configure"><i class="fa fa-gear"></i> Configure</a>
+                                    @*<a href="javascript://" class="btn btn-warning" title="Apply Settings"><i class="fa fa-check"></i> Apply</a>*@
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+                        <li class="list-group-item">
+                            <label class="col-sm-4"> Sage Pay</label>
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-xs" role="group">
+                                    <a href="javascript://" data-id="" class="btn btn-info disabled" data-toggle="modal" data-target="#sagePayDlg" title="Configure"><i class="fa fa-gear"></i> Configure</a>
+                                    @*<a href="javascript://" class="btn btn-warning" title="Apply Settings"><i class="fa fa-check"></i> Apply</a>*@
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+                        <li class="list-group-item">
+                            <label class="col-sm-4"> Brain Tree</label>
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-xs" role="group">
+                                    <a href="javascript://" data-id="" class="btn btn-info disabled" data-toggle="modal" data-target="#brainTreeDlg" title="Configure"><i class="fa fa-gear"></i> Configure</a>
+                                    @*<a href="javascript://" class="btn btn-warning" title="Apply Settings"><i class="fa fa-check"></i> Apply</a>*@
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="pull-right" style="font-size:16px">
+                <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()" title="Cancel / Back"><i class="fa fa-close fa-2x"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="paypalPaymentsProDlg" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Paypal Payments Pro</h4>
+            </div>
+            <form id="frmPro" action="~/Secure/Ecommerce/SavePaymentGatewaySettings" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="/Secure/Integration/PaymentGateway" />
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Username: </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control input-sm" name="PayPalPaymentsPro:Username" value="@AppSettings.GetVal("PayPalPaymentsPro:Username")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Password: </label>
+                                <div class="col-md-9">
+                                    <input type="password" class="form-control input-sm" name="PayPalPaymentsPro:Password" value="@AppSettings.GetVal("PayPalPaymentsPro:Password")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Signature: </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control input-sm" name="PayPalPaymentsPro:Signature" value="@AppSettings.GetVal("PayPalPaymentsPro:Signature")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="paypalAdvancedDlg" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Paypal Advanced</h4>
+            </div>
+            <form id="frmAdvance" action="~/Secure/Ecommerce/SavePaymentGatewaySettings" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="/Secure/Integration/PaymentGateway" />
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Partner: </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control input-sm" name="PayPalAdvanced:Partner" value="@AppSettings.GetVal("PayPalAdvanced:Partner")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Vendor: </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control input-sm" name="PayPalAdvanced:Vendor" value="@AppSettings.GetVal("PayPalAdvanced:Vendor")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">User: </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control input-sm" name="PayPalAdvanced:User" value="@AppSettings.GetVal("PayPalAdvanced:User")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Password: </label>
+                                <div class="col-md-9">
+                                    <input type="password" class="form-control input-sm" name="PayPalAdvanced:Password" value="@AppSettings.GetVal("PayPalAdvanced:Password")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="authorizeNetDlg" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Authorize.Net</h4>
+            </div>
+            @using (Ajax.BeginForm("SaveAuthorizeNet", "Settings", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "authorizenet-loader" }))
+            {
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Transaction Key: </label>
+                                <div class="col-md-9">
+                                    @*@Html.TextBox("TransactionKey", Settings.Get.AuthorizeNet.TransactionKey, new { @class = "form-control input-sm", data_val_required = "The Transaction Key field is required.", data_val = "true" })*@
+                                    <input type="text" class="form-control input-sm" id="TransactionKey" name="TransactionKey" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Admin ID: </label>
+                                <div class="col-md-9">
+                                    @*@Html.TextBox("AdminID", Settings.Get.AuthorizeNet.AdminID, new { @class = "form-control input-sm", data_val_required = "The Admin ID field is required.", data_val = "true" })*@
+                                    <input type="text" class="form-control input-sm" id="AdminID" name="AdminID" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            }
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="sagePayDlg" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Sage Pay</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row form-group">
+                            <label class="col-md-3"></label>
+                            <div class="col-md-9">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="brainTreeDlg" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Brain Tree</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row form-group">
+                            <label class="col-md-3"></label>
+                            <div class="col-md-9">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts{
+    <script src="~/Scripts/App/EcommerceSettings.js"></script>
+    }

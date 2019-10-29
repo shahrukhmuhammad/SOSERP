@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+<form id="frm" class="form-Modal" method="post" style="margin-top:55px;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Please Login to Continue</h4>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <input name="Username" type="text" class="form-control input-sm" placeholder="Username" required autofocus />
+            </div>
+            <div class="form-group">
+                <input name="Password" type="password" class="form-control input-sm" placeholder="Password" required />
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="checkbox">
+                        <label style="font-size:12px;">
+                            <input id="rememberMe" type="checkbox" value="false" name="rememberMe" style="margin-top:2px;" /> Remember me
+                        </label>
+                    </div>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <a href="~/Secure/Account/Recovery" role="button" style="margin-top:12px; float:right; font-size:11px;">Need help?</a>
+                </div>
+                <div id="rememberMe-Div" class="col-md-12" hidden>
+                    <select name="rememberMeTime" class="form-control input-sm">
+                        <option value="1 week">1 week</option>
+                        <option value="2 weeks">2 weeks</option>
+                        <option value="Until I sign out manually">Until I sign out manually</option>
+                    </select>
+                </div>
+            </div>
+            @if (TempData["ErrorMsg"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Error!</strong> @TempData["ErrorMsg"]
+                </div>
+            }
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Login</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script>
+        $('#rememberMe').change(function () {
+            if (this.checked)
+                $('#rememberMe-Div').show();
+            else
+                $('#rememberMe-Div').hide();
+        });
+    </script>
+}

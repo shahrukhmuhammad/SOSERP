@@ -1,0 +1,134 @@
+﻿@functions{
+    #region Current Location Check
+    bool IsCurrentArea(string a)
+    {
+        var area = ViewContext.RouteData.DataTokens["area"].ToString();
+        return string.Compare(a, area, true) == 0;
+    }
+    bool IsCurrentController(string c)
+    {
+        var controller = ViewContext.RouteData.GetRequiredString("controller");
+        return string.Compare(c, controller, true) == 0;
+    }
+    bool IsCurrentAction(string c, string a)
+    {
+        var action = ViewContext.RouteData.GetRequiredString("controller") + ViewContext.RouteData.GetRequiredString("action");
+        return string.Compare(c + a, action, true) == 0;
+    }
+    #endregion
+
+    #region Set Location
+    string SetActiveArea(string area)
+    {
+        var res = IsCurrentArea(area);
+        return res ? "active-tile active" : null;
+    }
+    string SetActiveController(string controller)
+    {
+        var res = IsCurrentController(controller);
+        return res ? "active-tile active" : null;
+    }
+    string SetTopActiveController(string controller)
+    {
+        var res = IsCurrentController(controller);
+        return res ? "active" : null;
+    }
+    string SetActiveAction(string controller, string action)
+    {
+        var res = IsCurrentAction(controller, action);
+        return res ? "active" : null;
+    }
+    #endregion
+}
+
+<footer id="baseApp-Footer" class="navbar navbar-inverse navbar-fixed-bottom">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div id="Footer-Module-Nav" class="visible-tablet visible-xs bg-primary">
+            <div class="module-nav-wrapper">
+                <a class="btn btn-primary tile @SetActiveArea("Dashboard")" href="~/Dashboard">
+                    <div class="tile-Icon"><span class="fa fa-2x fa-dashboard"></span></div>
+                    <div class="tile-Title">Dashboard</div>
+                </a>
+
+                @if (AppModule.GetById("CMS").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewCMS, BaseApp.Entity.AppPermission.CMS))
+                {
+                    <a class="btn btn-primary tile @SetActiveArea("CMS")" @(IsCurrentArea("CMS") ? "href=javascript:// data-toggle=sidebar data-target=#mobile-Module-Menu data-canvas=body data-autohide=true" : "href=/CMS")>
+                        <div class="tile-Icon"><span class="fa fa-2x fa-globe"></span></div>
+                        <div class="tile-Title">Website <br /> Management</div>
+                    </a>
+                }
+
+                @if (AppModule.GetById("DMS").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewDMS, BaseApp.Entity.AppPermission.DMS))
+                {
+                    <a class="btn btn-primary tile @SetActiveArea("DMS")" @(IsCurrentArea("DMS") ? "href=javascript:// data-toggle=sidebar data-target=#mobile-Module-Menu data-canvas=body data-autohide=true" : "href=/DMS")>
+                        <div class="tile-Icon"><span class="fa fa-2x fa-folder"></span></div>
+                        <div class="tile-Title">Document <br /> Management</div>
+                    </a>
+                }
+
+                @if (AppModule.GetById("CRM").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All))
+                {
+                    <a class="btn btn-primary tile @SetActiveArea("CRM")" @(IsCurrentArea("CRM") ? "href=javascript:// data-toggle=sidebar data-target=#mobile-Module-Menu data-canvas=body data-autohide=true" : "href=/CRM")>
+                        <div class="tile-Icon"><span class="fa fa-2x fa-users"></span></div>
+                        <div class="tile-Title">CRM</div>
+                    </a>
+                }
+
+                @*@if (AppModule.GetById("Listing").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All))
+                {
+                    <a class="btn btn-primary visible-tablet hidden-xs tile @SetActiveArea("Listing")" @(IsCurrentArea("Listing") ? "href=javascript:// data-toggle=sidebar data-target=#mobile-Module-Menu data-canvas=body data-autohide=true" : "href=/Listing")>
+                        <div class="tile-Icon"><span class="fa fa-2x fa-gavel"></span></div>
+                        <div class="tile-Title">Tenders</div>
+                    </a>
+                }
+
+                @if (AppModule.GetById("Sales").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All))
+                {
+                    <a class="btn btn-primary visible-tablet hidden-xs tile @SetActiveArea("Sales")" @(IsCurrentArea("Sales") ? "href=javascript:// data-toggle=sidebar data-target=#mobile-Module-Menu data-canvas=body data-autohide=true" : "href=/Sales")>
+                        <div class="tile-Icon"><span class="fa fa-2x fa-area-chart"></span></div>
+                        <div class="tile-Title">Sales</div>
+                    </a>
+                }*@
+
+                @*<a id="management-popover-mobile" class="btn btn-primary tile pull-right hidden-tablet visible-xs" href="javascript://">
+                    <div class="tile-Icon"><span class="fa fa-2x fa-th-large"></span></div>
+                    <div class="tile-Title">More <i class="fa fa-chevron-up"></i></div>
+                </a>*@
+            </div>
+        </div>
+    }
+
+    <div class="row no-margin hidden-tablet hidden-xs">
+        <div class="col-sm-6">
+            @*@AppSettings.GetVal("app:Title") powered by <a class="navbar-brand" style="float:none; height:auto; width:auto;" href="http://www.webnomicstech.net" target="_blank">Webnomics Technologies LLC</a>*@
+        </div>
+        <div class="col-sm-6 text-right" style="padding:3px;">
+            @Request.UserHostName from @Request.Browser.Type
+        </div>
+    </div>
+</footer>
+
+<!-- Management Popover hidden content -->
+@*<div id="management-popover-content-mobile" hidden>
+    <div class="management-popover-content-mobile navbar-inverse">
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (AppModule.GetById("Listing").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All))
+        {
+            <a class="btn btn-primary tile @SetActiveArea("Listing")" @(IsCurrentArea("Listing") ? "href=javascript:// data-toggle=sidebar data-target=#mobile-Module-Menu data-canvas=body data-autohide=true" : "href=/Listing")>
+                <div class="tile-Icon"><span class="fa fa-2x fa-gavel"></span></div>
+                <div class="tile-Title">Tenders</div>
+            </a>
+        }
+
+        if (AppModule.GetById("Sales").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All))
+        {
+            <a class="btn btn-primary tile @SetActiveArea("Sales")" @(IsCurrentArea("Sales") ? "href=javascript:// data-toggle=sidebar data-target=#mobile-Module-Menu data-canvas=body data-autohide=true" : "href=/Sales")>
+                <div class="tile-Icon"><span class="fa fa-2x fa-area-chart"></span></div>
+                <div class="tile-Title">Sales</div>
+            </a>
+        }
+    }
+    </div>
+</div>*@

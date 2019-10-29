@@ -1,0 +1,28 @@
+﻿@model CMS.Entity.CmsPage
+@{
+    ViewBag.Title = Model.BrowserTitle;
+}
+
+@section metadata{
+    @Html.Raw(Model.Metadata)
+}
+
+<div class="container-fluid">
+    @Html.Raw(Model.Contents)
+
+    @foreach (var x in Model.PageSections.Where(x => x.Status == CMS.Entity.CmsPageSectionStatus.Published).ToList())
+    {
+        @Html.Raw(x.Section)
+    }
+</div>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">News</h3>
+    </div>
+    <div class="panel-body no-padding">
+        <ul class="list-group no-margin">
+            @Html.Action("CmsRecentNews")
+        </ul>
+    </div>
+</div>

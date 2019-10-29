@@ -1,0 +1,152 @@
+﻿
+@{
+    ViewBag.Title = "Calendar";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+<link href="~/Content/Full Calendar/fullcalendar.css" rel="stylesheet" />
+<link href="~/Content/Full Calendar/fullcalendar.print.css" rel="stylesheet" media='print' />
+
+<style>
+    
+    #calendar1 {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    table:not(.table-bordered) > thead > tr > th, .table:not(.table-bordered) > thead > tr > th, table:not(.table-bordered) > tbody > tr > th, .table:not(.table-bordered) > tbody > tr > th, table:not(.table-bordered) > tfoot > tr > th, .table:not(.table-bordered) > tfoot > tr > th, table:not(.table-bordered) > thead > tr > td, .table:not(.table-bordered) > thead > tr > td, table:not(.table-bordered) > tbody > tr > td, .table:not(.table-bordered) > tbody > tr > td, table:not(.table-bordered) > tfoot > tr > td, .table:not(.table-bordered) > tfoot > tr > td{
+        border-color:#bfbbbb;
+    }
+    .fc th, .fc td {
+    border-style: solid;
+    border-width: 1px;
+    padding: 0;
+    vertical-align: top;
+}
+    .menu-links a:hover {
+        text-decoration: none;
+    }
+</style>
+
+    }
+
+<div class="form-Modal">
+    <div class="modal-content bg-transparent">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                Events
+                <span class="pull-right menu-links">
+                    <a href="javascript://" class="text-muted" style="margin:0 8px;" title="back to previous" onclick="window.history.back()">
+                        <i class="fa fa-arrow-circle-left"></i>
+                    </a>
+                    <a href="javascript://" title="add new">
+                        <i class="fa fa-plus-circle text-primary"></i>
+                    </a>
+                </span>
+            </h3>
+            
+        </div>
+        <div class="row" style="margin:12px 0;">
+            <div class="col-md-10 no-padding">
+                <ul class="nav nav-pills">
+                    <li><a href="#" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-calendar"></i> &nbsp; &nbsp; All Events</a></li>
+                    <li><a href="#" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-calendar-plus-o"></i> &nbsp; &nbsp; Public Events</a></li>
+                    <li><a href="#" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-bullhorn"></i> &nbsp; &nbsp; Upcoming</a></li>
+                    <li><a href="#" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-adjust"></i> &nbsp; &nbsp; Invited</a></li>
+                    <li><a href="#" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-thumbs-up"></i> &nbsp; &nbsp; Accepted</a></li>
+                    <li><a href="#" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-street-view"></i> Organizing</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2 no-padding">
+                <div class="btn-group-xs pull-right" role="group">
+                    <button type="button" class="btn btn-primary" onclick="window.location.replace('?p=&viewMode=list')" title="List View" data-toggle="tooltip" data-placement="bottom"><span class="fa fa-th-list"></span></button>
+                    <button type="button" class="btn btn-primary" onclick="window.location.replace('/?p=&viewMode=grid')" title="Grid View" data-toggle="tooltip" data-placement="bottom"><span class="fa fa-th-large"></span></button>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="modal-body" style="padding:0;">
+            <div id='calendar1'></div>
+        </div>        
+    </div>
+</div>
+
+@section Scripts{
+<script src="~/Scripts/Full Calendar/moment.min.js"></script>
+<script src="~/Scripts/Full Calendar/fullcalendar.min.js"></script>
+
+    <script>
+
+	$(document).ready(function() {
+
+	    $('#calendar1').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,basicWeek,basicDay'
+			},
+			defaultDate: '2016-01-12',
+			editable: true,
+			eventLimit: true, // allow "more" link when too many events
+			events: [
+				{
+					title: 'All Day Event',
+					start: '2016-01-01'
+				},
+				{
+					title: 'Long Event',
+					start: '2016-01-07',
+					end: '2016-01-10'
+				},
+				{
+					id: 999,
+					title: 'Repeating Event',
+					start: '2016-01-09T16:00:00'
+				},
+				{
+					id: 999,
+					title: 'Repeating Event',
+					start: '2016-01-16T16:00:00'
+				},
+				{
+					title: 'Conference',
+					start: '2016-01-11',
+					end: '2016-01-13'
+				},
+				{
+					title: 'Meeting',
+					start: '2016-01-12T10:30:00',
+					end: '2016-01-12T12:30:00'
+				},
+				{
+					title: 'Lunch',
+					start: '2016-01-12T12:00:00'
+				},
+				{
+					title: 'Meeting',
+					start: '2016-01-12T14:30:00'
+				},
+				{
+					title: 'Happy Hour',
+					start: '2016-01-12T17:30:00'
+				},
+				{
+					title: 'Dinner',
+					start: '2016-01-12T20:00:00'
+				},
+				{
+					title: 'Birthday Party',
+					start: '2016-01-13T07:00:00'
+				},
+				{
+					title: 'Click for Google',
+					url: 'http://google.com/',
+					start: '2016-01-28'
+				}
+			]
+		});
+
+	});
+
+</script>
+    }

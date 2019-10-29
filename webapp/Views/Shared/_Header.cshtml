@@ -1,0 +1,151 @@
+﻿@{
+    var querySlug = (ViewContext.RouteData.Values["slug"] == null ? "" : ViewContext.RouteData.Values["slug"].ToString());
+    var mainMenu = ViewBag.MainMenu as List<CMS.Entity.CmsPage>;
+    var parentSlugId = (!string.IsNullOrEmpty(querySlug) ? mainMenu.Where(x => x.Slug == querySlug).SingleOrDefault().ParentId : Guid.Empty);
+    var rootMenuItems = mainMenu.Where(x => !x.ParentId.HasValue && x.Menu == true).OrderBy(x => x.PageOrder);
+}
+
+@functions{
+    #region Current Location Check
+    bool IsCurrentController(string c)
+    {
+        var controller = ViewContext.RouteData.GetRequiredString("controller");
+        return string.Compare(c, controller, true) == 0;
+    }
+    bool IsCurrentAction(string c, string a)
+    {
+        var action = ViewContext.RouteData.GetRequiredString("controller") + ViewContext.RouteData.GetRequiredString("action");
+        return string.Compare(c + a, action, true) == 0;
+    }
+    #endregion
+
+    #region Set Location
+    string SetActiveController(string controller)
+    {
+        var res = IsCurrentController(controller);
+        return res ? "active" : null;
+    }
+    string SetActiveAction(string controller, string action)
+    {
+        var res = IsCurrentAction(controller, action);
+        return res ? "active" : null;
+    }
+    #endregion
+}
+
+<!-- header -->
+<header>
+    <div class="top-bar bg-light hdden-xs">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 list-inline list-unstyled no-margin hidden-xs">
+                    <p class="no-margin">
+                        Have any questions?
+                        <strong>@AppSettings.GetVal("website:Phone")</strong> or <strong>@AppSettings.GetVal("website:Email")</strong>
+                    </p>
+                </div>
+                <div class="col-sm-4 col-sm-offset-2">
+                    <div class="row">
+                        <div class="col-xs-9 no-padding-right">
+                            @if (Request.IsAuthenticated && !string.IsNullOrEmpty(CurrentWebUser.FullName))
+                            {
+                                <button class="dropdown-toggle language pull-right" type="button" data-toggle="dropdown" aria-expanded="false">
+                                    Welcome: @CurrentWebUser.FullName <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu no-border-radius no-shadow" style="right:0;">
+                                    <li><a href="~/Portal/EditProfile"><i class="fa fa-user"></i> Profile</a></li>
+                                    <li><a href="javascript://"><i class="fa fa-lock"></i> Change Password</a></li>
+                                    <li><a href="~/Portal/Logout"><i class="fa fa-power-off"></i> Logout</a></li>
+                                </ul>
+                            }
+                            else
+                            {
+                                <ul class="list-inline list-unstyled pull-right no-margin">
+                                    <li class="@SetActiveAction("Portal", "Login")"><a href="~/Portal/Login">Sign In</a></li>
+                                    <li class="@SetActiveAction("Portal", "Registration")"><a href="~/Portal/Registration">Sign Up</a></li>
+                                </ul>
+                            }
+                        </div>
+                        <div class="col-xs-3 no-padding-left">
+                            <button class="dropdown-toggle language pull-right" type="button" data-toggle="dropdown" aria-expanded="false">
+                                <img src="~/Content/Template/images/us.png" width="16" height="11" alt="EN Language"> English <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu no-border-radius no-shadow">
+                                <li><a href="javascript://"><img src="~/Content/Template/images/us.png" width="16" height="11" alt="EN Language"> [US] English</a></li>
+                                <li><a href="javascript://"><img src="~/Content/Template/images/de.png" width="16" height="11" alt="DE Language"> [DE] German</a></li>
+                                <li><a href="javascript://"><img src="~/Content/Template/images/fr.png" width="16" height="11" alt="FR Language"> [FR] French</a></li>
+                                <li><a href="javascript://"><img src="~/Content/Template/images/ru.png" width="16" height="11" alt="RU Language"> [RU] Russian</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="nav-wrap">
+        <div class="nav-wrap-holder">
+            <div class="container" id="nav_wrapper">
+                <nav class="navbar navbar-static-top nav-white">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#Navbar">
+                            <span class="sr-only">
+                                Toggle navigation
+                            </span>
+                            <span class="icon-bar">
+                            </span>
+                            <span class="icon-bar">
+                            </span>
+                            <span class="icon-bar">
+                            </span>
+                        </button>
+                        <a class="navbar-brand" href="~/">
+                            <img src="~/Content/Images/logo.png" alt="@AppSettings.GetVal("website:Title")" class="img-responsive">
+                            <span>@AppSettings.GetVal("website:Title")</span>
+                            <small>Largest Source to African Tenders</small>
+                        </a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="Navbar">
+                        <!-- regular link -->
+                        <ul class="nav navbar-nav navbar-right">
+                            @foreach (var rootItem in rootMenuItems)
+                            {
+                                if (mainMenu.Any(x => x.ParentId == rootItem.Id))
+                                {
+                                    var subItems = mainMenu.Where(x => x.ParentId == rootItem.Id && x.Menu == true).OrderBy(x => x.PageOrder);
+
+                                    if (subItems.Count() > 0)
+                                    {
+                                        <li class="dropdown @(querySlug == rootItem.Slug || parentSlugId == rootItem.Id ? "active" : "")">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">@rootItem.Name <i class="caret"></i></a>
+                                            <ul class="dropdown-menu">
+                                                <li class="@(querySlug == rootItem.Slug ? "active" : "")"><a href="@(rootItem.IsLink ? rootItem.LinkUrl : "/" + rootItem.Slug)" @(rootItem.LinkTarget ? "target=_blank" : "")><i class="fa fa-angle-right"></i> @rootItem.Name</a></li>
+                                                <li class="divider" role="separator"></li>
+                                                @foreach (var subItem in subItems)
+                                                {
+                                                    <li class="@(querySlug == subItem.Slug ? "active" : "")"><a href="@(subItem.IsLink ? subItem.LinkUrl : "/" + subItem.Slug)" @(subItem.LinkTarget ? "target=_blank" : "")><i class="fa fa-angle-right"></i> @subItem.Name</a></li>
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="@(querySlug == rootItem.Slug ? "active" : (string.IsNullOrEmpty(querySlug) && rootItem.Slug.ToLower() == "home" ? "active" : ""))"><a href="@(rootItem.IsLink ? rootItem.LinkUrl : "/" + rootItem.Slug)" id="@rootItem.Slug" @(rootItem.LinkTarget ? "target=_blank" : "")>@rootItem.Name</a></li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li class="@(querySlug == rootItem.Slug ? "active" : (string.IsNullOrEmpty(querySlug) && rootItem.Slug.ToLower() == "home" ? "active" : ""))"><a href="@(rootItem.IsLink ? rootItem.LinkUrl : "/" + rootItem.Slug)" id="@rootItem.Slug" @(rootItem.LinkTarget ? "target=_blank" : "")>@rootItem.Name</a></li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- /.div nav wrap holder -->
+    </div>
+    <!-- /#nav wrap -->
+</header>
+<!-- end: Header -->

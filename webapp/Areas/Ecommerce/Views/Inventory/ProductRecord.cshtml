@@ -1,0 +1,555 @@
+﻿@model Ecommerce.Entity.Product
+
+@{
+    ViewBag.Title = "ProductRecord";
+    var fieldIndex = 0;
+}
+@section styles{
+<link href="~/Content/App/imageuploadify.min.css" rel="stylesheet" />
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+}
+
+<form id="lead-frm" class="user-Profile" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="ProductId" name="ProductId" value="@Model.ProductId" />
+    @Html.Hidden("sr", "false")
+
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                <button type="submit" class="btn btn-success" onclick="$('#sr').val('saveanother');"><i class="fa fa-check"></i> Save &amp; Add Another</button>
+                <button type="submit" class="btn btn-primary" onclick="$('#sr').val('savereturn');"><i class="fa fa-check"></i> Save &amp; return</button>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top:15px;">
+            
+            
+            <div class="col-sm-9 bordered-section">
+                <div class="row" style="border-bottom:1px solid #000000">
+                    <div class="col-sm-12">
+                        <h3>Product Vitals </h3>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:18px;">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            @Html.DropDownList("EANCodeType", new SelectList(ViewBag.Types, "value", "text"), new { @class = "form-control input-sm", @required = "required" })
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control input-sm" name="EAN" value="@Model.EAN" placeholder="" autofocus="true" />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @if (Model.ProductId == 0)
+                            {
+                                <input type="text" disabled="disabled" value="SKU is System Generated" class="form-control input-sm" />
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(x => x.Sku, new { @class = "form-control input-sm", @readonly = "true" })
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row form-group">
+                            <label class="col-sm-3 horizontal-label">Title</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-sm" name="Title" value="@Model.Title" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row form-group">
+                            <label class="col-sm-3 horizontal-label">Short Description</label>
+                            <div class="col-sm-8">
+                                <textarea id="DefaultShortDescription" class="hidden" disabled readonly></textarea>
+                                <textarea type="text" class="form-control" id="ShortDescription" name="ShortDescription" required>
+                                    @Html.Raw(Model.ShortDescription)
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row form-group">
+                            <label class="col-sm-3 horizontal-label">MPN <small>(Manufacturer Part Number)</small></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-sm" name="MPN" value="@Model.MPN" required />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row form-group">
+                            <label class="col-sm-3 horizontal-label">Category</label>
+                            <div class="col-sm-8">
+                                @Html.DropDownList("CategoryId", new SelectList(ViewBag.Categories, "value", "text"), " -Select Category- ", new { @class = "form-control input-sm", @required = "required" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row form-group">
+                            <label class="col-sm-3 horizontal-label">Brand</label>
+                            <div class="col-sm-8">
+                                @Html.DropDownListFor(x => x.ManufacturerId, (SelectList)ViewBag.Manufacturer, " -Select Manufacturer- ", new { @class = "form-control input-sm", @required = "required" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="row tb-padding">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h4>Image Gallery</h4>
+            </div>
+            <div class="row">
+                <div class="row col-sm-3 img-container">
+                    <img id="img-Preview" src="~/Content/Uploads/Ecommerce/p_@(Model.ProductId).jpg" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/img.png';" />
+                    <input type="file" class="form-control input-sm file-select" id="Image" name="Image" onchange="previewImage(this,'#img-Preview')" />
+                    <div class="img-overlay">
+                        <a class="btn btn-default btn-xs" href="javascript://"><i class="fa fa-edit"></i> Edit</a>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="row form-group">
+                        <div class="col-sm-12">
+                            <input id="files" type="file" accept="image/jpeg,image/jpg" multiple>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row tb-padding">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h4>Description</h4>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row form-group">
+                        <div class="col-sm-12">
+                            <textarea id="DefaultDescription" class="hidden" disabled readonly></textarea>
+                            <textarea type="text" class="form-control" id="Description" name="Description" required>
+                                @Html.Raw(Model.Description)
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row tb-padding">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h4>Product Dimensions</h4>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Length</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control input-sm" name="Length" value="@Model.Length" required />
+                                <div class="input-group-addon"> cm </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Width</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control input-sm" name="Width" value="@Model.Width" required />
+                                <div class="input-group-addon"> cm </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Height</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control input-sm" name="Height" value="@Model.Height" required />
+                                <div class="input-group-addon"> cm </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Weight</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control input-sm" name="Weight" value="@Model.Weight" required />
+                                <div class="input-group-addon"> gm </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row tb-padding">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h4>Shipping Details</h4>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Package Size</label>
+                        <div class="col-sm-6">
+                            @Html.DropDownList("PackageSize", new SelectList(ViewBag.PackageSizes, "value", "text"), "- Select Size -", new { @class = "form-control input-sm", @required = "required" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Economy <small>(Prefered Shipping Package)</small></label>
+                        <div class="col-sm-6">
+                            @Html.DropDownList("EconomyPackageId", (SelectList)ViewBag.EconomyList, " -Select Shipping Package- ", new { @class = "form-control input-sm", @required = "required" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Standard <small>(Prefered Shipping Package)</small></label>
+                        <div class="col-sm-6">
+                            @Html.DropDownList("StandardPackageId", (SelectList)ViewBag.StandardList, " -Select Shipping Package- ", new { @class = "form-control input-sm", @required = "required" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Express <small>(Prefered Shipping Package)</small></label>
+                        <div class="col-sm-6">
+                            @Html.DropDownList("ExpressPackageId", (SelectList)ViewBag.ExpressList, " -Select Shipping Package- ", new { @class = "form-control input-sm", @required = "required" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row tb-padding">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h4>Stock Options</h4>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Lot Code</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control input-sm" name="LotCode" value="@Model.LotCode" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Quantity</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control input-sm" name="Quantity" value="@Model.Quantity" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Supplier </label>
+                        <div class="col-sm-9">
+                            @*@Html.DropDownList("Suppliers", new SelectList(ViewBag.Suppliers, "value", "text"), "- Select Supplier -", new { @class = "form-control input-sm", @required = "required" })*@
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Purchase Price</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-addon"> @AppSettings.GetVal("CurrencySymbol") </div>
+                                <input type="number" class="form-control input-sm" name="PurchasePrice" value="@Model.PurchasePrice" required />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row tb-padding">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h4>Pricing</h4>
+            </div>
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="row form-group">
+                        <div class="col-sm-3 pull-right">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="checkAll" name="ApplyVAT" value="@Model.ApplyVAT" />
+                                <label class="form-check-label" for="checkAll">
+                                    Apply VAT (for All)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Retail/Website Price</label>
+                        <div class="col-sm-6">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-addon"> @AppSettings.GetVal("CurrencySymbol") </div>
+                                <input type="number" class="form-control input-sm" name="SalePrice" value="@Model.SalePrice" required />
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Apply VAT
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Dropship/Associates Price</label>
+                        <div class="col-sm-6">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-addon"> @AppSettings.GetVal("CurrencySymbol") </div>
+                                <input type="number" class="form-control input-sm" name="TradeSalePrice" value="@Model.TradeSalePrice" required />
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                <label class="form-check-label" for="defaultCheck2">
+                                    Apply VAT
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-9">
+
+                    @if (Model.ProductId > 0)
+                    {
+                        <div class="row form-group">
+                            <label class="col-sm-3 horizontal-label">Bulk Buyers Prices </label>
+                            <div class="col-sm-6" id="rowContainer">
+                                @foreach (var item in Model.BulkPrices)
+                                {
+                                    <ul class="list-inline" id="ul_@fieldIndex">
+                                        <li>Qty</li>
+                                        <li>
+                                            <select class="form-control input-sm drop" id="BulkQuantity" name="BulkPrices[@fieldIndex].Quantity"></select>
+                                        </li>
+                                        <li>Rate</li>
+                                        <li><input type="text" class="form-control input-sm" id="BulkPrice" name="BulkPrices[@fieldIndex].Price" value="@item.Price" style="width: 100px;"></li>
+                                        @if (fieldIndex == 0)
+                                        {
+                                            <li>
+                                                <a href="javascript://" class="btn btn-info btn-xs" id="btn_addRow">
+                                                    <i class="fa fa-plus"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript://" class="btn btn-danger btn-xs" id="btn_removeRow">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+
+                                    fieldIndex++;
+                                }
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
+                                    <label class="form-check-label" for="defaultCheck3">
+                                        Apply VAT
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row form-group">
+                            <label class="col-sm-3 horizontal-label">Bulk Buyers Prices </label>
+                            <div class="col-sm-6" id="rowContainer">
+                                <ul class="list-inline" id="ul_0">
+                                    <li>Qty</li>
+                                    <li>
+                                        <select class="form-control input-sm drop" id="BulkQuantity" name="BulkPrices[0].Quantity"></select>
+                                    </li>
+                                    <li>Rate</li>
+                                    <li><input type="text" class="form-control input-sm" id="BulkPrice" name="BulkPrices[0].Price" style="width: 100px;"></li>
+                                    <li>
+                                        <a href="javascript://" class="btn btn-info btn-xs" id="btn_addRow">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript://" class="btn btn-danger btn-xs" id="btn_removeRow">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
+                                    <label class="form-check-label" for="defaultCheck3">
+                                        Apply VAT
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                <button type="submit" class="btn btn-success" onclick="$('#sr').val('saveanother');" tabindex="29"><i class="fa fa-check"></i> Save &amp; Add Another</button>
+                <button type="submit" class="btn btn-primary" onclick="$('#sr').val('savereturn');" tabindex="30"><i class="fa fa-check"></i> Save &amp; return</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script src="~/Scripts/App/Ecommerce.js"></script>
+<script src="~/Scripts/App/imageuploadify.js"></script>
+    <script>
+        $('#files').imageuploadify();
+
+        var counter = 2;
+        $(function () {
+            var $select = $(".drop");
+            for (i = 1; i <= 100; i++) {
+                $select.append($('<option></option>').val(i).html(i))
+            }
+        });
+
+        $("#checkAll").click(function () {
+            $('input:checkbox').not(this).prop('checked', this.checked);
+        });
+    </script>
+
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+            $(function () {
+                $("#Description").summernote({ height: 200 });
+                $('.Restore').click(function () {
+                    var id = $('#Id').val();
+                    if (id == '') return;
+                    bootbox.confirm("Are you sure, you want to replace this page's content with default revision?", function (res) {
+                        if (res) {
+                            $("#loading-mask").show();
+                            $('#Description').summernote('code', $('#DefaultDescription').val());
+                            $("#loading-mask").fadeOut();
+                        }
+                    });
+                });
+            });
+
+            $(function () {
+                $("#ShortDescription").summernote({ height: 200 });
+                $('.Restore').click(function () {
+                    var id = $('#Id').val();
+                    if (id == '') return;
+                    bootbox.confirm("Are you sure, you want to replace this page's content with default revision?", function (res) {
+                        if (res) {
+                            $("#loading-mask").show();
+                            $('#ShortDescription').summernote('code', $('#DefaultShortDescription').val());
+                            $("#loading-mask").fadeOut();
+                        }
+                    });
+                });
+            });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('Description');
+                $('.Restore').click(function () {
+                    var id = $('#Id').val();
+                    if (id == '') return;
+                    bootbox.confirm("Are you sure, you want to replace this page's content with default revision?", function (res) {
+                        if (res) {
+                            $("#loading-mask").show();
+                            $('.ae-editable').html($('#DefaultDescription').val());
+                            $("#loading-mask").fadeOut();
+                        }
+                    });
+                });
+            });
+            $(function () {
+                makeAlloyEditor('ShortDescription');
+                $('.Restore').click(function () {
+                    var id = $('#Id').val();
+                    if (id == '') return;
+                    bootbox.confirm("Are you sure, you want to replace this page's content with default revision?", function (res) {
+                        if (res) {
+                            $("#loading-mask").show();
+                            $('.ae-editable').html($('#DefaultShortDescription').val());
+                            $("#loading-mask").fadeOut();
+                        }
+                    });
+                });
+            });
+        </script>
+    }
+}

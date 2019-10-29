@@ -1,0 +1,106 @@
+﻿@model IList<CatalogProduct>
+@{
+    ViewBag.Title = "Products";
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_Layout.cshtml";
+}
+
+<div id="content">
+    <div class="container" data-section-id="collection" data-section-type="collection-page-section">
+
+
+        <ol class="breadcrumb">
+            <li><a href="~/" title="Home">Home</a></li>
+
+
+            <li>@(ViewContext.RouteData.Values["id"] == null ? "All Categories" : ViewBag.CategoryTitle)</li>
+
+
+        </ol>
+        <div class="catalog_c">
+
+            <div class="title clearfix">
+                <h1>@(ViewContext.RouteData.Values["id"] == null ? "All Categories" : ViewBag.CategoryTitle)</h1>
+            </div>
+
+            @if (Model.Count() > 0)
+
+            {
+
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <div class="product_c">
+                            <div class="filter_c">
+                                <div class="collection-view pull-right hidden-xs">
+                                    <a id="grid" title="Grid View" href="?viewmode=grid&pmin=@Request["pmin"]&pmax=@Request["pmax"]" class="btn btn-default change-view active-filter ml5 mr5">
+                                        <i class="fa fa-lg fa-th"></i>
+                                    </a>
+
+                                    <a id="list" title="List View" href="?viewmode=list&pmin=@Request["pmin"]&pmax=@Request["pmax"]" class="btn btn-default change-view mr5">
+                                        <i class="fa fa-lg fa-list"></i>
+                                    </a>
+                                </div>
+
+                                <span>Sort by:</span>
+                                <div class="select_box sel_2">
+                                    <select name="sortBy" id="sortBy" class="form-control" data-sort="manual">
+                                        <option value="manual">Featured</option>
+                                        <option value="best-selling">Best Selling</option>
+                                        <option value="title-ascending">Alphabetically, A-Z</option>
+                                        <option value="title-descending">Alphabetically, Z-A</option>
+                                        <option value="price-ascending">Price, low to high</option>
+                                        <option value="price-descending">Price, high to low</option>
+                                        <option value="created-descending">Date, new to old</option>
+                                        <option value="created-ascending">Date, old to new</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            @Html.Partial("_Products", Model)
+
+                        </div>
+                    </div>
+
+                </div>
+                @Html.Partial("_ProductsPager", Model)
+
+            }
+            else
+            {
+                <p>No product Available.</p>
+            }
+        </div>
+
+                    </div>
+                </div>
+
+                @section foot{
+                    <script>
+                        $(function () {
+                            $('body').addClass('single-product');
+                            @if (Request["viewmode"] == null || Request.QueryString["viewmode"] == "grid" || Request["viewmode"] == "")
+            {
+                <text>
+                            $('#grid').addClass("active");
+                            </text>
+            }
+            else
+            {
+                <text>
+                            $('#@Request["viewmode"]').addClass("active");
+                            </text>
+            }
+                            //$('#departments-menu-toggle').on('click', function () {
+                            //    var attr = $('#menu-vertical-menu').attr('style');
+
+                            //    // For some browsers, `attr` is undefined; for others,
+                            //    // `attr` is false.  Check for both.
+                            //    if (typeof attr !== typeof undefined && attr !== false) {
+                            //        $('#menu-vertical-menu').removeAttr('style');
+                            //    }
+                            //    else {
+                            //        $('#menu-vertical-menu').attr('style', 'display: block !important');
+                            //    }
+                            //});
+                        });
+                    </script>
+                }

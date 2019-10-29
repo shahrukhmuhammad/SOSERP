@@ -1,0 +1,75 @@
+﻿
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    ViewBag.Title = (queryId == null ? "New Tender" : "Edit Tender");
+}
+
+<form id="frm" class="form-Modal" method="post">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Back"><i class="fa fa-angle-left"></i></a>
+                <button type="submit" class="btn btn-success" title="Submit"><i class="fa fa-check"></i></button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Tender No.</label>
+                        <input type="text" name="Title" class="form-control input-sm" required autofocus />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Closing Date</label>
+                        <div class="input-group input-group-sm datePicker">
+                            <input name="ClosingDate" class="form-control input-sm" type="text" value="@DateTime.UtcNow.ToShortDateString()" required autocomplete="off">
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Tender Title</label>
+                        <input type="text" name="Title" class="form-control input-sm" required autofocus />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Town</label>
+                        <input type="text" name="Title" class="form-control input-sm" required />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Province</label>
+                        <input type="text" name="Title" class="form-control input-sm" required autofocus />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Country</label>
+                        <select class="form-control input-sm" required>
+                            @*@foreach (var c in Html.CountriesListWithCode())
+                            {
+                                <option value="@c.Value" selected="@(Model.Country == c.Value)">@c.Text</option>
+                            }*@
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><span class="fa fa-times"></span> Cancel / Back</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</form>

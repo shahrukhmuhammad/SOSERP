@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "Sitemap";
+}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs nav-justified custom-Nav-Tabs" role="tablist">
+    <li role="presentation" class="first-child"><a href="~/CMS/Seo/Metadata"><i class="fa fa-search"></i> General</a></li>
+    <li role="presentation"><a href="~/CMS/Seo/Keyword"><i class="fa fa-key"></i> Keywords Management</a></li>
+    <li role="presentation" class="active"><a href="~/CMS/Seo/Sitemap"><i class="fa fa-sitemap"></i> Sitemap</a></li>
+    <li role="presentation" class="last-child"><a href="~/CMS/Seo/UrlMetadata"><i class="fa fa-link"></i> Page Optimization</a></li>
+</ul>
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" class="btn btn-warning"><i class="fa fa-ban"></i> UnPublish</a>
+                <a href="javascript://" class="btn btn-success"><i class="fa fa-check"></i> Publish</a>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table class="table table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th width="15px"><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                            <th>Page Name</th>
+                            <th>URL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" class="checkIt" value="" /></td>
+                            <td>Home Page</td>
+                            <td>/Home</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="checkIt" value="" /></td>
+                            <td>Contact Us</td>
+                            <td>/Contact</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="checkIt" value="" /></td>
+                            <td>Our Services</td>
+                            <td>/Services</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" class="btn btn-warning"><i class="fa fa-ban"></i> UnPublish</a>
+                <a href="javascript://" class="btn btn-success"><i class="fa fa-check"></i> Publish</a>
+            </div>
+        </div>
+    </div>
+</div>

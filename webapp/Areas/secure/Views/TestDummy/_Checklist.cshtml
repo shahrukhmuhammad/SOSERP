@@ -1,0 +1,73 @@
+﻿
+<style>
+    .checklist-item{
+        padding:2px 12px;
+        display:inline-block;
+        color:#535c69;
+        margin:3px;
+    }
+    .checklist-item:hover{
+        background-color:rgba(128, 126, 126, 0.22);
+    }
+</style>
+
+<div class="row" style="padding:5px 22px;">
+    <div class="col-md-12 well" style="margin-bottom:3px;">
+        <label style="font-size: 15px;"><strong>Checklist</strong></label>
+        <div class="row">
+            <div class="col-md-10 col-sm-10 col-xs-10">
+                <input type="text" id="checklist-todo" placeholder="Things to do" class="form-control input-sm" />
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2 no-padding" style="font-size:15px;">
+                <label><a href="javascript://" id="pure-check"><span class="fa fa-check"></span></a> &nbsp; &nbsp; <a href="javascript://"> <span class="fa fa-close"></span> </a></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p class="text-muted text-center" style="padding-top:8px; padding-bottom:0"> Completed (<span id="completed">0</span> of <span id="incomplete">0</span>)</p>
+            </div>
+        </div>
+        <div class="row" style="padding:6px; margin-top:10px;">
+            <div class="col-md-6">
+                <div class="well-skyBlue" style="padding:10px; background:none">
+                    <div class="panel-heading panel-primary" style="font-size: 13px; background-color: rgba(40, 169, 182, 0.35)"><strong>New Checklist</strong></div>
+                    <div class="checklistbox"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="well-skyBlue" style="padding:10px; background:none;">
+                    <div class="panel-heading panel-primary" style="font-size: 13px; background-color: rgba(40, 169, 182, 0.35)"><strong>Completed Checklist</strong></div>
+                    <div class="completed-checklistbox"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-2.2.3.js"></script>
+<script src="~/Scripts/App/Checklist.js"></script>
+
+<script>
+    function DelCheckItem(d) {
+        debugger;
+        $('.checkItem' + d).remove();
+        $('#incomplete').html($('.checklist-item').length);
+        if ($('.checklist-item').length == 0)
+        {
+            $('#notfound-txt').css('display', 'block');
+        }
+    }
+    function EditCheckItem(d) {
+        debugger;
+        var dataText = $('.checkItem' + d).find('a').attr('data-ids');
+        $('#checklist-todo').val(dataText);
+        $('.checkItem' + d).remove();
+        $('#incomplete').html($('.checklist-item').length);
+        if ($('.checklist-item').length == 0) {
+            $('#notfound-txt').css('display', 'block');
+        }
+    }
+    function OnCheckedChange() {
+
+    }
+</script>

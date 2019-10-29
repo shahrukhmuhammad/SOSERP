@@ -1,0 +1,110 @@
+﻿@model List<CMS.Entity.CmsNewsletterEmail>
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    ViewBag.Title = "Newsletter Subscribers";
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleEmails")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+            </div>
+        </div>
+        <div class="modal-body">
+
+            @if (TempData["SuccessMsg"] != null)
+            {
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Success!</strong>
+                    @TempData["SuccessMsg"]
+                </div>
+            }
+
+            @if (TempData["ErrorMsg"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Error!</strong>
+                    @TempData["ErrorMsg"]
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <form id="subscriber-frm" method="post" class="row">
+                        <div class="input-group">
+                            <input type="email" id="Email" name="Email" class="form-control input-sm" required autofocus />
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <hr />
+            <div class="table-responsive">
+                <table id="cms-Newsletter-Subscribers-dataTable" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Email" id="dataTable_0" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Subscribed on" id="dataTable_1" /></th>
+                            <th class="text-center" width="100px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@foreach (var x in Model)
+                        {
+                            <tr>
+                                <td><input type="checkbox" class="checkIt" value="@x.Id" /></td>
+                                <td>@x.Email</td>
+                                <td>@x.CreatedOn</td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <a href="javascript://" onclick="deleteRecord('@Url.Action("DeleteEmail")', '@x.Id')" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleEmails")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#cms-Newsletter-Subscribers-dataTable", [1, 2], [0, 3]);
+            getCmsNewsletterSubscribers("#cms-Newsletter-Subscribers-dataTable");
+
+            $("#subscriber-frm").validate({
+                rules: {
+                    Email: {
+                        remote: {
+                            url: "@Url.Action("CheckDuplicateEmail", "Newsletter", new { Area = "CMS" })",
+                            type: "post",
+                            data: {
+                                Email: function () {
+                                    return $("#Email").val();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

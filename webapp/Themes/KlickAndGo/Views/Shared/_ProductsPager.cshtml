@@ -1,0 +1,27 @@
+﻿@model IList<CatalogProduct>
+
+<div class="page_c clearfix red5">
+
+    <a  href="?pagesize=24&pagenumber=@(Convert.ToInt32(Request.QueryString["pagenumber"])- 1)" class="prev disabled">
+    <span class="fa fa-chevron-left"></span>Previous</a>
+
+    @*<ul>
+
+
+
+        <li class="active"><a href="">1</a></li>
+
+
+
+
+        <li>
+            <a href="/collections/outdoor-furniture?page=2" title="">2</a>
+        </li>
+
+
+    </ul>*@
+
+    <a href="?pagesize=24&pagenumber=@(Convert.ToInt32(Request.QueryString["pagenumber"]) + 1)" title="Next »" class="next">Next
+    <span class="fa fa-chevron-right"></span></a>
+
+</div>

@@ -1,0 +1,23 @@
+﻿@{
+    IList<SpecAttribute> attributes = ViewBag.VariantsByProduct;
+    int i = 0;
+}
+@if (attributes.Count != 0)
+{
+foreach (var item in ViewBag.AttributesByProduct as IList<SpecAttribute>)
+{
+    <div class="form-group variants" >
+        <label hidden style="font-size:16px;font-weight:bold; margin-top:8px;" class="control-label attribute-@i">@item.Title:</label>
+        <select name="productVariant" class="soflow" data-productid="@ViewBag.ProductId" @*onchange="ChangeVarient(@product.ProductId)"*@ id="soflow-@i" data-id="@item.Title">
+            <option value="">-- select --</option>
+            @foreach (var subItem in attributes.Where(m => m.AttrId == item.AttrId))
+            {
+                <option value="@subItem.Value">@subItem.Value</option>
+            }
+        </select>
+    </div>
+        { i++; }
+
+    }
+
+}

@@ -1,0 +1,913 @@
+﻿@model BaseApp.Entity.AppUser
+@{
+    ViewBag.Title = Model.FullName;
+    var extras = ViewBag.Extras as List<BaseApp.Entity.ExtraFieldSection>;
+}
+
+@section styles{
+    <link href="~/Content/activityStream.css" rel="stylesheet" />
+<style>
+    .summaryView-btns > .btn {
+        width: 115px;
+    }
+
+    .dms-frame {
+        height: 477px;
+    }
+
+    .ae-editable {
+        height: 270px;
+    }
+</style>
+}
+
+<div class="user-Profile bg-info">
+
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="btn-group btn-group-lg visible-xs" style="position: absolute; top: 10px; left: 15px;">
+                <a class="right-btn" href="javascript://">@Model.EmploymentStatus.ToSpacedTitleCase()</a>
+            </div>
+            <img src="~/Content/Uploads/Dp/@(Model.Id).jpg" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/user.png';" />
+            <div class="btn-group btn-group-lg visible-xs" style="position: absolute; top: -14px; right: 0;">
+                <a href="~/Secure/Employee/Record/@Model.Id" class="btn btn-link text-muted" title="Edit"><i class="fa fa-2x fa-edit"></i></a>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="page-header">
+                <h1 style="margin-top:0;">@Model.FullName <small>(@Model.Code)</small></h1>
+                <div class="btn-group btn-group-lg hidden-xs">
+                    <a href="~/Secure/Employee/Record/@Model.Id" class="btn btn-link text-muted" title="Edit"><i class="fa fa-edit"></i></a>
+                </div>
+            </div>
+            <h3 class="text-muted">@Model.Type.ToSpacedTitleCase()-@Model.Office.Title <a class="right-btn hidden-xs" href="javascript://">@Model.EmploymentStatus.ToSpacedTitleCase()</a></h3>
+            <div class="hidden-xs">
+                <h5 class="text-muted">Reporting To: @Model.Office.Contact.FullName, Last Updated: @Model.UpdatedOn.GetTimeSpan()</h5>
+            </div>
+            <div class="visible-xs">
+                <h5 class="text-muted">Reporting To: Super Admin</h5>
+                <h5 class="text-muted">Last Updated: @Model.UpdatedOn.GetTimeSpan()</h5>
+            </div>
+            <h5 class="text-muted">Last Login: @Model.LastLogin.GetTimeSpan()</h5>
+        </div>
+    </div>
+    <div class="row tb-padding">
+        <div class="col-sm-12 col-md-8 col-xs-12 col-md-offset-3">
+            <div class="circle-btns circle-btnsNew">
+                <a class="active" href="#activity" aria-controls="activity" role="tab" data-toggle="tab" onclick="$(this).parent().find('a').removeClass('active'); $(this).addClass('active');">
+                    <p class="title">Insights</p>
+                </a>
+                <a href="#summary" aria-controls="summary" role="tab" data-toggle="tab" onclick="$(this).parent().find('a').removeClass('active'); $(this).addClass('active');">
+                    <p class="title">Scheduled <br /> Tasks</p>
+                </a>
+                <a href="#schedules" aria-controls="schedules" role="tab" data-toggle="tab" onclick="$(this).parent().find('a').removeClass('active'); $(this).addClass('active');">
+                    <p class="title">Time <br /> Tracker</p>
+                </a>
+                <a href="#timesheet" aria-controls="timesheet" role="tab" data-toggle="tab" onclick="$(this).parent().find('a').removeClass('active'); $(this).addClass('active');">
+                    <p class="title">My <br /> Payroll</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="activity">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="activity-feed">
+                        <div class="feed-item">
+                            <div class="date">Sep 25</div>
+                            <div class="text">Responded to need <a href="javascript://">“Volunteer opportunity”</a></div>
+                        </div>
+                        <div class="feed-item">
+                            <div class="date">Sep 24</div>
+                            <div class="text">Added an interest “Volunteer Activities”</div>
+                        </div>
+                        <div class="feed-item">
+                            <div class="date">Sep 23</div>
+                            <div class="text">Joined the group <a href="javascript://">“Boardsmanship Forum”</a></div>
+                        </div>
+                        <div class="feed-item">
+                            <div class="date">Sep 21</div>
+                            <div class="text">Responded to need <a href="javascript://">“In-Kind Opportunity”</a></div>
+                        </div>
+                        <div class="feed-item">
+                            <div class="date">Sep 18</div>
+                            <div class="text">Created need <a href="javascript://">“Volunteer Opportunity”</a></div>
+                        </div>
+                        <div class="feed-item">
+                            <div class="date">Sep 17</div>
+                            <div class="text">Attending the event <a href="javascript://">“Some New Event”</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="summary">
+            <div class="row tb-padding">
+                <div class="col-sm-4">
+                    <div class="page-header">
+                        <h4>Telephone</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3 text-right">
+                            Home
+                        </div>
+                        <div class="col-xs-9">
+                            @Model.HomePhone
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3 text-right">
+                            Work
+                        </div>
+                        <div class="col-xs-9">
+                            @Model.WorkPhone
+                        </div>
+                    </div>
+                    @foreach (var x in extras.Where(x => x.Section == "Telephone").ToList())
+                    {
+                        foreach (var f in x.Fields)
+                        {
+                            <div class="row">
+                                <div class="col-xs-3 text-right">
+                                    @f.FieldName
+                                </div>
+                                <div class="col-xs-9">
+                                    @if (f.FieldType == "checkbox")
+                                    {
+                                        @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? (string.IsNullOrEmpty(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value) ? Html.Raw("<i class='fa fa-times text-danger'></i>") : Html.Raw("<i class='fa fa-times text-danger'></i>")) : Html.Raw("<i class='fa fa-check text-success'></i>"))
+                                    }
+                                    else
+                                    {
+                                        @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() != null ? Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value : "")
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="col-sm-4">
+                    <div class="page-header">
+                        <h4>Email</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3 text-right">
+                            Primary
+                        </div>
+                        <div class="col-xs-9">
+                            @Model.Email
+                        </div>
+                    </div>
+                    @foreach (var x in extras.Where(x => x.Section == "Email").ToList())
+                    {
+                        foreach (var f in x.Fields)
+                        {
+                            <div class="row">
+                                <div class="col-xs-3 text-right">
+                                    @f.FieldName
+                                </div>
+                                <div class="col-xs-9">
+                                    @if (f.FieldType == "checkbox")
+                                    {
+                                        @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? (string.IsNullOrEmpty(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value) ? Html.Raw("<i class='fa fa-times text-danger'></i>") : Html.Raw("<i class='fa fa-times text-danger'></i>")) : Html.Raw("<i class='fa fa-check text-success'></i>"))
+                                    }
+                                    else
+                                    {
+                                        @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() != null ? Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value : "")
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="col-sm-4">
+                    <div class="page-header">
+                        <h4>Vitals</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-5 text-right">
+                            Date of Birth
+                        </div>
+                        <div class="col-xs-7">
+                            @Model.DateOfBirth.ToShortDateString()
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-5 text-right">
+                            Gender
+                        </div>
+                        <div class="col-xs-7">
+                            @Model.Gender
+                        </div>
+                    </div>
+
+                    @foreach (var x in extras.Where(x => x.Section == "Vitals").ToList())
+                    {
+                        foreach (var f in x.Fields)
+                        {
+                            <div class="row">
+                                <div class="col-xs-5 text-right">
+                                    @f.FieldName
+                                </div>
+                                <div class="col-xs-7">
+                                    @if (f.FieldType == "checkbox")
+                                    {
+                                        @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? (string.IsNullOrEmpty(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value) ? Html.Raw("<i class='fa fa-times text-danger'></i>") : Html.Raw("<i class='fa fa-times text-danger'></i>")) : Html.Raw("<i class='fa fa-check text-success'></i>"))
+                                    }
+                                    else
+                                    {
+                                        @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() != null ? Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value : "")
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+            </div>
+            <div class="row tb-padding">
+                <div class="col-sm-12">
+                    <div class="page-header">
+                        <h4>Address</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-xs-3 text-right">
+                                    Address Line 1
+                                </div>
+                                <div class="col-xs-9">
+                                    @Model.AddressLine1
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 text-right">
+                                    Address Line 2
+                                </div>
+                                <div class="col-xs-9">
+                                    @Model.AddressLine2
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 text-right">
+                                    Zip Code
+                                </div>
+                                <div class="col-xs-9">
+                                    @Model.ZipCode
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-xs-3 text-right">
+                                    City
+                                </div>
+                                <div class="col-xs-9">
+                                    @Model.City
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 text-right">
+                                    State
+                                </div>
+                                <div class="col-xs-9">
+                                    @Model.State
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-3 text-right">
+                                    Country
+                                </div>
+                                <div class="col-xs-9">
+                                    @Html.CountriesListWithCode().Where(x => x.Value == Model.Country).FirstOrDefault().Text
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @foreach (var x in extras.Where(x => x.Section == "Address").ToList())
+                    {
+                        foreach (var f in x.Fields)
+                        {
+                            <div class="row">
+                                <div class="col-xs-3 text-right">
+                                    @f.FieldName
+                                </div>
+                                <div class="col-xs-9">
+                                    @if (f.FieldType == "checkbox")
+                                    {
+                                        @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? (string.IsNullOrEmpty(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value) ? Html.Raw("<i class='fa fa-times text-danger'></i>") : Html.Raw("<i class='fa fa-times text-danger'></i>")) : Html.Raw("<i class='fa fa-check text-success'></i>"))
+                                    }
+                                    else
+                                    {
+                                        @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() != null ? Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value : "")
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            @foreach (var x in extras)
+            {
+                if (!x.IsSystem)
+                {
+                    if (!x.ParentId.HasValue)
+                    {
+                        <div class="row tb-padding">
+                            <div class="col-sm-12">
+                                <div class="page-header">
+                                    <h4>@x.Section</h4>
+                                </div>
+                                <div class="page-body">
+                                    @if (x.Fields != null)
+                                    {
+                                        foreach (var f in x.Fields)
+                                        {
+                                            <div class="row form-group">
+                                                <div class="col-xs-3 text-right">
+                                                    @f.FieldName
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    @if (f.FieldType == "checkbox")
+                                                    {
+                                                        @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? Html.Raw("") : (string.IsNullOrEmpty(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value) ? Html.Raw("<i class='fa fa-times text-danger'></i>") : Html.Raw("<i class='fa fa-times text-danger'></i>")))
+                                                    }
+                                                    else
+                                                    {
+                                                        @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() != null ? Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value : "")
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="schedules">....</div>
+        <div role="tabpanel" class="tab-pane fade" id="timesheet">
+            <div id="div-Loader" hidden>
+                <img src="~/Content/Images/loader.gif" alt="Loading" style="margin: 0 auto; display: block; max-height: 100px;" />
+            </div>
+            <div id="timesheet-Submission-Container" class="row" hidden>
+                <div class="col-sm-8 col-sm-offset-2">
+                    <h4>Your timesheet has been submitted successfully. Your paystub will be available in <a href="javascript://" class="alert-link">My Paystubs</a> as soon as your payroll is processed. <a id="show-timesheet-Container" href="javascript://" class="alert-link">Start creating new timesheet</a></h4>
+                </div>
+            </div>
+            <div id="timesheet-Container" class="row">
+                <div class="col-sm-2 col-sm-push-10">
+                    <div class="page-header">
+                        <h4>Summary</h4>
+                    </div>
+                    <p class="text-center" style="margin-bottom:15px;">@DateTime.UtcNow.AddDays(-5).ToShortDateString() - Till date</p>
+                    <div class="row">
+                        <div class="col-xs-6 text-right" style="font-size:20px; height:55px;">
+                            Hours Worked
+                        </div>
+                        <div class="col-xs-6 text-center" style="font-size:20px; height:55px; line-height:55px;">
+                            20
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 text-right" style="font-size:20px;">
+                            Overtime
+                        </div>
+                        <div class="col-xs-6 text-center" style="font-size:20px;">
+                            3
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 text-right" style="font-size:20px;">
+                            PTO
+                        </div>
+                        <div class="col-xs-6 text-center" style="font-size:20px;">
+                            10
+                        </div>
+                    </div>
+
+                    <a id="hide-timesheet-Container" href="javascript://" class="btn btn-success btn-lg fullWidth" style="margin-top:15px;"><i class="fa fa-check"></i> Submit Timesheet</a>
+                </div>
+                <div class="col-sm-10 col-sm-pull-2">
+                    <div class="page-header">
+                        <div class="visible-xs text-right">
+                            <div class="btn-group btn-group-lg">
+                                <a href="javascript://" class="btn btn-link no-padding" style="top:5px;"><i class="fa fa-history"></i> View Previous Timesheets</a>
+                            </div>
+                            <br />
+                        </div>
+                        
+                        <h4 style="margin-top: 0; margin-bottom: 3px;">Current Timesheet <a href="javascript://" class="btn btn-link" style="padding-left:0; padding-right:0;"><i class="fa fa-plus-circle" style="font-size:16px;"></i> Add TimeCard</a></h4>
+                        <div class="btn-group btn-group-lg hidden-xs">
+                            <a href="javascript://" class="btn btn-link" style="top:-13px;"><i class="fa fa-history"></i> View Previous Timesheets</a>
+                        </div>
+                        
+                        
+                    </div>
+                    <div class="table-responsive" style="height:218px;">
+                        <table class="table table-condensed table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Clock In</th>
+                                    <th>Clock Out</th>
+                                    <th>Duration</th>
+                                    <th>Client</th>
+                                    <th>Project</th>
+                                    <th>Task Details</th>
+                                    <th>Task Location</th>
+                                    <th>Was it Scheduled</th>
+                                    <th>Attachments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@DateTime.UtcNow.ToShortDateString()</td>
+                                    <td>@DateTime.UtcNow.ToShortTimeString()</td>
+                                    <td>@DateTime.UtcNow.AddHours(9).ToShortTimeString()</td>
+                                    <td>9 hours</td>
+                                    <td>Mr. Client 1</td>
+                                    <td>Project Almanac</td>
+                                    <td>Task 1</td>
+                                    <td>Office</td>
+                                    <td>
+                                        <label class="label label-success">Yes</label>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            <a href="javascript://" class="btn btn-default"><i class="fa fa-file-o"></i></a>
+                                            <a href="javascript://" class="btn btn-default"><i class="fa fa-file-o"></i></a>
+                                            <a href="javascript://" class="btn btn-default"><i class="fa fa-file-o"></i></a>
+                                            <a href="javascript://" class="btn btn-primary"><i class="fa fa-plus-circle"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@DateTime.UtcNow.ToShortDateString()</td>
+                                    <td>@DateTime.UtcNow.ToShortTimeString()</td>
+                                    <td>@DateTime.UtcNow.AddHours(9).ToShortTimeString()</td>
+                                    <td>9 hours</td>
+                                    <td>Mr. Client 2</td>
+                                    <td>Project Almanac</td>
+                                    <td>Task 3</td>
+                                    <td>Residence</td>
+                                    <td>
+                                        <label class="label label-warning">No</label>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            <a href="javascript://" class="btn btn-default"><i class="fa fa-file-o"></i></a>
+                                            <a href="javascript://" class="btn btn-default"><i class="fa fa-file-o"></i></a>
+                                            <a href="javascript://" class="btn btn-primary"><i class="fa fa-plus-circle"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@DateTime.UtcNow.ToShortDateString()</td>
+                                    <td>@DateTime.UtcNow.ToShortTimeString()</td>
+                                    <td>@DateTime.UtcNow.AddHours(9).ToShortTimeString()</td>
+                                    <td>9 hours</td>
+                                    <td>Mrs. Client 12</td>
+                                    <td>Project New</td>
+                                    <td>Task 12</td>
+                                    <td>Outside</td>
+                                    <td>
+                                        <label class="label label-warning">No</label>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            <a href="javascript://" class="btn btn-default"><i class="fa fa-file-o"></i></a>
+                                            <a href="javascript://" class="btn btn-default"><i class="fa fa-file-o"></i></a>
+                                            <a href="javascript://" class="btn btn-primary"><i class="fa fa-plus-circle"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="payrolls">
+            <div class="row tb-padding">
+                <div class="col-sm-12">
+                    <div class="page-header">
+                        <h4>Payrolls</h4>
+                    </div>
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th>Payroll</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Payroll 1</td>
+                                <td>
+                                    @DateTime.UtcNow - @DateTime.UtcNow.AddDays(10)
+                                </td>
+                                <td>
+                                    <label class="label label-success">Paid</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Payroll 2</td>
+                                <td>
+                                    @DateTime.UtcNow - @DateTime.UtcNow.AddDays(10)
+                                </td>
+                                <td>
+                                    <label class="label label-warning">Pending</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Payroll 3</td>
+                                <td>
+                                    @DateTime.UtcNow - @DateTime.UtcNow.AddDays(10)
+                                </td>
+                                <td>
+                                    <label class="label label-danger">Un Paid</label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@*<span class="doctorNote-FixedBtn bg-light-blue-gradient" onclick="openHistory();"><i class="fa fa-history"></i></span>*@
+<span class="doctorNote-FixedBtn bg-yellow-gradient visible-md visible-lg" onclick="openNotes();" style="top:165px;"><i class="fa fa-clock-o"></i></span>
+<span class="doctorNote-FixedBtn bg-yellow-gradient visible-sm visible-xs" onclick="openMobileNotes();" style="top:165px;"><i class="fa fa-clock-o"></i></span>
+
+<!-- Overlay -->
+<div id="doctor-Notes" class="patientOverlay-right">
+    <div class="btn-group" role="group">
+        @*<button type="button" class="btn btn-warning"><i class="fa fa-plus"></i> Add New Note</button>*@
+        <button type="button" class="btn btn-default" onclick="closeNotes()"><i class="fa fa-times"></i> Close</button>
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="overlay-content">
+        <div class="col-sm-12">
+            <span id="currentTime" class="text-center" style="font-size:14px;color:#fefefe;"></span>
+            <div class="row no-margin">
+                <div class="col-xs-6 no-padding">
+                    <button type="button" class="btn btn-success btn-lg fullWidth start-timer-btn"><i class="fa fa-clock-o"></i> Clock In</button>
+                </div>
+                <div class="col-xs-6 no-padding">
+                    <button type="button" class="btn btn-warning btn-lg fullWidth remove-timer-btn"><i class="fa fa-clock-o"></i> Clock Out</button>
+                </div>
+            </div>
+            <h1 id="stopwatch" class="text-center">00:00:00</h1>
+            <div class="row no-margin">
+                <div class="col-xs-6 no-padding">
+                    <button type="button" class="btn btn-link fullWidth"><i class="fa fa-tasks"></i> Task Details</button>
+                </div>
+                <div class="col-xs-6 no-padding">
+                    <button type="button" class="btn btn-success fullWidth"><i class="fa fa-check"></i> Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="appt-History" class="patientOverlay-right">
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default" onclick="closeHistory()"><i class="fa fa-times"></i> Close</button>
+    </div>
+    <div class="overlay-content">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-clipboard"></i> Recent Appointment</h3>
+                <div class="btn-group btn-group-xs" role="group">
+                    <a href="javascript://" class="btn btn-primary btn-xs"><i class="fa fa-clock-o"></i> 06/08/2016 11:00 AM</a>
+                    <a href="javascript://" class="btn btn-success btn-xs">In-Process</a>
+                </div>
+            </div>
+            <div class="page-header" style="margin-top:0;">
+                <div class="row">
+                    <div class="col-sm-4 text-center">
+                        <h5>Case #: <strong>case-1</strong></h5>
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <h5>Appointment ID: <strong>appt-5</strong></h5>
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <h5>Appointment Type: <label class="label label-info">Surgery</label></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Symptoms</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-condensed table-hover" style="font-size:10px;">
+                                <thead>
+                                    <tr>
+                                        <th>Symptom</th>
+                                        <th>Severity</th>
+                                        <th>Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Dizzyness</td>
+                                        <td><label class="label label-info">Acute</label></td>
+                                        <td>1 month</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sore Throat</td>
+                                        <td><label class="label label-success">Normal</label></td>
+                                        <td>5 days</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Short sightedness</td>
+                                        <td><label class="label label-warning">Severe</label></td>
+                                        <td>6 months</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Diagnoses</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-condensed table-hover" style="font-size:10px;">
+                                <thead>
+                                    <tr>
+                                        <th>Diagnose</th>
+                                        <th>Level</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Hemoglobin level</td>
+                                        <td><label class="label label-info">Acute</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Heart Beat</td>
+                                        <td><label class="label label-success">Normal</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Diabetes</td>
+                                        <td><label class="label label-warning">Severe</label></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Vitals</h3>
+                        </div>
+                        <div class="panel-body" style="padding:7px;">
+                            <p class="no-margin">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis in.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-Modal">
+                        <div class="modal-content">
+                            <div class="modal-header text-center">
+                                <h5 class="modal-title">Treatment</h5>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-condensed table-hover" style="font-size:85%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Result</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Treatment 1</td>
+                                            <td>readings are good</td>
+                                            <td><label class="label label-success">Active</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Treatment 2</td>
+                                            <td></td>
+                                            <td><label class="label label-danger">Discontinued</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Treatment 3</td>
+                                            <td></td>
+                                            <td><label class="label label-success">Active</label></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-Modal">
+                        <div class="modal-content">
+                            <div class="modal-header text-center">
+                                <h5 class="modal-title">Medications</h5>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-condensed table-hover" style="font-size:85%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Perscription</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Medicine 1</td>
+                                            <td>Day, Noon, Evening 1 10 MG oral tablet</td>
+                                            <td><label class="label label-success">Active</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Medicine 2</td>
+                                            <td>200 MG oral tablet</td>
+                                            <td><label class="label label-danger">Discontinued</label></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Medicine 3</td>
+                                            <td>Daily 1 spoon syrup</td>
+                                            <td><label class="label label-success">Active</label></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+            <div class="panel-footer">
+                <h5 class="no-margin">Remarks</h5>
+                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="user-timesheets-Modal" tabindex="-1" role="dialog" aria-labelledby="user-timesheets-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/Stopwatch/timer.jquery.js"></script>
+
+    <script>
+        $(function () {
+            $(".user-timesheets").click(function (ev) {
+                $('#loading-mask').show();
+                ev.preventDefault();
+                var dataId = $(this).attr("data-id");
+                var target = "";
+                if (dataId === "") {
+                    target = "/Secure/Employee/_AllTimesheets/";
+                }
+                else {
+                    target = "/Secure/Employee/_AllTimesheets/" + dataId;
+                }
+
+
+                // load the url and show modal on success
+                $("#user-timesheets-Modal .modal-dialog").load(target, function () {
+                    $("#user-timesheets-Modal").modal("show");
+                    $('#loading-mask').hide();
+                });
+            });
+
+            // Init timer start
+            $('.start-timer-btn').on('click', function () {
+                $('#stopwatch').timer();
+                $(this).attr('disabled');
+            });
+
+            // Remove timer
+            $('.remove-timer-btn').on('click', function () {
+                $('#stopwatch').timer('remove');
+                $(this).attr('disabled');
+            });
+            
+            // Hide Timesheet Container
+            $("#hide-timesheet-Container").click(function (ev) {
+                $('#timesheet-Container').hide();
+                $("#div-Loader").show();
+
+                setTimeout(function () {
+                    $("#div-Loader").hide();
+                    
+                    $('#timesheet-Submission-Container').show();
+                }, 5000);
+            });
+
+            // Show Timesheet Container
+            $("#show-timesheet-Container").click(function (ev) {
+                $('#timesheet-Submission-Container').hide();
+                $('#timesheet-Container').show();
+            });
+        });
+    </script>
+
+<script>
+        $(function () {
+            //--- Add Vitals
+            $(".addNewVital").click(function (ev) {
+                $('#loading-mask').show();
+                ev.preventDefault();
+                var vitalId = $(this).attr("data-id");
+                var apptId = $(this).attr("data-apptId");
+                var vitalType = $(this).attr("data-type");
+                var targetURL = "/Clinicul/Appointment/_Vital/" + vitalId + "?AppointmentId=" + apptId + "&Type=" + vitalType;
+
+                // load the url and show modal on success
+                $("#apptVital-Modal .modal-dialog").load(targetURL, function () {
+                    $("#apptVital-Modal").modal("show");
+                    $('#loading-mask').hide();
+                });
+            });
+
+            $("body").on("keypress keyup blur onchange", ".add-BP", function () {
+                var bpSys = $("#bp-SYS").val();
+                var bpDia = $("#bp-DIA").val();
+                var bpPulse = $("#bp-Pulse").val();
+                var allVal = bpSys + "," + bpDia + "," + bpPulse;
+                $("#Description").val(allVal);
+            });
+            //---
+
+            //--- Changing Symptoms
+            $("#symptom-AddNewRow").click(function () {
+                var itemIndex = $("#symptom-Table input.iHidden").length;
+                var markup = '<tr>';
+                markup += '<td width="93%;"><input class="iHidden" type="hidden" value=""><input name="[' + itemIndex + '].Description" type="text" class="form-control input-sm" placeholder="Description" required/></td>';
+                markup += '<td><a href="javascript://" class="btn btn-danger btn-sm remCF"><span class="fa fa-trash-o"></span></a></td>';
+                markup += '</tr>';
+                $("#symptom-Table tbody").append(markup);
+            });
+            $("#symptom-Table").on('click', '.remCF', function () {
+                $(this).parent().parent().remove();
+            });
+            //---
+
+            //--- Diagnostics
+            $("#diagnostic-AddNewRow").click(function () {
+                var itemIndex = $("#diagnostic-Table input.iHidden").length;
+                var markup = '<tr>';
+                markup += '<td width="93%;"><a href="javascript://" class="btn btn-danger btn-sm remCF"><span class="fa fa-trash-o"></span></a><input class="iHidden" type="hidden" value="0">';
+                markup += '<div class="form-group"><div class="input-group"><input type="text" class="form-control" placeholder="Fill in diagnostics code or lookup" required /><div class="input-group-btn"><button class="btn btn-primary"><i class="fa fa-search"></i></button></div></div></div><div class="form-group"><textarea class="form-control input-sm" rows="3" placeholder="Description"></textarea></div></td>';
+                markup += '<td><a href="javascript://" class="btn btn-danger btn-sm remCF"><span class="fa fa-trash-o"></span></a></td>';
+                markup += '</tr>';
+                $("#diagnostic-Table tbody").append(markup);
+            });
+            $("#diagnostic-Table").on('click', '.remCF', function () {
+                $(this).parent().parent().remove();
+            });
+            //---
+        });
+
+        //--- Overlay Functions
+        function openNotes() {
+            document.getElementById("doctor-Notes").style.width = "50%";
+        }
+        function openMobileNotes() {
+            document.getElementById("doctor-Notes").style.width = "100%";
+        }
+        function closeNotes() {
+            document.getElementById("doctor-Notes").style.width = "0%";
+        }
+
+        function openHistory() {
+            document.getElementById("appt-History").style.width = "50%";
+        }
+        function closeHistory() {
+            document.getElementById("appt-History").style.width = "0%";
+        }
+        //---
+</script>
+}

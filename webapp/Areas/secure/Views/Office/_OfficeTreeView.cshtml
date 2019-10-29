@@ -1,0 +1,47 @@
+﻿ <!--<![endif]-->
+<link href="~/Content/JsTree/assets/dist/themes/default/style.min.css" rel="stylesheet" />
+<link href="~/Content/JsTree/assets/docs.css" rel="stylesheet" />
+    <!--[if lt IE 9]><script src="./assets/respond.js"></script><![endif]-->
+
+    <script>window.$q=[];window.$=window.jQuery=function(a){window.$q.push(a);};</script>
+    <div class="container" id="content">
+        <!--.-->
+        <div class="row page" id="docs">
+            <div class="col-md-12" style="">
+                <h3><i class="glyphicon glyphicon-leaf"></i> What is jsTree?</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div id="jstree1" class="demo">
+                            <ul>
+                                <li>
+                                    Root node 1
+                                    <ul>
+                                        <li data-jstree='{ "selected" : true }'><a href="#"><em>initially</em> <strong>selected</strong></a></li>
+                                        <li data-jstree='{ "icon" : "http://jstree.com/tree-icon.png" }'>custom icon URL</li>
+                                        <li data-jstree='{ "opened" : true }'>
+                                            initially open
+                                            <ul>
+                                                <li>Another node</li>
+                                            </ul>
+                                        </li>
+                                        <li data-jstree='{ "icon" : "glyphicon glyphicon-leaf" }'>Custom icon class (bootstrap)</li>
+                                    </ul>
+                                </li>
+                                <li><a href="http://www.jstree.com">Root node 2</a></li>
+                            </ul>
+                        </div>
+                        <div id="jstree2" class="demo" style="margin-top:2em;"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--.-->
+    </div>
+    <a class="hidden-xs hidden-sm" href="https://github.com/vakata/jstree"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_green_007200.png" alt="Fork me on GitHub"></a>
+<script src="~/Content/JsTree/assets/jquery-1.10.2.min.js"></script>
+<script src="~/Content/JsTree/assets/jquery.address-1.6.js"></script>
+<script src="~/Content/JsTree/assets/vakata.js"></script>
+<script src="~/Content/JsTree/assets/dist/jstree.min.js"></script>
+<script src="~/Content/JsTree/assets/docs.js"></script>
+    <script>$.each($q,function(i,f){$(f)});$q=null;</script>

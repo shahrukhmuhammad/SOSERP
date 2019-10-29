@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewBag.Title = "Recovery";
+}
+
+@section styles{
+    <style>
+        .stickyNavPadding {
+            padding-top:42px;
+        }
+    </style>
+}
+
+<div class="row" style="margin-top:50px;">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="form-Modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Having trouble signing in?</h4>
+                </div>
+
+                @if (TempData["SuccessMsg"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>Success!</strong> @TempData["SuccessMsg"]
+                    </div>
+                }
+
+                @if (TempData["ErrorMsg"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>Error!</strong> @TempData["ErrorMsg"]
+                    </div>
+                }
+
+                <div class="panel-group" id="recovery-Accordion" role="tablist" aria-multiselectable="true">
+                    <!-- Collapse Start -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading no-padding" role="tab" id="heading-Password">
+                            <h4 class="panel-title">
+                                <a class="list-group-item" role="button" data-toggle="collapse" data-parent="#recovery-Accordion" href="#collapse-Password" aria-expanded="false" aria-controls="collapse-Password">
+                                    <i class="fa fa-circle"></i> I don't know my password
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapse-Password" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-Password">
+                            <div class="panel-body">
+                                To reset your password, enter the username and email address you use to sign in to @AppSettings.GetVal("app:Title"). We will send you an email if your username and email match found.
+
+                                <form class="form-Modal frm" method="post" action="~/Secure/Account/PasswordRecovery">
+                                    @Html.AntiForgeryToken()
+                                    <div class="modal-content">
+                                        <div class="modal-header"></div>
+                                        <div class="modal-body" style="padding:10px 0;">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <input name="Username" type="text" class="form-control input-sm" placeholder="Username" required autofocus />
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <input name="Email" type="email" class="form-control input-sm" placeholder="Email" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer text-right" style="padding:10px 0;">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Collapse End -->
+
+                    <!-- Collapse Start -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading no-padding" role="tab" id="heading-Username">
+                            <h4 class="panel-title">
+                                <a class="list-group-item" role="button" data-toggle="collapse" data-parent="#recovery-Accordion" href="#collapse-Username" aria-expanded="false" aria-controls="collapse-Username">
+                                    <i class="fa fa-circle"></i> I don't know my username
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapse-Username" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-Username">
+                            <div class="panel-body">
+                                <p>To reset your username, please fill following details that you use to sign in to @AppSettings.GetVal("app:Title"). We will send you an email if the match is found.</p>
+
+                                <!-- Collapse Start -->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading no-padding" role="tab" id="heading-Email">
+                                        <h4 class="panel-title" style="font-size:12px;">
+                                            <a class="list-group-item" role="button" data-toggle="collapse" data-parent="#collapse-Username" href="#collapse-Email" aria-expanded="false" aria-controls="collapse-Email">
+                                                <i class="fa fa-circle"></i> Recover account by email
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse-Email" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-Email">
+                                        <form class="form-Modal frm" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <input name="Email" type="email" class="form-control input-sm" placeholder="Email" required />
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <input name="FirstName" type="text" class="form-control input-sm" placeholder="First Name" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <input name="MiddleName" type="text" class="form-control input-sm" placeholder="Middle Name" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <input name="LastName" type="text" class="form-control input-sm" placeholder="Last Name" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer text-right">
+                                                    <div class="btn-group btn-group-sm" role="group">
+                                                        <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- Collapse End -->
+
+                                <!-- Collapse Start -->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading no-padding" role="tab" id="heading-QA">
+                                        <h4 class="panel-title" style="font-size:12px;">
+                                            <a class="list-group-item" role="button" data-toggle="collapse" data-parent="#collapse-Username" href="#collapse-QA" aria-expanded="false" aria-controls="collapse-QA">
+                                                <i class="fa fa-circle"></i> Recover account by security question answer
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse-QA" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-QA">
+                                        <form class="form-Modal frm" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label>Question</label>
+                                                        <select name="Question" class="form-control input-sm" required autofocus>
+                                                            <option value="What was the house number and street name you lived in as a child?">What was the house number and street name you lived in as a child?</option>
+                                                            <option value="What primary school did you attend?">What primary school did you attend?</option>
+                                                            <option value="In what town or city was your first full time job?">In what town or city was your first full time job?</option>
+                                                            <option value="In what town or city did you meet your spouse/partner?">In what town or city did you meet your spouse/partner?</option>
+                                                            <option value="What is the middle name of your oldest child?">What is the middle name of your oldest child?</option>
+                                                            <option value="In what town or city did your mother and father meet?">In what town or city did your mother and father meet?</option>
+                                                            <option value="What is your spouse or partner's mother's maiden name?">What is your spouse or partner's mother's maiden name?</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Answer</label>
+                                                        <textarea name="Answer" class="form-control input-sm" rows="3" required></textarea>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <input name="FirstName" type="text" class="form-control input-sm" placeholder="First Name" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <input name="MiddleName" type="text" class="form-control input-sm" placeholder="Middle Name" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <input name="LastName" type="text" class="form-control input-sm" placeholder="Last Name" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer text-right">
+                                                    <div class="btn-group btn-group-sm" role="group">
+                                                        <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- Collapse End -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Collapse End -->
+                </div>
+                <div class="modal-footer text-right">
+                    <div class="btn-group btn-group-sm" role="group">
+                        <a href="~/Secure/Account/Login" class="btn btn-default"><i class="fa fa-angle-left"></i> Back to Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

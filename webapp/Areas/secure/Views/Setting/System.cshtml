@@ -1,0 +1,316 @@
+﻿
+@{
+    ViewBag.Title = "System Settings";
+}
+@section styles{
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.businessHours/1.0.1/jquery.businessHours.css" rel="stylesheet" />
+}
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> @TempData["ErrorMsg"]
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="frm" action="~/secure/setting/" class="form-Modal" method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        @ViewBag.Title
+                        <span class="pull-right" style="font-size:16px;">
+                            <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()" title="Cancel / Back"><i class="fa fa-close fa-2x"></i></a>
+                            <button type="submit" style="background:transparent; border:none" title="Save"><i class="fa fa-check-circle fa-2x text-success"></i></button>
+                        </span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="/Secure/Setting/System" />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="text-bold">System Logo <a href="javascript://" title="For best experience use PNG format file type for logo."><i class="fa fa-info-circle"></i></a></label>
+                                <div class="thumbnail text-center">
+                                    <img id="logo-Preview" src="~/Content/Images/applogo.png" class="img-responsive img-centre" style="max-height:210px;">
+                                    <div class="caption">
+                                        <input type="file" class="form-control input-sm" id="logo" name="logo" onchange="previewImage(this,'#logo-Preview')" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="text-bold">System Favicon <a href="javascript://" title="Updated favicon icon can take upto 1 day to show in browser because of browser cache issue."><i class="fa fa-info-circle"></i></a></label>
+                                <div class="thumbnail text-center">
+                                    <img id="favicon-Preview" src="~/appfavicon.ico" class="img-responsive img-centre thumbnail" style="max-height:50px;">
+                                    <div class="caption">
+                                        <input type="file" class="form-control input-sm" id="favicon" name="favicon" onchange="previewImage(this, '#favicon-Preview')" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @*<div class="form-group">
+                                    <label>Application Start</label>
+                                    <select name="app:StartURL" class="form-control input-sm">
+                                        @foreach (var x in AppModule.GetAll())
+                                        {
+                                            <option value="/@(x.Id == "CMS" ? "" : "")" @(AppSettings.GetVal("app:StartURL").Contains(x.Id) ? "selected" : "")>@x.Title</option>
+                                        }
+                                    </select>
+                                </div>*@
+
+                            <div class="form-group">
+                                <label class="text-bold">System Title</label>
+                                <input name="app:Title" type="text" class="form-control input-sm" value="@AppSettings.GetVal("app:Title")" required autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">Browser Title</label>
+                                <input name="app:BrowserTitle" type="text" class="form-control input-sm" value="@AppSettings.GetVal("app:BrowserTitle")" required autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">CDN Path</label>
+                                <input name="app:CDNPath" type="url" class="form-control input-sm" value="@AppSettings.GetVal("app:CDNPath")" required autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">Contact Email</label>
+                                <input name="contact:Email" type="email" class="form-control input-sm" value="@AppSettings.GetVal("contact:Email")" required autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">Address Line 1</label>
+                                <input name="contact:Address" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:Address")" required autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">Address Line 2 <a href="javascript://" title="Optional"> <i class="fa fa-info-circle"></i></a></label>
+                                <input name="contact:Address2" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:Address2")" autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">Town/City </label>
+                                <input name="contact:City" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:City")" required autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">County/State </label>
+                                <input name="contact:County" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:County")" required autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">Post Code/Zip Code </label>
+                                <input name="contact:PostCode" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:PostCode")" required autofocus />
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">Country </label>
+                                <select name="contact:Country" class="form-control input-sm" required autofocus>
+                                    @foreach (var c in Html.CountriesListWithCode())
+                                    {
+                                        <option value="@c.Value" selected="@(AppSettings.GetVal("contact:Country") == c.Value)">@c.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">Contact Phone</label>
+                                <input name="contact:Phone" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:Phone")" required autofocus />
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="text-bold">Currency</label>
+                                <select name="CurrencySymbol" class="form-control input-sm" required>
+                                    @foreach (var x in Html.CurrenciesList())
+                                    {
+                                        <option value="@x.Value" selected="@(AppSettings.GetVal("CurrencySymbol") == x.Value)">@x.Value - @x.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">Time Zone</label>
+                                <select name="TimeZone" class="form-control input-sm" required>
+                                    <option timezoneid="1" gmtadjustment="GMT-12:00" usedaylighttime="0" value="-12_(GMT-12:00) International Date Line West">(GMT-12:00) International Date Line West</option>
+                                    <option timezoneid="2" gmtadjustment="GMT-11:00" usedaylighttime="0" value="-11_(GMT-11:00) Midway Island, Samoa">(GMT-11:00) Midway Island, Samoa</option>
+                                    <option timezoneid="3" gmtadjustment="GMT-10:00" usedaylighttime="0" value="-10_(GMT-10:00) Hawaii">(GMT-10:00) Hawaii</option>
+                                    <option timezoneid="4" gmtadjustment="GMT-09:00" usedaylighttime="1" value="-9_(GMT-09:00) Alaska">(GMT-09:00) Alaska</option>
+                                    <option timezoneid="5" gmtadjustment="GMT-08:00" usedaylighttime="1" value="-8_(GMT-08:00) Pacific Time (US & Canada)">(GMT-08:00) Pacific Time (US & Canada)</option>
+                                    <option timezoneid="6" gmtadjustment="GMT-08:00" usedaylighttime="1" value="-8_(GMT-08:00) Tijuana, Baja California">(GMT-08:00) Tijuana, Baja California</option>
+                                    <option timezoneid="7" gmtadjustment="GMT-07:00" usedaylighttime="0" value="-7_(GMT-07:00) Arizona">(GMT-07:00) Arizona</option>
+                                    <option timezoneid="8" gmtadjustment="GMT-07:00" usedaylighttime="1" value="-7_(GMT-07:00) Chihuahua, La Paz, Mazatlan">(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
+                                    <option timezoneid="9" gmtadjustment="GMT-07:00" usedaylighttime="1" value="-7_(GMT-07:00) Mountain Time (US & Canada)">(GMT-07:00) Mountain Time (US & Canada)</option>
+                                    <option timezoneid="10" gmtadjustment="GMT-06:00" usedaylighttime="0" value="-6_(GMT-06:00) Central America">(GMT-06:00) Central America</option>
+                                    <option timezoneid="11" gmtadjustment="GMT-06:00" usedaylighttime="1" value="-6_(GMT-06:00) Central Time (US & Canada)">(GMT-06:00) Central Time (US & Canada)</option>
+                                    <option timezoneid="12" gmtadjustment="GMT-06:00" usedaylighttime="1" value="-6_(GMT-06:00) Guadalajara, Mexico City, Monterrey">(GMT-06:00) Guadalajara, Mexico City, Monterrey</option>
+                                    <option timezoneid="13" gmtadjustment="GMT-06:00" usedaylighttime="0" value="-6_(GMT-06:00) Saskatchewan">(GMT-06:00) Saskatchewan</option>
+                                    <option timezoneid="14" gmtadjustment="GMT-05:00" usedaylighttime="0" value="-5_(GMT-05:00) Bogota, Lima, Quito, Rio Branco">(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
+                                    <option timezoneid="15" gmtadjustment="GMT-05:00" usedaylighttime="1" value="-5_(GMT-05:00) Eastern Time (US & Canada)">(GMT-05:00) Eastern Time (US & Canada)</option>
+                                    <option timezoneid="16" gmtadjustment="GMT-05:00" usedaylighttime="1" value="-5_(GMT-05:00) Indiana (East)">(GMT-05:00) Indiana (East)</option>
+                                    <option timezoneid="17" gmtadjustment="GMT-04:00" usedaylighttime="1" value="-4_(GMT-04:00) Atlantic Time (Canada)">(GMT-04:00) Atlantic Time (Canada)</option>
+                                    <option timezoneid="18" gmtadjustment="GMT-04:00" usedaylighttime="0" value="-4_(GMT-04:00) Caracas, La Paz">(GMT-04:00) Caracas, La Paz</option>
+                                    <option timezoneid="19" gmtadjustment="GMT-04:00" usedaylighttime="0" value="-4_(GMT-04:00) Manaus">(GMT-04:00) Manaus</option>
+                                    <option timezoneid="20" gmtadjustment="GMT-04:00" usedaylighttime="1" value="-4_(GMT-04:00) Santiago">(GMT-04:00) Santiago</option>
+                                    <option timezoneid="21" gmtadjustment="GMT-03:30" usedaylighttime="1" value="-3.5_(GMT-03:30) Newfoundland">(GMT-03:30) Newfoundland</option>
+                                    <option timezoneid="22" gmtadjustment="GMT-03:00" usedaylighttime="1" value="-3_(GMT-03:00) Brasilia">(GMT-03:00) Brasilia</option>
+                                    <option timezoneid="23" gmtadjustment="GMT-03:00" usedaylighttime="0" value="-3_(GMT-03:00) Buenos Aires, Georgetown">(GMT-03:00) Buenos Aires, Georgetown</option>
+                                    <option timezoneid="24" gmtadjustment="GMT-03:00" usedaylighttime="1" value="-3_(GMT-03:00) Greenland">(GMT-03:00) Greenland</option>
+                                    <option timezoneid="25" gmtadjustment="GMT-03:00" usedaylighttime="1" value="-3_(GMT-03:00) Montevideo">(GMT-03:00) Montevideo</option>
+                                    <option timezoneid="26" gmtadjustment="GMT-02:00" usedaylighttime="1" value="-2_(GMT-02:00) Mid-Atlantic">(GMT-02:00) Mid-Atlantic</option>
+                                    <option timezoneid="27" gmtadjustment="GMT-01:00" usedaylighttime="0" value="-1_(GMT-01:00) Cape Verde Is.">(GMT-01:00) Cape Verde Is.</option>
+                                    <option timezoneid="28" gmtadjustment="GMT-01:00" usedaylighttime="1" value="-1_(GMT-01:00) Azores">(GMT-01:00) Azores</option>
+                                    <option timezoneid="29" gmtadjustment="GMT+00:00" usedaylighttime="0" value="0_(GMT+00:00) Casablanca, Monrovia, Reykjavik">(GMT+00:00) Casablanca, Monrovia, Reykjavik</option>
+                                    <option timezoneid="30" gmtadjustment="GMT+00:00" usedaylighttime="1" value="0_(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London">(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London</option>
+                                    <option timezoneid="31" gmtadjustment="GMT+01:00" usedaylighttime="1" value="1_(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna">(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</option>
+                                    <option timezoneid="32" gmtadjustment="GMT+01:00" usedaylighttime="1" value="1_(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague">(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>
+                                    <option timezoneid="33" gmtadjustment="GMT+01:00" usedaylighttime="1" value="1_(GMT+01:00) Brussels, Copenhagen, Madrid, Paris">(GMT+01:00) Brussels, Copenhagen, Madrid, Paris</option>
+                                    <option timezoneid="34" gmtadjustment="GMT+01:00" usedaylighttime="1" value="1_(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb">(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb</option>
+                                    <option timezoneid="35" gmtadjustment="GMT+01:00" usedaylighttime="1" value="1_(GMT+01:00) West Central Africa">(GMT+01:00) West Central Africa</option>
+                                    <option timezoneid="36" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Amman">(GMT+02:00) Amman</option>
+                                    <option timezoneid="37" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Athens, Bucharest, Istanbul">(GMT+02:00) Athens, Bucharest, Istanbul</option>
+                                    <option timezoneid="38" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Beirut">(GMT+02:00) Beirut</option>
+                                    <option timezoneid="39" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Cairo">(GMT+02:00) Cairo</option>
+                                    <option timezoneid="40" gmtadjustment="GMT+02:00" usedaylighttime="0" value="2_(GMT+02:00) Harare, Pretoria">(GMT+02:00) Harare, Pretoria</option>
+                                    <option timezoneid="41" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius">(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
+                                    <option timezoneid="42" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Jerusalem">(GMT+02:00) Jerusalem</option>
+                                    <option timezoneid="43" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Minsk">(GMT+02:00) Minsk</option>
+                                    <option timezoneid="44" gmtadjustment="GMT+02:00" usedaylighttime="1" value="2_(GMT+02:00) Windhoek">(GMT+02:00) Windhoek</option>
+                                    <option timezoneid="45" gmtadjustment="GMT+03:00" usedaylighttime="0" value="3_(GMT+03:00) Kuwait, Riyadh, Baghdad">(GMT+03:00) Kuwait, Riyadh, Baghdad</option>
+                                    <option timezoneid="46" gmtadjustment="GMT+03:00" usedaylighttime="1" value="3_(GMT+03:00) Moscow, St. Petersburg, Volgograd">(GMT+03:00) Moscow, St. Petersburg, Volgograd</option>
+                                    <option timezoneid="47" gmtadjustment="GMT+03:00" usedaylighttime="0" value="3_(GMT+03:00) Nairobi">(GMT+03:00) Nairobi</option>
+                                    <option timezoneid="48" gmtadjustment="GMT+03:00" usedaylighttime="0" value="3_(GMT+03:00) Tbilisi">(GMT+03:00) Tbilisi</option>
+                                    <option timezoneid="49" gmtadjustment="GMT+03:30" usedaylighttime="1" value="3.5_(GMT+03:30) Tehran">(GMT+03:30) Tehran</option>
+                                    <option timezoneid="50" gmtadjustment="GMT+04:00" usedaylighttime="0" value="4_(GMT+04:00) Abu Dhabi, Muscat">(GMT+04:00) Abu Dhabi, Muscat</option>
+                                    <option timezoneid="51" gmtadjustment="GMT+04:00" usedaylighttime="1" value="4_(GMT+04:00) Baku">(GMT+04:00) Baku</option>
+                                    <option timezoneid="52" gmtadjustment="GMT+04:00" usedaylighttime="1" value="4_(GMT+04:00) Yerevan">(GMT+04:00) Yerevan</option>
+                                    <option timezoneid="53" gmtadjustment="GMT+04:30" usedaylighttime="0" value="4.5_(GMT+04:30) Kabul">(GMT+04:30) Kabul</option>
+                                    <option timezoneid="54" gmtadjustment="GMT+05:00" usedaylighttime="1" value="5_(GMT+05:00) Yekaterinburg">(GMT+05:00) Yekaterinburg</option>
+                                    <option timezoneid="55" gmtadjustment="GMT+05:00" usedaylighttime="0" value="5_(GMT+05:00) Islamabad, Karachi, Tashkent">(GMT+05:00) Islamabad, Karachi, Tashkent</option>
+                                    <option timezoneid="56" gmtadjustment="GMT+05:30" usedaylighttime="0" value="5.5_(GMT+05:30) Sri Jayawardenapura">(GMT+05:30) Sri Jayawardenapura</option>
+                                    <option timezoneid="57" gmtadjustment="GMT+05:30" usedaylighttime="0" value="5.5_(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi">(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi</option>
+                                    <option timezoneid="58" gmtadjustment="GMT+05:45" usedaylighttime="0" value="5.75_(GMT+05:45) Kathmandu">(GMT+05:45) Kathmandu</option>
+                                    <option timezoneid="59" gmtadjustment="GMT+06:00" usedaylighttime="1" value="6_(GMT+06:00) Almaty, Novosibirsk">(GMT+06:00) Almaty, Novosibirsk</option>
+                                    <option timezoneid="60" gmtadjustment="GMT+06:00" usedaylighttime="0" value="6_(GMT+06:00) Astana, Dhaka">(GMT+06:00) Astana, Dhaka</option>
+                                    @*<option timezoneid="61" gmtadjustment="GMT+06:30" usedaylighttime="0" value="6.5_(GMT+06:30) Yangon (Rangoon)" @(Model.FullTimeZone == "6.5_(GMT+06:30) Yangon (Rangoon)" ? "selected" : "")>(GMT+06:30) Yangon (Rangoon)</option>
+                    <option timezoneid="62" gmtadjustment="GMT+07:00" usedaylighttime="0" value="7_(GMT+07:00) Bangkok, Hanoi, Jakarta" @(Model.FullTimeZone == "7_(GMT+07:00) Bangkok, Hanoi, Jakarta" ? "selected" : "")>(GMT+07:00) Bangkok, Hanoi, Jakarta</option>
+                    <option timezoneid="63" gmtadjustment="GMT+07:00" usedaylighttime="1" value="7_(GMT+07:00) Krasnoyarsk" @(Model.FullTimeZone == "7_(GMT+07:00) Krasnoyarsk" ? "selected" : "")>(GMT+07:00) Krasnoyarsk</option>
+                    <option timezoneid="64" gmtadjustment="GMT+08:00" usedaylighttime="0" value="8_(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi" @(Model.FullTimeZone == "8_(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi" ? "selected" : "")>(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
+                    <option timezoneid="65" gmtadjustment="GMT+08:00" usedaylighttime="0" value="8_(GMT+08:00) Kuala Lumpur, Singapore" @(Model.FullTimeZone == "8_(GMT+08:00) Kuala Lumpur, Singapore" ? "selected" : "")>(GMT+08:00) Kuala Lumpur, Singapore</option>
+                    <option timezoneid="66" gmtadjustment="GMT+08:00" usedaylighttime="0" value="8_(GMT+08:00) Irkutsk, Ulaan Bataar" @(Model.FullTimeZone == "8_(GMT+08:00) Irkutsk, Ulaan Bataar" ? "selected" : "")>(GMT+08:00) Irkutsk, Ulaan Bataar</option>
+                    <option timezoneid="67" gmtadjustment="GMT+08:00" usedaylighttime="0" value="8_(GMT+08:00) Perth" @(Model.FullTimeZone == "8_(GMT+08:00) Perth" ? "selected" : "")>(GMT+08:00) Perth</option>
+                    <option timezoneid="68" gmtadjustment="GMT+08:00" usedaylighttime="0" value="8_(GMT+08:00) Taipei" @(Model.FullTimeZone == "8_(GMT+08:00) Taipei" ? "selected" : "")>(GMT+08:00) Taipei</option>
+                    <option timezoneid="69" gmtadjustment="GMT+09:00" usedaylighttime="0" value="9_(GMT+09:00) Osaka, Sapporo, Tokyo" @(Model.FullTimeZone == "9_(GMT+09:00) Osaka, Sapporo, Tokyo" ? "selected" : "")>(GMT+09:00) Osaka, Sapporo, Tokyo</option>
+                    <option timezoneid="70" gmtadjustment="GMT+09:00" usedaylighttime="0" value="9_(GMT+09:00) Seoul" @(Model.FullTimeZone == "9_(GMT+09:00) Seoul" ? "selected" : "")>(GMT+09:00) Seoul</option>
+                    <option timezoneid="71" gmtadjustment="GMT+09:00" usedaylighttime="1" value="9_(GMT+09:00) Yakutsk" @(Model.FullTimeZone == "9_(GMT+09:00) Yakutsk" ? "selected" : "")>(GMT+09:00) Yakutsk</option>
+                    <option timezoneid="72" gmtadjustment="GMT+09:30" usedaylighttime="0" value="9.5_(GMT+09:30) Adelaide" @(Model.FullTimeZone == "9.5_(GMT+09:30) Adelaide" ? "selected" : "")>(GMT+09:30) Adelaide</option>
+                    <option timezoneid="73" gmtadjustment="GMT+09:30" usedaylighttime="0" value="9.5_(GMT+09:30) Darwin" @(Model.FullTimeZone == "9.5_(GMT+09:30) Darwin" ? "selected" : "")>(GMT+09:30) Darwin</option>
+                    <option timezoneid="74" gmtadjustment="GMT+10:00" usedaylighttime="0" value="10_(GMT+10:00) Brisbane" @(Model.FullTimeZone == "10_(GMT+10:00) Brisbane" ? "selected" : "")>(GMT+10:00) Brisbane</option>
+                    <option timezoneid="75" gmtadjustment="GMT+10:00" usedaylighttime="1" value="10_(GMT+10:00) Canberra, Melbourne, Sydney" @(Model.FullTimeZone == "10_(GMT+10:00) Canberra, Melbourne, Sydney" ? "selected" : "")>(GMT+10:00) Canberra, Melbourne, Sydney</option>
+                    <option timezoneid="76" gmtadjustment="GMT+10:00" usedaylighttime="1" value="10_(GMT+10:00) Hobart" @(Model.FullTimeZone == "10_(GMT+10:00) Hobart" ? "selected" : "")>(GMT+10:00) Hobart</option>
+                    <option timezoneid="77" gmtadjustment="GMT+10:00" usedaylighttime="0" value="10_(GMT+10:00) Guam, Port Moresby" @(Model.FullTimeZone == "10_(GMT+10:00) Guam, Port Moresby" ? "selected" : "")>(GMT+10:00) Guam, Port Moresby</option>
+                    <option timezoneid="78" gmtadjustment="GMT+10:00" usedaylighttime="1" value="10_(GMT+10:00) Vladivostok" @(Model.FullTimeZone == "10_(GMT+10:00) Vladivostok" ? "selected" : "")>(GMT+10:00) Vladivostok</option>
+                    <option timezoneid="79" gmtadjustment="GMT+11:00" usedaylighttime="1" value="11_(GMT+11:00) Magadan, Solomon Is., New Caledonia" @(Model.FullTimeZone == "11_(GMT+11:00) Magadan, Solomon Is., New Caledonia" ? "selected" : "")>(GMT+11:00) Magadan, Solomon Is., New Caledonia</option>
+                    <option timezoneid="80" gmtadjustment="GMT+12:00" usedaylighttime="1" value="12_(GMT+12:00) Auckland, Wellington" @(Model.FullTimeZone == "12_(GMT+12:00) Auckland, Wellington" ? "selected" : "")>(GMT+12:00) Auckland, Wellington</option>
+                    <option timezoneid="81" gmtadjustment="GMT+12:00" usedaylighttime="0" value="12_(GMT+12:00) Fiji, Kamchatka, Marshall Is." @(Model.FullTimeZone == "12_(GMT+12:00) Fiji, Kamchatka, Marshall Is." ? "selected" : "")>(GMT+12:00) Fiji, Kamchatka, Marshall Is.</option>
+                    <option timezoneid="82" gmtadjustment="GMT+13:00" usedaylighttime="0" value="13_(GMT+13:00) Nuku'alofa" @(Model.FullTimeZone == "13_(GMT+13:00) Nuku'alofa" ? "selected" : "")>(GMT+13:00) Nuku'alofa</option>*@
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">Date Format</label>
+                                <select name="DateFormat" class="form-control input-sm" required>
+                                    <option value="DD/MM/YYYY" @((AppSettings.GetVal("DateFormat") == "DD/MM/YYYY") ? "selected" : "")>DD/MM/YYYY</option>
+                                    <option value="MM/dd/yy" @((AppSettings.GetVal("DateFormat") == "MM/dd/yy") ? "selected" : "")>MM/dd/yy</option>
+                                    <option value="MM/dd/yyyy" @((AppSettings.GetVal("DateFormat") == "MM/dd/yyyy") ? "selected" : "")>MM/dd/yyyy</option>
+                                    <option value="M/d/yyyy" @((AppSettings.GetVal("DateFormat") == "M/d/yyyy") ? "selected" : "")>M/d/yyyy</option>
+                                    <option value="MMMM d, yyyy" @((AppSettings.GetVal("DateFormat") == "MMMM d, yyyy") ? "selected" : "")>MMMM d, yyyy</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">Time Format</label>
+                                <select name="TimeFormat" class="form-control input-sm" required>
+                                    <option value="12 Hours" @((AppSettings.GetVal("TimeFormat") == "12 Hours") ? "selected" : "")>12 Hours</option>
+                                    <option value="24 Hours" @((AppSettings.GetVal("TimeFormat") == "24 Hours") ? "selected" : "")>24 Hours</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-bold">Hours of Operation</label>
+                                <div id="businessHoursContainer3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-right">
+                    <div class="pull-right" style="font-size:16px;">
+                        <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()" title="Cancel / Back"><i class="fa fa-close fa-2x"></i></a>
+                        <button type="submit" style="background:transparent; border:none"><i class="fa fa-check-circle fa-2x text-success"></i></button>
+                    </div>
+                    @*<div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                        </div>*@
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.businessHours/1.0.1/jquery.businessHours.js"></script>
+
+    <script>
+        (function() {
+            //Rainbow.color();
+
+            var businessHoursManager1 = $("#businessHoursContainer1").businessHours();
+            $("#btnSerialize").click(function() {
+                $("#businessHoursOutput1").val(JSON.stringify(businessHoursManager1.serialize()));
+            });
+
+            $("#btnInit").click(function() {
+                try{
+                    var businessHours = jQuery.parseJSON($("#businessHoursData").val());
+                    $("#businessHoursContainerJson").businessHours({
+                        operationTime: businessHours
+                    });
+                }catch(e) {
+                    alert("JSON non valid: " + e.message);
+                }
+            });
+
+            var businessHoursManager2 = $("#businessHoursContainer2").businessHours({
+                checkedColorClass: "workingBusinssDay",
+                inputDisabled: true,
+                uncheckedColorClass: "dayOff",
+                dayTmpl: '<div class="dayContainer">' +
+                        '<div data-original-title="" class="colorBox"><input type="checkbox" class="invisible operationState"/></div>' +
+                        '<div class="weekday"></div></div>'
+            });
+
+            var b3 = $("#businessHoursContainer3");
+            var businessHoursManagerBootstrap = b3.businessHours({
+                postInit:function(){
+                    b3.find('.operationTimeFrom, .operationTimeTill').timepicker({
+                        'timeFormat': 'H:i',
+                        'step': 15
+                    });
+                },
+                dayTmpl: '<div class="dayContainer" style="width: 80px;">' +
+                        '<div data-original-title="" class="colorBox"><input type="checkbox" class="invisible operationState"/></div>' +
+                        '<div class="weekday"></div>' +
+                        '<div class="operationDayTimeContainer">' +
+                        '<div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><input type="text" name="startTime" class="mini-time form-control operationTimeFrom" value=""/></div>' +
+                        '<div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-moon-o"></i></span><input type="text" name="endTime" class="mini-time form-control operationTimeTill" value=""/></div>' +
+                        '</div></div>'
+            });
+        })();
+    </script>
+}

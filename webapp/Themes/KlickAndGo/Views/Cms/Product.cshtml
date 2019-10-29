@@ -1,0 +1,491 @@
+﻿@model Framework.Data.CatalogProduct
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+
+    @*<link href="~/Themes/KlickAndGo/Content/css/alertify.core.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/Themes/KlickAndGo/Content/css/alertify.default.css" rel="stylesheet" type="text/css" media="all" />*@
+<script src="~/Content/Xzoom/js/vendor/jquery.js"></script>
+@*<link href="~/Content/Xzoom/css/normalize.css" rel="stylesheet" />*@
+<link href="~/Content/Xzoom/css/foundation.css" rel="stylesheet" />
+@*<link href="~/Content/Xzoom/css/demo.css" rel="stylesheet" />*@
+<script src="~/Content/Xzoom/js/vendor/modernizr.js"></script>
+<script src="~/Content/Xzoom/xzoom.min.js"></script>
+<link href="~/Content/Xzoom/xzoom.css" rel="stylesheet" />
+   
+
+  
+<script src="~/Content/Xzoom/hammer.js/1.0.5/jquery.hammer.min.js"></script>
+
+<link href="~/Content/Xzoom/fancybox/jquery.fancybox.css" rel="stylesheet" />
+<link href="~/Content/Xzoom/magnific-popup/css/magnific-popup.css" rel="stylesheet" />
+<script src="~/Content/Xzoom/fancybox/jquery.fancybox.js"></script>   
+<script src="~/Content/Xzoom/magnific-popup/js/magnific-popup.js"></script>
+    <style type="text/css">
+                .image-link {
+          cursor: -webkit-zoom-in;
+          cursor: -moz-zoom-in;
+          cursor: zoom-in;
+        }
+
+
+        /* This block of CSS adds opacity transition to background */
+        .mfp-with-zoom .mfp-container,
+        .mfp-with-zoom.mfp-bg {
+            opacity: 0;
+            -webkit-backface-visibility: hidden;
+            -webkit-transition: all 0.3s ease-out;
+            -moz-transition: all 0.3s ease-out;
+            -o-transition: all 0.3s ease-out;
+            transition: all 0.3s ease-out;
+        }
+
+        .mfp-with-zoom.mfp-ready .mfp-container {
+                opacity: 1;
+        }
+        .mfp-with-zoom.mfp-ready.mfp-bg {
+                opacity: 0.8;
+        }
+
+        .mfp-with-zoom.mfp-removing .mfp-container,
+        .mfp-with-zoom.mfp-removing.mfp-bg {
+            opacity: 0;
+        }
+        /* padding-bottom and top for image */
+        .mfp-no-margins img.mfp-img {
+            padding: 0;
+        }
+        /* position of shadow behind the image */
+        .mfp-no-margins .mfp-figure:after {
+            top: 0;
+            bottom: 0;
+        }
+        /* padding for main container */
+        .mfp-no-margins .mfp-container {
+            padding: 0;
+        }
+
+        #main_div{
+
+        }
+        .container{
+            font-family: 'Open Sans',sans-serif;
+            font-size: 14px;
+            color: #5b5645;
+        }
+
+        /* aligns caption to center */
+    </style>
+}
+<div class="container" style="margin-top:10px;">
+    <ol class="breadcrumb" style="margin-top:10px;">
+        <li><a href="https://www.rinkit.com/" title="Home">Home</a></li>
+        <li><a href="~/category/@(Model.CategorySlug)">@Model.CategoryTitle</a></li>
+        <li>@Model.Title</li>
+
+    </ol>
+    <div class="row" style="max-width:none">
+        <div class="col-lg-7 col-md-7" style="">
+            
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="large-5 column">
+                            <div class="xzoom-container">
+                                <img class="xzoom5" id="xzoom-magnific" style="width:100%" data-image-id="" src="http://klickngo.co.uk/admin/@Url.Action("Img", "Cdn")/@(Model.ProductId == 0 ? "0" : Model.ProductId.ToString())?s=m&t=p&target=null&w=600&h=800" xoriginal="http://klickngo.co.uk/admin/@Url.Action("Img", "Cdn")/@(Model.ProductId == 0 ? "0" : Model.ProductId.ToString())?s=m&t=p&target=null&w=600&h=800" />
+
+                                <div class="xzoom-thumbs">
+                                    @foreach (var item in ViewBag.ProductImages)
+                                    {
+                                        <a href="http://klickngo.co.uk/admin/@Url.Action("Img", "Cdn")/@(Model.ProductId == 0 ? "0" : Model.ProductId.ToString())?s=m&t=p&target=null&w=600&h=800" data-src="http://klickngo.co.uk/admin/@Url.Action("Img", "Cdn")/@(Model.ProductId == 0 ? "0" : Model.ProductId.ToString())?s=m&t=p&target=null&w=600&h=800">
+                                            <img width="80" class="xzoom-gallery5" data-image-id="" src="http://klickngo.co.uk/admin/@Url.Action("Img", "Cdn")/@(Model.ProductId == 0 ? "0" : Model.ProductId.ToString())?s=m&t=p&target=null&w=600&h=800" />
+
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @*<div style="height:450px; border:1px solid #d8d8d1; border-radius:0px;">
+                        <div class="animated  animation-done bounceInLeft" data-animation="bounceInLeft">
+                            <div class="slider_1 clearfix" data-image="">
+                                <div id="image-block" data-zoom="enabled">
+                                    <div class="flexslider product_gallery product_images" id="">
+                                        <ul class="slides">
+                                            <li data-image-id="" data-thumb="http://klickngo.co.uk/admin/@Url.Action("Img", "Cdn")/@(Model.ProductId == 0 ? "0" : Model.ProductId.ToString())?s=m&t=p&target=null&w=800&h=800"
+                                                data-title="@Model.Title" style="width: 100%; float: left; margin-right: -100%; position: relative; opacity: 0; display: block; z-index: 1;" data-rel="prettyPhoto[product-gallery]">
+                                                <a class="image-slide-link without-caption image-link" href="http://klickngo.co.uk/admin/@Url.Action("Img", "Cdn")/@(Model.ProductId == 0 ? "0" : Model.ProductId.ToString())?s=m&t=p&target=null&w=800&h=800"
+                                                   title="@Model.Title" width="172" height="115">
+                                                    <img data-image-id="" src="http://klickngo.co.uk/admin/@Url.Action("Img", "Cdn")/@(Model.ProductId == 0 ? "0" : Model.ProductId.ToString())?s=m&t=p&target=null&w=600&h=800"
+                                                         data-src="http://klickngo.co.uk/admin/@Url.Action("Img", "Cdn")/@(Model.ProductId == 0 ? "0" : Model.ProductId.ToString())?s=m&t=p&target=null&w=600&h=800"
+                                                         alt="@Model.Title" data-index="1" draggable="false">
+                                                </a>
+                                            </li>
+                                            @foreach (var item in ViewBag.ProductImages)
+                                {
+                                                <li data-image-id="" data-rel="prettyPhoto[product-gallery]"
+                                                    data-thumb="http://klickngo.co.uk/admin/Pictures/Gallery/@(item).jpg?w=400&h=400&wm=false"
+                                                    data-zoom-image="http://klickngo.co.uk/admin/Pictures/Gallery/@(item).jpg" data-title="@Model.Title" class="flex-active-slide"
+                                                    style="width: 100%; float: left; margin-right: -100%; position: relative; opacity: 1; display: block; z-index: 2;">
+
+                                                    <a class="image-slide-link without-caption image-link" href="http://klickngo.co.uk/admin/Pictures/Gallery/@(item).jpg" title="@Model.Title" width="172" height="115">
+                                                        <img data-image-id="@Model.ProductId" src="http://klickngo.co.uk/admin/@Url.Action("Img", "Cdn")/@(Model.ProductId == 0 ? "0" : Model.ProductId.ToString())?s=m&t=p&target=null&w=600&h=800"
+                                                             data-src="http://klickngo.co.uk/admin/Pictures/Gallery/@(item).jpg" alt="@Model.Title" data-index="0" class="featured_image" draggable="false">
+                                                    </a>
+                                                </li>
+                                }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                    </div>
+
+                </div>
+               
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="border:1px solid #d8d8d1; border-radius:0px;margin-top:10px; min-height:450px; padding:8px;">
+                            <h1 style="color:#06C; font-size:18px; line-height:40px; font-weight:600">Produt Description</h1>
+                            <p>@Model.ShortDescription</p>
+                            <p>@Model.Description</p>
+                        </div>
+                    </div>
+                </div>
+</div>
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div style="height:120px; max-width:530px; border:none; border-radius:0px; padding:20px; ">
+                        <h1 style="color:#06C; font-size:26px; line-height:40px; font-weight:bold">@Model.Title</h1>
+                        <p>@Model.ShortDescription</p>
+                        <p>Product Code: &nbsp; @Model.Sku </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div style="border:1px solid #d8d8d1;border-radius:0px; margin-top:10px; ">
+                        <h1  style="color:#ff0024;font-weight:800;height:auto;font-size:35px; width:auto; margin:8px;">@Settings.Get.CurrencySymbol <span id="price">@Model.RetailPrice</span> </h1>
+                       
+                         <div class="" style="margin-bottom:50px">
+                            @{
+                                IList<SpecAttribute> attributes = ViewBag.VariantsByProduct;
+                                int i = 0;
+                            }
+                            @foreach (var item in ViewBag.AttributesByProduct as IList<SpecAttribute>)
+                            {
+                                <div class="form-group" style="margin-left:13px">
+                                    <label style="font-size:16px;font-weight:bold; margin-top:8px;" class="control-label attribute-@i">@item.Title:</label>
+                                    <select name="productVariant" class="soflow" id="soflow-@i" data-id="@item.Title">
+                                        <option value="">-- select --</option>
+                                        @foreach (var subItem in attributes.Where(m => m.AttrId == item.AttrId))
+                                        {
+                                            <option value="@subItem.Value">@subItem.Value</option>
+                                        }
+                                    </select>
+                                </div>
+                                { i++; }
+
+                             }
+                        </div>
+                        <div class="" style="margin-bottom:50px;">
+                            <div class="col-lg-4 col-md-4"><span style="font-weight:bold; font-size:16px;">Qty:</span>&nbsp;<input id="qty" type="number" value="1" style="width:50px; height:30px; text-align:center" /></div>
+                            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                            {
+                            <div class="col-lg-2 col-md-2"><button id="WishList" type="button" onclick="window.location='@Url.Action("Add", "WishList", new { @id = Model.ProductId })'" class="btn-warning btn_c" style="margin:0 auto 0; border-radius:45px;"><span class="fa fa-heart" style="color:white"></span></button></div>
+                            }
+                            else
+                            {
+                                <div class="col-lg-2 col-md-2"></div>
+                            }
+                            <div class="col-lg-6 col-md-6"><button id="cart" type="submit" class="btn-success btn_c" style="margin:0 auto 0; width:180px;">Add to cart</button></div>
+                            <hr />
+                        </div>
+                        
+                        <div class="rte" style="font-weight: 600; border-top:1px solid #d8d8d1; margin-top:10px">
+                            @if (Model.Quantity <= 0)
+                            {
+                                if (Settings.Get.InventoryOutofStock == true)
+                                {
+                                    <script>
+                                        $(document).ready(function () {
+                                            if ('@ViewBag.Session' != null) {
+                                                $("#cart").attr('disabled', 'disabled');
+                                                $("#qty").val('0').attr('disabled', 'disabled');
+                                            }
+                                        });
+                                    </script>
+                                    <input type="checkbox" class="checkbox-success" disabled><span style="color:red">&nbsp;Out of Stock</span>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" class="checkbox-success" checked disabled><span style="color:#6bb022">&nbsp;In Stock Ready to Dispatch</span>
+                                }
+                            }
+                            else
+                            {
+                                <input type="checkbox" class="checkbox-success" checked disabled><span style="color:#6bb022">&nbsp;In Stock Ready to Dispatch</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="" style="max-width:530px; border:1px solid #d8d8d1;border-radius:0px; margin-top:10px; padding:15px;">
+                      @if (Convert.ToInt32(ViewBag.PriorityLevel) == 1)
+                      {
+                         <h6 style="font-size:16px; color: #5b5645; font-weight:600; margin:20px">
+                            <span class="fa fa-truck"></span> Economy Delivery
+                        </h6>
+                        <p style="margin-left:18px;">
+                            £3.99 - Order before 2pm for delivery within 2-3 working days
+                            FREE ON ORDERS OVER £40
+                        </p>
+                      }
+                      @if (Convert.ToInt32(ViewBag.PriorityLevel) == 2)
+                      {
+                        <h6 style="font-size:16px; color: #5b5645; font-weight:600; margin:20px">
+                            <span class="fa fa-car"></span> Standard Delivery
+                        </h6>
+                        <p style="margin-left:18px;">
+                            £3.99 - Order before 2pm for delivery within 2-3 working days
+                            FREE ON ORDERS OVER £40
+                        </p>
+                      }
+                      @if (Convert.ToInt32(ViewBag.PriorityLevel) == 3)
+                      {
+                        <h6 style="font-size:16px; color: #5b5645; font-weight:600; margin:20px">
+                            <span class="fa fa-clock-o"></span> Express Delivery
+                        </h6>
+                        <p style="margin-left:18px;">
+                            £3.99 - Order before 2pm for delivery within 2-3 working days
+                            FREE ON ORDERS OVER £40
+                        </p>
+                      }
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="" style="max-width:530px; border:1px solid #d8d8d1;border-radius:0px; margin-top:10px; padding:15px;">
+                        <h1 style="color:#06C; font-size:18px; line-height:40px; font-weight:600">Related Products</h1>
+                        <br />
+                        <ul class="products-grid">
+                            @foreach (var categ in (IEnumerable<Framework.Data.CatalogProduct>)ViewBag.RelatedProductsByCategory)
+                            {
+                                <li class="item" style="padding:10px 0;">
+                                    <div id="product-image" class="col-md-4" >
+                                        <a href="javascript://">
+                                            <img id="product-collection-image-6368" src="@Url.Action("Img", "Cdn", new { id = categ.ProductId, s = "s", t = "p", target = "Website", w=100, h=100})" alt="Children’s Mercedes-Benz AMG SLS Ride On Car Toy" class="thumb-hover">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h2 class="product-name" style="font-size:16px;"><a href="~/product/@categ.Slug" title="">@categ.Title</a></h2>
+                                        
+                                        <div id="price-box">
+                                            <div class="rrp-price">
+                                                <!--Now!-->
+                                                <div class="price-box">
+                                                    <span class="label cnflabel" id="configurable-price-from-6368"><span id="cnf" class="configurable-price-from-label" style="display: none;"></span></span>
+                                                    <span class="regular-price" id="product-price-6368">
+                                                        <span class="price">@Settings.Get.CurrencySymbol@categ.RetailPrice</span>
+                                                    </span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+
+    <div class="variations mt15">
+        @*@foreach (var item in ViewBag.AttributesByProduct as IList<SpecAttribute>)
+        {
+            {
+                IList<SpecAttribute> attributes = ViewBag.VariantsByProduct;
+                int i = 0;
+                <div class="rte" style="font-weight: 600;">
+                    <div>
+                        <span class="attribute-@i">@item.Title</span>
+                    </div>
+                    <select name="productVariant" class="soflow" id="soflow-@i" data-id="@item.Title">
+                        <option value="">-- select --</option>
+                        @foreach (var subItem in attributes.Where(m => m.AttrId == item.AttrId))
+                        {
+                            <option value="@subItem.Value">@subItem.Value</option>
+                        }
+                    </select>
+                </div>
+                { i++; }
+            }
+        }*@
+    </div>
+</div>
+
+
+<div id="shopify-section-product" class="shopify-section">
+    <div id="hiddenProductId" style="display:none;" data-product-id="@Model.ProductId"></div>
+    <div itemscope="" itemtype="http://schema.org/Product">
+        <div id="content">
+            <div class="container" data-section-id="product" data-section-type="product-page-section">
+                <input id="product-handle" type="hidden" value="@Model.Title"> <!--  using for JS -->
+                <div class="pro_main_c">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-5 col-sm-6 animated animation-done  bounceInRight" data-animation="bounceInRight">
+                            <div itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                                <div class="form-add-to-cart form-horizontal">
+                                    <div class="desc_blk">
+                                        <!-- variations section  -->
+                                        <input type="hidden" name="add-to-cart" value="2452">
+                                        <input type="hidden" name="id" value="@Model.ProductId">
+                                        <input type="hidden" name="variation_id" class="variation_id" value="0">
+                                        <input type="hidden" value="" id="productvariantId" />
+                                    </div>
+                                </div>
+                                <!-- cart section end -->
+                                @*<div >
+                                                                                <button  class="btn_sold_out" >
+                                                                                    <a class=""><i class="fa fa-heart"></i></a>
+                                                                                    </button>
+                                                                                    <a class="btn btn-primary"><i class="fa fa-heart"></i></a>
+                                    </div>*@                                        <!-- product variant sku, vendor -->
+                                @*<button class="btn_c" type="button"><i class="fa fa-heart"></i></button>*@
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="cbb-frequently-bought-box"></div>
+<script src="~/Content/Xzoom/js/foundation.min.js"></script>
+
+<script src="~/Content/Xzoom/js/setup.js"></script>
+@section foot{
+    <script type="text/javascript" src="~/Themes/KlickAndGo/Content/js/alertify.js"></script>
+    <script type="text/javascript" src="~/Themes/KlickAndGo/Content/js/alertify.min.js"></script>
+    <script>
+        $('.soflow').on('change', function () {
+            var leng = $('.soflow').length;
+            var criteria = "";
+            var productprice = @Model.RetailPrice;
+            for (var i = 0; i < leng; i++) {
+                //criteria += alert($('#provariation-' + i).data('id') + ' ' + $('#provariation-' + i).val());
+                if ($('#soflow-' + i).val() != "") {
+                    criteria += $('#soflow-' + i).data('id') + "=''" + $('#soflow-' + i).val() + "'' And ";
+                }
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/home/productvariant?Criteria=" + criteria.slice(0, -5) + "&productId=@Model.ProductId",
+                //data: function () {
+                //    Criteria = criteria
+                //},
+                success: function (data) {
+                    debugger;
+                    $('#productvariantId').val(data[0].Id);
+                    // $('#price').text() = productprice + data[0].Price;
+                    //var a = data[0].Price;
+                    if (parseFloat(productprice) != @Model.RetailPrice +data[0].Price)
+                    {
+                        var b = parseFloat(data[0].Price) + parseFloat(productprice);
+                        $('#price').html(b.toFixed(2));
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+            //alert($(this).data('id') + ' ' + $(this).val());
+        });
+
+        $('.btn_c').on('click', function () {
+            debugger;
+            if ($('.soflow').val() == "") {
+                //alertify.alert("Please Choose Options");
+                $('.soflow').css('border-color', 'red');
+            }
+            else {
+                var productvariantId = $('#productvariantId').val();
+                window.location.href = '@Url.Action("Add","Cart")?id=@Model.ProductId&variantTitle=' + productvariantId
+            }
+
+            @*$.ajax({
+                type: "POST",
+                url: "/home/productvariant?Criteria=" + criteria.slice(0, -5) + "&productId=@Model.ProductId",
+                //data: function () {
+                //    Criteria = criteria
+                //},
+                success: function (data) {
+                    $('#productvariantId').val(data[0].Id);
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });*@
+            //alert($(this).data('id') + ' ' + $(this).val());
+        });
+    </script>
+    <script>
+        /*ESHOP GUIDE*/
+        jQuery(function ($) {
+            window.VIG = window.VIG || {};
+            VIG.VariantChangeCallback = function () {
+                $('.flex-control-thumbs img:visible:first').click();
+            };
+
+        });
+        /*ESHOP GUIDE END*/
+
+        $('.without-caption').magnificPopup({
+            type: 'image',
+            closeOnContentClick: true,
+            closeBtnInside: false,
+            mainClass: 'mfp-no-margins mfp-with-zoom', // class to remove default margin from left and right side
+            image: {
+                verticalFit: true
+            },
+            zoom: {
+                enabled: true,
+                duration: 300 // don't foget to change the duration also in CSS
+            }
+        });
+
+        $('.with-caption').magnificPopup({
+            type: 'image',
+            closeOnContentClick: true,
+            closeBtnInside: false,
+            mainClass: 'mfp-with-zoom mfp-img-mobile',
+            image: {
+                verticalFit: true,
+                titleSrc: function (item) {
+                    return item.el.attr('title') + ' &middot; <a class="image-source-link" href="' + item.el.attr('data-source') + '" target="_blank">image source</a>';
+                }
+            },
+            zoom: {
+                enabled: true
+            }
+        });
+    </script>
+
+}

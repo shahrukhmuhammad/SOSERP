@@ -1,0 +1,1181 @@
+﻿@functions{
+    #region Current Location Check
+    bool IsCurrentArea(string a)
+    {
+        var area = ViewContext.RouteData.DataTokens["area"].ToString();
+        return string.Compare(a, area, true) == 0;
+    }
+    bool IsCurrentController(string c)
+    {
+        var controller = ViewContext.RouteData.GetRequiredString("controller");
+        return string.Compare(c, controller, true) == 0;
+    }
+    bool IsCurrentAction(string c, string a)
+    {
+        var action = ViewContext.RouteData.GetRequiredString("controller") + ViewContext.RouteData.GetRequiredString("action");
+        return string.Compare(c + a, action, true) == 0;
+    }
+    #endregion
+
+    #region Set Location
+    string SetActiveArea(string area)
+    {
+        var res = IsCurrentArea(area);
+        return res ? "active in" : null;
+    }
+    string SetActiveController(string controller)
+    {
+        var res = IsCurrentController(controller);
+        return res ? "list-group-item-success in" : null;
+    }
+    string SetActiveAction(string controller, string action)
+    {
+        var res = IsCurrentAction(controller, action);
+        return res ? "list-group-item-success in" : null;
+    }
+    string SetActiveSubAction(string controller, string action)
+    {
+        var res = IsCurrentAction(controller, action);
+        return res ? "info" : null;
+    }
+    #endregion
+}
+
+@{
+    var allOffices = ViewBag.AllOffices as List<BaseApp.Entity.Office>;
+    var queryId = ViewContext.RouteData.Values["Id"];
+}
+
+<div class="panel-group hidden-print" id="sideBar-accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default visible-xs">
+        <div class="panel-heading no-padding" role="tab">
+            <h4 class="panel-title">
+                <a class="list-group-item" href="javascript://" data-toggle="sidebar" data-target="#mobile-Module-Menu" data-canvas="body" data-autohide="true"><i class="fa fa-times"></i> Close</a>
+            </h4>
+        </div>
+    </div>
+
+    @if (IsCurrentAction("AppLog", "General") || IsCurrentAction("AppLog", "Error"))
+    {
+        if (CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.LogsManagement))
+        {
+            <div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("AppLog", "General")" href="~/Secure/AppLog/General"><i class="fa fa-exclamation"></i> General Activity Log</a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("AppLog", "Connectivity")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-plug"></i> Connectivity Log</a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("AppLog", "Error")" href="~/Secure/AppLog/Error"><i class="fa fa-warning"></i> Errors Log</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    @if (IsCurrentController("MessageCenter"))
+    {
+        if (Request.IsAuthenticated)
+        {
+            <div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("MessageCenter", "New")" href="~/Secure/MessageCenter/New"><i class="fa fa-plus"></i> Create New Message</a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("MessageCenter", "Index")" href="~/Secure/MessageCenter"><i class="fa fa-envelope"></i> Inbox</a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("MessageCenter", "Outbox")" href="~/Secure/MessageCenter/Outbox"><i class="fa fa-send"></i> Outbox</a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("MessageCenter", "Draft")" href="~/Secure/MessageCenter/Draft"><i class="fa fa-inbox"></i> Draft</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    @if ((IsCurrentArea("HRMS") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewHRMS, BaseApp.Entity.AppPermission.HRMS)))
+    {
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Dashboard", "Index")" href="@Url.Action("Index","Dashboard")"><i class="fa fa-dashboard clr-green"></i> Dashboard</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Employee", "Employees") @SetActiveAction("Employee", "Record") " href="@Url.Action("Employees","Employee")"><i class="fa fa-list-alt clr-green"></i> Employees</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        @*<a class="list-group-item @SetActiveAction("TimeSheet", "Index")" href="~/Secure/TimeSheet"><i class="fa fa-clock-o clr-green"></i> Timesheets</a>*@
+                        <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-clock-o clr-green"></i> Timesheets</a>
+
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        @*<a class="list-group-item @SetActiveAction("Employee", "Payrolls")" href="javascript://"><i class="fa fa-file clr-green"></i> Payrolls</a>*@
+                        <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-file clr-green"></i> Payrolls</a>
+
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-companySettings">
+                    <h4 class="panel-title">
+
+                        <a class="list-group-item  @SetActiveAction("Employee", "Settings") @SetActiveAction("Employee", "TimesheetSettings")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-companySettings" aria-expanded="false" aria-controls="collapse-companySettings">
+                            <i class="fa fa-gears clr-yellow"></i> Settings <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-companySettings" class="panel-collapse collapse @SetActiveAction("Employee", "Settings") @SetActiveAction("Employee", "TimesheetSettings") @SetActiveAction("Employee", "PayrollSettings")" role="tabpanel" aria-labelledby="heading-companySettings">
+                    <div class="list-group">
+                        <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-gear clr-yellow"></i> Manage Employee Data Fields</a>
+                        <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-gear clr-yellow"></i> Payroll Settings</a>
+                        <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-gear clr-yellow"></i> Timesheet Settings</a>
+
+
+                        @*<a class="list-group-item @SetActiveAction("Employee", "Settings")" href="~/Secure/Employee/Settings"><i class="fa fa-gear clr-yellow"></i> Manage Employee Data Fields</a>
+                        <a class="list-group-item @SetActiveAction("Employee", "PayrollSettings")" href="~/Secure/Employee/PayrollSettings"><i class="fa fa-gear clr-yellow"></i> Payroll Settings</a>
+                        <a class="list-group-item @SetActiveAction("Employee", "TimesheetSettings")" href="~/Secure/Employee/TimesheetSettings"><i class="fa fa-gear clr-yellow"></i> Timesheet Settings</a>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (IsCurrentController("Account"))
+    {
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Account", "Index") @SetActiveAction("Account", "Edit")" href="~/Secure/Account"><i class="fa fa-user-secret"></i> Profile</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Account", "Security")" href="~/Secure/Account/Security"><i class="fa fa-lock"></i> Security Settings</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-cog"></i> Notifications & Preferences</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a href="javascript://" data-toggle="modal" data-target="#themes-Modal" class="list-group-item"><i class="fa fa-paint-brush"></i> Theme</a>
+                    </h4>
+                </div>
+            </div>
+            if (CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All))
+            {
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-briefcase"></i> My Account</a>
+                        </h4>
+                    </div>
+                </div>*@
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item" href="~/Secure/Config"><i class="fa fa-wrench"></i> Configurations</a>
+                        </h4>
+                    </div>
+                </div>*@
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-puzzle-piece"></i> Integrations</a>
+                        </h4>
+                    </div>
+                </div>*@
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item" href="~/Secure/Settings"><i class="fa fa-cogs"></i> Settings</a>
+                        </h4>
+                    </div>
+                </div>*@
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-support"></i> Support Center</a>
+                    </h4>
+                </div>
+            </div>
+            }
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Account", "Security")" href="~/Secure/Account/Security"><i class="fa fa-lock"></i> Security Settings</a>
+                        </h4>
+                    </div>
+                </div>*@
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item" href="~/Secure/Account/Logout"><i class="fa fa-sign-out"></i> Logout</a>
+                        </h4>
+                    </div>
+                </div>*@
+        </div>
+    }
+
+    @*@if (IsCurrentController("AccessControl") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewContact, BaseApp.Entity.AppPermission.Contact))
+        {
+            if (CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.Contact))
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a href="javascript://" class="list-group-item @SetActiveAction("AccessControl", "Record") dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-user-plus"></i> Add New Contact <span class="badge"><i class="fa fa-angle-right"></i></span>
+                            </a>
+                            <ul class="dropdown-menu" style="top:0; left:320px;">
+                                @foreach (var x in allOffices)
+                                {
+                                    <li><a href="~/Secure/AccessControl/Record?o=@x.Id">@x.Code - @x.Title</a></li>
+                                }
+                            </ul>
+                        </h4>
+                    </div>
+                </div>
+            }
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("AccessControl", "Index")" href="~/Secure/AccessControl"><i class="fa fa-users"></i> All Contacts</a>
+                    </h4>
+                </div>
+            </div>
+        }*@
+
+    @if ((IsCurrentController("Setting") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All)) || (IsCurrentController("Config") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All))
+                                || (IsCurrentController("Notification") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All)) || (IsCurrentController("Company") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All)) || (IsCurrentController("Office") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All))
+                                || (IsCurrentController("AccessControl") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewContact, BaseApp.Entity.AppPermission.Contact))
+                                || (IsCurrentController("Integration") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All)) || (IsCurrentController("Documentation") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All)))
+    {
+        <div>
+            <div class="panel panel-default hidden-lg hidden-md">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("QuickSetup", "Index")" href="javascript://"><i class="fa fa-anchor"></i> Qucik Setup</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Config", "Index")" href="~/Secure/Config"><i class="fa fa-wrench"></i> Configurations</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-CompanyProfile">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-CompanyProfile" aria-expanded="false" aria-controls="collapse-CompanyProfile"><i class="fa fa-bank"></i> Company Profile <span class="badge"><i class="fa fa-angle-down"></i></span> </a>
+                    </h4>
+                </div>
+
+                <div id="collapse-CompanyProfile" class="panel-collapse collapse @SetActiveAction("Company", "CompanyProfile") @SetActiveAction("Company", "Index") @SetActiveAction("Office", "Index") @SetActiveAction("Office", "Structure")" role="tabpanel" aria-labelledby="heading-CompanyProfile">
+                    <div class="list-group">
+                        @*<a class="list-group-item" style="font-weight:normal" href="~/Secure/Company/CompanyProfile"><i class="fa fa-file clr-royalBlue"></i> Company Details</a>*@
+                        <a class="list-group-item @SetActiveAction("Company", "Index")" href="~/Secure/Company"><i class="fa fa-envelope-o"></i> Company Setup</a>
+                        <a class="list-group-item @SetActiveAction("Company", "CompanyProfile")" href="~/Secure/Company/CompanyProfile"><i class="fa fa-edit"></i> Company Details</a>
+                        <a class="list-group-item @SetActiveAction("Office", "Structure") @SetActiveAction("Office", "Index")" href="~/Secure/Office/Structure"><i class="fa fa-warning"></i> Organization Structure</a>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab" id="heading-Company">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Company", "Index") @SetActiveAction("Company", "Index")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-Company" aria-expanded="false" aria-controls="collapse-Company">
+                                <i class="fa fa-sticky-note-o"></i> Company Profile <span class="badge"><i class="fa fa-angle-down"></i></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-Templates" class="panel-collapse collapse @SetActiveAction("Company", "Index") @SetActiveAction("Company", "Index")" role="tabpanel" aria-labelledby="heading-Company">
+                        <div class="list-group">
+                            <a class="list-group-item @SetActiveAction("Company", "Index")" href="~/Secure/Company"><i class="fa fa-envelope-o"></i> Company Setup</a>
+                            <a class="list-group-item @SetActiveAction("Company", "Index")" href="~/Secure/Company/CompanyProfile"><i class="fa fa-edit"></i> Company Details</a>
+                            <a class="list-group-item @SetActiveAction("Company", "Index")" href="~/Secure/Office"><i class="fa fa-warning"></i> Organization Structure</a>
+                        </div>
+                    </div>
+                </div>*@
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Setting", "Notification")" href="~/Secure/Setting/Notification"><i class="fa fa-bell-o"></i> Notification Settings</a>
+                        </h4>
+                    </div>
+                </div>*@
+            @if (AppModule.GetById("CMS").IsPurchased == true)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Setting", "CMS")" href="~/Secure/Setting/CMS"><i class="fa fa-globe"></i> CMS </a>
+                        </h4>
+                    </div>
+                </div>
+            }
+            @if (AppModule.GetById("Ecommerce").IsPurchased == true)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Setting", "Ecommerce")" href="~/Secure/Setting/Ecommerce"><i class="fa fa-shopping-cart"></i> Ecommerce </a>
+                        </h4>
+                    </div>
+                </div>
+            }
+            @if (AppModule.GetById("Employees").IsPurchased == true)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Setting", "Employees")" href="~/Secure/Setting/Employees"><i class="fa fa-users"></i> HRM</a>
+                        </h4>
+                    </div>
+                </div>
+            }
+            @if (AppModule.GetById("DMS").IsPurchased == true)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Setting", "DMS")" href="~/Secure/Setting/DMS"><i class="fa fa-folder"></i> Company Drive</a>
+                        </h4>
+                    </div>
+                </div>
+            }
+            @if (AppModule.GetById("CRM").IsPurchased == true)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Setting", "CRM")" href="~/Secure/Setting/CRM"><i class="fa fa-users"></i> CRM</a>
+                        </h4>
+                    </div>
+                </div>
+            }
+            @if (AppModule.GetById("TaskManager").IsPurchased == true)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Setting", "TaskManager")" href="~/Secure/Setting/TaskManager"><i class="fa fa-calendar"></i> Task Manager</a>
+                        </h4>
+                    </div>
+                </div>
+            }
+            @if (AppModule.GetById("Financials").IsPurchased == true)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Setting", "Financials")" href="~/Secure/Setting/Financials"><i class="fa fa-money"></i> Financials</a>
+                        </h4>
+                    </div>
+                </div>
+            }
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab" id="heading-ApplicationSettings">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Setting", "CMS") @SetActiveAction("Setting", "DMS")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-ApplicationSettings" aria-expanded="false" aria-controls="collapse-ApplicationSettings">
+                                <i class="fa fa-laptop"></i> Application Settings <span class="badge"><i class="fa fa-angle-down"></i></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-ApplicationSettings" class="panel-collapse collapse @SetActiveAction("Setting", "CMS") @SetActiveAction("Setting", "DMS")" role="tabpanel" aria-labelledby="heading-ApplicationSettings">
+                        <div class="list-group">
+                            <a class="list-group-item @SetActiveAction("Setting", "CMS")" href="~/Secure/Setting/CMS"><i class="fa fa-globe"></i> CMS</a>
+                            <a class="list-group-item @SetActiveAction("Setting", "DMS")" href="~/Secure/Setting/DMS"><i class="fa fa-folder"></i> Company Drive</a>
+                        </div>
+                    </div>
+                </div>*@
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab" id="heading-Templates">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Setting", "EmailTemplate") @SetActiveAction("Setting", "FormSubmission")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-Templates" aria-expanded="false" aria-controls="collapse-Templates">
+                                <i class="fa fa-sticky-note-o"></i> Templates <span class="badge"><i class="fa fa-angle-down"></i></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-Templates" class="panel-collapse collapse @SetActiveAction("Setting", "EmailTemplate") @SetActiveAction("Setting", "FormSubmission")" role="tabpanel" aria-labelledby="heading-Templates">
+                        <div class="list-group">
+                            <a class="list-group-item @SetActiveAction("Setting", "EmailTemplate")" href="~/Secure/Setting/EmailTemplate"><i class="fa fa-envelope-o"></i> Email</a>
+                            <a class="list-group-item @SetActiveAction("Setting", "FormSubmission")" href="~/Secure/Setting/FormSubmission"><i class="fa fa-edit"></i> Form Submission</a>
+                            <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-warning"></i> Error Pages</a>
+                        </div>
+                    </div>
+                </div>*@
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Config", "Smtps") @SetActiveAction("Config", "Smtp")" href="~/Secure/Config/Smtps"><i class="fa fa-envelope"></i> SMTP Controls</a>
+                        </h4>
+                    </div>
+                </div>*@
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item" href="~/Secure/AccessControl">
+                                <i class="fa fa-lock"></i> System Access Control
+                            </a>
+                        </h4>
+                    </div>
+                </div>*@
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-Integration">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveController("Integration")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-Integration" aria-expanded="false" aria-controls="collapse-Integration">
+                            <i class="fa fa-puzzle-piece"></i> Integration <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-Integration" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-Integration">
+                    <div class="list-group">
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Integration", "All")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-server"></i> All</a>
+                        <a class="list-group-item @SetActiveAction("Integration", "PaymentGateway")" href="~/Secure/Integration/PaymentGateway"><i class="fa fa-credit-card"></i> Payment Gateway</a>
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Integration", "SearchEngine")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-search"></i> Search Engines</a>
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Integration", "SocialMedia")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-facebook-square"></i> Social Media</a>
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Integration", "ThirdParty")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-gg"></i> Thid Party</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-Developers">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-Developers" aria-expanded="false" aria-controls="collapse-Developers">
+                            <i class="fa fa-code"></i> Developers <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-Developers" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-Developers">
+                    <div class="list-group">
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Integration", "SDK")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-lightbulb-o"></i> SDK</a>
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Integration", "API")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-compress"></i> API Details</a>
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Integration", "API Access Control")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-plug"></i> API Access Control</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-Documentation">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveController("Documentation")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-Documentation" aria-expanded="false" aria-controls="collapse-Documentation">
+                            <i class="fa fa-files-o"></i> Documentation <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-Documentation" class="panel-collapse collapse @SetActiveAction("Documentation", "Index")" role="tabpanel" aria-labelledby="heading-Documentation">
+                    <div class="list-group">
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Documentation", "Index")" href="~/Secure/Documentation"><i class="fa fa-file-code-o"></i> General Documentation</a>
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Documentation", "VersionControl")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-gear"></i> Version Control</a>
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Documentation", "Integration")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-gg"></i> Integration</a>
+                    </div>
+                </div>
+            </div>
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Config", "Info")" href="~/Secure/Config/Info"><i class="fa fa-info-circle"></i> System Information & Reboot</a>
+                        </h4>
+                    </div>
+                </div>*@
+        </div>
+    }
+
+    @if ((!IsCurrentArea("HRMS") && IsCurrentController("Employee") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewContact, BaseApp.Entity.AppPermission.Contact)) || (IsCurrentController("TimeSheet") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewContact, BaseApp.Entity.AppPermission.Contact)))
+    {
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Employee", "Index")" href="~/Secure/Employee"><i class="fa fa-dashboard clr-green"></i> Overview</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Employee", "Employees")" href="~/Secure/Employee/Employees"><i class="fa fa-list-alt clr-green"></i> Employees</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("TimeSheet", "Index")" href="~/Secure/TimeSheet"><i class="fa fa-clock-o clr-green"></i> Timesheets</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Employee", "Payrolls")" href="javascript://"><i class="fa fa-file clr-green"></i> Payrolls</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-companySettings">
+                    <h4 class="panel-title">
+                        <a class="list-group-item  @SetActiveAction("Employee", "Settings") @SetActiveAction("Employee", "TimesheetSettings")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-companySettings" aria-expanded="false" aria-controls="collapse-companySettings">
+                            <i class="fa fa-gears clr-yellow"></i> Settings <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-companySettings" class="panel-collapse collapse @SetActiveAction("Employee", "Settings") @SetActiveAction("Employee", "TimesheetSettings") @SetActiveAction("Employee", "PayrollSettings")" role="tabpanel" aria-labelledby="heading-companySettings">
+                    <div class="list-group">
+                        <a class="list-group-item @SetActiveAction("Employee", "Settings")" href="~/Secure/Employee/Settings"><i class="fa fa-gear clr-yellow"></i> Manage Employee Data Fields</a>
+                        <a class="list-group-item @SetActiveAction("Employee", "PayrollSettings")" href="~/Secure/Employee/PayrollSettings"><i class="fa fa-gear clr-yellow"></i> Payroll Settings</a>
+                        <a class="list-group-item @SetActiveAction("Employee", "TimesheetSettings")" href="~/Secure/Employee/TimesheetSettings"><i class="fa fa-gear clr-yellow"></i> Timesheet Settings</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if ((IsCurrentController("TaskManagement") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewContact, BaseApp.Entity.AppPermission.Contact)))
+    {
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("TaskManagement", "Index")" href="~/Secure/TaskManagement"><i class="fa fa-dashboard clr-green"></i> Overview</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("TaskManagement", "Projects")" href="javascript://" @*href="~/Secure/TaskManagement/Projects"*@><i class="fa fa-list-alt clr-green"></i> Projects</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("TaskManagement", "Tasks") @SetActiveAction("TaskManagement", "CreateTask")" href="~/Secure/TaskManagement/Tasks"><i class="fa fa-clock-o clr-green"></i> Tasks</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("TaskManagement", "Performance")" href="javascript://"><i class="fa fa-file clr-green"></i> Performance</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-companySettings">
+                    <h4 class="panel-title">
+                        <a class="list-group-item  @SetActiveAction("TaskManagement", "Settings")" href="~/Secure/TaskManagement/Settings">
+                            <i class="fa fa-gears clr-yellow"></i> Settings
+                        </a>
+                    </h4>
+                </div>
+                @*<div id="collapse-companySettings" class="panel-collapse collapse @SetActiveAction("Employee", "Settings") @SetActiveAction("Employee", "TimesheetSettings") @SetActiveAction("Employee", "PayrollSettings")" role="tabpanel" aria-labelledby="heading-companySettings">
+                        <div class="list-group">
+                            <a class="list-group-item @SetActiveAction("Employee", "Settings")" href="~/Secure/Employee/Settings"><i class="fa fa-gear clr-yellow"></i> Manage Employee Data Fields</a>
+                            <a class="list-group-item @SetActiveAction("Employee", "PayrollSettings")" href="~/Secure/Employee/PayrollSettings"><i class="fa fa-gear clr-yellow"></i> Payroll Settings</a>
+                            <a class="list-group-item @SetActiveAction("Employee", "TimesheetSettings")" href="~/Secure/Employee/TimesheetSettings"><i class="fa fa-gear clr-yellow"></i> Timesheet Settings</a>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+    }
+
+    @if ((IsCurrentController("Company") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All)) || (IsCurrentController("Office") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All)) || (IsCurrentController("AccessControl") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewContact, BaseApp.Entity.AppPermission.Contact)))
+    {
+        <div>
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Company", "Index")" href="~/Secure/Company"><i class="fa fa-wrench clr-green"></i> Company Setup</a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab" id="heading-CompanyProfile">
+                        <h4 class="panel-title">
+                            <a class="list-group-item" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-CompanyProfile" aria-expanded="false" aria-controls="collapse-CompanyProfile"><i class="fa fa-dashboard clr-royalBlue"></i> Company Profile <span class="badge"><i class="fa fa-angle-down"></i></span> </a>
+                        </h4>
+                    </div>
+
+                    <div id="collapse-CompanyProfile" class="panel-collapse collapse @SetActiveAction("Company", "CompanyProfile")" role="tabpanel" aria-labelledby="heading-CompanyProfile">
+                        <div class="list-group">
+                            <a class="list-group-item" style="font-weight:normal" href="~/Secure/Company/CompanyProfile"><i class="fa fa-file clr-royalBlue"></i> Company Details</a>
+                            <a class="list-group-item" style="font-weight:normal" href="javascript://"><i class="fa fa-list clr-royalBlue"></i> Marketing Materials</a>
+                            <a class="list-group-item" style="font-weight:normal" href="javascript://"><i class="fa fa-lightbulb-o clr-royalBlue"></i> Business Plan</a>
+                            <a class="list-group-item" style="font-weight:normal" href="javascript://"><i class="fa fa-flag clr-royalBlue"></i> Milestone</a>
+                            <a class="list-group-item" style="font-weight:normal" href="javascript://"><i class="fa fa-anchor clr-royalBlue"></i> Capabilities</a>
+                            <a class="list-group-item" style="font-weight:normal" href="javascript://"><i class="fa fa-bank clr-royalBlue"></i> Trading Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Office", "Index") @SetActiveAction("Office", "Details") @SetActiveAction("Office", "Record")" href="~/Secure/Office"><i class="fa fa-sitemap clr-royalBlue"></i> Organization Structure</a>
+                        </h4>
+                    </div>
+                </div>*@
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-hdd-o clr-purple"></i> Company Drive</a>
+                        </h4>
+                    </div>
+                </div>*@
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Employee", "Index")" href="~/Secure/Employee"><i class="fa fa-users clr-teal"></i> Employees Management</a>
+                        </h4>
+                    </div>
+                </div>*@
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab" id="heading-companySettings">
+                        <h4 class="panel-title">
+                            <a class="list-group-item  @SetActiveAction("Company", "Settings") @SetActiveAction("Employee", "Settings") @SetActiveAction("Employee", "TimesheetSettings")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-companySettings" aria-expanded="false" aria-controls="collapse-companySettings">
+                                <i class="fa fa-gears clr-yellow"></i> Settings <span class="badge"><i class="fa fa-angle-down"></i></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-companySettings" class="panel-collapse collapse @SetActiveAction("Company", "Settings") @SetActiveAction("Employee", "Settings") @SetActiveAction("Employee", "TimesheetSettings")" role="tabpanel" aria-labelledby="heading-companySettings">
+                        <div class="list-group">
+                            <a class="list-group-item @SetActiveAction("Company", "Settings")" href="~/Secure/Company/Settings"><i class="fa fa-gear clr-yellow"></i> Company Settings</a>
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+    }
+
+
+    @if (IsCurrentArea("Cms") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewCMS, BaseApp.Entity.AppPermission.CMS))
+    {
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Dashboard", "Index")" href="~/CMS"><i class="fa fa-dashboard clr-green"></i> Performance Dashboard</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-cms-Themes">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveController("Design")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-cms-Themes" aria-expanded="true" aria-controls="collapse-cms-Themes">
+                            <i class="fa fa-object-group clr-maroon"></i> Design Studio <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-cms-Themes" class="panel-collapse collapse @SetActiveController("Design")" role="tabpanel" aria-labelledby="heading-cms-Themes">
+                    <div class="list-group">
+                        <a class="list-group-item @SetActiveController("Design")" href="~/CMS/Design/Themes"><i class="fa fa-file-image-o clr-lightMaroon"></i> Themes Management</a>
+                        <a class="list-group-item @SetActiveController("WebSlide")" href="~/CMS/WebSlide"><i class="fa fa-file-image-o clr-lightMaroon"></i> Slides Management</a>
+                        <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-sticky-note-o clr-lightMaroon"></i> Popup Management</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-cms-ContentManagement">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveController("WebPage")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-cms-ContentManagement" aria-expanded="true" aria-controls="collapse-cms-ContentManagement">
+                            <i class="fa fa-desktop clr-royalBlue"></i> Content Management <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-cms-ContentManagement" class="panel-collapse collapse @SetActiveController("WebPage")" role="tabpanel" aria-labelledby="heading-cms-ContentManagement">
+                    <div class="list-group">
+                        <a class="list-group-item @(queryId != null ? (queryId.ToString() == "1AF879CC-6FC9-E511-9BCB-889FFADE3811" ? "list-group-item-success" : "") : "")" href="~/CMS/WebPage/Record/1AF879CC-6FC9-E511-9BCB-889FFADE3811"><i class="fa fa-home clr-lightBlue"></i> Home Page</a>
+                        <a class="list-group-item @SetActiveController("WebPage")" href="~/CMS/WebPage"><i class="fa fa-file-code-o clr-lightBlue"></i> Web Pages</a>
+                        <a class="list-group-item @SetActiveAction("WebPage", "Footer")" href="~/CMS/WebPage/Footer"><i class="fa fa-long-arrow-down clr-lightBlue"></i> Footer</a>
+                        <a class="list-group-item list-group-item-@(queryId != null ? (queryId.ToString() == "91A66B3E-26CB-E511-9BCB-889FFADE3811" ? "info" : "") : "")" href="~/CMS/WebPage/Record/91A66B3E-26CB-E511-9BCB-889FFADE3811"><i class="fa fa-newspaper-o clr-lightBlue"></i> News Page</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveController("Subsite")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-cms-SubSites" aria-expanded="true" aria-controls="collapse-cms-SubSites">
+                            <i class="fa fa-object-ungroup clr-pink"></i> Subsites / Sections <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-cms-SubSites" class="panel-collapse collapse @SetActiveController("SubSite")" role="tabpanel" aria-labelledby="heading-cms-SubSite">
+                    <div class="list-group">
+                        <a class="list-group-item" href="~/CMS/SubSite/Dashboard/tradeportal"><i class="fa fa-home clr-pink"></i> Trade Portal</a>
+                        <a class="list-group-item" href="~/CMS/SubSite/Dashboard/blog"><i class="fa fa-feed clr-pink"></i> Blog</a>
+                        <a class="list-group-item" href="~/CMS/SubSite/Dashboard/forum"><i class="fa fa-forumbee clr-pink"></i> Forum</a>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab" id="heading-CmsNews">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveController("WebNews")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-CmsNews" aria-expanded="true" aria-controls="collapse-CmsNews">
+                                <i class="fa fa-newspaper-o clr-teal"></i> News & Events <span class="badge"><i class="fa fa-angle-down"></i></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-CmsNews" class="panel-collapse collapse @SetActiveController("WebNews")" role="tabpanel" aria-labelledby="heading-CmsNews">
+                        <div class="list-group">
+                            <a class="list-group-item @SetActiveController("WebNews")" href="~/CMS/WebNews"><i class="fa fa-newspaper-o clr-teal"></i> News</a>
+                            <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-calendar-check-o clr-teal"></i> Events</a>
+                        </div>
+                    </div>
+                </div>*@
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-Newsletter">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveController("Newsletter")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-Newsletter" aria-expanded="true" aria-controls="collapse-Newsletter">
+                            <i class="fa fa-edit clr-purple"></i> Newsletter Management <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-Newsletter" class="panel-collapse collapse @SetActiveController("Newsletter")" role="tabpanel" aria-labelledby="heading-Newsletter">
+                    <div class="list-group">
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Newsletter", "Subscribers")" href="~/CMS/Newsletter/Subscribers"><i class="fa fa-users clr-purple"></i> Subscribers</a>
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Newsletter", "Index") list-group-item-@SetActiveSubAction("Newsletter", "Record") list-group-item-@SetActiveSubAction("Newsletter", "Details")" href="~/CMS/Newsletter"><i class="fa fa-envelope-square clr-purple"></i> Posts</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveController("SocialMedia")" href="~/CMS/SocialMedia"><i class="fa fa-share-alt clr-lightGreen"></i> Social Media Management</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-cms-FileManager">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveController("FileManager") @SetActiveController("WebContent")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-cms-FileManager" aria-expanded="true" aria-controls="collapse-cms-FileManager">
+                            <i class="fa fa-folder-open-o clr-blue"></i> Widgets <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-cms-FileManager" class="panel-collapse collapse @SetActiveController("FileManager") @SetActiveController("WebContent")" role="tabpanel" aria-labelledby="heading-cms-FileManager">
+                    <div class="list-group">
+                        <a class="list-group-item @SetActiveController("FileManager")" href="~/CMS/FileManager"><i class="fa fa-files-o clr-blue"></i> Files</a>
+                        <a class="list-group-item @SetActiveController("WebContent")" href="~/CMS/WebContent"><i class="fa fa-file-text-o clr-blue"></i> Contents</a>
+                        <a class="list-group-item @SetActiveController("WebNews")" href="~/CMS/WebNews"><i class="fa fa-newspaper-o clr-teal"></i> News</a>
+                        <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-calendar-check-o clr-teal"></i> Events</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-check-square clr-lightBlue"></i> Forms Management</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-cms-SEO">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveController("Seo")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-cms-SEO" aria-expanded="true" aria-controls="collapse-cms-SEO">
+                            <i class="fa fa-area-chart clr-green"></i> SEO Management <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-cms-SEO" class="panel-collapse collapse @SetActiveController("Seo")" role="tabpanel" aria-labelledby="heading-cms-SEO">
+                    <div class="list-group">
+                        <a class="list-group-item @SetActiveAction("Seo","Index")" href="~/CMS/Seo"><i class="fa fa-dashboard clr-green"></i> SEO Overview</a>
+                        <a class="list-group-item @SetActiveAction("Seo","Management")" href="~/CMS/Seo/Management"><i class="fa fa-search-plus clr-green"></i> Search Engine Tools</a>
+                        <a class="list-group-item @SetActiveAction("Seo","Metadata") @SetActiveAction("Seo","UrlMetadata") @SetActiveAction("Seo","Keyword") @SetActiveAction("Seo","Sitemap")" href="~/CMS/Seo/Metadata"><i class="fa fa-code clr-green"></i> Search Engine Optimization</a>
+                        <a class="list-group-item @SetActiveAction("Seo","Campaign")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-tasks clr-green"></i> Campaigns</a>
+                        <a class="list-group-item @SetActiveAction("Seo","Analytics")" href="~/CMS/Seo/Analytics"><i class="fa fa-industry clr-green"></i> Analytics</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-cubes clr-royalBlue"></i> Addons</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-trash clr-red"></i> Trash</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" @SetActiveController("Settings") href="@Url.Action("Index","Settings")"><i class="fa fa-gear"></i> CMS Settings</a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    }
+    @if (IsCurrentArea("Ecommerce") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewEcommerce, BaseApp.Entity.AppPermission.Ecommerce))
+    {
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Dashboard", "Index")" href="~/Ecommerce"><i class="fa fa-dashboard clr-green"></i> Overview</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Order", "Purchase")" href="~/Ecommerce/Order/Purchase"><i class="fa fa-cart-plus clr-pink"></i> Purchases</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-cms-Themes">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveController("Inventory")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-cms-Themes" aria-expanded="true" aria-controls="collapse-cms-Themes">
+                            <i class="fa fa-cubes clr-maroon"></i> Stock <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-cms-Themes" class="panel-collapse collapse @SetActiveController("Inventory")" role="tabpanel" aria-labelledby="heading-cms-Themes">
+                    <div class="list-group">
+                        <a class="list-group-item @SetActiveController("Inventory")" href="~/Ecommerce/Inventory/Product"><i class="fa fa-file-image-o clr-lightMaroon"></i> Products</a>
+                        <a class="list-group-item @SetActiveController("Inventory")" href="~/Ecommerce/Inventory/Manufacturer"><i class="fa fa-file-image-o clr-lightBlue"></i> Brand</a>
+                        <a class="list-group-item @SetActiveController("Inventory")" href="~/Ecommerce/Inventory/Category"><i class="fa fa-file-image-o clr-lightGreen"></i> Categories</a>
+                        <a class="list-group-item @SetActiveController("Inventory")" href="~/Ecommerce/Products/Attributes"><i class="fa fa-file-image-o clr-royalBlue"></i> Attributes</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveController("Catalog")" href="~/Ecommerce/Catalog/AddProducts"><i class="fa fa-book clr-pink"></i> Catalog</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Order", "Sale")" href="~/Ecommerce/Order/Sale"><i class="fa fa-shopping-cart clr-yellow"></i> Orders</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" @SetActiveAction("Settings", "Index") href="@Url.Action("Index","Settings")"><i class="fa fa-gear"></i> Ecommerce Settings</a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    }
+    @if (IsCurrentArea("DMS"))
+    {
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Docs", "QuickUpload")" href="~/DMS/Docs/QuickUpload"><i class="fa fa-upload clr-green"></i> Quick Upload</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Docs", "Personal")" href="~/DMS/Docs/Personal"><i class="fa fa-files-o clr-blue"></i> Files</a>
+                    </h4>
+                </div>
+            </div>
+
+            @*if (CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewDMS, BaseApp.Entity.AppPermission.DMS))
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading no-padding" role="tab">
+                            <h4 class="panel-title">
+                                <a class="list-group-item @SetActiveAction("Docs", "All")" href="~/DMS/Docs/All"><i class="fa fa-files-o"></i> Files</a>
+                            </h4>
+                        </div>
+                    </div>
+                }*@
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Docs", "Teams")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-users clr-purple"></i> Teams</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-pencil-square-o clr-skyblue"></i> TreeWare<sup>TM</sup></a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-dmsShared">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Docs", "Shared")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-dmsShared" aria-expanded="false" aria-controls="collapse-dmsShared">
+                            <i class="fa fa-share-alt clr-teal"></i> Shared <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-dmsShared" class="panel-collapse collapse @SetActiveAction("Docs", "Shared")" role="tabpanel" aria-labelledby="heading-dmsShared">
+                    <div class="list-group">
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Docs", "Shared")" href="~/DMS/Docs/Shared"><i class="fa fa-files-o"></i> Files</a>
+                        <a class="list-group-item list-group-item-@SetActiveSubAction("Docs", "SharedHistory")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-clock-o"></i> History</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Docs", "FormsLibrary")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-tags clr-skyblue"></i> Tagging</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Docs", "FormsLibrary")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-th-list clr-blue"></i> Forms Library</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Docs", "Trash")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-trash-o clr-red"></i> Trash</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Docs", "Archives")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-archive clr-yellow"></i> Archives</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Docs", "Shredder")" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-recycle clr-red"></i> e-Shred</a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading no-padding" role="tab">
+                <h4 class="panel-title">
+                    <a class="list-group-item list-group-item-@SetActiveSubAction("Settings", "Index")" href="~/DMS/Settings/Index"><i class="fa fa-gear"></i> DMS Settings</a>
+                </h4>
+            </div>
+        </div>
+    }
+
+    @if (IsCurrentArea("CRM"))
+    {
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" href="javascript://"><i class="fa fa-list clr-green"></i> Overview</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Contact", "Index")" href="~/CRM/Contact/Index/@((int)CRM.Entity.ContactType.General)"><i class="fa fa-list clr-green"></i> General Contacts</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Contact", "Customers")" href="~/CRM/Contact/Customers/@((int)CRM.Entity.ContactType.Customer)"><i class="fa fa-users clr-green"></i> Customers</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Contact", "Suppliers")" href="~/CRM/Contact/Suppliers/@((int)CRM.Entity.ContactType.Supplier)"><i class="fa fa-users clr-green"></i> Suppliers</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Contact", "Traders")" href="~/CRM/Contact/Traders/@((int)CRM.Entity.ContactType.Trader)"><i class="fa fa-users clr-green"></i> Trader / Bulk Buyer</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Contact", "Dropshipers")" href="~/CRM/Contact/Dropshipers/@((int)CRM.Entity.ContactType.DropShipper)"><i class="fa fa-users clr-green"></i> Associates / Drop Ship</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab" id="heading-companySettings">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-companyMarketing" aria-expanded="false" aria-controls="collapse-companyMarketing">
+                            <i class="fa fa-delicious clr-lightBlue"></i> Marketing <span class="badge"><i class="fa fa-angle-down"></i></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-companyMarketing" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-companyMarketing">
+                    <div class="list-group">
+                        <a class="list-group-item" href="javascript://"><i class="fa fa-deviantart clr-yellow"></i> Marketing List</a>
+                        <a class="list-group-item" href="javascript://"><i class="fa fa-briefcase clr-green"></i> Sale Leads</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Settings", "Index")" href="~/CRM/Settings/Index"><i class="fa fa-gear clr-yellow"></i> Settings</a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (IsCurrentArea("Listing"))
+    {
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Tender", "Index")" href="~/Listing"><i class="fa fa-dashboard clr-green"></i> Overview</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Tender", "All") @SetActiveAction("Tender", "List")" href="~/Listing/Tender/All"><i class="fa fa-th-list clr-lightMaroon"></i> Lists</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-magnet clr-yellow"></i> Web Crawler</a>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item" href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal"><i class="fa fa-trash clr-red"></i> Trash</a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    }
+    @if (IsCurrentController("Schedular"))
+    {
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Schedular", "Calendar")" href="~/Listing"><i class="fa fa-calendar clr-green"></i> All Events</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading no-padding" role="tab">
+                    <h4 class="panel-title">
+                        <a class="list-group-item @SetActiveAction("Schedular", "MyEvents")" href="~/Listing"><i class="fa fa-calendar-check-o clr-green"></i> My Events</a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    }
+</div>

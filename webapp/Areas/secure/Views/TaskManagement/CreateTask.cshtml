@@ -1,0 +1,336 @@
+﻿
+@{
+    ViewBag.Title = "New Task";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+    <link href="~/Content/App/TaskManagement.css" rel="stylesheet" />
+    <link href="~/Content/Jquery-Filer/jquery.filer.css" rel="stylesheet" />
+    @*<link href="~/Content/DMS/bootstrap-dms.css" rel="stylesheet" />*@
+
+<!-- Choices includes -->
+<link href="~/Content/Choices/css/choices.min.css" rel="stylesheet" />
+<!-- End Choices includes -->
+<link href="~/Content/SelectJS/css/normalize.css" rel="stylesheet" />
+<link href="~/Content/SelectJS/css/selectize.default.css" rel="stylesheet" />
+<link href="~/Content/AdvancedSearch/advance-search.css" rel="stylesheet" />
+<style>
+#dataTable_length, #dataTable_filter, #dataTable_info, #dataTable_paginate {
+    display: none;
+}
+
+.breadcrumb {
+    margin-bottom: 5px;
+}
+.breadcrumb {
+    border-color: #ededed;
+    border-style: solid;
+    border-width: 0 1px 4px 1px;
+    font-size:12px;
+}
+.breadcrumb {
+    padding: 8px 15px;
+    list-style: none;
+}
+
+    </style>
+}
+
+<div class="form-Modal">
+    <div class="modal-content bg-transparent">
+        <div class="modal-header">
+            <h3 class="modal-title">New Task
+                <span class="pull-right" style="font-size:16px;">
+                    <a href="javascript://" title="Back" style="margin:0 10px;" onclick="window.history.back()"><i class="fa fa-angle-left fa-2x"></i></a>
+                    <button type="submit" title="Save" style="border:none; background:transparent"><i class="fa fa-check-circle fa-2x text-success"></i></button>
+                </span>
+            </h3>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-12 visible-sm visible-xs col-sm-offset-3 col-xs-12 col-xs-offset-2 col-md-offset-1 no-padding" style="font-size:17px; padding:5px;">
+                    @*<label><input type="checkbox" class="checkbox-inline big" id="priority-check" /> High Priority <span class="fa fa-tint"></span></label>*@
+                    <div class="pull-left" style="font-size: 1px; margin-top:3px;line-height:2; height:31px; display:block">
+                        <a href="javascript://" class="sort-top" style="height: 10px; font-size: 18px; line-height: 0px; display: block;">
+                            <i class="fa fa-sort-up"></i>
+                        </a>
+                        <a href="javascript://" class="sort-down" style="height: 12px; font-size: 18px; line-height: 0px; display: block;">
+                            <i class="fa fa-sort-down"></i>
+                        </a>
+                        <div class="clearfix"></div>
+                    </div>
+                    <label class="pull-left lbl-txt" style="padding:3px 10px; font-size:16px;"></label>
+                    <span class="fa fa-tint" style="font-size:20px; margin-top:6px;"></span>
+                    <span class="clearfix"></span>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                    <input type="text" placeholder="Things to do" class="form-control input-xlarge" style="font-size:22px;" />
+                </div>
+                <div class="col-md-2 hidden-sm hidden-xs col-md-offset-1 no-padding" style="font-size:17px;">
+                    @*<label><input type="checkbox" class="checkbox-inline big" id="priority-check" /> High Priority <span class="fa fa-tint"></span></label>*@
+                    <div class="pull-left hidden-sm hidden-xs" style="font-size: 1px; margin-top:3px;line-height:2; height:31px; display:block">
+                        <a href="javascript://" class="sort-top" style="height: 10px; font-size: 18px; line-height: 0px; display: block;">
+                            <i class="fa fa-sort-up"></i>
+                        </a>
+                        <a href="javascript://" class="sort-down" style="height: 12px; font-size: 18px; line-height: 0px; display: block;">
+                            <i class="fa fa-sort-down"></i>
+                        </a>
+                        <div class="clearfix"></div>
+                    </div> 
+                    <label class="pull-left hidden-sm hidden-xs lbl-txt" style="padding:3px 4px; font-size:16px;"></label> 
+                    <span id="font-icons" class="fa hidden-sm hidden-xs" style="font-size:18px; margin-top:6px;"></span>
+                    <span class="clearfix"></span>
+                </div>
+            </div>
+            <hr style="margin:5px 0;" />
+            <div class="row">
+                <div class="col-md-12">
+                    <textarea id="Message" rows="3" style="border:1px solid #808080" name="TaskDetails"></textarea>
+                </div>
+            </div>
+            <div class="row" style="margin-top:8px;">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading" style="background-color: rgba(40, 169, 182, 0.35)">
+                            <a href="javascript://" title="Upload files" id="upload-options"><i class="fa fa-upload fa-2x"></i></a>
+                            <a href="javascript://" title="Checklist" id="checklist-options"><i class="fa fa-list-ol fa-2x"></i></a>
+                            <a href="javascript://" title="Location" id="location-options"><i class="fa fa-map-marker fa-2x"></i></a>
+                        </div>
+                        <div class="panel-body" style="padding:0">
+                            @{ Html.RenderPartial("_UploadFiles");}
+                            <div class="checklist-box" style="display:none">
+                                @{ Html.Partial("_Checklist");}
+                            </div>
+                            <div class="location-box" style="display:none">
+                                @{ Html.Partial("_LocationTracking");}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <h4 class="col-sm-2 modal-title" style="margin: 8px 0;">Assign To</h4>
+                        <div class="col-md-10">
+                            <select id="select-AssignTo" name="assignees[]" multiple class="demo-default col-sm-11 col-xs-11" placeholder="Type employees name to assign">
+                                <option value="">Type employees name to assign</option>
+                                <option value="Reyan Cambel">Reyan Cambel</option>
+                                <option value="Luis Hycks">Luis Hycks</option>
+                                <option value="Voughan Thomas">Voughan Thomas</option>
+                                <option value="Lee Marshal">Lee Marshal</option>
+                            </select>
+                            <a href="javascript://" class="col-sm-1 col-xs-1 no-padding crmsearch" title="Search and add more" style="margin-top:3px;"><i class="fa fa-search fa-2x"></i></a>
+                            <div class="clearfix"></div>
+                            <div id="crm-box-panel" class="advance-search-box" style="display:none;"><div id="loading-mask-inner" align="center" style="margin: 12% 0;"><img src="~/Content/Images/loader.gif" style="height:60px;" alt="Loading" /></div></div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="form-group text-center" style="margin-top:8px; font-size:14px;">
+                        <a href="javascript://" style="margin:6px; text-decoration:underline" id="managedby-link"> Managed By</a>
+                        <a href="javascript://" style="margin:6px; text-decoration:underline" id="observer-link"> Observers</a>
+                        @*<a href="javascript://" style="margin:6px; text-decoration:underline" id="participants-link"> Participants</a>*@
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="form-group" id="managed-by" style="display:none">
+                        <h4 class="col-sm-2 modal-title" style="margin: 8px 0;">Managed By</h4>
+                        <div class="col-md-10">
+                            @*<input class="form-control" style="background-color:#ffffff;" id="choices-text-remove-button1" type="text" value="" placeholder="Enter Managed By Name......">*@
+                            <select id="select-ManagedBy" name="ManagedBy[]" multiple class="demo-default col-sm-11 col-xs-11" placeholder="Type employees name">
+                                <option value="">Type employees name</option>
+                                <option value="Reyan Cambel">Reyan Cambel</option>
+                                <option value="Luis Hycks">Luis Hycks</option>
+                                <option value="Voughan Thomas">Voughan Thomas</option>
+                            </select>
+                            <a href="javascript://" class="col-sm-1 col-xs-1 no-padding" id="managedbySearch" title="Search and add more" style="margin-top:3px;"><i class="fa fa-search fa-2x"></i></a>
+                            <div class="clearfix"></div>
+                            <div id="managedBy-box-panel" class="advance-search-box" style="display:none;"><div id="loading-mask-inner" align="center" style="margin: 12% 0;"><img src="~/Content/Images/loader.gif" style="height:60px;" alt="Loading" /></div></div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="form-group" id="observer-by" style="display:none">
+                        <h4 class="col-sm-2 modal-title" style="margin: 8px 0;">Observers</h4>
+                        <div class="col-md-10">
+                            <select id="select-Observers" name="Observers[]" multiple class="demo-default col-sm-11 col-xs-11" placeholder="Type name">
+                                <option value="">Type name</option>
+                                <option value="Reyan Cambel">Reyan Cambel</option>
+                                <option value="Luis Hycks">Luis Hycks</option>
+                                <option value="Voughan Thomas">Voughan Thomas</option>
+                                <option value="Lee Marshal">Lee Marshal</option>
+                            </select>
+                            <a href="javascript://" class="col-sm-1 col-xs-1 no-padding" id="observerSearch" title="Search and add more" style="margin-top:3px;"><i class="fa fa-search fa-2x"></i></a>
+                            <div class="clearfix"></div>
+                            <div id="observer-box-panel" class="advance-search-box" style="display:none;"><div id="loading-mask-inner" align="center" style="margin: 12% 0;"><img src="~/Content/Images/loader.gif" style="height:60px;" alt="Loading" /></div></div>
+                        </div>
+                    </div>
+                    @*<div class="clearfix"></div>
+                    <div class="form-group" id="participants" style="display:none">
+                        <h4 class="col-sm-2 modal-title" style="margin: 8px 0;">Participants</h4>
+                        <div class="col-md-10">
+                            <select id="select-Participants" name="Participants[]" multiple class="demo-default col-sm-11 col-xs-11" placeholder="Type name">
+                                <option value="">Type name</option>
+                                <option value="Reyan Cambel">Reyan Cambel</option>
+                                <option value="Luis Hycks">Luis Hycks</option>
+                                <option value="Voughan Thomas">Voughan Thomas</option>
+                                <option value="Lee Marshal">Lee Marshal</option>
+                            </select>
+                            <a href="javascript://" class="col-sm-1 col-xs-1 no-padding" title="Search and add more" style="margin-top:3px;"><i class="fa fa-search fa-2x"></i></a>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+            @{Html.RenderAction("_TimeManagement", "TaskManagement", new { area = "secure"});}
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel-group" id="accordion3" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingThree">
+                                <h4 class="panel-title">
+                                    <a href="javascript://" id="create-event"> <i class="fa fa-calendar"></i> Event Management <i class="fa fa-angle-down"></i> </a>
+                                </h4>
+                            </div>
+                            <div class="panel-body" style="padding:0;">
+                                <div class="row" style="display:none;" id="create-event-box"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-center">
+            <div class="btn-group btn-group-sm col-md-8 col-md-offset-3" role="group">
+                <button type="submit" class="btn btn-lg btn-success"><i class="fa fa-check"></i> Create Task</button>
+                <button type="submit" class="btn btn-lg btn-info"><i class="fa fa-check"></i> Save & Create Another</button>
+                <button type="submit" class="btn btn-lg btn-warning"><i class="fa fa-check"></i> Save as Draft</button>
+                <button type="submit" class="btn btn-lg btn-danger"><i class="fa fa-check"></i> Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="employeeList-Modal" tabindex="-1" role="dialog" aria-labelledby="employeeList-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+
+    </div>
+</div>
+
+@section scripts{
+<script src="~/Content/SelectJS/js/selectize.js"></script>
+<script src="~/Content/SelectJS/js/index.js"></script>
+<script src="~/Scripts/App/TasksManagement.js"></script>
+<script src="~/Scripts/Jquery-Filer/custom.js"></script>
+<script src="~/Scripts/Jquery-Filer/jquery.filer.js"></script>
+<script src="~/Scripts/Bootstrap DateTimePicker/bootstrap-datetimepicker.js"></script>
+<script src="~/Scripts/Bootstrap DateTimePicker/moment.js"></script>
+
+<script>
+    $(function () {
+        $('.lbl-txt').html('High Priority');
+        $('#font-icons').removeClass('fa-file');
+        $('#font-icons').removeClass('fa-caret-square-o-down');
+        $('#font-icons').addClass('fa-tint');
+        $('.lbl-txt').css('color', '#ff0000');
+        $('.fa-tint').css('color', '#ff0000');
+        $('.datetimepicker1').datetimepicker();
+        $('.datetimepicker2').datetimepicker();
+        $('.sort-down').on('click', function () {
+            if ($('.lbl-txt').html() == "High Priority") {
+                $('.lbl-txt').html('Medium Priority');
+                $('#font-icons').removeClass('fa-tint');
+                $('#font-icons').removeClass('fa-caret-square-o-down');
+                //$('#font-icons').addClass('fa-file');
+                $('#font-icons').append('<img class="icon icons8-Medium-Priority" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAACJElEQVRoQ9XYPUoDQRjG8ecVXcHGNNpqYbDVC+QD7PUGIniAeBJtrLQI6AH0BNkg2GondikFC0mwSQI7kjWrCcnO5zvZyXZh9uP/250kzBKWfKMl74cXgGhhFxRdgugkvUECMURyQfXhK/cNYweI1toBiFogKs3EUnJGlWGTE8EKkMZn1cwINoBWvAcEC8AonhnhDLCKZ0Q4AZzimRDWAJZ4BoQVgDXeEWEM8BLvgDACeI23RGgDFhJvgdACLDTeEKEEFBJvgJACCo3XROQCgojXQMwFBBWvQMwAgoyXIKYAQcfnIP4A42Xgy9yVFOcSiuNcSXKYLU//Ae3oAaBj3fO337dw+1TGd38VjaM3VPc/pw51HZd2CMRU69dH+/wD4ujL5O6fXFfw0d1Ir1Pe7uHu/Hnqmq7jqhtJ1X7aPgFY74CwozowG58M3Nvu4V4CsBlXdcwC2lEToFPVgdn4aIrcjKfQRc4UchmXd4hHqg7SVzaTX+ISKOqAaFMXUch+QnQhBgdUR2cKMPow/hmNg0Wk8aI2+YIs748sPMSc+JknkE2J4J5ETnwuIKjpJImXAoJAKOKVgEIRGvFagEIQmvHagIUiDOKNAAtBGMYbA7wiLOKtAF4QlvHWAFaEQ7wTgAXhGO8McEIwxLMArBBM8WwAIwRjPCtAC8Eczw6QIjzEewH8IlDCSnQFQTVAlECIkQwa2TJwtA/Xpny9znUhX+dZesAPhYKqQLS4cYgAAAAASUVORK5CYII=" width="18" height="18">');
+                $('.lbl-txt').css('color', 'rgba(255, 193, 7, 1)');
+                //$('.fa-tint').css('color', 'rgba(40, 169, 182, 0.85)');
+            }
+            else if ($('.lbl-txt').html() == "Medium Priority") {
+                $('.lbl-txt').html('Low Priority');
+                $('#font-icons').html('');
+                $('#font-icons').removeClass('fa-tint');
+                $('#font-icons').addClass('fa-caret-square-o-down');
+                $('.lbl-txt').css('color', '#07ba15');
+                $('.fa-caret-square-o-down').css('color', '#07ba15');
+            }
+        });
+        $('.sort-top').on('click', function () {
+            if ($('.lbl-txt').html() == "Low Priority") {
+                $('.lbl-txt').html('Medium Priority');
+                $('#font-icons').removeClass('fa-tint');
+                $('#font-icons').removeClass('fa-caret-square-o-down');
+                $('#font-icons').append('<img class="icon icons8-Medium-Priority" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAACJElEQVRoQ9XYPUoDQRjG8ecVXcHGNNpqYbDVC+QD7PUGIniAeBJtrLQI6AH0BNkg2GondikFC0mwSQI7kjWrCcnO5zvZyXZh9uP/250kzBKWfKMl74cXgGhhFxRdgugkvUECMURyQfXhK/cNYweI1toBiFogKs3EUnJGlWGTE8EKkMZn1cwINoBWvAcEC8AonhnhDLCKZ0Q4AZzimRDWAJZ4BoQVgDXeEWEM8BLvgDACeI23RGgDFhJvgdACLDTeEKEEFBJvgJACCo3XROQCgojXQMwFBBWvQMwAgoyXIKYAQcfnIP4A42Xgy9yVFOcSiuNcSXKYLU//Ae3oAaBj3fO337dw+1TGd38VjaM3VPc/pw51HZd2CMRU69dH+/wD4ujL5O6fXFfw0d1Ir1Pe7uHu/Hnqmq7jqhtJ1X7aPgFY74CwozowG58M3Nvu4V4CsBlXdcwC2lEToFPVgdn4aIrcjKfQRc4UchmXd4hHqg7SVzaTX+ISKOqAaFMXUch+QnQhBgdUR2cKMPow/hmNg0Wk8aI2+YIs748sPMSc+JknkE2J4J5ETnwuIKjpJImXAoJAKOKVgEIRGvFagEIQmvHagIUiDOKNAAtBGMYbA7wiLOKtAF4QlvHWAFaEQ7wTgAXhGO8McEIwxLMArBBM8WwAIwRjPCtAC8Eczw6QIjzEewH8IlDCSnQFQTVAlECIkQwa2TJwtA/Xpny9znUhX+dZesAPhYKqQLS4cYgAAAAASUVORK5CYII=" width="18" height="18">');
+                $('.lbl-txt').css('color', 'rgba(255, 193, 7, 1)');
+                //$('.fa-tint').css('color', 'rgba(40, 169, 182, 0.85)');
+            }
+            else if ($('.lbl-txt').html() == "Medium Priority") {
+                $('.lbl-txt').html('High Priority');
+                //$('#font-icons').removeClass('fa-file');
+                $('#font-icons').html('');
+                $('#font-icons').removeClass('fa-caret-square-o-down');
+                $('#font-icons').addClass('fa-tint');
+                $('.lbl-txt').css('color', '#ff0000');
+                $('.fa-tint').css('color', '#ff0000');
+            }
+        });
+    });
+    $('#select-AssignTo').selectize({
+        plugins: ['remove_button'],
+        openOnFocus: false
+    });
+    @*var dt = $("#dms-list-dataTable").DataTable({
+        lengthMenu: [[-1, 10, 25, 50, 100], ["All", 10, 25, 50, 100]],
+        columnDefs: [
+            { targets: [1, 2, 3], type: "string" },
+            { targets: [0, 4], sortable: false }
+        ],
+        order: [],
+    });
+    new $.fn.dataTable.CustomSearch(dt, {
+        container: 'thead:after',
+        fields: [1, 2, 3]
+    });
+    $('#dms-list-dataTable tbody').on('click', 'tr', function () {
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+        }
+        else {
+            dt.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    });
+    var dmsPath = '@DMS.System.BaseUrl.GetBaseUrl()/DMS/Docs';
+    var parentId = '@Request.RequestContext.RouteData.Values["id"]';
+    var p = '@Request["p"]';
+    var mode = '@Request["mode"]';*@
+</script>
+@*<script src="~/Scripts/jquery.filedrop.js"></script>*@
+
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+                $(function () {
+                    $("#Message").summernote({ height: 200 });
+                });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('Message');
+            });
+        </script>
+    }
+@*<script src="~/Scripts/DMS/dmsbase.js"></script>*@
+}

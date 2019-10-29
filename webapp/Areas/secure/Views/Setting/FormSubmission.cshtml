@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "Form Submission Messages";
+}
+
+@section styles{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+}
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> @TempData["ErrorMsg"]
+    </div>
+}
+
+<div>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#success-Msg" aria-controls="success-Msg" role="tab" data-toggle="tab">Success Message</a></li>
+        <li role="presentation"><a href="#error-Msg" aria-controls="error-Msg" role="tab" data-toggle="tab">Error Message</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="success-Msg">
+            <form id="frm" class="form-Modal" method="post" action="~/Secure/Setting/Index">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="returnUrl" value="/Secure/Setting/FormSubmission" />
+                        <textarea id="successMessage" name="website:SuccessMessage" class="form-control input-sm" rows="10" required>@AppSettings.GetVal("website:SuccessMessage")</textarea>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="error-Msg">
+            <form class="form-Modal frm" method="post" action="~/Secure/Setting/Index">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="returnUrl" value="/Secure/Setting/FormSubmission" />
+                        <textarea id="errorMessage" name="website:ErrorMessage" class="form-control input-sm" rows="10" required>@AppSettings.GetVal("website:ErrorMessage")</textarea>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+            $(function () {
+                $("#successMessage").summernote({ height: 200 });
+                $("#errorMessage").summernote({ height: 200 });
+            });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('successMessage');
+                makeAlloyEditor('errorMessage');
+            });
+        </script>
+    }
+}

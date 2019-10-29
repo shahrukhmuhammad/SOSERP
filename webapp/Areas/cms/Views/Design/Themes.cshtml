@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "Themes";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back();" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/CMS/Design/Theme" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Theme</a>
+            </div>
+        </div>
+        <div class="modal-body">
+            @*@foreach (var item in Model)
+            {*@
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox" style="width:60px; height:60px;" />
+                    </div>
+                    <div class="col-md-11">
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object" src="/Content/Uploads/Slides/660a4725-fcca-e511-9bcb-889ffade3811.png?w=250&h=250" style="width:160px; height:180px;" alt="" />
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Klick And Go</h4>
+                                    <div class="btn-group btn-group-xs" role="group" style="float: right; margin-top: -19px;">
+                                        <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                                        <a href="~/CMS/Design/Theme" class="btn btn-primary"><i class="fa fa-plus"></i> Customise</a>
+                                    </div>
+                                </div>
+                                <div class="modal-body">
+                                    <p>
+                                        Added By: <b>Hamza Ali Sajjad</b>
+                                    </p>
+                                    <p>
+                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo.
+                                        Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
+                                        fringilla. Donec lacinia congue felis in faucibus.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @*}*@
+        </div>
+    </div>
+</div>

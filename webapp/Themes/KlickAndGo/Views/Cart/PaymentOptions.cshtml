@@ -1,0 +1,162 @@
+﻿@model Framework.Data.Order
+@{
+    ViewBag.Title = "Payment Options";
+    Layout = null;
+}
+
+@section head{
+<style type="text/css">
+    .btn:hover
+    {
+        background: #ffffff;
+        color: #04468d;
+    }
+</style>
+    <link href='//fonts.googleapis.com/css?family=Open Sans:400,600' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open Sans:400,600' rel='stylesheet' type='text/css'>
+    <link href="~/Themes/KlickAndGo/Content/cdn.shopify.com/app/services/8825910/assets/v2-ltr-2017-09-19-0b20e000d80995df86f7fbc195bf4962-16094182073911761634.css" rel="stylesheet" media="all" />
+    <script src="~/Themes/KlickAndGo/Content/cdn.shopify.com/s/assets/checkout_2017-09-19-3bb09355085bf13b64bea607e9196470733e44061824553835d1c1338d06c156.js"></script>
+}
+<div id="content" data-content="">
+    <div class="wrap">
+
+        <div class="main" role="main"style="width:100%;">
+            <div class="main__header">
+                <ul class="breadcrumb ">
+                    <li class="breadcrumb__item breadcrumb__item--completed">
+                        <a class="breadcrumb__link" href="@Url.Action("Index","Cart")">Cart</a>
+                        <svg class="icon-svg icon-svg--size-10 breadcrumb__chevron-icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M2 1l1-1 4 4 1 1-1 1-4 4-1-1 4-4"></path></svg>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--current">
+                        <a class="breadcrumb__link" href="@Url.Action("Checkout","Cart")">
+                            Customer information
+                        </a>
+                        <svg class="icon-svg icon-svg--size-10 breadcrumb__chevron-icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M2 1l1-1 4 4 1 1-1 1-4 4-1-1 4-4"></path></svg>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--blank">
+                        <a class="breadcrumb__link" href="@Url.Action("Review","Cart", new { @id = ViewContext.RouteData.Values["id"] })">
+                            Order Detail
+                        </a>
+                        <svg class="icon-svg icon-svg--size-10 breadcrumb__chevron-icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M2 1l1-1 4 4 1 1-1 1-4 4-1-1 4-4"></path></svg>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--blank">
+                        <span class="breadcrumb__text">Payment method</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="main__content">
+                <div class="step" data-step="payment_method">
+                    <div class="step__sections">
+                        <div class="section section--payment-method">
+                            <div class="section__header">
+                                <h2 class="section__title">Payment method</h2>
+                                <p class="section__text">
+                                    All transactions are secure and encrypted.
+                                </p>
+                            </div>
+                            @using (Html.BeginForm())
+                            {
+                                <div class="section__content" id="payment">
+                                    @if (Settings.Get.ShippingCashOnDelivery == true)
+                                    {
+                                        <div>
+                                            <div class="content-box">
+                                                <div class="radio-wrapper content-box__row ">
+                                                    <input type="radio" data-order_button_text="" checked="checked" value="cod" name="PaymentMethod" class="input-radio" id="payment_method_cod">
+                                                    <label for="payment_method_cod" style="margin-left:30px;">Cash on Delivery</label>
+                                                    <div style="display:none;" class="payment_box payment_method_cod">
+                                                        <p>Pay with cash upon delivery.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="card-fields-placeholder-lightness"></div>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Settings.Get.OnlineOrder == true)
+                                    {
+                                        <div>
+                                            <div class="content-box">
+                                                <div class="radio-wrapper content-box__row ">
+                                                    <input type="radio" data-order_button_text="Proceed to PayPal" value="paypal" name="PaymentMethod" class="input-radio" id="payment_method_paypal">
+                                                    <label for="payment_method_paypal" style="margin-left:30px;">PayPal <img alt="PayPal Acceptance Mark" src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg"><a style="margin-left:20px;" title="What is PayPal?" onclick="javascript:window.open('https://www.paypal.com/us/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700'); return false;" class="about_paypal" href="https://www.paypal.com/us/webapps/mpp/paypal-popup">What is PayPal?</a></label>
+                                                    <div style="display:none;" class="payment_box payment_method_paypal">
+                                                        <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="content-box">
+                                                <div class="radio-wrapper content-box__row ">
+                                                    <input type="radio" data-order_button_text="Proceed to Credit or Debit Card" value="credit" name="PaymentMethod" class="input-radio" id="payment_method_credit">
+                                                    <label for="payment_method_credit" style="margin-left:30px;">Credit or Debit Card </label>
+                                                    <div class="card-fields-placeholder-lightness"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    }
+                                </div>
+                                <input type="hidden" name="id" value="@ViewContext.RouteData.Values["id"]" />
+
+                                <div>
+                                    <div class="content-box">
+                                        <div class="radio-wrapper content-box__row ">
+                                            <input type="checkbox" required="required" id="terms" name="terms" class="input-checkbox">
+                                            <label class="checkbox" style="display:inline;margin-left:30px;" for="terms">I’ve read and accept the <a target="_blank" href="terms-and-conditions.html">terms &amp; conditions</a> <span class="required">*</span></label>
+                                            <input type="hidden" value="1" name="terms-field">
+                                            <input type="submit" data-value="Place order" value="Place order" class="step__footer__continue-btn btn">
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="step__footer" data-step-footer="">
+                        <a class="step__footer__previous-link" href="@Url.Action("Review","Cart", new { @id = ViewContext.RouteData.Values["id"] })"><svg class="icon-svg icon-svg--color-accent icon-svg--size-10 previous-link__icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M8 1L7 0 3 4 2 5l1 1 4 4 1-1-4-4"></path></svg><span class="step__footer__previous-link-content">Return to shipping method</span></a>
+                    </div>
+
+
+                </div>
+            </div>
+            @*<div class="main__footer">
+                <div class="modals">
+                    <div class="modal-backdrop" role="dialog" id="policy-6100867" aria-labelledby="policy-6100867-title" data-modal-backdrop="">
+                        <div class="modal">
+                            <div class="modal__header">
+                                <h1 class="modal__header__title" id="policy-6100867-title">
+                                    Refund policy
+                                </h1>
+                                <div class="modal__close">
+                                    <button type="button" class="icon icon--close-modal" data-modal-close="">
+                                        <span class="visually-hidden">
+                                            Close
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="modal__content">
+                                <svg class="modal__loading-icon icon icon--spinner" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><path d="M32 16c0 8.837-7.163 16-16 16S0 24.837 0 16 7.163 0 16 0v2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14h2z"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div role="contentinfo" aria-label="Footer">
+                    <ul class="policy-list">
+                        <li class="policy-list__item">
+                            <a title="Refund policy" data-modal="policy-6100867" data-close-text="Close" href="https://www.rinkit.com/8825910/policies/6100867.html">Refund policy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>
+@section foot{
+    <script type="text/javascript" src="~/Scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}

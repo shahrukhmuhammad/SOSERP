@@ -1,0 +1,141 @@
+﻿@model BaseApp.Entity.AppMessage
+@{
+    var queryId = ViewContext.RouteData.Values["id"];
+    ViewBag.Title = queryId == null ? "Add New Message" : "Edit Message";
+    var allUsers = ViewBag.AllUsers as List<BaseApp.Entity.AppUser>;
+}
+
+@section styles{
+    <!--  Bootstrap Typehead  -->
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet" />
+    <link href="~/Content/Bootstrap Typehead/tokenfield-typeahead.css" rel="stylesheet" />
+    <link href="~/Content/Bootstrap Typehead/bootstrap-tokenfield.css" rel="stylesheet" />
+}
+
+<form id="frm" class="form-Modal" method="post" enctype="multipart/form-data">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Back"><i class="fa fa-angle-left"></i></a>
+                <button type="submit" name="submit" value="draft" class="btn btn-primary" title="Save as Draft"><i class="fa fa-send"></i></button>
+                <button type="submit" name="submit" value="send" class="btn btn-success" title="Send"><i class="fa fa-check"></i></button>
+            </div>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+            <input id="Id" type="hidden" name="Id" value="@Model.Id" />
+
+            @if (TempData["ErrorMsg"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Error!</strong>
+                    @TempData["ErrorMsg"]
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Contacts</label>
+                        <input id="contacts-typehead" class="form-control input-sm" name="Recipients" value="@Model.Recipients" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>External Recipients' Emails</label>
+                        <input id="emails-typehead" class="form-control input-sm" name="EmailRecipients" value="@Model.EmailRecipients" placeholder="Type email and hit enter or tab" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input name="Subject" class="form-control input-sm" value="@Model.Subject" required />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Attachments</label>
+                        <input type="file" name="attachments" multiple class="form-control input-sm" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea name="Message" class="form-control input-sm" required style="min-height:96px;">@Model.Message</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><span class="fa fa-times"></span> Cancel / Back</a>
+                <button type="submit" name="submit" value="draft" class="btn btn-primary"><i class="fa fa-send"></i> Save as Draft</button>
+                <button type="submit" name="submit" value="send" class="btn btn-success"><i class="fa fa-check"></i> Send</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section scripts{
+    <!--  Bootstrap Typehead  -->
+    <script src="~/Scripts/Bootstrap Typehead/bootstrap-tokenfield.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+    <script>
+        $(function () {
+            $('#contacts-typehead').tokenfield({
+                autocomplete: {
+                    source: [
+                        @foreach (var x in allUsers)
+                        {
+                            @: { value: "@x.Id", label: "@x.FullName" },
+                        }
+                    ],
+                    delay: 100
+                },
+                showAutocompleteOnFocus: true
+            }).data('bs.tokenfield').$input.on('autocompletefocus', function (e, ui) {
+                e.preventDefault();
+                $(this).val(ui.item.label)
+            });
+
+            @if (queryId != null && !string.IsNullOrEmpty(Model.Recipients))
+            {
+               @: $('#contacts-typehead').tokenfield('setTokens', [
+                    foreach (var x in Model.RecipientsList)
+                    {
+               @:     { value: "@x", label: "@allUsers.Where(y=>y.Id == new Guid(x)).FirstOrDefault().FullName" },
+                    }
+               @:]);
+                        
+                <text>
+            $('#contacts-typehead').on('tokenfield:createtoken', function (event) {
+                var existingTokens = $(this).tokenfield('getTokens');
+                $.each(existingTokens, function (index, token) {
+                    if (token.value === event.attrs.value)
+                        event.preventDefault();
+                });
+            });
+                </text>
+            }
+
+
+
+            $('#emails-typehead').on('tokenfield:createdtoken', function (e) {
+                // Über-simplistic e-mail validation
+                var re = /\S+@@\S+\.\S+/
+                var valid = re.test(e.attrs.value)
+                if (!valid) {
+                    $(e.relatedTarget).addClass('invalid')
+                }
+            }).tokenfield({ createTokensOnBlur: true });
+        });
+    </script>
+}

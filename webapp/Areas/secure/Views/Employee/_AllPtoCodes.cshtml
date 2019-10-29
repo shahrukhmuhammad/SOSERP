@@ -1,0 +1,27 @@
+﻿@model List<BaseApp.Entity.PtoCode>
+<table id="ptoRecord-Table" class="table table-condensed table-hover">
+    <tbody>
+
+    </tbody>
+    <tfoot>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td>@x.Title</td>
+                <td>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <label><input type="checkbox" class="updateIsAssignedToAll" data-id="@x.Id" value="@x.IsAssignedToAll" @(x.IsAssignedToAll ? "checked" : "") /> Assign to All</label>
+                        </div>
+                        @*<div class="col-xs-6 text-right">
+                            <a href="javascript://" class="btn btn-xs btn-link ptoAssignees" data-id="@x.Id"><i class="fa fa-credit-card"></i> Assign</a>
+                        </div>*@
+                    </div>
+                </td>
+                <td class="text-right">
+                    <a href="javascript://" class="btn btn-xs btn-danger remCF" data-id="@x.Id">@*<i class="fa fa-times"></i>*@ <i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tfoot>
+</table>

@@ -1,0 +1,554 @@
+﻿@model BaseApp.Entity.AppSMTP
+@{
+    ViewBag.Title = "SMTP Settings";
+}
+
+@section styles{
+<link href="~/Content/Settings.css" rel="stylesheet" />
+    <style>
+        ul.stage-Nav > li.list-group > a.list-group-item::after {
+            left: 95%;
+        }
+    </style>
+}
+
+<div id="div-Carousel" class="carousel slide" data-ride="carousel" data-interval="false">
+    <form id="smtp-frm" class="carousel-inner" role="listbox" method="post">
+        @Html.AntiForgeryToken()
+        <div class="item active">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add New SMTP Setting</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-sm-12 col-xs-12 bhoechie-tab-container">
+                                        <div class="col-sm-2 col-xs-4 bhoechie-tab-menu">
+                                            <div class="list-group">
+                                                <a href="#" class="list-group-item active text-center">
+                                                    <i class="fa fa-cloud fa-2x"></i> <br />iCloud
+                                                </a>
+                                                <a href="#" class="list-group-item text-center">
+                                                    <i class="fa fa-envelope-o fa-2x"></i><br />Exchange
+                                                </a>
+                                                <a href="#" class="list-group-item text-center">
+                                                    <i class="fa fa-google fa-2x"></i><br />Google
+                                                </a>
+                                                <a href="#" class="list-group-item text-center">
+                                                    <i class="fa fa-yahoo fa-2x"></i><br />Yahoo
+                                                </a>
+                                                <a href="#" class="list-group-item text-center">
+                                                    <i class="fa fa-envelope-square fa-2x"></i><br />Outlook.com
+                                                </a>
+                                                <a href="#" class="list-group-item text-center">
+                                                    <i class="fa fa-envelope fa-2x"></i><br />Other
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-10 col-xs-8 bhoechie-tab">
+                                            <div class="bhoechie-tab-content active">
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-sm-offset-2 extraPading">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <center>
+                                                                    <h1> <i class="fa fa-cloud" style="color:#55518a"></i> iCloud <a href="javascript://" data-id="@((int)BaseApp.Entity.ThirdParty.ICloud)" class="pull-right btnConfiguration" title="Configuration"> <i class="fa fa-gears"></i></a></h1>
+                                                                    @*<a class="btn btn-sm btn-info" href="javascript://"> Configure</a>*@
+                                                                </center>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row extraPading">
+                                                            <div class="col-sm-4">
+                                                                <label>Username/Email <a href="javascript://" title="Your full iCloud email address (for example, emilyparker@icloud.com, not emilyparker)"> <i class="fa fa-info-circle"></i></a></label>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <input id="DefaultUsername" name="DefaultUsername" placeholder="emilyparker@icloud.com" type="email" class="form-control input-sm" value="" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-4">
+                                                                <label>Password</label>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <input id="DefaultPassword" name="DefaultPassword" type="password" class="form-control input-sm" value="" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-offset-4 col-sm-8">
+                                                                <a href="https://support.apple.com/en-us/HT202304" role="button" style="margin-top:12px; float:right; font-size:11px;">Need help?</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-offset-4 col-sm-8">
+                                                                <a href="javascript://" onclick="window.history.back()" data-placement="bottom" class="btn btn-default btn-sm"><i class="fa fa-close"></i> Cancel / Back</a>
+                                                                <button class="btn btn-sm btn-primary"> Save Settings</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bhoechie-tab-content">
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-sm-offset-2 extraPading">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <center>
+                                                                    <h1> <i class="fa fa-envelope-o" style="color:#55518a"></i> Exchange <a href="javascript://" data-id="@((int)BaseApp.Entity.ThirdParty.Exchange)" class="pull-right btnConfiguration" title="Configuration"> <i class="fa fa-gears"></i></a></h1>
+                                                                </center>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row extraPading">
+                                                            <div class="col-sm-4">
+                                                                <label>Username/Email <a href="javascript://" title="Your full email address (for example, emilyparker@company.com, not emilyparker)"> <i class="fa fa-info-circle"></i></a></label>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <input id="DefaultUsername" name="DefaultUsername" placeholder="emilyparker@company.com" type="text" class="form-control input-sm" value="" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-4">
+                                                                <label>Password</label>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <input id="DefaultPassword" name="DefaultPassword" type="password" class="form-control input-sm" value="" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-offset-4 col-sm-8">
+                                                                <a href="" role="button" style="margin-top:12px; float:right; font-size:11px;">Need help?</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-offset-4 col-sm-8">
+                                                                <a href="javascript://" onclick="window.history.back()" data-placement="bottom" class="btn btn-default btn-sm"><i class="fa fa-close"></i> Cancel / Back</a>
+                                                                <button class="btn btn-sm btn-primary"> Save Settings</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="bhoechie-tab-content">
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-sm-offset-2 extraPading">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <center>
+                                                                    <h1> <i class="fa fa-google" style="color:#55518a"></i> Google <a href="javascript://" data-id="@((int)BaseApp.Entity.ThirdParty.Google)" class="pull-right btnConfiguration" title="Configuration"> <i class="fa fa-gears"></i></a></h1>
+                                                                </center>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row extraPading">
+                                                            <div class="col-sm-4">
+                                                                <label>Username/Email <a href="javascript://" title="Your full email address (for example, emilyparker@company.com, not emilyparker)"> <i class="fa fa-info-circle"></i></a></label>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <input id="DefaultUsername" name="DefaultUsername" placeholder="emilyparker@company.com" type="text" class="form-control input-sm" value="" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-4">
+                                                                <label>Password</label>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <input id="DefaultPassword" name="DefaultPassword" type="password" class="form-control input-sm" value="" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-offset-4 col-sm-8">
+                                                                <a href="" role="button" style="margin-top:12px; float:right; font-size:11px;">Need help?</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-offset-4 col-sm-8">
+                                                                <a href="javascript://" onclick="window.history.back()" data-placement="bottom" class="btn btn-default btn-sm"><i class="fa fa-close"></i> Cancel / Back</a>
+                                                                <button class="btn btn-sm btn-primary"> Save Settings</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bhoechie-tab-content">
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-sm-offset-2 extraPading">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <center>
+                                                                    <h1> <i class="fa fa-yahoo" style="color:#55518a"></i> Yahoo <a href="javascript://" data-id="@((int)BaseApp.Entity.ThirdParty.Yahoo)" class="pull-right btnConfiguration" title="Configuration"> <i class="fa fa-gears"></i></a></h1>
+                                                                </center>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row extraPading">
+                                                            <div class="col-sm-4">
+                                                                <label>Username/Email <a href="javascript://" title="Your full email address (for example, emilyparker@company.com, not emilyparker)"> <i class="fa fa-info-circle"></i></a></label>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <input id="DefaultUsername" name="DefaultUsername" placeholder="emilyparker@company.com" type="text" class="form-control input-sm" value="" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-4">
+                                                                <label>Password</label>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <input id="DefaultPassword" name="DefaultPassword" type="password" class="form-control input-sm" value="" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-offset-4 col-sm-8">
+                                                                <a href="" role="button" style="margin-top:12px; float:right; font-size:11px;">Need help?</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-offset-4 col-sm-8">
+                                                                <a href="javascript://" onclick="window.history.back()" data-placement="bottom" class="btn btn-default btn-sm"><i class="fa fa-close"></i> Cancel / Back</a>
+                                                                <button class="btn btn-sm btn-primary"> Save Settings</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bhoechie-tab-content">
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-sm-offset-2 extraPading">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <center>
+                                                                    <h1> <i class="fa fa-envelope-square" style="color:#55518a"></i> Outlook.com <a href="javascript://" data-id="@((int)BaseApp.Entity.ThirdParty.Outlook)" class="pull-right btnConfiguration" title="Configuration"> <i class="fa fa-gears"></i></a></h1>
+                                                                </center>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row extraPading">
+                                                            <div class="col-sm-4">
+                                                                <label>Username/Email <a href="javascript://" title="Your full email address (for example, emilyparker@company.com, not emilyparker)"> <i class="fa fa-info-circle"></i></a></label>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <input id="DefaultUsername" name="DefaultUsername" placeholder="emilyparker@company.com" type="text" class="form-control input-sm" value="" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-4">
+                                                                <label>Password</label>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <input id="DefaultPassword" name="DefaultPassword" type="password" class="form-control input-sm" value="" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-offset-4 col-sm-8">
+                                                                <a href="" role="button" style="margin-top:12px; float:right; font-size:11px;">Need help?</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row rowPadding">
+                                                            <div class="col-sm-offset-4 col-sm-8">
+                                                                <a href="javascript://" onclick="window.history.back()" data-placement="bottom" class="btn btn-default btn-sm"><i class="fa fa-close"></i> Cancel / Back</a>
+                                                                <button class="btn btn-sm btn-primary"> Save Settings</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="bhoechie-tab-content">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group">
+                                                                    <label>Title</label>
+                                                                    <input id="Title" name="Title" type="text" class="form-control input-sm" value="@Model.Title" required autofocus />
+                                                                    <input id="Id" name="Id" type="hidden" value="@Model.Id" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group">
+                                                                    <label>Username</label>
+                                                                    <input id="DefaultUsername" name="DefaultUsername" type="text" class="form-control input-sm" value="@Model.DefaultUsername" required />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group">
+                                                                    <label>Password</label>
+                                                                    <input id="DefaultPassword" name="DefaultPassword" type="password" class="form-control input-sm" value="@Model.DefaultPassword" required />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group">
+                                                                    <label>Description</label>
+                                                                    <textarea id="Description" name="Description" class="form-control input-sm" rows="3">@Model.Description</textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group">
+                                                                    <label>Server Type</label>
+                                                                    <select id="ServerType" name="ServerType" class="form-control input-sm" required>
+                                                                        <option value="">- Please Select -</option>
+                                                                        <option value="@((int)BaseApp.Entity.AppSMTPServerType.POP)" @(Model.ServerType == BaseApp.Entity.AppSMTPServerType.POP ? "selected" : "")>@BaseApp.Entity.AppSMTPServerType.POP</option>
+                                                                        <option value="@((int)BaseApp.Entity.AppSMTPServerType.IMAP)" @(Model.ServerType == BaseApp.Entity.AppSMTPServerType.IMAP ? "selected" : "")>@BaseApp.Entity.AppSMTPServerType.IMAP</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="row">
+                                                                    <div class="col-sm-7">
+                                                                        <div class="form-group">
+                                                                            <label>Incoming Mail Server</label>
+                                                                            <input id="IncomingServer" name="IncomingServer" type="text" class="form-control input-sm" value="@Model.IncomingServer" required />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-5">
+                                                                        <div class="form-group">
+                                                                            <label>Incoming Port</label>
+                                                                            <input id="IncomingPort" name="IncomingPort" type="text" class="form-control input-sm numericMask" value="@Model.IncomingPort" required />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="row">
+                                                                    <div class="col-sm-7">
+                                                                        <div class="form-group">
+                                                                            <label>Outgoing Mail Server</label>
+                                                                            <input id="OutgoingServer" name="OutgoingServer" type="text" class="form-control input-sm" value="@Model.OutgoingServer" required />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-5">
+                                                                        <div class="form-group">
+                                                                            <label>Outgoing Port</label>
+                                                                            <input id="OutgoingPort" name="OutgoingPort" type="text" class="form-control input-sm numericMask" value="@Model.OutgoingPort" required />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-12">
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <div class="checkbox">
+                                                                            <label style="font-size: 1em">
+                                                                                <input type="checkbox" value="@Model.SSL" @((Model.SSL) ? "checked" : "")>
+                                                                                <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                                                                                Enable SSL
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="checkbox">
+                                                                            <label style="font-size: 1em">
+                                                                                <input type="checkbox" value="@Model.TLS" @((Model.TLS) ? "checked" : "")>
+                                                                                <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                                                                                Enable TLS
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-4 pull-right">
+                                                        <a href="javascript://" onclick="window.history.back()" data-placement="bottom" class="btn btn-default btn-sm"><i class="fa fa-close"></i> Cancel / Back</a>
+                                                        <button class="btn btn-sm btn-primary"> Save Settings</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Title</label>
+                                            <input id="Title" name="Title" type="text" class="form-control input-sm" value="@Model.Title" required autofocus />
+                                            <input id="Id" name="Id" type="hidden" value="@Model.Id" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Username</label>
+                                            <input id="DefaultUsername" name="DefaultUsername" type="text" class="form-control input-sm" value="@Model.DefaultUsername" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Password</label>
+                                            <input id="DefaultPassword" name="DefaultPassword" type="password" class="form-control input-sm" value="@Model.DefaultPassword" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Description</label>
+                                            <textarea id="Description" name="Description" class="form-control input-sm" rows="3">@Model.Description</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Server Type</label>
+                                            <select id="ServerType" name="ServerType" class="form-control input-sm" required>
+                                                <option value="">- Please Select -</option>
+                                                <option value="@((int)BaseApp.Entity.AppSMTPServerType.POP)" @(Model.ServerType == BaseApp.Entity.AppSMTPServerType.POP ? "selected" : "")>@BaseApp.Entity.AppSMTPServerType.POP</option>
+                                                <option value="@((int)BaseApp.Entity.AppSMTPServerType.IMAP)" @(Model.ServerType == BaseApp.Entity.AppSMTPServerType.IMAP ? "selected" : "")>@BaseApp.Entity.AppSMTPServerType.IMAP</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Enable SSL</label>
+                                            <select id="SSL" name="SSL" class="form-control input-sm" required>
+                                                <option value="false" selected="@(!Model.SSL)">No</option>
+                                                <option value="true" selected="@(Model.SSL)">Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Incoming Mail Server</label>
+                                            <input id="IncomingServer" name="IncomingServer" type="text" class="form-control input-sm" value="@Model.IncomingServer" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Outgoing Mail Server</label>
+                                            <input id="OutgoingServer" name="OutgoingServer" type="text" class="form-control input-sm" value="@Model.OutgoingServer" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Incoming Port</label>
+                                            <input id="IncomingPort" name="IncomingPort" type="text" class="form-control input-sm numericMask" value="@Model.IncomingPort" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Outgoing Port</label>
+                                            <input id="OutgoingPort" name="OutgoingPort" type="text" class="form-control input-sm numericMask" value="@Model.OutgoingPort" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Module</label>
+                                            <select name="ModuleId" class="form-control input-sm" required>
+                                                <option value="">- Please Select -</option>
+                                                @foreach (var c in ViewBag.ModulesList as IList<BaseApp.Entity.AppModule>)
+                                                {
+                                                    if (c.Status)
+                                                    {
+                                                <option value="@c.Id" selected="@(Model.ModuleId == c.Id)">@c.Title</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Use as Default</label>
+                                            <select id="IsDefault" name="IsDefault" class="form-control input-sm" required>
+                                                <option value="false" selected="@(!Model.IsDefault)">No</option>
+                                                <option value="true" selected="@(Model.IsDefault)">Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="smtp-Modal" tabindex="-1" role="dialog" aria-labelledby="smtp-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+@section scripts{
+<script src="~/Scripts/App/EmployeeSettings.js"></script>
+    <script>
+        $(function () {
+            $('#smtp-frm').validate({
+                rules: {
+                    Slug: {
+                        remote: {
+                            url: "@Url.Action("CheckDuplicateSmtpTitle", "Config")",
+                            type: "post",
+                            data: {
+                                Title: function () {
+                                    return $("#Title").val();
+                                },
+                                Id: function () {
+                                    return $("#Id").val();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            $('.smtp-test-btn').click(function () {
+                $('#smtp-frm').validate();
+                if (!$('#smtp-frm').valid()) return;
+                var btn = $(this)
+                btn.button('loading');
+                $('#smtp-test-res').html('Testing settings, Please wait...');
+                var d = new FormData($('#smtp-frm')[0]);
+                $.ajax({
+                    url: '/Secure/Config/SmtpTest',
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    data: d
+                }).done(function (d) {
+                    $('#smtp-test-res').html(d);
+                }).always(function () {
+                    btn.button('reset');
+                });
+            });
+
+            $('.review-btn').click(function (e) {
+                $("#review-Title").text($("#Title").val());
+                $("#review-DefaultUsername").text($("#DefaultUsername").val());
+                $("#review-DefaultPassword").text($("#DefaultPassword").val());
+                $("#review-Description").text($("#Description").val());
+                $("#review-ServerType").text($("#ServerType option:selected").text());
+                $("#review-SSL").text($("#SSL option:selected").text());
+                $("#review-IncomingServer").text($("#IncomingServer").val());
+                $("#review-OutgoingServer").text($("#OutgoingServer").val());
+                $("#review-IncomingPort").text($("#IncomingPort").val());
+                $("#review-OutgoingPort").text($("#OutgoingPort").val());
+            });
+        });
+    </script>
+}

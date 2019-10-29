@@ -1,0 +1,1444 @@
+﻿@model Contact
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    ViewBag.Title = (queryId == null ? "Add New Account" : "Edit Account");
+    var dpSrc = (queryId == null ? "../../Content/Images/base-user.jpg" : "../../../Content/Uploads/CRM/" + Model.Id + ".jpg");
+    if (Model.Id != null)
+    {
+        var selectedTypes = ViewBag.SelectedTypes as List<CRM.Entity.CrmContactType>;
+    }
+
+}
+@section styles{
+    <link href="~/Content/chosen/chosen.css" rel="stylesheet" />
+    <style>
+        .chosen-container {
+            width: 100% !important;
+        }
+        .margRight {
+            margin-right: 5px !important;
+        }
+    </style>
+}
+@if (Request.QueryString["r"].ToString() != "0" && Request.QueryString["r"].ToString() != "")
+{
+    if (Request.QueryString["r"].ToString() == Convert.ToString((int)ContactType.General) || Model.ContactType == ContactType.General)
+    {
+        <form id="lead-frm" class="user-Profile" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="type" value="@Request.QueryString["r"]" />
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+            <input type="hidden" id="save-text" name="SaveClick" />
+
+            <div class="row">
+                <div class="col-sm-12 text-right">
+                    <div class="btn-group" role="group">
+                        <a href="javascript://" onclick="window.history.back()" class="btn btn-default btn-sm"><i class="fa fa-close"></i> Cancel / Back</a>
+                        @if (Model.Id.IsEmpty())
+                        {
+                            <a href="~/CRM/Contact/Record" class="btn btn-warning btn-sm"><i class="fa fa-plus-circle"></i> Create New</a>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-success btn-sm save-continue"><i class="fa fa-check"></i> Save</button>
+                        }
+                        <button type="submit" class="btn btn-primary btn-sm save-add-new"><i class="fa fa-check"></i> Save & Add New</button>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top:15px;">
+                <div class="col-sm-3 img-container">
+                    <img id="img-Preview" src="@dpSrc" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
+                    <input type="file" class="form-control input-sm file-select" id="file" name="file" onchange="previewImage(this,'#img-Preview')" />
+                    <div class="img-overlay">
+                        <a class="btn btn-default btn-xs" href="javascript://"><i class="fa fa-edit"></i> Edit</a>
+                    </div>
+                </div>
+                <div class="col-sm-9 bordered-section">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="row form-group">
+                                        <label class="col-sm-4 text-left horizontal-label">Customer ID</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control input-sm" name="Code" value="@Model.Code" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row form-group">
+                                        <label class="col-sm-3 horizontal-label">Source</label>
+                                        <div class="col-sm-9">
+                                            <select name="Source" class="form-control input-sm" required>
+                                                <option value="">-NONE-</option>
+                                                <option value="@((int)ContactSource.Website)" @(Model.Source == ContactSource.Website ? "selected" : "")>@ContactSource.Website</option>
+                                                <option value="@((int)ContactSource.Referred)" @(Model.Source == ContactSource.Referred ? "selected" : "")>@ContactSource.Referred</option>
+                                                <option value="@((int)ContactSource.SearchEngine)" @(Model.Source == ContactSource.SearchEngine ? "selected" : "")>@ContactSource.SearchEngine.ToSpacedTitleCase()</option>
+                                                <option value="@((int)ContactSource.Campaign)" @(Model.Source == ContactSource.Campaign ? "selected" : "")>@ContactSource.Campaign</option>
+                                                <option value="@((int)ContactSource.Exhibition)" @(Model.Source == ContactSource.Exhibition ? "selected" : "")>@ContactSource.Exhibition</option>
+                                                <option value="@((int)ContactSource.PersonalContact)" @(Model.Source == ContactSource.PersonalContact ? "selected" : "")>@ContactSource.PersonalContact.ToSpacedTitleCase()</option>
+                                                <option value="@((int)ContactSource.Advertisement)" @(Model.Source == ContactSource.Advertisement ? "selected" : "")>@ContactSource.Advertisement.ToSpacedTitleCase()</option>
+                                                <option value="@((int)ContactSource.ColdCall)" @(Model.Source == ContactSource.ColdCall ? "selected" : "")>@ContactSource.ColdCall.ToSpacedTitleCase()</option>
+                                                <option value="@((int)ContactSource.Partner)" @(Model.Source == ContactSource.Partner ? "selected" : "")>@ContactSource.Partner.ToSpacedTitleCase()</option>
+                                                <option value="@((int)ContactSource.PublicRelations)" @(Model.Source == ContactSource.PublicRelations ? "selected" : "")>@ContactSource.PublicRelations.ToSpacedTitleCase()</option>
+                                                <option value="@((int)ContactSource.Other)" @(Model.Source == ContactSource.Other ? "selected" : "")>@ContactSource.Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row form-group">
+                                        <label class="col-sm-3 horizontal-label">Suffix</label>
+                                        <div class="col-sm-9">
+                                            <select name="TitleSuffix" class="form-control input-sm" required>
+                                                <option value="@TitleSuffix.Jr" @(Model.TitleSuffix == TitleSuffix.Jr ? "selected" : "")>@TitleSuffix.Jr. (Junior)</option>
+                                                <option value="@TitleSuffix.Sr" @(Model.TitleSuffix == TitleSuffix.Sr ? "selected" : "")>@TitleSuffix.Sr. (Senior)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="row form-group">
+                                        <label class="col-sm-5 horizontal-label">Title</label>
+                                        <div class="col-sm-7">
+                                            <select name="TitlePrefix" class="form-control input-sm" required>
+                                                <option value="@TitlePrefix.Mr" @(Model.TitlePrefix == TitlePrefix.Mr ? "selected" : "")>@TitlePrefix.Mr.</option>
+                                                <option value="@TitlePrefix.Mrs" @(Model.TitlePrefix == TitlePrefix.Mrs ? "selected" : "")>@TitlePrefix.Mrs.</option>
+                                                <option value="@TitlePrefix.Miss" @(Model.TitlePrefix == TitlePrefix.Miss ? "selected" : "")>@TitlePrefix.Miss</option>
+                                                <option value="@TitlePrefix.Ms" @(Model.TitlePrefix == TitlePrefix.Ms ? "selected" : "")>@TitlePrefix.Ms.</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="row form-group">
+                                        <label class="col-sm-5 horizontal-label">First Name</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control input-sm" name="FirstName" value="@Model.FirstName" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row form-group">
+                                        <label class="col-sm-3 horizontal-label">Last Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control input-sm" name="LastName" value="@Model.LastName" required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="row form-group">
+                                        <label class="col-sm-5 horizontal-label">Gender</label>
+                                        <div class="col-sm-7">
+                                            <select name="Gender" class="form-control input-sm" required>
+                                                <option value="@((int)ContactGender.Male)" @(Model.Gender == ContactGender.Male ? "selected" : "")>@ContactGender.Male</option>
+                                                <option value="@((int)ContactGender.Female)" @(Model.Gender == ContactGender.Female ? "selected" : "")>@ContactGender.Female</option>
+                                                <option value="@((int)ContactGender.Other)" @(Model.Gender == ContactGender.Other ? "selected" : "")>@ContactGender.Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="row form-group">
+                                        <label class="col-sm-5 horizontal-label">Date of Birth</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group input-group-sm datePicker">
+                                                <input name="DateOfBirth" class="form-control input-sm" type="text" value="@Model.DateOfBirth.ToShortDateString()" required autocomplete="off">
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row form-group">
+                                        <label class="col-sm-3 horizontal-label">Username</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control input-sm" name="Username" value="@Model.Username" required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    @if (Model.ContactType == ContactType.Trader || Model.ContactType == ContactType.DropShipper || Model.ContactType == ContactType.TraderDropShipper || Request.QueryString["r"].ToString() == Convert.ToString((int)ContactType.Trader))
+                                    {
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Account Type</label>
+                                            <div class="col-sm-8">
+                                                <select name="ContactType" class="form-control input-sm" required>
+                                                    <option value="@((int)CRM.Entity.ContactType.Trader)" @((Model.ContactType == ContactType.Trader) ? "selected" : "")>@CRM.Entity.ContactType.Trader</option>
+                                                    <option value="@((int)CRM.Entity.ContactType.DropShipper)" @((Model.ContactType == ContactType.DropShipper) ? "selected" : "")>Dropshipper</option>
+                                                    <option value="@((int)CRM.Entity.ContactType.TraderDropShipper)" @((Model.ContactType == ContactType.TraderDropShipper) ? "selected" : "")>Both Accounts</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*<div class="col-sm-4">
+                                <div class="row form-group">
+                                    <label class="col-sm-4 horizontal-label">Targeted For</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control input-sm" name="TargetedFor" required>
+                                            <option value="">-NONE-</option>
+                                            <option value="@((int)ContactTargetedFor.TenderPurchase)" @(Model.TargetedFor == ContactTargetedFor.TenderPurchase ? "selected" : "")>@ContactTargetedFor.TenderPurchase.ToSpacedTitleCase()</option>
+                                            <option value="@((int)ContactTargetedFor.TenderListing)" @(Model.TargetedFor == ContactTargetedFor.TenderListing ? "selected" : "")>@ContactTargetedFor.TenderListing.ToSpacedTitleCase()</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>*@
+
+                        @*<div class="col-sm-4">
+                                <div class="row form-group">
+                                    <label class="col-sm-3 horizontal-label">Status</label>
+                                    <div class="col-sm-9">
+                                        <select name="Status" class="form-control input-sm" required>
+                                            <option value="">-NONE-</option>
+                                            <option value="@((int)ContactStatus.Registered)" @(Model.Status == ContactStatus.Registered ? "selected" : "")>@ContactStatus.Registered.ToSpacedTitleCase()</option>
+                                            <option value="@((int)ContactStatus.NoPurchaseHistory)" @(Model.Status == ContactStatus.NoPurchaseHistory ? "selected" : "")>@ContactStatus.NoPurchaseHistory.ToSpacedTitleCase()</option>
+                                            <option value="@((int)ContactStatus.InProgress)" @(Model.Status == ContactStatus.InProgress ? "selected" : "")>@ContactStatus.InProgress.ToSpacedTitleCase()</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>*@
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-sm-1 horizontal-label">Details</label>
+                        <div class="col-sm-11">
+                            <textarea class="form-control input-sm" name="Description" rows="3">@Model.Description</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.ContactType == ContactType.Supplier || Model.ContactType == ContactType.Trader || Model.ContactType == ContactType.DropShipper || Model.ContactType == ContactType.TraderDropShipper || Request.QueryString["r"].ToString() == Convert.ToString((int)ContactType.Trader) || Request.QueryString["r"].ToString() == Convert.ToString((int)ContactType.Supplier))
+            {
+                <input type="hidden" id="Company-id" name="Company.Id" value="@Model.Company.Id" />
+                <div class="row tb-padding">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <h4>Company Profile</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Trading Name</label>
+                                    <div>
+                                        <input type="text" name="Company.Title" value="@Model.Company.Title" required class="form-control input-sm" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Business Type</label>
+                                    <div>
+                                        <select name="Company.Type" required class="form-control input-sm">
+                                            <option value=""> -- select --</option>
+                                            <option value="@CRM.Entity.ContactCompanyType.Shop" @((Model.Company.Type == ContactCompanyType.Shop) ? "selected" : "")>@CRM.Entity.ContactCompanyType.Shop</option>
+                                            <option value="@CRM.Entity.ContactCompanyType.MarketTrader" @((Model.Company.Type == ContactCompanyType.MarketTrader) ? "selected" : "")>@CRM.Entity.ContactCompanyType.MarketTrader.ToSpacedTitleCase()</option>
+                                            <option value="@CRM.Entity.ContactCompanyType.OnlineStore" @((Model.Company.Type == ContactCompanyType.OnlineStore) ? "selected" : "")>@CRM.Entity.ContactCompanyType.OnlineStore.ToSpacedTitleCase()</option>
+                                            <option value="@CRM.Entity.ContactCompanyType.Other" @((Model.Company.Type == ContactCompanyType.Other) ? "selected" : "")>@CRM.Entity.ContactCompanyType.Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Name of Director/Owner of Business</label>
+                                    <div>
+                                        <input type="text" name="Company.ResponsiblePerson" value="@Model.Company.ResponsiblePerson" class="form-control input-sm" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>N.I Number</label>
+                                    <div>
+                                        <input type="text" name="Company.NINumber" value="@Model.Company.NINumber" class="form-control input-sm" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="row tb-padding">
+                <div class="col-sm-12">
+                    <div class="page-header">
+                        <h4>Contact Details <a href="javascript://" data-val="showmore" class="btnshow pull-right" style="text-decoration:none; font-size:13px;">Click to add more Details <i class="fa fa-arrow-down"></i></a></h4>
+                    </div>
+                </div>
+            </div>
+            <div id="content" style="display:none;">
+                <div class="row tb-padding">
+                    <div class="col-sm-6">
+                        <div class="page-header">
+                            <h4>Telephone</h4>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Primary</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control input-sm phoneMask" name="Phone" value="@Model.Phone" />
+                                </div>
+                                <div class="col-sm-3">
+                                    <select name="PrimaryPhoneType" class="form-control input-sm">
+                                        <option value="@((int)ContactPhoneType.Home)" @(Model.PrimaryPhoneType == ContactPhoneType.Home ? "selected" : "")>@ContactPhoneType.Home</option>
+                                        <option value="@((int)ContactPhoneType.Work)" @(Model.PrimaryPhoneType == ContactPhoneType.Work ? "selected" : "")>@ContactPhoneType.Work</option>
+                                        <option value="@((int)ContactPhoneType.Other)" @(Model.PrimaryPhoneType == ContactPhoneType.Other ? "selected" : "")>@ContactPhoneType.Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-1">
+
+                                </div>
+                            </div>
+                            <div id="morePhone-Container">
+                                @if (Model.MorePhones.Count() > 0)
+                                {
+                                    var morePhoneIndexer = 0;
+                                    foreach (var x in Model.MorePhones)
+                                    {
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">
+                                                <input class="iHidden" type="hidden" value="@morePhoneIndexer">
+                                            </label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control input-sm phoneMask" name="MorePhones[@morePhoneIndexer].Phone" value="@x.Phone" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <select name="MorePhones[@morePhoneIndexer].Type" class="form-control input-sm">
+                                                    <option value="@((int)ContactPhoneType.Home)" @(x.Type == ContactPhoneType.Home ? "selected" : "")>@ContactPhoneType.Home</option>
+                                                    <option value="@((int)ContactPhoneType.Work)" @(x.Type == ContactPhoneType.Work ? "selected" : "")>@ContactPhoneType.Work</option>
+                                                    <option value="@((int)ContactPhoneType.Other)" @(x.Type == ContactPhoneType.Other ? "selected" : "")>@ContactPhoneType.Other</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <a href="javascript://" class="text-muted remCF"><span class="fa fa-times"></span></a>
+                                            </div>
+                                        </div>
+                                        morePhoneIndexer++;
+                                    }
+                                }
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-9 text-right">
+                                    <a id="morePhone-AddNew" href="javascript://"><i class="fa fa-plus-circle"></i> Add New Phone</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="page-header">
+                            <h4>Email</h4>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Primary</label>
+                                <div class="col-sm-6">
+                                    <input type="email" class="form-control input-sm" id="Email" name="Email" value="@Model.Email" />
+                                </div>
+                                <div class="col-sm-3">
+                                    <select name="PrimaryEmailType" class="form-control input-sm">
+                                        <option value="@((int)ContactEmailType.Home)" @(Model.PrimaryEmailType == ContactEmailType.Home ? "selected" : "")>@ContactEmailType.Home</option>
+                                        <option value="@((int)ContactEmailType.Work)" @(Model.PrimaryEmailType == ContactEmailType.Work ? "selected" : "")>@ContactEmailType.Work</option>
+                                        <option value="@((int)ContactEmailType.Other)" @(Model.PrimaryEmailType == ContactEmailType.Other ? "selected" : "")>@ContactEmailType.Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-1">
+
+                                </div>
+                            </div>
+                            <div id="moreEmail-Container">
+                                @if (Model.MoreEmails.Count() > 0)
+                                {
+                                    var moreEmailIndexer = 0;
+                                    foreach (var x in Model.MoreEmails)
+                                    {
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">
+                                                <input class="iHidden" type="hidden" value="@moreEmailIndexer">
+                                            </label>
+                                            <div class="col-sm-6">
+                                                <input type="email" class="form-control input-sm" name="MoreEmails[@moreEmailIndexer].Email" value="@x.Email" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <select name="MoreEmails[@moreEmailIndexer].Type" class="form-control input-sm">
+                                                    <option value="@((int)ContactEmailType.Home)" @(x.Type == ContactEmailType.Home ? "selected" : "")>@ContactEmailType.Home</option>
+                                                    <option value="@((int)ContactEmailType.Work)" @(x.Type == ContactEmailType.Work ? "selected" : "")>@ContactEmailType.Work</option>
+                                                    <option value="@((int)ContactEmailType.Other)" @(x.Type == ContactEmailType.Other ? "selected" : "")>@ContactEmailType.Other</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <a href="javascript://" class="text-muted remCF"><span class="fa fa-times"></span></a>
+                                            </div>
+                                        </div>
+                                        moreEmailIndexer++;
+                                    }
+                                }
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-9 text-right">
+                                    <a id="moreEmail-AddNew" href="javascript://"><i class="fa fa-plus-circle"></i> Add New Email</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row tb-padding">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <h4>Other Information</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="row form-group">
+                                    <label class="col-sm-3 horizontal-label">Fax</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control input-sm phoneMask" name="Fax" value="@Model.Fax" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="row form-group">
+                                    <label class="col-sm-2 horizontal-label">Website</label>
+                                    <div class="col-sm-10">
+                                        <input type="url" class="form-control input-sm" name="Website" value="@Model.Website" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="row form-group">
+                                    <label class="col-sm-3 horizontal-label">Skype ID</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control input-sm" name="SkypeID" value="@Model.SkypeID" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="row form-group">
+                                    <label class="col-sm-3 horizontal-label">Facebook</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control input-sm" name="Facebook" value="@Model.Facebook" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="row form-group">
+                                    <label class="col-sm-3 horizontal-label">Twitter</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control input-sm" name="Twitter" value="@Model.Twitter" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-sm-offset-1 col-sm-11">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="SubscribedForUpdates" value="@(Model.SubscribedForUpdates ? "true" : "false")" @(Model.SubscribedForUpdates ? "checked" : "") /> Subscribe for Updates
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="SubscribedForNewsletter" value="@(Model.SubscribedForNewsletter ? "true" : "false")" @(Model.SubscribedForNewsletter ? "checked" : "") /> Subscribe for Newsletter
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row tb-padding">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <h4>Address Information</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="row form-group">
+                                    <label class="col-sm-3 horizontal-label">Address Line 1</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control input-sm" name="AddressLine1" value="@Model.AddressLine1" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="row form-group">
+                                    <label class="col-sm-3 horizontal-label">Address Line2</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control input-sm" name="AddressLine2" value="@Model.AddressLine2" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="row form-group">
+                                    <label class="col-sm-4 horizontal-label">Town/City</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control input-sm" name="City" value="@Model.City" />
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="row form-group">
+                                    <label class="col-sm-3 horizontal-label">County/State</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control input-sm" name="State" value="@Model.State" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="row form-group">
+                                    <label class="col-sm-4 horizontal-label">Post/Zip Code</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control input-sm" name="ZipCode" value="@Model.ZipCode" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="row form-group">
+                                    <label class="col-sm-3 horizontal-label">Country</label>
+                                    <div class="col-sm-9">
+                                        <select name="Country" class="form-control input-sm">
+                                            @foreach (var c in Html.CountriesListWithCode())
+                                            {
+                                                <option value="@c.Value" selected="@(Model.Country == c.Value)">@c.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                
+                            </div>
+                        </div>
+                        <div id="moreAddress-Container">
+                            @if (Model.MoreAddresses.Count() > 0)
+                            {
+                                var moreAddressIndexer = 0;
+                                foreach (var x in Model.MoreAddresses)
+                                {                        
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            <input class="iHidden" type="hidden" value="@moreAddressIndexer">
+                                            <div class="row form-group">
+                                                <label class="col-sm-3 horizontal-label">Address Line 1</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" name="MoreAddresses[@moreAddressIndexer].AddressLine1" value="@x.AddressLine1" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="row form-group">
+                                                <label class="col-sm-3 horizontal-label">Address Line2</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" name="MoreAddresses[@moreAddressIndexer].AddressLine2" value="@x.AddressLine2" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="row form-group">
+                                                <label class="col-sm-4 horizontal-label">Town/City</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control input-sm" name="MoreAddresses[@moreAddressIndexer].City" value="@x.City" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="row form-group">
+                                                <label class="col-sm-3 horizontal-label">County/State</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" name="MoreAddresses[@moreAddressIndexer].State" value="@x.State" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="row form-group">
+                                                <label class="col-sm-4 horizontal-label">Post/Zip Code</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control input-sm" name="MoreAddresses[@moreAddressIndexer].ZipCode" value="@x.ZipCode" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="row form-group">
+                                                <label class="col-sm-3 horizontal-label">Country</label>
+                                                <div class="col-sm-9">
+                                                    <select name="MoreAddresses[@moreAddressIndexer].Country" class="form-control input-sm">
+                                                        @foreach (var c in Html.CountriesListWithCode())
+                                                        {
+                                                            <option value="@c.Value" selected="@(x.Country == c.Value)">@c.Text</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <a href="javascript://" class="text-muted remCF"><span class="fa fa-times"></span></a>
+                                        </div>
+                                    </div>
+                                    moreAddressIndexer++;
+                                }
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9 text-right">
+                                <a id="moreAddress-AddNew" href="javascript://"><i class="fa fa-plus-circle"></i> Add New Address</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row tb-padding">
+                <div class="col-sm-12">
+                    <div class="page-header">
+                        <h4>Advance Setup <a href="javascript://" data-val="showmore" class="btnAdvanceShow pull-right" style="text-decoration:none; font-size:13px;">Click to show Advance Setup <i class="fa fa-arrow-down"></i></a></h4>
+                    </div>
+                </div>
+            </div>
+            <div id="AdvanceContent" style="display:none;">
+                <div class="row tb-padding">
+                    <div class="col-sm-6">
+                        <div class="page-header">
+                            <h4>Contact Type(s) <a href="javascript://" title="You can select multiple types"><i class="fa fa-info-circle"></i></a></h4>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    @if (Model.SelectedContactTypes.Count() > 0)
+                                    {
+                                        foreach (var item in Model.SelectedContactTypes)
+                                        {
+                                            <span class="label label-primary margRight"> @item.ContactType.ToSpacedTitleCase() </span>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    @Html.DropDownList("ContactTypes", new MultiSelectList(ViewBag.ContactTypes, "text", "text"), new { @class = "form-control input-sm select", @multiple = "multiple" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-right">
+                    <div class="btn-group" role="group">
+                        <a href="javascript://" onclick="window.history.back()" class="btn btn-default btn-sm"><i class="fa fa-close"></i> Cancel / Back</a>
+                        @if (!Model.Id.IsEmpty())
+                            {
+                            <a href="~/CRM/Contact/Record" class="btn btn-warning btn-sm"><i class="fa fa-plus-circle"></i> Create New</a>
+                            }
+                            else
+                            {
+                            <button type="submit" class="btn btn-primary btn-sm save-add-new"><i class="fa fa-check"></i> Save & Add New</button>
+                            }
+                        <button type="submit" class="btn btn-success btn-sm save-continue"><i class="fa fa-check"></i> Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
+    else
+    {
+        <form id="lead-frm" class="user-Profile" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="type" value="@Request.QueryString["r"]" />
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+            <input type="hidden" id="save-text" name="SaveClick" />
+
+            <div class="row">
+                <div class="col-sm-12 text-right">
+                    <div class="btn-group" role="group">
+                        <a href="javascript://" onclick="window.history.back()" class="btn btn-default btn-sm"><i class="fa fa-close"></i> Cancel / Back</a>
+                        @if (Model.Id.IsEmpty())
+                    {
+                        <a href="~/CRM/Contact/Record" class="btn btn-warning btn-sm"><i class="fa fa-plus-circle"></i> Create New</a>
+                        }
+                        else
+                        {
+                        <button type="submit" class="btn btn-success btn-sm save-continue"><i class="fa fa-check"></i> Save</button>
+                        }
+                        <button type="submit" class="btn btn-primary btn-sm save-add-new"><i class="fa fa-check"></i> Save & Add New</button>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top:15px;">
+                <div class="col-sm-3 img-container">
+                    <img id="img-Preview" src="@dpSrc" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
+                    <input type="file" class="form-control input-sm file-select" id="file" name="file" onchange="previewImage(this,'#img-Preview')" />
+                    <div class="img-overlay">
+                        <a class="btn btn-default btn-xs" href="javascript://"><i class="fa fa-edit"></i> Edit</a>
+                    </div>
+                </div>
+                <div class="col-sm-9 bordered-section">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="row form-group">
+                                        <label class="col-sm-4 text-left horizontal-label">Customer ID</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control input-sm" name="Code" value="@Model.Code" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row form-group">
+                                        <label class="col-sm-3 horizontal-label">Source</label>
+                                        <div class="col-sm-9">
+                                            <select name="Source" class="form-control input-sm" required>
+                                                <option value="">-NONE-</option>
+                                                <option value="@((int)ContactSource.Website)" @(Model.Source == ContactSource.Website ? "selected" : "")>@ContactSource.Website</option>
+                                                <option value="@((int)ContactSource.Referred)" @(Model.Source == ContactSource.Referred ? "selected" : "")>@ContactSource.Referred</option>
+                                                <option value="@((int)ContactSource.SearchEngine)" @(Model.Source == ContactSource.SearchEngine ? "selected" : "")>@ContactSource.SearchEngine.ToSpacedTitleCase()</option>
+                                                <option value="@((int)ContactSource.Campaign)" @(Model.Source == ContactSource.Campaign ? "selected" : "")>@ContactSource.Campaign</option>
+                                                <option value="@((int)ContactSource.Exhibition)" @(Model.Source == ContactSource.Exhibition ? "selected" : "")>@ContactSource.Exhibition</option>
+                                                <option value="@((int)ContactSource.PersonalContact)" @(Model.Source == ContactSource.PersonalContact ? "selected" : "")>@ContactSource.PersonalContact.ToSpacedTitleCase()</option>
+                                                <option value="@((int)ContactSource.Advertisement)" @(Model.Source == ContactSource.Advertisement ? "selected" : "")>@ContactSource.Advertisement.ToSpacedTitleCase()</option>
+                                                <option value="@((int)ContactSource.ColdCall)" @(Model.Source == ContactSource.ColdCall ? "selected" : "")>@ContactSource.ColdCall.ToSpacedTitleCase()</option>
+                                                <option value="@((int)ContactSource.Partner)" @(Model.Source == ContactSource.Partner ? "selected" : "")>@ContactSource.Partner.ToSpacedTitleCase()</option>
+                                                <option value="@((int)ContactSource.PublicRelations)" @(Model.Source == ContactSource.PublicRelations ? "selected" : "")>@ContactSource.PublicRelations.ToSpacedTitleCase()</option>
+                                                <option value="@((int)ContactSource.Other)" @(Model.Source == ContactSource.Other ? "selected" : "")>@ContactSource.Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row form-group">
+                                        <label class="col-sm-3 horizontal-label">Suffix</label>
+                                        <div class="col-sm-9">
+                                            <select name="TitleSuffix" class="form-control input-sm" required>
+                                                <option value="@TitleSuffix.Jr" @(Model.TitleSuffix == TitleSuffix.Jr ? "selected" : "")>@TitleSuffix.Jr. (Junior)</option>
+                                                <option value="@TitleSuffix.Sr" @(Model.TitleSuffix == TitleSuffix.Sr ? "selected" : "")>@TitleSuffix.Sr. (Senior)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="row form-group">
+                                        <label class="col-sm-5 horizontal-label">Title</label>
+                                        <div class="col-sm-7">
+                                            <select name="TitlePrefix" class="form-control input-sm" required>
+                                                <option value="@TitlePrefix.Mr" @(Model.TitlePrefix == TitlePrefix.Mr ? "selected" : "")>@TitlePrefix.Mr.</option>
+                                                <option value="@TitlePrefix.Mrs" @(Model.TitlePrefix == TitlePrefix.Mrs ? "selected" : "")>@TitlePrefix.Mrs.</option>
+                                                <option value="@TitlePrefix.Miss" @(Model.TitlePrefix == TitlePrefix.Miss ? "selected" : "")>@TitlePrefix.Miss</option>
+                                                <option value="@TitlePrefix.Ms" @(Model.TitlePrefix == TitlePrefix.Ms ? "selected" : "")>@TitlePrefix.Ms.</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="row form-group">
+                                        <label class="col-sm-5 horizontal-label">First Name</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control input-sm" name="FirstName" value="@Model.FirstName" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row form-group">
+                                        <label class="col-sm-3 horizontal-label">Last Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control input-sm" name="LastName" value="@Model.LastName" required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="row form-group">
+                                        <label class="col-sm-5 horizontal-label">Gender</label>
+                                        <div class="col-sm-7">
+                                            <select name="Gender" class="form-control input-sm" required>
+                                                <option value="@((int)ContactGender.Male)" @(Model.Gender == ContactGender.Male ? "selected" : "")>@ContactGender.Male</option>
+                                                <option value="@((int)ContactGender.Female)" @(Model.Gender == ContactGender.Female ? "selected" : "")>@ContactGender.Female</option>
+                                                <option value="@((int)ContactGender.Other)" @(Model.Gender == ContactGender.Other ? "selected" : "")>@ContactGender.Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="row form-group">
+                                        <label class="col-sm-5 horizontal-label">Date of Birth</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group input-group-sm datePicker">
+                                                <input name="DateOfBirth" class="form-control input-sm" type="text" value="@Model.DateOfBirth.ToShortDateString()" required autocomplete="off">
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row form-group">
+                                        <label class="col-sm-3 horizontal-label">Username</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control input-sm" name="Username" value="@Model.Username" required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    @if (Model.ContactType == ContactType.Trader || Model.ContactType == ContactType.DropShipper || Model.ContactType == ContactType.TraderDropShipper || Request.QueryString["r"].ToString() == Convert.ToString((int)ContactType.Trader))
+                                    {
+                                    <div class="row form-group">
+                                        <label class="col-sm-4 horizontal-label">Account Type</label>
+                                        <div class="col-sm-8">
+                                            <select name="ContactType" class="form-control input-sm" required>
+                                                <option value="@((int)CRM.Entity.ContactType.Trader)" @((Model.ContactType == ContactType.Trader) ? "selected" : "")>@CRM.Entity.ContactType.Trader</option>
+                                                <option value="@((int)CRM.Entity.ContactType.DropShipper)" @((Model.ContactType == ContactType.DropShipper) ? "selected" : "")>Dropshipper</option>
+                                                <option value="@((int)CRM.Entity.ContactType.TraderDropShipper)" @((Model.ContactType == ContactType.TraderDropShipper) ? "selected" : "")>Both Accounts</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @*<div class="col-sm-4">
+                                <div class="row form-group">
+                                    <label class="col-sm-4 horizontal-label">Targeted For</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control input-sm" name="TargetedFor" required>
+                                            <option value="">-NONE-</option>
+                                            <option value="@((int)ContactTargetedFor.TenderPurchase)" @(Model.TargetedFor == ContactTargetedFor.TenderPurchase ? "selected" : "")>@ContactTargetedFor.TenderPurchase.ToSpacedTitleCase()</option>
+                                            <option value="@((int)ContactTargetedFor.TenderListing)" @(Model.TargetedFor == ContactTargetedFor.TenderListing ? "selected" : "")>@ContactTargetedFor.TenderListing.ToSpacedTitleCase()</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>*@
+
+                        @*<div class="col-sm-4">
+                                <div class="row form-group">
+                                    <label class="col-sm-3 horizontal-label">Status</label>
+                                    <div class="col-sm-9">
+                                        <select name="Status" class="form-control input-sm" required>
+                                            <option value="">-NONE-</option>
+                                            <option value="@((int)ContactStatus.Registered)" @(Model.Status == ContactStatus.Registered ? "selected" : "")>@ContactStatus.Registered.ToSpacedTitleCase()</option>
+                                            <option value="@((int)ContactStatus.NoPurchaseHistory)" @(Model.Status == ContactStatus.NoPurchaseHistory ? "selected" : "")>@ContactStatus.NoPurchaseHistory.ToSpacedTitleCase()</option>
+                                            <option value="@((int)ContactStatus.InProgress)" @(Model.Status == ContactStatus.InProgress ? "selected" : "")>@ContactStatus.InProgress.ToSpacedTitleCase()</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>*@
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-sm-1 horizontal-label">Details</label>
+                        <div class="col-sm-11">
+                            <textarea class="form-control input-sm" name="Description" rows="3">@Model.Description</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.ContactType == ContactType.Supplier || Model.ContactType == ContactType.Trader || Model.ContactType == ContactType.DropShipper || Model.ContactType == ContactType.TraderDropShipper || Request.QueryString["r"].ToString() == Convert.ToString((int)ContactType.Trader) || Request.QueryString["r"].ToString() == Convert.ToString((int)ContactType.Supplier))
+            {
+            <input type="hidden" id="Company-id" name="Company.Id" value="@Model.Company.Id" />
+            <div class="row tb-padding">
+                <div class="col-sm-12">
+                    <div class="page-header">
+                        <h4>Company Profile</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Trading Name</label>
+                                <div>
+                                    <input type="text" name="Company.Title" value="@Model.Company.Title" required class="form-control input-sm" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Business Type</label>
+                                <div>
+                                    <select name="Company.Type" required class="form-control input-sm">
+                                        <option value=""> -- select --</option>
+                                        <option value="@CRM.Entity.ContactCompanyType.Shop" @((Model.Company.Type == ContactCompanyType.Shop) ? "selected" : "")>@CRM.Entity.ContactCompanyType.Shop</option>
+                                        <option value="@CRM.Entity.ContactCompanyType.MarketTrader" @((Model.Company.Type == ContactCompanyType.MarketTrader) ? "selected" : "")>@CRM.Entity.ContactCompanyType.MarketTrader.ToSpacedTitleCase()</option>
+                                        <option value="@CRM.Entity.ContactCompanyType.OnlineStore" @((Model.Company.Type == ContactCompanyType.OnlineStore) ? "selected" : "")>@CRM.Entity.ContactCompanyType.OnlineStore.ToSpacedTitleCase()</option>
+                                        <option value="@CRM.Entity.ContactCompanyType.Other" @((Model.Company.Type == ContactCompanyType.Other) ? "selected" : "")>@CRM.Entity.ContactCompanyType.Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Name of Director/Owner of Business</label>
+                                <div>
+                                    <input type="text" name="Company.ResponsiblePerson" value="@Model.Company.ResponsiblePerson" class="form-control input-sm" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>N.I Number</label>
+                                <div>
+                                    <input type="text" name="Company.NINumber" value="@Model.Company.NINumber" class="form-control input-sm" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+
+            <div class="row tb-padding">
+                <div class="col-sm-6">
+                    <div class="page-header">
+                        <h4>Telephone</h4>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Primary</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control input-sm phoneMask" name="Phone" value="@Model.Phone" required />
+                            </div>
+                            <div class="col-sm-3">
+                                <select name="PrimaryPhoneType" class="form-control input-sm">
+                                    <option value="@((int)ContactPhoneType.Home)" @(Model.PrimaryPhoneType == ContactPhoneType.Home ? "selected" : "")>@ContactPhoneType.Home</option>
+                                    <option value="@((int)ContactPhoneType.Work)" @(Model.PrimaryPhoneType == ContactPhoneType.Work ? "selected" : "")>@ContactPhoneType.Work</option>
+                                    <option value="@((int)ContactPhoneType.Other)" @(Model.PrimaryPhoneType == ContactPhoneType.Other ? "selected" : "")>@ContactPhoneType.Other</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1">
+
+                            </div>
+                        </div>
+                        <div id="morePhone-Container">
+                            @if (Model.MorePhones.Count() > 0)
+                            {
+                                var morePhoneIndexer = 0;
+                                foreach (var x in Model.MorePhones)
+                                {
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">
+                                    <input class="iHidden" type="hidden" value="@morePhoneIndexer">
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control input-sm phoneMask" name="MorePhones[@morePhoneIndexer].Phone" value="@x.Phone" required />
+                                </div>
+                                <div class="col-sm-3">
+                                    <select name="MorePhones[@morePhoneIndexer].Type" class="form-control input-sm">
+                                        <option value="@((int)ContactPhoneType.Home)" @(x.Type == ContactPhoneType.Home ? "selected" : "")>@ContactPhoneType.Home</option>
+                                        <option value="@((int)ContactPhoneType.Work)" @(x.Type == ContactPhoneType.Work ? "selected" : "")>@ContactPhoneType.Work</option>
+                                        <option value="@((int)ContactPhoneType.Other)" @(x.Type == ContactPhoneType.Other ? "selected" : "")>@ContactPhoneType.Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-1">
+                                    <a href="javascript://" class="text-muted remCF"><span class="fa fa-times"></span></a>
+                                </div>
+                            </div>
+                                    morePhoneIndexer++;
+                                }
+                            }
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9 text-right">
+                                <a id="morePhone-AddNew" href="javascript://"><i class="fa fa-plus-circle"></i> Add New Phone</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="page-header">
+                        <h4>Email</h4>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Primary</label>
+                            <div class="col-sm-6">
+                                <input type="email" class="form-control input-sm" id="Email" name="Email" value="@Model.Email" required />
+                            </div>
+                            <div class="col-sm-3">
+                                <select name="PrimaryEmailType" class="form-control input-sm">
+                                    <option value="@((int)ContactEmailType.Home)" @(Model.PrimaryEmailType == ContactEmailType.Home ? "selected" : "")>@ContactEmailType.Home</option>
+                                    <option value="@((int)ContactEmailType.Work)" @(Model.PrimaryEmailType == ContactEmailType.Work ? "selected" : "")>@ContactEmailType.Work</option>
+                                    <option value="@((int)ContactEmailType.Other)" @(Model.PrimaryEmailType == ContactEmailType.Other ? "selected" : "")>@ContactEmailType.Other</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1">
+
+                            </div>
+                        </div>
+                        <div id="moreEmail-Container">
+                            @if (Model.MoreEmails.Count() > 0)
+                            {
+                                var moreEmailIndexer = 0;
+                                foreach (var x in Model.MoreEmails)
+                                {
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">
+                                    <input class="iHidden" type="hidden" value="@moreEmailIndexer">
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="email" class="form-control input-sm" name="MoreEmails[@moreEmailIndexer].Email" value="@x.Email" required />
+                                </div>
+                                <div class="col-sm-3">
+                                    <select name="MoreEmails[@moreEmailIndexer].Type" class="form-control input-sm">
+                                        <option value="@((int)ContactEmailType.Home)" @(x.Type == ContactEmailType.Home ? "selected" : "")>@ContactEmailType.Home</option>
+                                        <option value="@((int)ContactEmailType.Work)" @(x.Type == ContactEmailType.Work ? "selected" : "")>@ContactEmailType.Work</option>
+                                        <option value="@((int)ContactEmailType.Other)" @(x.Type == ContactEmailType.Other ? "selected" : "")>@ContactEmailType.Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-1">
+                                    <a href="javascript://" class="text-muted remCF"><span class="fa fa-times"></span></a>
+                                </div>
+                            </div>
+                                    moreEmailIndexer++;
+                                }
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9 text-right">
+                                <a id="moreEmail-AddNew" href="javascript://"><i class="fa fa-plus-circle"></i> Add New Email</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row tb-padding">
+                <div class="col-sm-12">
+                    <div class="page-header">
+                        <h4>Other Information</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="row form-group">
+                                <label class="col-sm-3 horizontal-label">Fax</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm phoneMask" name="Fax" value="@Model.Fax" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="row form-group">
+                                <label class="col-sm-2 horizontal-label">Website</label>
+                                <div class="col-sm-10">
+                                    <input type="url" class="form-control input-sm" name="Website" value="@Model.Website" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="row form-group">
+                                <label class="col-sm-3 horizontal-label">Skype ID</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm" name="SkypeID" value="@Model.SkypeID" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="row form-group">
+                                <label class="col-sm-3 horizontal-label">Facebook</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm" name="Facebook" value="@Model.Facebook" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="row form-group">
+                                <label class="col-sm-3 horizontal-label">Twitter</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm" name="Twitter" value="@Model.Twitter" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-sm-offset-1 col-sm-11">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="SubscribedForUpdates" value="@(Model.SubscribedForUpdates ? "true" : "false")" @(Model.SubscribedForUpdates ? "checked" : "") /> Subscribe for Updates
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="SubscribedForNewsletter" value="@(Model.SubscribedForNewsletter ? "true" : "false")" @(Model.SubscribedForNewsletter ? "checked" : "") /> Subscribe for Newsletter
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row tb-padding">
+                <div class="col-sm-12">
+                    <div class="page-header">
+                        <h4>Address Information</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row form-group">
+                                <label class="col-sm-3 horizontal-label">Address Line 1</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm" name="AddressLine1" value="@Model.AddressLine1" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row form-group">
+                                <label class="col-sm-3 horizontal-label">Address Line 2</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm" name="AddressLine2" value="@Model.AddressLine2" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="row form-group">
+                                <label class="col-sm-3 horizontal-label">Town/City</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm" name="City" value="@Model.City" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="row form-group">
+                                <label class="col-sm-3 horizontal-label">County/State</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm" name="State" value="@Model.State" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="row form-group">
+                                <label class="col-sm-4 horizontal-label">Post/Zip Code</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control input-sm" name="ZipCode" value="@Model.ZipCode" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="row form-group">
+                                <label class="col-sm-3 horizontal-label">Country</label>
+                                <div class="col-sm-9">
+                                    <select name="Country" class="form-control input-sm">
+                                        @foreach (var c in Html.CountriesListWithCode())
+                                        {
+                                        <option value="@c.Value" selected="@(Model.Country == c.Value)">@c.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div id="moreAddress-Container">
+                        @if (Model.MoreAddresses.Count() > 0)
+                        {
+                            var moreAddressIndexer = 0;
+                            foreach (var x in Model.MoreAddresses)
+                            {
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <input class="iHidden" type="hidden" value="@moreAddressIndexer">
+                                        <div class="row form-group">
+                                            <label class="col-sm-3 horizontal-label">Address Line 1</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control input-sm" name="MoreAddresses[@moreAddressIndexer].AddressLine1" value="@x.AddressLine1" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="row form-group">
+                                            <label class="col-sm-3 horizontal-label">Address Line2</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control input-sm" name="MoreAddresses[@moreAddressIndexer].AddressLine2" value="@x.AddressLine2" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Town/City</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control input-sm" name="MoreAddresses[@moreAddressIndexer].City" value="@x.City" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="row form-group">
+                                                <label class="col-sm-3 horizontal-label">County/State</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" name="MoreAddresses[@moreAddressIndexer].State" value="@x.State" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="row form-group">
+                                                <label class="col-sm-4 horizontal-label">Post/Zip Code</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control input-sm" name="MoreAddresses[@moreAddressIndexer].ZipCode" value="@x.ZipCode" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="row form-group">
+                                                <label class="col-sm-3 horizontal-label">Country</label>
+                                                <div class="col-sm-9">
+                                                    <select name="MoreAddresses[@moreAddressIndexer].Country" class="form-control input-sm">
+                                                        @foreach (var c in Html.CountriesListWithCode())
+                                                        {
+                                                            <option value="@c.Value" selected="@(x.Country == c.Value)">@c.Text</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <a href="javascript://" class="text-muted remCF"><span class="fa fa-times"></span></a>
+                                        </div>
+                                    </div>
+                                moreAddressIndexer++;
+                            }
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9 text-right">
+                            <a id="moreAddress-AddNew" href="javascript://"><i class="fa fa-plus-circle"></i> Add New Address</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-right">
+                    <div class="btn-group" role="group">
+                        <a href="javascript://" onclick="window.history.back()" class="btn btn-default btn-sm"><i class="fa fa-close"></i> Cancel / Back</a>
+                        @if (!Model.Id.IsEmpty())
+                    {
+                        <a href="~/CRM/Contact/Record" class="btn btn-warning btn-sm"><i class="fa fa-plus-circle"></i> Create New</a>
+                        }
+                        else
+                        {
+                        <button type="submit" class="btn btn-primary btn-sm save-add-new"><i class="fa fa-check"></i> Save & Add New</button>
+                        }
+                        <button type="submit" class="btn btn-success btn-sm save-continue"><i class="fa fa-check"></i> Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
+}
+else
+{
+    Response.Redirect("~/CRM");
+}
+
+
+@*<div class="list-group-item">
+        <div class="row">
+            <label class="col-xs-3 horizontal-label">Industry</label>
+            <div class="col-xs-9">
+                <select name="Industry" class="form-control input-sm">
+                    <option value="">-NONE-</option>
+                    <option value="ASP" @(Model.Industry == "ASP" ? "selected" : "")>ASP</option>
+                    <option value="Data/Telecom OEM" @(Model.Industry == "Data/Telecom OEM" ? "selected" : "")>Data/Telecom OEM</option>
+                    <option value="ERP" @(Model.Industry == "ERP" ? "selected" : "")>ERP</option>
+                    <option value="Government/Military" @(Model.Industry == "Government/Military" ? "selected" : "")>Government/Military</option>
+                    <option value="Large Enterprise" @(Model.Industry == "Large Enterprise" ? "selected" : "")>Large Enterprise</option>
+                    <option value="ManagementISV" @(Model.Industry == "ManagementISV" ? "selected" : "")>ManagementISV</option>
+                    <option value="MSP (Management Service Provider)" @(Model.Industry == "MSP (Management Service Provider)" ? "selected" : "")>MSP (Management Service Provider)</option>
+                    <option value="Network Equipment (Enterprise)" @(Model.Industry == "Network Equipment (Enterprise)" ? "selected" : "")>Network Equipment (Enterprise)</option>
+                    <option value="Non-management ISV" @(Model.Industry == "Non-management ISV" ? "selected" : "")>Non-management ISV</option>
+                    <option value="Optical Networking" @(Model.Industry == "Optical Networking" ? "selected" : "")>Optical Networking</option>
+                    <option value="Service Provider" @(Model.Industry == "Service Provider" ? "selected" : "")>Service Provider</option>
+                    <option value="Small/Medium Enterprise" @(Model.Industry == "Small/Medium Enterprise" ? "selected" : "")>Small/Medium Enterprise</option>
+                    <option value="Storage Equipment" @(Model.Industry == "Storage Equipment" ? "selected" : "")>Storage Equipment</option>
+                    <option value="Storage Service Provider" @(Model.Industry == "Storage Service Provider" ? "selected" : "")>Storage Service Provider</option>
+                    <option value="Systems Integrator" @(Model.Industry == "Systems Integrator" ? "selected" : "")>Systems Integrator</option>
+                    <option value="Wireless Industry" @(Model.Industry == "Wireless Industry" ? "selected" : "")>Wireless Industry</option>
+                </select>
+            </div>
+        </div>
+    </div>*@
+
+@section scripts{
+    <script src="~/Content/chosen/chosen.jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".select").chosen();
+        });
+        $(function () {
+            $('.save-add-new').on('click', function () {
+                //alert('SaveAddNew');
+                $('#save-text').val('SaveAddNew');
+            });
+            $('.save-continue').on('click', function () {
+                //alert('SaveContinue');
+                $('#save-text').val('SaveContinue');
+            });
+
+            $('.btnshow').on('click', function () {
+                var dataVal = $(this).attr("data-val");
+                if (dataVal == "showmore") {
+                    $(this).attr("data-val", "showless");
+                    $(this).html('Click to show less <i class="fa fa-arrow-up"></i>');
+                    $('#content').show();
+                }
+                else {
+                    $(this).attr("data-val", "showmore");
+                    $(this).html('Click to add more Details <i class="fa fa-arrow-down"></i>');
+                    $('#content').hide();
+                }
+
+            });
+
+            $('.btnAdvanceShow').on('click', function () {
+                var dataVal = $(this).attr("data-val");
+                if (dataVal == "showmore") {
+                    $(this).attr("data-val", "showless");
+                    $(this).html('Click to hide <i class="fa fa-arrow-up"></i>');
+                    $('#AdvanceContent').show();
+                }
+                else {
+                    $(this).attr("data-val", "showmore");
+                    $(this).html('Click to show Advance Setup <i class="fa fa-arrow-down"></i>');
+                    $('#AdvanceContent').hide();
+                }
+
+            });
+
+            //--- Contact More Email
+            $("#moreEmail-AddNew").click(function () {
+                var itemIndex = $("#moreEmail-Container input.iHidden").length;
+                var markup = '<div class="form-group">';
+                markup += '<label class="col-sm-2 control-label"><input class="iHidden" type="hidden" value="' + itemIndex + '"></label>';
+                markup += '<div class="col-sm-6"><input type="email" class="form-control input-sm" name="MoreEmails[' + itemIndex + '].Email" required /></div>';
+                markup += '<div class="col-sm-3"><select name="MoreEmails[' + itemIndex + '].Type" class="form-control input-sm"><option value="@((int)ContactEmailType.Home)">@ContactEmailType.Home</option><option value="@((int)ContactEmailType.Work)">@ContactEmailType.Work</option><option value="@((int)ContactEmailType.Other)">@ContactEmailType.Other</option></select></div>';
+                markup += '<div class="col-sm-1"><a href="javascript://" class="text-muted remCF"><span class="fa fa-times"></span></a></div>';
+                markup += '</div>';
+                $("#moreEmail-Container").append(markup);
+            });
+            $("#moreEmail-Container").on('click', '.remCF', function () {
+                $(this).parent().parent().remove();
+            });
+            //---
+
+            //--- Contact More Phone
+            $("#morePhone-AddNew").click(function () {
+                var itemIndex = $("#morePhone-Container input.iHidden").length;
+                var markup = '<div class="form-group">';
+                markup += '<label class="col-sm-2 control-label"><input class="iHidden" type="hidden" value="' + itemIndex + '"></label>';
+                markup += '<div class="col-sm-6"><input type="text" class="form-control input-sm phoneMaskNew" name="MorePhones[' + itemIndex + '].Phone" required /></div>';
+                markup += '<div class="col-sm-3"><select name="MorePhones[' + itemIndex + '].Type" class="form-control input-sm"><option value="@((int)ContactPhoneType.Home)">@ContactPhoneType.Home</option><option value="@((int)ContactPhoneType.Work)">@ContactPhoneType.Work</option><option value="@((int)ContactPhoneType.Other)">@ContactPhoneType.Other</option></select></div>';
+                markup += '<div class="col-sm-1"><a href="javascript://" class="text-muted remCF"><span class="fa fa-times"></span></a></div>';
+                markup += '</div>';
+                $("#morePhone-Container").append(markup);
+
+                $(".phoneMaskNew").inputmask({
+                    "alias": "phone",
+                    "url": "../../../Scripts/Input Mask/phone-codes/phone-codes.js"
+                });
+            });
+            $("#morePhone-Container").on('click', '.remCF', function () {
+                $(this).parent().parent().remove();
+            });
+            //---
+
+            //--- Contact More Address
+            $("#moreAddress-AddNew").click(function () {
+                var itemIndex = $("#moreAddress-Container input.iHidden").length;
+                var markup = '<div class="bodyContainer"><hr/><div class="row"><div class="col-sm-5">';
+                markup += '<input class="iHidden" type="hidden" value="' + itemIndex + '">';
+                markup += '<div class="row form-group"><label class="col-sm-3 horizontal-label">Address Line 1</label>';
+                markup += '<div class="col-sm-9"><input type="text" class="form-control input-sm" name="MoreAddresses[' + itemIndex + '].AddressLine1" required/></div></div></div>';
+                markup += '<div class="col-sm-4"><div class="row form-group"><label class="col-sm-3 horizontal-label">Address Line2</label>';
+                markup += '<div class="col-sm-9"><input type="text" class="form-control input-sm" name="MoreAddresses[' + itemIndex + '].AddressLine2"/></div></div></div>';
+                markup += '<div class="col-sm-3"><div class="row form-group"><label class="col-sm-4 horizontal-label">Town/City</label>';
+                markup += '<div class="col-sm-8"><input type="text" class="form-control input-sm" name="MoreAddresses[' + itemIndex + '].City" required/></div></div></div>';
+                markup += '<div class="col-sm-4">';
+                markup += '<div class="row form-group"><label class="col-sm-3 horizontal-label">County/State</label>';
+                markup += '<div class="col-sm-9"><input type="text" class="form-control input-sm" name="MoreAddresses[' + itemIndex + '].State" required/></div></div></div>';
+                markup += '<div class="col-sm-3"><div class="row form-group"><label class="col-sm-4 horizontal-label">Post/Zip Code</label>';
+                markup += '<div class="col-sm-8"><input type="text" class="form-control input-sm" name="MoreAddresses[' + itemIndex + '].ZipCode" required/></div></div></div>';
+                markup += '<div class="col-sm-4"><div class="row form-group"><label class="col-sm-3 horizontal-label">Country</label>';
+
+                var countriesList = '@foreach (var c in Html.CountriesListWithCode()){ <option value="@c.Value" selected="@(Model.Country == c.Value)">@c.Text</option> }';
+
+                markup += '<div class="col-sm-9"><select name="MoreAddresses[' + itemIndex + '].Country" class="form-control input-sm" required>' + countriesList + '</select></div></div></div>';
+                markup += '<div class="col-sm-1"><a href="javascript://" class="text-muted remCF"><span class="fa fa-times"></span></a></div>';
+                markup += '</div><div class="row">';
+
+                $("#moreAddress-Container").append(markup);
+            });
+            $("#moreAddress-Container").on('click', '.remCF', function () {
+                $(this).parent().parent().parent().remove();
+            });
+            //---
+
+            $("#lead-frm").validate({
+                rules: {
+                    Email: {
+                        remote: {
+                            url: "@Url.Action("CheckDuplicateEmail", "Contact", new { Area = "CRM" })",
+                            type: "post",
+                            data: {
+                                Email: function () {
+                                    return $("#Email").val();
+                                },
+                                Id: function () {
+                                    return $("#Id").val();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

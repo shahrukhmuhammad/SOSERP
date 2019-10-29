@@ -1,0 +1,113 @@
+﻿@model BaseApp.Entity.AppLog
+@{
+    ViewBag.Title = Model.Title;
+}
+
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Back"><i class="fa fa-angle-left"></i></a>
+                @if (Model.Type == BaseApp.Entity.AppLogType.Error)
+                {
+                    <button type="button" data-loading-text="Please wait..." class="btn btn-primary send-Report" title="Send Report to Support Centre"><i class="fa fa-life-ring"></i></button>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-striped table-hover">
+                    <tr>
+                        <th class="text-right">@(Model.Type == BaseApp.Entity.AppLogType.Error ? "Error Type" : "Log Title")</th>
+                        <td>@Model.Title</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Office</th>
+                        @if (Model.OfficeId.HasValue)
+                        {
+                            <td><a href="~/Secure/Office/Details/@Model.OfficeId">@Model.Office.Title</a></td>
+                        }
+                        else
+                        {
+                            <td>N / A</td>
+                        }
+                    </tr>
+                    <tr>
+                        <th class="text-right">Contact</th>
+                        @if (Model.ContactId.HasValue)
+                        {
+                            <td><a href="~/AccessControl/Contact/Details/@Model.ContactId">@Model.Contact.FullName</a></td>
+                        }
+                        else
+                        {
+                            <td>N / A</td>
+                        }
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-striped table-hover">
+                    <tr>
+                        <th class="text-right">Module</th>
+                        <td>@Model.Module</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Location</th>
+                        <td>@Model.Location</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">@(Model.Type == BaseApp.Entity.AppLogType.Error ? "Error Time" : "Log Time")</th>
+                        <td>@Model.CreatedOn.ToString("dd/MM/yyyy hh:mm tt")</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <hr />
+        @Html.Raw(Model.Description)
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><span class="fa fa-angle-left"></span> Back</a>
+                @if (Model.Type == BaseApp.Entity.AppLogType.Error)
+                {
+                    <button type="button" data-loading-text="Please wait..." class="btn btn-primary send-Report"><i class="fa fa-life-ring"></i> Send Report to Support Centre</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $(function () {
+            $('.send-Report').click(function () {
+                var btn = $(this)
+                btn.button('loading');
+                $.ajax({
+                    url: '/Secure/AppLog/SendReport/@Model.Id',
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                }).done(function (d) {
+                    bootbox.dialog({
+                        message: d,
+                        title: "Sending Report Result",
+                        buttons: {
+                            main: {
+                                label: "Close",
+                                className: "btn-default",
+                                callback: function () {
+                                    show: false;
+                                }
+                            }
+                        }
+                    });
+                }).always(function () {
+                    btn.button('reset');
+                });
+            });
+        });
+    </script>
+}

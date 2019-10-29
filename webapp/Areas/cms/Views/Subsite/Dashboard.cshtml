@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+
+    var recentPages = ViewBag.RecentPages as List<CMS.Entity.CmsPage>;
+    var recentSlides = ViewBag.RecentSlides as List<CMS.Entity.CmsSlide>;
+    var recentContents = ViewBag.RecentContents as List<CMS.Entity.CmsContent>;
+    var recentNews = ViewBag.RecentNews as List<CMS.Entity.CmsNews>;
+    var recentFiles = ViewBag.RecentFiles as List<CMS.Entity.CmsFile>;
+}
+
+<div>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+        <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+        <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="home">Home</div>
+        <div role="tabpanel" class="tab-pane" id="profile">Profile</div>
+        <div role="tabpanel" class="tab-pane" id="messages">Message</div>
+        <div role="tabpanel" class="tab-pane" id="settings">Setting</div>
+    </div>
+
+</div>
+
+<div class="row no-margin">
+    <div class="col-md-12 well well-sm bg-transparent">
+        <div class="row">
+            <div class="col-xs-6 col-sm-2">
+                <a href="~/CMS/WebPage/Record" class="btn btn-link btn-xs fullWidth">Create New Page</a>
+            </div>
+            <div class="col-xs-6 col-sm-2">
+                <a href="~/CMS/WebContent/Record" class="btn btn-link btn-xs fullWidth">Create New Content</a>
+            </div>
+            <div class="col-xs-6 col-sm-2">
+                <a href="~/CMS/WebSlide/Record" class="btn btn-link btn-xs fullWidth">Create New Slide</a>
+            </div>
+            <div class="col-xs-6 col-sm-2">
+                <a href="~/CMS/Newsletter/Record" class="btn btn-link btn-xs fullWidth">Create Newsletter</a>
+            </div>
+            <div class="col-xs-6 col-sm-2">
+                <a href="~/CMS/WebNews/Record" class="btn btn-link btn-xs fullWidth">Create News</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <a href="~/CMS/SubSite/WebPages/tradeportal" class="small-box bg-aqua-gradient">
+            <div class="inner">
+                <div class="icon"><i class="fa fa-file-code-o"></i></div>
+                <div class="caption">
+                    <p>Draft: <span class="count">@recentPages.Where(x => x.Status == CMS.Entity.CmsPageStatus.Draft).Count()</span></p>
+                    <p>Published: <span class="count">@recentPages.Where(x => x.Status == CMS.Entity.CmsPageStatus.Published).Count()</span></p>
+                    <p>Total: <span class="count">@recentPages.Count()</span></p>
+                </div>
+            </div>
+            <span class="small-box-footer">Web Pages</span>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="~/CMS/WebNews" class="small-box bg-light-blue-gradient">
+            <div class="inner">
+                <div class="icon"><i class="fa fa-newspaper-o"></i></div>
+                <div class="caption">
+                    <p>Draft: <span class="count">@recentNews.Where(x => x.Status == CMS.Entity.CmsNewsStatus.Draft).Count()</span></p>
+                    <p>Published: <span class="count">@recentNews.Where(x => x.Status == CMS.Entity.CmsNewsStatus.Published).Count()</span></p>
+                    <p>Total: <span class="count">@recentNews.Count()</span></p>
+                </div>
+            </div>
+            <span class="small-box-footer">News</span>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="~/CMS/WebContent" class="small-box bg-teal-gradient">
+            <div class="inner">
+                <div class="icon"><i class="fa fa-file-text-o"></i></div>
+                <div class="caption">
+                    <p>Draft: <span class="count">@recentContents.Where(x => x.Status == CMS.Entity.CmsContentStatus.Draft).Count()</span></p>
+                    <p>Published: <span class="count">@recentContents.Where(x => x.Status == CMS.Entity.CmsContentStatus.Published).Count()</span></p>
+                    <p>Total: <span class="count">@recentContents.Count()</span></p>
+                </div>
+            </div>
+            <span class="small-box-footer">Web Contents</span>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="~/CMS/WebSlide" class="small-box bg-purple-gradient">
+            <div class="inner">
+                <div class="icon"><i class="fa fa-file-image-o"></i></div>
+                <div class="caption">
+                    <p>Draft: <span class="count">@recentSlides.Where(x => x.Status == CMS.Entity.CmsSlideStatus.Draft).Count()</span></p>
+                    <p>Published: <span class="count">@recentSlides.Where(x => x.Status == CMS.Entity.CmsSlideStatus.Published).Count()</span></p>
+                    <p>Total: <span class="count">@recentSlides.Count()</span></p>
+                </div>
+            </div>
+            <span class="small-box-footer">Web Slides</span>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+﻿@model DmsItem
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@(Model != null ? Model.Filename : "Not found")</title>
+    @Styles.Render("~/Content/BaseApp")
+    <link href="~/Content/DMS/bootstrap-dms.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body style="margin-top:60px">
+    @if (Model != null)
+    {
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <span class="navbar-brand"><img src="@string.Format("/content/ext/{0}.png", Model.Type)" style="width:16px;height:16px;float:left;margin-right:5px"> @Model.Filename</span>
+            </div>
+
+            <div style="padding:10px" class="pull-right">
+                <a href="@BaseUrl.GetBaseUrl()/dms/docs/download/@Model.Id" class="btn btn-primary"><i class="fa fa-download"></i> Download</a>
+            </div>
+        </nav>
+        switch (Model.Extension)
+        {
+            case "jpg":
+            case "jpeg":
+            case "gif":
+            case "png":
+            case "bmp":
+                <div style="text-align:center;padding:10px;">
+                    <img src="/dms/docs/get/@Model.Id" />
+                </div>
+                break;
+            case "pdf":
+                <iframe src="/dms/docs/get/@Model.Id" frameborder='0' style="width:100%; height:580px"></iframe>
+                break;
+            case "txt":
+            case "xml":
+            case "js":
+            case "html":
+            case "css":
+            case "csv":
+            case "aspx":
+            case "sql":
+            case "php":
+            case "cshtml":
+                <pre style="width:100%;height:580px;overflow:auto"></pre>
+                @Scripts.Render("~/bundles/jquery")
+                <script>
+                    $.get("/dms/docs/getcontent/@Model.Id", function (d) {
+                        $('pre').html(d);
+                    });
+                </script>
+                break;
+            case "doc":
+            case "docx":
+            case "xls":
+            case "xlsx":
+            case "ppt":
+            case "pptx":
+            case "pps":
+            case "rtf":
+                <iframe src="https://drive.google.com/viewerng/viewer?embedded=true&chrome=false&url=@BaseUrl.GetBaseUrl()/dms/docs/get/@Model.Id" frameborder="0" style="width:100%; height:580px"></iframe>
+                break;
+            case "mp3":
+            case "ogg":
+            case "wav":
+                <div style='margin-top:150px' class='help-block text-center'><i class='fa fa-file-audio-o fa-5x'></i><br><br><br><audio controls autoplay><source src='@BaseUrl.GetBaseUrl()/dms/get/@Model.Id'></audio></div>
+                break;
+            case "mp4":
+            case "3gp":
+            case "flv":
+            case "webm":
+                <div style="height:510px;width:868px;margin:10px auto"><a href='@BaseUrl.GetBaseUrl()/dms/docs/get/@Model.Id' id='dmsPlayer' style="width:100%;height:510px"></a></div>
+                @Scripts.Render("~/bundles/jquery")
+                <script src="~/Scripts/flowplayer/flowplayer-3.2.13.min.js"></script>
+                <script>
+                    $f("dmsPlayer", {
+                        src: "/Scripts/flowplayer/flowplayer-3.2.18.swf",
+                        wmode: "transparent"
+                    });
+                </script>
+                break;
+            default:
+                <div class="text-center">
+                    <div style='margin-top:150px' class='help-block'><span class='fa fa-frown-o fa-5x'></span><p>No preview available.</p><a href="/dms/download/@Model.Id" class='btn btn-primary btn-lg'><span class='fa fa-download'></span> Download</a></div>
+                </div>
+                break;
+        }
+    }
+    else
+    {
+        <div class="text-center">
+            <div style='margin-top:150px' class='help-block'><span class='fa fa-frown-o fa-5x'></span><h4>Oopss! File not found.</h4><br /><a href="@BaseUrl.GetBaseUrl()" class='btn btn-primary btn-lg'><span class='fa fa-backward'></span> Go Back</a></div>
+        </div>
+    }
+</body>
+</html>

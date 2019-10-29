@@ -1,0 +1,77 @@
+﻿@model List<BaseApp.Entity.AppMessage>
+
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Messages" data-placement="bottom">
+    <i class="fa fa-envelope" style="font-size:21px;"></i>
+    @if (Model.Where(x => x.IsRead == false).Count() > 0)
+    {
+        <span class="badge">@Model.Where(x => x.IsRead == false).Count()</span>
+    }
+</a>
+<div class="dropdown-menu no-padding">
+    <div class="row no-margin no-padding well well-sm">
+        <div class="col-xs-3 no-padding text-center">
+            <a href="~/Secure/MessageCenter/New" class="btn btn-link no-underline">
+                <i class="fa fa-2x fa-edit"></i>
+                <br />
+                New
+            </a>
+        </div>
+        <div class="col-xs-3 no-padding text-center">
+            <a href="~/Secure/MessageCenter" class="btn btn-link no-underline">
+                <i class="fa fa-2x fa-envelope"></i>
+                <br />
+                Inbox
+            </a>
+        </div>
+        <div class="col-xs-3 no-padding text-center">
+            <a href="~/Secure/MessageCenter/Outbox" class="btn btn-link no-underline">
+                <i class="fa fa-2x fa-send"></i>
+                <br />
+                Outbox
+            </a>
+        </div>
+        <div class="col-xs-3 no-padding text-center">
+            <a href="~/Secure/MessageCenter/Draft" class="btn btn-link no-underline">
+                <i class="fa fa-2x fa-inbox"></i>
+                <br />
+                Draft
+            </a>
+        </div>
+    </div>
+    <div class="form-Modal">
+        <div class="modal-content">
+            <div class="modal-header sm-padding">
+                <h6 class="modal-title text-center">You have <strong> @(Model.Where(x => x.IsRead == false).Count() > 0 ? Model.Where(x => x.IsRead == false).Count() : 0)</strong> unread messages</h6>
+            </div>
+            <div class="list-group no-margin" style="max-height:240px; overflow-y:auto;">
+                @if (Model.Count() > 0)
+                {
+                    foreach (var x in Model)
+                    {
+                        <a href="~/Secure/MessageCenter/Thread/@(x.ParentId.HasValue ? x.ParentId.Value : x.Id)" data-id="@x.Id" class="list-group-item @(!x.IsRead ? "list-group-item-warning" : "") no-radius message-item sm-padding">
+                            <span class="badge no-radius">@x.CreatedOn.GetTimeSpan()</span>
+                            <div class="row no-margin">
+                                <div class="col-xs-2 no-padding text-center">
+                                    <img class="img-responsive img-circle" src="~/Content/Uploads/Dp/@(x.CreatorId).jpg" onerror="this.onerror = null; this.src = '/Content/Images/user.png';" style="height:64px; width:64px;" />
+                                </div>
+                                <div class="col-xs-10">
+                                    <h6 class="no-margin" style="height:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:130px;">@(x.CreatorId.HasValue ? x.Creator.FullName : x.CreatorEmail)</h6>
+                                    <p class="no-margin" style="font-size:11px; line-height:12px; margin-top:5px; height:27px; overflow:hidden; text-overflow:ellipsis;">@(x.ParentId.HasValue ? x.Parent.Subject : "")</p>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                }
+                else
+                {
+                    <small class="list-group-item sm-padding text-center">No new message found</small>
+                }
+            </div>
+            @*<div class="modal-footer no-padding">
+                <div class="well well-sm no-margin no-padding text-center">
+                    <a href="~/Secure/MessageCenter/New" class="btn btn-link btn-sm fullWidth"><i class="fa fa-plus"></i> Create new message</a>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>

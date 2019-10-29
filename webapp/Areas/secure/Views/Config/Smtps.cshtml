@@ -1,0 +1,77 @@
+﻿@model List<BaseApp.Entity.AppSMTP>
+@{
+    ViewBag.Title = "All SMTP Controls";
+    var modules = ViewBag.Modules as IList<BaseApp.Entity.AppModuleSMTP>;
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleSmtps")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/Secure/Config/Smtp" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New Control</a>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table id="config-Smtp-dataTable" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Name" id="dataTable_0" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_1" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Username" id="dataTable_2" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Used For" id="dataTable_3" /></th>
+                            <th width="100px" class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td><input type="checkbox" class="checkIt" value="@x.Id" /></td>
+                                <td>@x.ThirdParty</td>
+                                <td>@x.Title</td>
+                                <td>@x.DefaultUsername</td>
+                                <td>
+                                    @foreach (var item in modules.Where(y => y.SMTPId == x.Id).ToList())
+                                    {
+                                        <span class="label label-warning">@item.ModuleId</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <a href="~/Secure/Config/Smtp/@x.Id" class="btn btn-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                        <a href="javascript://" data-id="@x.Id" class="btn btn-primary btnModuleConfigure" title="Configure for Modules"><i class="fa fa-gear"></i></a>
+                                        <a href="javascript://" onclick="deleteRecord('@Url.Action("DeleteSmtp")', '@x.Id')" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleSmtps")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/Secure/Config/Smtp" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New Control</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="configure-Modal" tabindex="-1" role="dialog" aria-labelledby="configure-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#config-Smtp-dataTable", [1, 2, 3], [0, 4]);
+            //getSmtpControls("#config-Smtp-dataTable");
+        });
+    </script>
+}

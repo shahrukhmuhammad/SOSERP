@@ -1,0 +1,22 @@
+﻿.advance-search-box{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-height:200px;
+    z-index: 1000;
+    float: left;
+    padding: 5px 0;
+    margin: 2px 0 35px;
+    list-style: none;
+    font-size: 14px;
+    text-align: left;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border: 1px solid #e7e7e7;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;    left: auto;
+    right: 0; width: 100%;
+}

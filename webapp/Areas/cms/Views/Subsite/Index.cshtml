@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "All Subsites";
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiplePages")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/CMS/Subsite/Record" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Subsite</a>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table id="cms-Subsite-dataTable" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Name" id="cms-Subsite-dataTable_0" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Url Path" id="cms-Subsite-dataTable_1" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Status" id="cms-Subsite-dataTable_2" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Updated" id="cms-Subsite-dataTable_3" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Created" id="cms-Subsite-dataTable_4" /></th>
+                            <th class="text-center" width="100px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiplePages")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                <a href="~/CMS/Subsite/Record" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Subsite</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#cms-Subsite-dataTable", [1, 2, 3, 4, 5], [0, 6]);
+        });
+    </script>
+}

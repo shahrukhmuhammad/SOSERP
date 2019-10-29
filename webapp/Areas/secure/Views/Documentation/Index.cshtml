@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "Documentation";
+}
+@section styles{
+<link href="~/Content/materialDesignSwitch.css" rel="stylesheet" />
+@if (Request.Browser.IsMobileDevice)
+    {
+    @Styles.Render("~/Content/SummerNote")
+}
+else
+{
+    <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+}
+
+<style>
+    .top-padding {
+        padding-top: 10px !important;
+    }
+</style>
+    
+
+}
+
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                @ViewBag.Title
+                <span class="pull-right" style="font-size:16px">
+                    <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()" title="Cancel / Back"><i class="fa fa-close fa-2x"></i></a>
+                </span>
+            </h4>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="/Integration/PaymentGateway" />
+            <div class="row top-padding">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>General Documentation</label>
+                        <textarea id="Message" name="Message"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="pull-right" style="font-size:16px">
+                <a href="javascript://" style="margin:0 10px;" onclick="window.history.back()" title="Cancel / Back"><i class="fa fa-close fa-2x"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+            $(function () {
+                $("#Message").summernote({ height: 200 });
+            });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('Message');
+            });
+        </script>
+    }
+}

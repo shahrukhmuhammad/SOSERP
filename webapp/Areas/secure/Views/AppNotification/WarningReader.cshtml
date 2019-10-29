@@ -1,0 +1,40 @@
+﻿@model List<BaseApp.Entity.AppNotification>
+
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Warnings" data-placement="bottom">
+    <i class="fa fa-warning"></i>
+    @if (Model.Where(x => x.IsRead == false).Count() > 0)
+    {
+        <span class="badge" style="background-color:#ff0000;">@Model.Where(x => x.IsRead == false).Count()</span>
+    }
+</a>
+<div class="dropdown-menu no-padding">
+    <div class="form-Modal">
+        <div class="modal-content">
+            <div class="modal-header sm-padding">
+                <a href="~/Secure/AppNotification/Index/Warning"><h6 class="modal-title">Warnings</h6></a>
+            </div>
+            <div class="list-group no-margin" style="max-height:240px; overflow-y:auto;">
+                @if (Model.Count() > 0)
+                {
+                    foreach (var x in Model)
+                    {
+                        <a href="~/Secure/AppNotification/Details/@x.Id" data-id="@x.Id" class="list-group-item @(!x.IsRead ? "list-group-item-warning" : "") no-radius notification-item sm-padding">
+                            <span class="label label-danger no-radius">@x.CreatedOn.GetTimeSpan()</span>
+                            <h6 class="list-group-item-heading" style="font-size:13px;">@x.Title</h6>
+                            @*<small style="font-size:9px;">@Html.Raw(x.Description)</small>*@
+                        </a>
+                    }
+                }
+                else
+                {
+                    <small class="list-group-item sm-padding text-center">No record found</small>
+                }
+            </div>
+            <div class="modal-footer no-padding">
+                <div class="well well-sm no-margin no-padding text-center">
+                    <a href="~/Secure/AppNotification/Index/Warning" class="btn btn-link btn-sm fullWidth">See all warnings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+﻿
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-pills">
+            <li><a href="javascript://" onclick="FilterBy('')" class="btn btn-default" style="padding:4px 15px;"> <i class="fa fa-hdd-o"></i> &nbsp; &nbsp; All</a></li>
+            <li><a href="javascript://" onclick="FilterBy('In Process')" class="btn btn-default" style="padding:4px 15px;"> <i class="fa fa-play"></i> &nbsp; &nbsp; Ongoing</a></li>
+            <li><a href="javascript://" onclick="FilterBy('Observing')" class="btn btn-default" style="padding:4px 15px;"> <i class="fa fa-object-group"></i> &nbsp; &nbsp; Observing</a></li>
+            <li><a href="javascript://" onclick="FilterBy('Following')" class="btn btn-default" style="padding:4px 15px;"> <i class="fa fa-eye"></i> &nbsp; &nbsp; Following</a></li>
+            <li><a href="javascript://" onclick="FilterBy('Favorite')" class="btn btn-default" style="padding:4px 15px;"> <i class="fa fa-star"></i> &nbsp; &nbsp; Favorite</a></li>
+            <li><a href="javascript://" class="btn btn-default" style="padding:4px 15px;"> <i class="fa fa-adjust"></i> &nbsp; &nbsp; Invited</a></li>
+            <li><a href="javascript://" class="btn btn-default" style="padding:4px 15px;"> <i class="fa fa-user"></i> Set by me</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="table-responsive" style="margin-top:15px;">
+    <table id="tasks-dataTable" style="font-size:13px;" class="table table-hover table-striped table-condensed">
+        <thead>
+            <tr>
+                <th rowspan="2" style="vertical-align:middle"><input type="checkbox" onchange="checkAll(this, 'checkIt');" /></th>
+                <th rowspan="2" style="vertical-align:middle"><input class="form-control input-sm input-tbl" style="font-size:10px; width:15px;" type="text" placeholder="ID" id="tasks-dataTable_0" /></th>
+                <th rowspan="2" style="vertical-align:middle"><input class="form-control input-sm input-tbl" style="font-size:10px; width:38px;" type="text" placeholder="Priority" id="tasks-dataTable_1" /></th>
+                <th rowspan="2" style="vertical-align:middle"><input class="form-control input-sm input-tbl" style="font-size:10px; width:35px;" type="text" placeholder="Client" id="tasks-dataTable_2" /></th>
+                <th rowspan="2" style="vertical-align:middle"><input class="form-control input-sm input-tbl" style="font-size:10px; width:92px;" type="text" placeholder="Title" id="tasks-dataTable_3" /></th>
+                <th rowspan="2" style="vertical-align:middle"><input class="form-control input-sm input-tbl" style="font-size:10px; width:45px;" type="text" placeholder="Project" id="tasks-dataTable_4" /></th>
+                @*<th rowspan="2" style="vertical-align:middle"><input class="form-control input-sm input-tbl" style="font-size:10px; width:55px;" type="text" placeholder="Created By" id="tasks-dataTable_4" /></th>*@
+                <th rowspan="2" style="vertical-align:middle"><input class="form-control input-sm input-tbl" style="font-size:10px; width:55px;" type="text" placeholder="Assigned To" id="tasks-dataTable_5" /></th>
+                <th rowspan="2" style="vertical-align:middle"><input class="form-control input-sm input-tbl" style="font-size:10px; width:55px;" type="text" placeholder="Managed By" id="tasks-dataTable_6" /></th>
+                <th colspan="2" align="center"><input class="form-control input-sm input-tbl" style="font-size:10px; width:75px; margin: 0 auto;" type="text" placeholder="Time Tracking" id="" /></th>
+                <th rowspan="2" style="vertical-align:middle"><input class="form-control input-sm input-tbl" style="font-size:10px; width:35px;" type="text" placeholder="Status" id="tasks-dataTable_9" /></th>
+                <th rowspan="2" style="vertical-align:middle"><input class="form-control input-sm input-tbl" style="font-size:10px; width:55px;" type="text" placeholder="Due Date" id="tasks-dataTable_10" /></th>
+                <th rowspan="2" class="text-center" style="font-size:10px; vertical-align: middle; vertical-align:middle;" width="30px">Action</th>
+            </tr>
+            <tr>
+                <th><input class="form-control input-sm input-tbl" style="font-size:10px; width:40px;" type="text" placeholder="Planned" id="tasks-dataTable_7" /></th>
+                <th><input class="form-control input-sm input-tbl" style="font-size:10px; width:40px;" type="text" placeholder="Actual" id="tasks-dataTable_8" /></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < 3; i++)
+            {
+                <tr style="font-size:11px;">
+                    <td><input type="checkbox" class="checkIt" value="@i" /></td>
+                    <td>@i</td>
+                    <td>
+                        <span class="fa fa-tint fa-2x" style="color:#ff0000"></span>
+                    </td>
+                    <td>sdfs sdfsd</td>
+                    <td>asd @i</td>
+                    <td>Xyz @i</td>
+                    @*<td>Admin @i</td>*@
+                    <td>Hamza @i</td>
+                    <td>Mocking @i</td>
+                    <td>@i/11/2016</td>
+                    <td>@i/12/2016</td>
+                    <td>In Process</td>
+                    <td>12/08/2016 <br /> <span class="text-danger"> <strong>Overdue by <br /> 10 days</strong></span> <br /> <span class="text-success"> <strong>Due in <br /> 10 days</strong></span> <br /> <span class="text-warning"> <strong> Due today </strong></span> </td>
+                    <td class="text-center" width="40px">
+                        <a href="~/Secure/TaskManagement/TaskDetails/@i" class="task-details" title="view details" data-backdrop="" style="text-decoration:none; font-size:12px;">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                        <a href="javascript://" class="change-status" title="Task Updater" style="text-decoration:none; color:#e8d229; font-size:12px;">
+                            <i class="fa fa-anchor"></i>
+                        </a>
+                        <a href="javascript://" class="" title="delete" data-backdrop="" style="text-decoration:none; color:#ff0000; font-size:12px;">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

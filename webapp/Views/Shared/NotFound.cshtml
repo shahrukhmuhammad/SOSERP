@@ -1,0 +1,33 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page not found</title>
+    @Styles.Render("~/Content/Cms")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="container">
+    <div class="page-header">
+        <h1><i class="fa fa-warning"></i> <strong>404</strong> <small>Page not found.</small></h1>
+    </div>
+    <h2>We're Sorry!</h2>
+    <blockquote class="bg-danger">
+        <p class="text-danger">
+            The <strong>"@Request["path"]"</strong> you are looking for is currently not available. This could be caused by out of date links, a typing error, or moving, renaming, or deleting a file. We have informed our webmaster of this problem.
+        </p>
+    </blockquote>
+    <blockquote class="bg-info">
+        <p class="text-info">
+            <strong>Please try the following:</strong>
+            <small class="text-info">Check the page address in the Address Bar for typing errors</small>
+            <small class="text-info">Go back to the <a href="javascript:history.back(1)">Previous Page</a></small>
+            <small class="text-info">Go back to the <a href="~/">Home Page</a></small>
+        </p>
+    </blockquote>
+</body>
+</html>

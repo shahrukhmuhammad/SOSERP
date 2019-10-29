@@ -1,0 +1,55 @@
+﻿@model HandleErrorInfo
+@{ Layout = null; }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Error</title>
+    @Styles.Render("~/Content/Cms")
+</head>
+<body class="container">
+    @if (Model.Exception.Message == "Forbidden")
+    {
+        <blockquote class="bg-info">
+            <p class="text-info">
+                <strong>You are not authorized to access this area of the system.</strong>
+                <small class="text-info"><a href="javascript://" onclick="window.history.back()">Go to previous page</a></small>
+                <small class="text-info"><a href="~/">Go to Dashboard</a></small>
+            </p>
+        </blockquote>
+    }
+    else
+    {
+        <blockquote class="bg-info">
+            <p class="text-info">
+                <strong>An unexpected error has occurred while processing your request.</strong>
+                <small class="text-info">We have informed our webmaster of this problem.</small>
+                <small class="text-info">Sorry for the inconvenience!</small>
+            </p>
+        </blockquote>
+    }
+    <blockquote class="bg-danger">
+        <section>
+            <strong><i class="fa fa-bug text-danger"></i> <span class="text-danger">@Model.Exception.Message</span></strong>
+            <small class="text-danger">@Model.Exception.GetType()</small>
+            @if (Model.Exception.InnerException != null)
+            {
+                <small class="text-danger">@Model.Exception.InnerException.GetType() @Model.Exception.InnerException.Message</small>
+            }
+            @if (HttpContext.Current.IsDebuggingEnabled)
+            {
+                <small class="text-danger">Controller: @Model.ControllerName</small>
+                <small class="text-danger">Action: @Model.ActionName</small>
+            }
+        </section>
+    </blockquote>
+
+    @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+    {
+        <pre class="bg-info">
+            @Model.Exception.StackTrace
+        </pre>
+    }
+</body>
+</html>

@@ -1,0 +1,219 @@
+﻿@model BaseApp.Entity.AppModuleSMTP
+@{
+    var smtpmodules = ViewBag.SMTPModules as IList<BaseApp.Entity.AppModuleSMTP>;
+    smtpmodules.Where(y => y.SMTPId == Model.SMTPId);
+    //@((smtpmodules.Where(x => x.ModuleId == c.Id).Count() > 0) ? "checked")
+    //var Src = (Model.ShippingCompanyId != 0 ? "../../../Content/Uploads/Ecommerce/sc_" + Model.ShippingCompanyId + ".jpg" : "");
+}
+
+<style>
+        .checkbox label:after,
+    .radio label:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+
+    .checkbox .cr,
+    .radio .cr {
+        position: relative;
+        display: inline-block;
+        border: 1px solid #a9a9a9;
+        border-radius: .25em;
+        width: 1.3em;
+        height: 1.3em;
+        float: left;
+        margin-right: .5em;
+    }
+
+    .radio .cr {
+        border-radius: 50%;
+    }
+
+    .checkbox .cr .cr-icon,
+    .radio .cr .cr-icon {
+        position: absolute;
+        font-size: .8em;
+        line-height: 0;
+        top: 50%;
+        left: 20%;
+    }
+
+    .radio .cr .cr-icon {
+        margin-left: 0.04em;
+    }
+
+    .checkbox label input[type="checkbox"],
+    .radio label input[type="radio"] {
+        display: none;
+    }
+
+    .checkbox label input[type="checkbox"] + .cr > .cr-icon,
+    .radio label input[type="radio"] + .cr > .cr-icon {
+        transform: scale(3) rotateZ(-20deg);
+        opacity: 0;
+        transition: all .3s ease-in;
+    }
+
+    .checkbox label input[type="checkbox"]:checked + .cr > .cr-icon,
+    .radio label input[type="radio"]:checked + .cr > .cr-icon {
+        transform: scale(1) rotateZ(0deg);
+        opacity: 1;
+    }
+
+    .checkbox label input[type="checkbox"]:disabled + .cr,
+    .radio label input[type="radio"]:disabled + .cr {
+        opacity: .5;
+    }
+
+</style>
+
+<form id="frm" class="form-Modal" method="post" action="">
+    <div class="modal-content">
+        <input type="hidden" id="moduleId" name="moduleId" value="@Model.Id" />
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Configure For Modules</h4>
+        </div>
+        <div class="modal-body" id="popup">
+            <div class="row form-group">
+                <div class="checkbox">
+                    <label style="font-size: 1em">
+                        <input type="checkbox" onchange="checkAllbox(this, 'checkthis')">
+                        <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                        Use for all <a href="javascript://" title="After Checking Use for all, this SMTP setting will used for all modules "> <i class="fa fa-info-circle"></i></a>
+                    </label>
+                </div>
+            </div>
+            <div class="moduleDiv">
+                @foreach (var c in ViewBag.ModulesList as IList<BaseApp.Entity.AppModule>)
+                    {
+                        if (c.Status)
+                        {
+                        <div class="checkbox">
+                            <label style="font-size: 1em">
+                                <input type="checkbox" value="@c.Id" class="checkthis">
+                                <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                                @c.Title
+                            </label>
+                        </div>
+                    }
+                }
+            </div>
+
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                <a href="javascript://" class="btn btn-sm btn-primary" onclick="deleteMultipleRecords('@Url.Action("SaveModulesSettings")', '.checkthis')"> Save Settings</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@*<script src="~/Scripts/BaseApp.js"></script>*@
+<script>
+    
+    //--- Enabling checkbox to post their data
+    $('input:checkbox').click(function () {
+        var getAttr = $(this).attr('value');
+        if (getAttr == 'false') {
+            $(this).attr('checked', true);
+            $(this).attr('value', true);
+        }
+        if (getAttr == 'true') {
+            $(this).removeAttr('checked');
+            $(this).attr('value', false);
+        }
+    });
+    //--- 
+
+    //--- Check All Checkboxes
+    function checkAllbox(e, checkboxClass) {
+        var checkboxes = document.getElementsByClassName(checkboxClass);
+        if (e.checked) {
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox' && checkboxes[i].style.display != 'none') {
+                    checkboxes[i].checked = true;
+                    $(checkboxes[i]).attr('checked', true);
+                }
+            }
+        } else {
+            for (var i = 0; i < checkboxes.length; i++) {
+                //console.log(i)
+                if (checkboxes[i].type == 'checkbox') {
+                    checkboxes[i].checked = false;
+                    $(checkboxes[i]).removeAttr('checked');
+                }
+            }
+        }
+    };
+    //---
+
+    function deleteMultipleRecords(targetUrl, recordsClass, returnUrl) {
+        var values = [];
+        $(recordsClass + "[type=checkbox]:checked").each(function () {
+            values.push($(this).val());
+        });
+        var moduleId = $('#moduleId').val();
+        if (values.length === 0) {
+            bootbox.dialog({
+                message: "No record selected, please select a record first.",
+                title: "Error",
+                buttons: {
+                    main: {
+                        label: "Close",
+                        className: "btn-default",
+                        callback: function () {
+                            show: false;
+                        }
+                    }
+                }
+            });
+        }
+        else {
+            bootbox.dialog({
+                message: "Are you sure you want to Apply selected SMTP settings for these module(s) ?",
+                title: "SMTP Settings",
+                buttons: {
+                    main: {
+                        label: "Cancel",
+                        className: "btn-default",
+                        callback: function () {
+                            show: false;
+                        }
+                    },
+                    danger: {
+                        label: "Apply",
+                        className: "btn-warning",
+                        callback: function () {
+                            $.ajax({
+                                url: targetUrl,
+                                data: { ids: values.join(), Id : moduleId },
+                                type: 'POST'
+                            }).always(function () {
+                                if (returnUrl == null) {
+                                    window.location.reload(true);
+                                }
+                                else {
+                                    window.location.replace(returnUrl);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+    };
+
+    //$("#cbx_default").click(function (e) {
+    //    if ($('#cbx_default').is(":checked")) {
+    //        //$('.moduleDiv').find('input:checkbox').not(this).prop('checked');
+    //        $('.moduleDiv').find("input:checkbox").prop('checked', $(this).prop("checked"));
+    //        //$('.moduleDiv').find('input:checkbox').attr('disabled', 'disabled');
+    //    }
+    //    else {
+    //        $("input:checkbox").removeAttr('checked');
+    //    }
+    //});
+</script>

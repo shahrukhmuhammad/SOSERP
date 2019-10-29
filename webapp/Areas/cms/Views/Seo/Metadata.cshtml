@@ -1,0 +1,337 @@
+﻿@model List<CMS.Entity.CmsSeoMetadata>
+@{
+    ViewBag.Title = "Metadata";
+}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs nav-justified custom-Nav-Tabs" role="tablist">
+    <li role="presentation" class="first-child active"><a href="~/CMS/Seo/Metadata"><i class="fa fa-search"></i> General</a></li>
+    <li role="presentation"><a href="~/CMS/Seo/Keyword"><i class="fa fa-key"></i> Keywords Management</a></li>
+    <li role="presentation"><a href="~/CMS/Seo/Sitemap"><i class="fa fa-sitemap"></i> Sitemap</a></li>
+    <li role="presentation" class="last-child"><a href="~/CMS/Seo/UrlMetadata"><i class="fa fa-link"></i> Page Optimization</a></li>
+</ul>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4 class="panel-title">Robots</h4>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Robots.txt</h4>
+                            </div>
+                            <table class="table table-condensed table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Permission</th>
+                                        <th>Robot</th>
+                                        <th>Files or Directories</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="active">
+                                        <td>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox"> Disallow
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox"> Allow
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <select class="form-control input-sm">
+                                                <option value="*" selected="selected">All</option>
+                                                <option value="Googlebot">Googlebot</option>
+                                                <option value="Googlebot-Mobile">Googlebot-Mobile</option>
+                                                <option value="Googlebot-Image">Googlebot-Image</option>
+                                                <option value="Mediapartners-Google">Mediapartners-Google</option>
+                                                <option value="Adsbot-Google">Adsbot-Google</option>
+                                                <option value="Slurp">Slurp (Yahoo!)</option>
+                                                <option value="msnbot">msnbot</option>
+                                                <option value="msnbot-media">msnbot-media</option>
+                                                <option value="Teoma">Teoma</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <div class="form-group no-margin">
+                                                <div class="input-group input-group-sm">
+                                                    <input type="text" class="form-control">
+                                                    <div class="input-group-btn"><button class="btn btn-default" type="button"><i class="fa fa-plus-circle"></i> Add</button></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="well well-sm bg-transparent" style="height:230px; overflow-y:scroll; margin:0;">
+
+                            </div>
+                            <table class="table table-condensed table-hover">
+                                <thead>
+                                    <tr class="active">
+                                        <th>Permission</th>
+                                        <th>Robot</th>
+                                        <th>Files or Directories</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" value="true" checked> Disallow
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox"> Allow
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <select class="form-control input-sm">
+                                                <option value="*" selected="selected">All</option>
+                                                <option value="Googlebot">Googlebot</option>
+                                                <option value="Googlebot-Mobile">Googlebot-Mobile</option>
+                                                <option value="Googlebot-Image">Googlebot-Image</option>
+                                                <option value="Mediapartners-Google">Mediapartners-Google</option>
+                                                <option value="Adsbot-Google">Adsbot-Google</option>
+                                                <option value="Slurp">Slurp (Yahoo!)</option>
+                                                <option value="msnbot">msnbot</option>
+                                                <option value="msnbot-media">msnbot-media</option>
+                                                <option value="Teoma">Teoma</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <div class="form-group no-margin">
+                                                <div class="input-group input-group-sm">
+                                                    <input type="text" class="form-control">
+                                                    <div class="input-group-btn"><button class="btn btn-danger" type="button"><i class="fa fa-times"></i> Delete</button></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Submit Robots</h4>
+                            </div>
+                            <ul class="list-group" style="height: 362px;overflow: hidden;">
+                                <li class="list-group-item">GOOGLE</li>
+                                <li class="list-group-item">BING</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-7">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h4 class="panel-title">Metadata</h4>
+                <div class="btn-group btn-group-xs" role="group">
+                    <a href="javascript://" class="btn btn-info"><i class="fa fa-plus"></i> Add New</a>
+                </div>
+            </div>
+            <div class="table-responsive" style="height:300px; overflow-y:scroll;">
+                <table class="table table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th width="100px">Title</th>
+                            <th>Metadata</th>
+                            <th width="100px">Pages Allowed</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td style="vertical-align:middle;">@x.Title</td>
+                                <td>@x.Metadata</td>
+                                <td style="vertical-align:middle;" class="text-center"><label class="label label-@(x.AllPages ? "success" : "warning")">@(x.AllPages ? "Yes" : "No")</label></td>
+                                <td style="vertical-align:middle;" class="text-center">
+                                    <a href="javascript://" class="btn btn-xs btn-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-5">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h4 class="panel-title">Tags</h4>
+                <div class="btn-group btn-group-xs" role="group">
+                    <a href="javascript://" class="btn btn-warning"><i class="fa fa-plus"></i> Add New</a>
+                </div>
+            </div>
+            <div class="table-responsive" style="height:300px; overflow-y:scroll;">
+                <table class="table table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th width="100px">Tag</th>
+                            <th width="100px">Pages Allowed</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td style="vertical-align:middle;">@x.Title</td>
+                                <td style="vertical-align:middle;" class="text-center"><label class="label label-@(x.AllPages ? "success" : "warning")">@(x.AllPages ? "Yes" : "No")</label></td>
+                                <td style="vertical-align:middle;" class="text-center">
+                                    <a href="javascript://" class="btn btn-xs btn-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hidden">
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            @TempData["SuccessMsg"]
+        </div>
+    }
+
+    @if (TempData["ErrorMsg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Error!</strong>
+            @TempData["ErrorMsg"]
+        </div>
+    }
+
+    <form id="frm" method="post" class="form-Modal">
+        @Html.AntiForgeryToken()
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@ViewBag.Title</h4>
+                <div class="btn-group btn-group-xs" role="group">
+                    <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                    <a href="javascript://" class="btn btn-primary metadata-AddNewRow"><i class="fa fa-plus"></i> Add New</a>
+                    <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th width="200px">Title</th>
+                            <th>Metadata</th>
+                            <th width="90px">On All Pages</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td style="vertical-align:middle;">@x.Title</td>
+                                <td>@x.Metadata</td>
+                                <td style="vertical-align:middle;"><label class="label label-@(x.AllPages ? "success" : "warning")">@(x.AllPages ? "Yes" : "No")</label></td>
+                                <td style="vertical-align:middle;">
+                                    <a href="javascript://" class="btn btn-xs btn-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-condensed table-hover" id="metadata-Table">
+                        <thead>
+                            <tr>
+                                <th>Metadata</th>
+                                <th class="text-center" width="130px">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Count() > 0)
+                            {
+                                var iHiddenIndex = 0;
+                                foreach (var x in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input class="iHidden" type="hidden" value="@iHiddenIndex">
+                                            <input type="text" class="form-control input-sm" placeholder="Title" name="[@iHiddenIndex].Title" value="@x.Title" required autofocus />
+                                            <textarea type="text" class="form-control input-sm" placeholder="Metadata" rows="3" name="[@iHiddenIndex].Metadata" required>@x.Metadata</textarea>
+                                        </td>
+                                        <td class="text-center">
+                                            <label><input type="checkbox" name="[@iHiddenIndex].AllPages" value="@(x.AllPages ? "true" : "false")" @(x.AllPages ? "checked" : "")> Apply to All Pages</label>
+                                            <br />
+                                            <a href="javascript://" class="btn btn-danger btn-xs remCF"><span class="fa fa-trash-o"></span> Delete</a>
+                                        </td>
+                                    </tr>
+                                    iHiddenIndex++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>
+                                        <input class="iHidden" type="hidden" value="0">
+                                        <input type="text" class="form-control input-sm" placeholder="Title" name="[0].Title" required autofocus />
+                                        <textarea type="text" class="form-control input-sm" placeholder="Metadata" rows="3" name="[0].Metadata" required></textarea>
+                                    </td>
+                                    <td class="text-center">
+                                        <label><input type="checkbox" name="[0].AllPages" value="false"> Apply to All Pages</label>
+                                        <br />
+                                        <a href="javascript://" class="btn btn-danger btn-xs remCF"><span class="fa fa-trash-o"></span> Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer text-right">
+                <div class="btn-group btn-group-sm" role="group">
+                    <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                    <a href="javascript://" class="btn btn-primary metadata-AddNewRow"><i class="fa fa-plus"></i> Add New</a>
+                    <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section scripts{
+    <script>
+        $(function () {
+            //--- Certificates
+            $(".metadata-AddNewRow").click(function () {
+                var itemIndex = $("#metadata-Table input.iHidden").length;
+                var markup = '<tr>';
+                markup += '<td><input class="iHidden" type="hidden" value="' + itemIndex + '"><input type="text" class="form-control input-sm" placeholder="Title" name="[' + itemIndex + '].Title" required autofocus /><textarea type="text" class="form-control input-sm" placeholder="Metadata" rows="3" name="[' + itemIndex + '].Metadata" required></textarea></td>';
+                markup += '<td class="text-center"><label><input type="checkbox" name="[' + itemIndex + '].AllPages" value="false"> Apply to All Pages</label><br /><a href="javascript://" class="btn btn-danger btn-xs remCF"><span class="fa fa-trash-o"></span> Delete</a></td>';
+                markup += '</tr>';
+                $("#metadata-Table tbody").append(markup);
+            });
+            $("#metadata-Table").on('click', '.remCF', function () {
+                $(this).parent().parent().remove();
+            });
+            //---
+        });
+    </script>
+}

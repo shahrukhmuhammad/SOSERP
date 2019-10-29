@@ -1,0 +1,19 @@
+﻿
+For Migrations:
+1) Enable-Migrations
+
+Code First Approch Commands
+For New Database Creation =>
+In Visual Studio, open NuGet Package Manager Console from Tools > NuGet Package Manager >Package Manager Console and enter the following command:
+1 PM> add-migration CompanyDB
+
+Now create the database by executing the update-database command on the Package Manager Console:
+2 PM> update-database –verbose
+3) update-database -target refModelAdded
+
+For Database Updation =>
+1) add-migration addedCreatedOn (addedCreatedOn just a name)
+2) update-database -target addedCreatedOn (addedCreatedOn just a name)
+
+for Delete migrations
+dotnet ef migrations remove

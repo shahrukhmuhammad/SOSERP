@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "All Documents";
+}
+@section styles{
+    <link href="~/Content/DMS/dms.css" rel="stylesheet" />
+}
+
+@if (CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewDMS, BaseApp.Entity.AppPermission.DMS))
+{
+    <div>@Html.Action("RenderDms", "Docs", new { path = "/dms/", viewMode = "grid", area = "DMS" })</div>
+}
+
+
+@section scripts{
+    <script src="~/Scripts/flowplayer/flowplayer-3.2.13.min.js"></script>
+    <script src="~/Scripts/DMS/dms.js"></script>
+}

@@ -1,0 +1,391 @@
+﻿
+@{
+    ViewBag.Title = "CMS";
+    var cms = AppModule.GetById("CMS");
+}
+
+@section styles{
+    @if (Request.Browser.IsMobileDevice)
+        {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+    <style>
+        ul.stage-Nav > li.list-group > a.list-group-item::after {
+            left: 93%;
+        }
+        .cke_textarea_inline .container{
+            width:965px;
+        }
+    </style>
+}
+
+<ul class="nav nav-tabs nav-justified stage-Nav">
+    <li class="list-group">
+        <a id="carousel-Step1" href="javascript://" class="list-group-item active">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">1. Configurations</h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step2" href="javascript://" class="list-group-item">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">
+                2. Settings
+            </h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step3" href="javascript://" class="list-group-item last">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">3. Review</h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+</ul>
+
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> @TempData["ErrorMsg"]
+    </div>
+}
+
+<div id="div-Carousel" class="carousel slide" data-ride="carousel" data-interval="false">
+    <form id="frm" class="carousel-inner" role="listbox" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="/Secure/Setting/CMS" />
+        <div class="item @(Request["tab"] == null ? "active" : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Configurations</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="window.history.back()" data-placement="bottom" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                            <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 2);" data-placement="bottom" class="btn btn-success">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="pull-right">
+                                    <input data-id="Model-Status" type="checkbox" class="switch" value="@(cms.Status ? "true" : "false")" @(cms.Status ? "checked" : "") />
+                                    <input id="Model-Status" name="cmsStatus" type="hidden" value="@(cms.Status ? "true" : "false")" />
+                                </span>
+                                <h4 class="list-group-item-heading">Activate / Deactivate Module</h4>
+                                <p class="list-group-item-text">Choose whether this module should be accessable and workable or not.</p>
+                            </li>
+                        </ul>
+
+                        <div class="form-group">
+                            <label>Message to show</label>
+                            <textarea id="Message" name="cmsMessage">@Html.Raw(cms.Message)</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                            <a href="javascript://" class="btn btn-success" onclick="carouselFormValidate(this, '#div-Carousel', 2);">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "loc" ? "active" : "" ) : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">CMS Settings</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 3);" data-placement="bottom" class="btn btn-success review-btn">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+
+                            <!-- Nav tabs -->
+                            @*<ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#website-vitals" aria-controls="website-vitals" role="tab" data-toggle="tab">Vitals</a></li>
+                                    <li role="presentation"><a href="#website-online" aria-controls="website-online" role="tab" data-toggle="tab">Website Online / Offline</a></li>
+                                </ul>*@
+
+                            <!-- Tab panes -->
+                            @*<div class="tab-content">*@
+                            @*<div role="tabpanel" class="tab-pane fade in active" id="website-vitals">*@
+                            @*<div class="modal-body">*@
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Website Logo <a href="javascript://" title="For best experience use PNG format file type for logo."><i class="fa fa-info-circle"></i></a></label>
+                                        <div class="thumbnail text-center">
+                                            <img id="logo-Preview" src="~/Content/Images/logo.png" class="img-responsive img-centre" style="max-height:210px;">
+                                            <div class="caption">
+                                                <input type="file" class="form-control input-sm" id="logo" name="logo" onchange="previewImage(this,'#logo-Preview')" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Website Favicon <a href="javascript://" title="Updated favicon icon can take upto 1 day to show in browser because of browser cache issue."><i class="fa fa-info-circle"></i></a></label>
+                                        <div class="thumbnail text-center">
+                                            <img id="favicon-Preview" src="~/favicon.ico" class="img-responsive img-centre" style="max-height:50px;">
+                                            <div class="caption">
+                                                <input type="file" class="form-control input-sm" id="favicon" name="favicon" onchange="previewImage(this, '#favicon-Preview')" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Website Title</label>
+                                        <input id="website-Title" name="website:Title" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:Title")" required autofocus />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Browser Title</label>
+                                        <input id="website-BrowserTitle" name="website:BrowserTitle" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:BrowserTitle")" required autofocus />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Website Copyright</label>
+                                        <input id="website-Copyright" name="website:Copyright" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:Copyright")" required autofocus />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Contact Email <a href="javascript://" title="This e-mail will be used for receiving e-mails."><i class="fa fa-info-circle"></i></a></label>
+                                        <input id="website-Email" name="website:Email" type="email" class="form-control input-sm" value="@AppSettings.GetVal("website:Email")" required autofocus />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Contact Address Line 1</label>
+                                        <textarea id="website-Address" name="website:Address" class="form-control input-sm" cols="3" required>@AppSettings.GetVal("website:Address")</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-bold">Address Line 2 <a href="javascript://" title="Optional"> <i class="fa fa-info-circle"></i></a></label>
+                                        <input id="website-Address2" name="website:Address2" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:Address2")" autofocus />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-bold">Town/City </label>
+                                        <input id="website-City" name="website:City" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:City")" required autofocus />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-bold">County/State </label>
+                                        <input id="website-County" name="website:County" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:County")" required autofocus />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-bold">Post Code/Zip Code </label>
+                                        <input id="website-PostCode" name="website:PostCode" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:PostCode")" required autofocus />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-bold">Country </label>
+                                        <select id="website-Country" name="website:Country" class="form-control input-sm" required autofocus>
+                                            @foreach (var c in Html.CountriesListWithCode())
+                                            {
+                                                <option value="@c.Value" selected="@(AppSettings.GetVal("website:Country") == c.Value)">@c.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Contact Phone</label>
+                                        <input id="website-Phone" name="website:Phone" type="text" class="form-control input-sm" value="@AppSettings.GetVal("website:Phone")" required autofocus />
+                                    </div>
+                                </div>
+                            </div>
+                            @*</div>*@
+                            @*</div>*@
+                            @*<div role="tabpanel" class="tab-pane fade" id="website-online">*@
+                            @*<div class="modal-body">*@
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label style="margin-right:20px;">Website Status</label>
+                                        <div class="btn-group btn-group-xs" data-toggle="buttons">
+                                            <label id="website-Online" class="btn btn-success @(AppSettings.GetVal<bool>("website:Online") ? "active" : "")">
+                                                <input type="radio" value="True" name="website:Online" checked="@(AppSettings.GetVal<bool>("website:Online"))"> Online
+                                            </label>
+                                            <label id="website-Offline" class="btn btn-danger @(!AppSettings.GetVal<bool>("website:Online") ? "active" : "")">
+                                                <input type="radio" value="False" name="website:Online" checked="@(!AppSettings.GetVal<bool>("website:Online"))"> Offline
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Offline Message</label>
+                                        <textarea id="offlineMessage" name="website:OfflineMessage" class="form-control input-sm" rows="10" required>@AppSettings.GetVal("website:OfflineMessage")</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*</div>*@
+                            @*</div>*@
+                            @*</div>*@
+
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="javascript://" class="btn btn-success review-btn" onclick="carouselFormValidate(this, '#div-Carousel', 3);">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "config" ? "active" : "" ) : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Review your changes</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 3)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                            <button type="submit" class="btn btn-success" data-placement="bottom"><i class="fa fa-check"></i> Submit</button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-striped">
+                                        <tr>
+                                            <th class="text-right">CMS Application Status</th>
+                                            <td>
+                                                <span id="review-Application-On" class="label label-success" hidden>ON</span>
+                                                <span id="review-Application-Off" class="label label-danger" hidden>OFF</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Website Status</th>
+                                            <td>
+                                                <span id="review-Website-Online" class="label label-success" hidden>Online</span>
+                                                <span id="review-Website-Offline" class="label label-danger" hidden>Offline</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Website Title</th>
+                                            <td id="review-Website-Title"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Browser Title</th>
+                                            <td id="review-Website-BrowserTitle"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Website Copyright</th>
+                                            <td id="review-Website-Copyright"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Contact Email</th>
+                                            <td id="review-Website-Email"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Contact Address</th>
+                                            <td id="review-Website-Address"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Contact Phone</th>
+                                            <td id="review-Website-Phone"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-striped">
+                                        <tr>
+                                            <th width="50%" class="text-center">Logo</th>
+                                            <th class="text-center">Favicon</th>
+                                        </tr>
+                                        <tr>
+                                            <td><img id="review-logo-Preview" src="~/Content/Images/logo.png" class="img-responsive img-centre" style="max-height:210px;"></td>
+                                            <td><img id="review-favicon-Preview" src="~/favicon.ico" class="img-responsive img-centre" style="max-height:50px;"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 3)" class="btn btn-default" role="button"><i class="fa fa-chevron-left"></i> Back</a>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+            $(function () {
+                $("#offlineMessage").summernote({ height: 200 });
+                $("#Message").summernote({ height: 200 });
+            });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('offlineMessage');
+                makeAlloyEditor('Message');
+            });
+        </script>
+    }
+    <script>
+        $(function () {
+            $('.review-btn').click(function (e) {
+                previewImage($("#logo")[0], "#review-logo-Preview");
+                previewImage($("#favicon")[0], "#review-favicon-Preview");
+
+
+                if ($("#Model-Status").val() === "true") {
+                    $("#review-Application-On").show();
+                    $("#review-Application-Off").hide();
+                };
+
+                if ($("#Model-Status").val() === "false") {
+                    $("#review-Application-Off").show();
+                    $("#review-Application-On").hide();
+                };
+
+                if ($("#website-Online").hasClass("active")) {
+                    $("#review-Website-Online").show();
+                    $("#review-Website-Offline").hide();
+                };
+
+                if ($("#website-Offline").hasClass("active")) {
+                    $("#review-Website-Offline").show();
+                    $("#review-Website-Online").hide();
+                };
+
+                $("#review-Website-Title").text($("#website-Title").val());
+                $("#review-Website-BrowserTitle").text($("#website-BrowserTitle").val());
+                $("#review-Website-Copyright").text($("#website-Copyright").val());
+                $("#review-Website-Phone").text($("#website-Phone").val());
+                $("#review-Website-Email").text($("#website-Email").val());
+                $("#review-Website-Address").text($("#website-Address,#website-City, #website-County").val());
+                $("#review-Website-Status").text($(".website-status").val());
+            });
+        });
+    </script>
+}

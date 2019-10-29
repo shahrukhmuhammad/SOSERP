@@ -1,0 +1,312 @@
+﻿@model CMS.Entity.CmsPage
+@{
+    ViewBag.Title = "Optimization > /" + Model.Name;
+}
+
+@section styles{
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet" />
+    <link href="~/Content/Bootstrap Typehead/tokenfield-typeahead.css" rel="stylesheet" />
+    <link href="~/Content/Bootstrap Typehead/bootstrap-tokenfield.css" rel="stylesheet" />
+}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs nav-justified custom-Nav-Tabs" role="tablist">
+    <li role="presentation" class="first-child"><a href="~/CMS/Seo/Metadata"><i class="fa fa-search"></i> General</a></li>
+    <li role="presentation"><a href="~/CMS/Seo/Keyword"><i class="fa fa-key"></i> Keywords Management</a></li>
+    <li role="presentation"><a href="~/CMS/Seo/Sitemap"><i class="fa fa-sitemap"></i> Sitemap</a></li>
+    <li role="presentation" class="last-child active"><a href="~/CMS/Seo/UrlMetadata"><i class="fa fa-link"></i> Page Optimization</a></li>
+</ul>
+
+<form id="page-frm" class="form-Modal" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" class="btn btn-primary metadata-AddNewRow"><i class="fa fa-plus"></i> Add New</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div id="score-Gauge"></div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Page Links</h4>
+                                </div>
+                                <div class="list-group" style="height: 120px;overflow-y: scroll;">
+                                    <a href="javascript://" class="list-group-item" style="padding:5px;">Page Internal Links <span class="badge">0</span></a>
+                                    <a href="javascript://" class="list-group-item" style="padding:5px;">Page External Links <span class="badge">0</span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Page Stats</h4>
+                                </div>
+                                <div class="list-group" style="height: 120px;overflow-y: scroll;">
+                                    <a href="javascript://" class="list-group-item" style="padding:5px;">Indexing Status <span class="badge">0</span></a>
+                                    <a href="javascript://" class="list-group-item" style="padding:5px;">Crawl Stats <span class="badge">0</span></a>
+                                    <a href="javascript://" class="list-group-item" style="padding:5px;">Crawl Errors <span class="badge">0</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Url</label>
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-addon">/</div>
+                                    <input type="text" class="form-control input-sm alphanumericNoSpaceMask" id="Slug" name="Slug" value="@Model.Slug" required autofocus @(Model.IsSystem ? "readonly" : "") />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control input-sm" name="Name" value="@Model.Name" required />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Browser Title</label>
+                                <input type="text" class="form-control input-sm" name="BrowserTitle" value="@Model.BrowserTitle" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Tags <a href="javascript://" title="Type tag and hit enter or tab to add another one."><i class="fa fa-info-circle"></i></a></label>
+                                <input id="tags-typehead" class="form-control input-sm" name="Tags" value="@Model.Tags" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label></label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><label>Include in sitemap<input type="checkbox" style="float: right;margin-top: 3px;margin-left: 12px;" /></label></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-condensed table-hover" id="metadata-Table">
+                            <thead>
+                                <tr>
+                                    <th>Metadata</th>
+                                    <th class="text-center" width="130px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.SeoMetadata.Count() > 0)
+                                {
+                                    var iHiddenIndex = 0;
+                                    foreach (var x in Model.SeoMetadata)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input class="iHidden" type="hidden" value="@iHiddenIndex">
+                                                <input type="text" class="form-control input-sm" placeholder="Title" name="SeoMetadata[@iHiddenIndex].Title" value="@x.Title" required autofocus />
+                                                <textarea type="text" class="form-control input-sm" placeholder="Metadata" rows="3" name="SeoMetadata[@iHiddenIndex].Metadata" required>@x.Metadata</textarea>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript://" class="btn btn-danger btn-sm remCF"><span class="fa fa-trash-o"></span></a>
+                                            </td>
+                                        </tr>
+                                        iHiddenIndex++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>
+                                            <input class="iHidden" type="hidden" value="0">
+                                            <input type="text" class="form-control input-sm" placeholder="Title" name="SeoMetadata[0].Title" required autofocus />
+                                            <textarea type="text" class="form-control input-sm" placeholder="Metadata" rows="3" name="SeoMetadata[0].Metadata" required></textarea>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="javascript://" class="btn btn-danger btn-sm remCF"><span class="fa fa-trash-o"></span></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Page Insights</h4>
+                        </div>
+                        <div id="resourcesChart"></div>
+                        <hr />
+                        <table class="table table-condensed table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Stats</th>
+                                    <th class="text-right">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Locale</td>
+                                    <td class="text-right"><span id="insightStat-locale">en_US</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Number of Hosts</td>
+                                    <td class="text-right"><span id="insightStat-noOfHosts">0</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Loaded HTTP Resources</td>
+                                    <td class="text-right"><span id="insightStat-httpResources">0</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Static Resources</td>
+                                    <td class="text-right"><span id="insightStat-staticResources">0</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Javascript Resources</td>
+                                    <td class="text-right"><span id="insightStat-jsResources">0</span></td>
+                                </tr>
+                                <tr>
+                                    <td>CSS Resources</td>
+                                    <td class="text-right"><span id="insightStat-cssResources">0</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="javascript://" class="btn btn-primary metadata-AddNewRow"><i class="fa fa-plus"></i> Add New</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <!--  Bootstrap Typehead  -->
+    <script src="~/Scripts/Bootstrap Typehead/bootstrap-tokenfield.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+    <script>
+        $(function () {
+            $('#tags-typehead').on('tokenfield:createdtoken', function (e) {
+                //// Über-simplistic e-mail validation
+                //var re = /\S+@@\S+\.\S+/
+                //var valid = re.test(e.attrs.value)
+                //if (!valid) {
+                //    $(e.relatedTarget).addClass('invalid')
+                //}
+            }).tokenfield({ createTokensOnBlur: true });
+
+            //--- Metadata Row
+            $(".metadata-AddNewRow").click(function () {
+                var itemIndex = $("#metadata-Table input.iHidden").length;
+                var markup = '<tr>';
+                markup += '<td><input class="iHidden" type="hidden" value="' + itemIndex + '"><input type="text" class="form-control input-sm" placeholder="Title" name="SeoMetadata[' + itemIndex + '].Title" required autofocus /><textarea type="text" class="form-control input-sm" placeholder="Metadata" rows="3" name="SeoMetadata[' + itemIndex + '].Metadata" required></textarea></td>';
+                markup += '<td class="text-center"><a href="javascript://" class="btn btn-danger btn-sm remCF"><span class="fa fa-trash-o"></span></a></td>';
+                markup += '</tr>';
+                $("#metadata-Table tbody").append(markup);
+            });
+            $("#metadata-Table").on('click', '.remCF', function () {
+                $(this).parent().parent().remove();
+            });
+            //---
+
+            $("#page-frm").validate({
+                rules: {
+                    Slug: {
+                        remote: {
+                            url: "@Url.Action("CheckUniqueSlug", "WebPage")",
+                        type: "post",
+                        data: {
+                            Slug: function () {
+                                return $("#Slug").val();
+                            },
+                            Id: function () {
+                                return $("#Id").val();
+                            }
+                        }
+                    }
+                }
+            }
+            });
+        });
+    </script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        var speedInsightData;
+        $.getJSON('https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=http://live.tendersafrica.net/@Model.Slug.ToLowerInvariant()', function (data) {
+            speedInsightData = data;
+            $("#insightStat-locale").text(speedInsightData.formattedResults.locale);
+            $("#insightStat-noOfHosts").text(speedInsightData.pageStats.numberHosts);
+            $("#insightStat-httpResources").text(speedInsightData.pageStats.numberResources);
+            $("#insightStat-staticResources").text(speedInsightData.pageStats.numberStaticResources);
+            $("#insightStat-jsResources").text(speedInsightData.pageStats.numberJsResources);
+            $("#insightStat-cssResources").text(speedInsightData.pageStats.numberCssResources);
+        });
+
+
+        google.charts.load('current', { packages: ['corechart', 'bar', 'gauge'] });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+              ['Label', 'Value'],
+              ['Score', speedInsightData.ruleGroups.SPEED.score],
+            ]);
+
+            var options = {
+                width: 170, height: 170,
+                redFrom: 90, redTo: 100,
+                yellowFrom: 75, yellowTo: 90,
+                minorTicks: 5
+            };
+
+            var chart = new google.visualization.Gauge(document.getElementById('score-Gauge'));
+            chart.draw(data, options);
+        };
+
+        
+        google.charts.setOnLoadCallback(drawBasic);
+        function drawBasic() {
+
+            var data = google.visualization.arrayToDataTable([
+              ['Total', 'Resources', ],
+              ['HTML', parseFloat(speedInsightData.pageStats.htmlResponseBytes)],
+              ['CSS', parseFloat(speedInsightData.pageStats.cssResponseBytes)],
+              ['IMAGES', parseFloat(speedInsightData.pageStats.imageResponseBytes)],
+              ['JS', parseFloat(speedInsightData.pageStats.javascriptResponseBytes)],
+              ['OTHER', parseFloat(speedInsightData.pageStats.otherResponseBytes)]
+            ]);
+
+            var options = {
+                title: 'TOTAL RESPONCE BYTES OF RESOURCES',
+                chartArea: { width: '70%' }
+            };
+
+            var chart = new google.visualization.BarChart(document.getElementById('resourcesChart'));
+
+            chart.draw(data, options);
+        };
+
+        
+    </script>
+}

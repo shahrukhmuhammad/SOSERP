@@ -1,0 +1,372 @@
+﻿@model Ecommerce.Entity.Order
+
+@{
+    ViewBag.Title = "Inventory Sale";
+}
+@section styles{
+    <link href="~/Content/App/Ecommerce.css" rel="stylesheet" />
+}
+@using (Html.BeginForm("InventorySale", "Order", FormMethod.Post, new { @id = "frm", @name = "frm", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(x => x.StoreId)
+    @Html.Hidden("sr", "false")
+    <div class="form-Modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@ViewBag.Title</h4>
+                <div class="btn-group btn-group-xs" role="group">
+                    <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                    <button type="submit" class="btn btn-success" form="frm" onclick="$('#sr').val('save');"> <i class="fa fa-save"></i> Save</button>
+                    <button type="submit" class="btn btn-primary" form="frm" onclick="$('#sr').val('saveanother');">Save &amp; Create Another</button>
+                    <button type="submit" class="btn btn-info" form="frm" onclick="$('#sr').val('savemarkpaid');">Save &amp; Mark Paid</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row form-group">
+                            <label class="col-sm-1 horizontal-label">Order Type</label>
+                            <div class="col-sm-2">
+                                @Html.DropDownListFor(x => x.OrderSource, (SelectList)ViewBag.OrderSource, "- Select -", new { @class = "form-control input-sm" })
+                            </div>
+                            <label class="col-sm-2 horizontal-label">Payment Method</label>
+                            <div class="col-sm-2">
+                                @Html.DropDownListFor(x => x.PaymentMethod, (SelectList)ViewBag.PaymentMethod, "- Select -", new { @class = "form-control input-sm" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="user-Profile">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <span>Add Products</span> 
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <label>Identifier</label>
+                                            <input type="text" class="form-control input-sm" id="inp-productEAN">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>SKU</label>
+                                            <div class="input-group">
+                                                <input id="inp-sku" type="text" class="form-control input-sm" placeholder="Search sku" />
+                                                <input id="inp-productId" type="hidden" />
+                                                <div class="input-group-btn">
+                                                    <a class="btn btn-default btn-sm btn-custom" href="javascript://" id="btn_searchbySku" title="Search"><i class="fa fa-search"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label>Title</label>
+                                            <input type="text" class="form-control input-sm" id="inp-title" placeholder="Search title">
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <label>Price</label>
+                                            <input type="text" class="form-control input-sm" disabled="disabled" id="inp-price">
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <label>Quantitly</label>
+                                            <input type="number" class="form-control input-sm" id="inp-quantity">
+                                            <input type="hidden" id="inp-remaingQty">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Sub Total</label>
+                                            <input id="inp-total" type="number" class="form-control input-sm" disabled="disabled">
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <label>&nbsp; &nbsp;</label> <br />
+                                            <button class="btn btn-primary btn-sm btn-custom" type="button" id="btn_AddProduct" title="Add Product"><i class="fa fa-plus"></i></button>
+                                        </div>
+                                        <br />
+                                    </div>
+
+                                    <br />
+                                    <div class="row tb-padding">
+                                        <table id="mytable" class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Identifier</th>
+                                                    <th>SKU</th>
+                                                    <th style="width:30% !important">Title</th>
+                                                    <th>Price</th>
+                                                    <th>Quantity</th>
+                                                    <th>Sub Total</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="col-md-offset-1 col-md-3" style="padding-left:0px !important;">
+                                <h5 class="text-center"><strong> Postage Type </strong></h5>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <label>
+                                                <input type="radio" name="PostageType" id="cbx_Economy" value="1" checked> <br />
+                                                Economy
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <label>
+                                                <input type="radio" name="PostageType" id="cbx_Standard" value="2"> <br />
+                                                Standard
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <label>
+                                                <input type="radio" name="PostageType" id="cbx_Express" value="3"> <br />
+                                                Express
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h5 class="text-center"><strong> Delivery </strong></h5>
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            @Html.RadioButtonFor(x => x.IsLocalPickup, LocalPickup.No, new { @class = "input-radio" }) Via Shipping Carrier
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            @Html.RadioButtonFor(x => x.IsLocalPickup, LocalPickup.Yes, new { @class = "input-radio" }) In-Store Pickup
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4" style="height: 79px;">
+                                <br />
+                                <label>Select Shipping Package</label>
+                                <select class="dropdownfield form-control input-sm" id="ShippingPackagesId" name="ShippingPackagesId"></select>
+                            </div>
+
+                            <div class="row col-sm-4 pull-right" style="padding-top:20px;">
+                                <ul class="list-group custom-padding">
+                                    <li class="list-group-item">Subtotal: <span class="pull-right"> @AppSettings.GetVal("CurrencySymbol") <input type="text" id="SubTotal" name="SubTotal" readonly="readonly" class="text-right txtbox" /> </span></li> @*@Model.Details.Sum(x => x.Total)*@
+                                    <li class="list-group-item"> Shipping: <span class="pull-right"> @AppSettings.GetVal("CurrencySymbol") <input type="text" id="ShippingCost" name="ShippingCost" readonly="readonly" class="text-right txtbox" /></span></li>
+                                    <li class="list-group-item">VAT (@Model.Tax%): <span class="pull-right">@AppSettings.GetVal("CurrencySymbol") <input type="text" id="Tax" name="Tax" value="@Model.Tax" readonly="readonly" style="width:40px; display:none" /> <input type="text" id="TaxAmount" name="TaxAmount" readonly="readonly" class="text-right txtbox" /></span></li>
+                                    <li class="list-group-item"> Grand Total: <span class="pull-right">@AppSettings.GetVal("CurrencySymbol") @Html.TextBoxFor(x => x.Total, new { @readonly = "readonly", @class = "text-right txtbox" })    </span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row tb-padding">
+                        <div class="col-xs-12">
+                            <div class="row col-xs-6">
+                                <div>
+                                    <span class="col-sm-11">
+                                        @*@Html.DropDownListFor(x => x.ContactId, (SelectList)ViewBag.Clients, "-Please Select Contact-", new { @class = "dropdownfield form-control input-sm" })*@
+                                        <select class="form-control input-sm">
+                                            <option value="value">-Select Clients-</option>
+                                        </select>
+                                    </span>
+                                    <span class="col-sm-1 end-padding">
+                                        <a href="javascript://" class="btn btn-info btn-info btn-xs" id="btn_addNewContact">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in active">
+                            <div class="row tb-padding">
+                                <div class="col-sm-6">
+                                    <div class="page-header">
+                                        <h4>Billing Details</h4>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <br />
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">First Name :</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control input-sm" readonly="readonly" id="FirstName" name="OrderBillingDetails.FirstName" />
+                                                </div>
+                                                <label class="col-sm-2 horizontal-label">Last Name :</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" class="form-control input-sm" readonly="readonly" id="LastName" name="OrderBillingDetails.LastName" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Company Name :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" readonly="readonly" id="Company" name="OrderBillingDetails.Company" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Address Line 1 :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" readonly="readonly" id="PostalAddress" name="OrderBillingDetails.PostalAddress" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Address Line 2 : <i class="fa fa-info-circle" title="Optional"></i></label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" readonly="readonly" id="PostalAddress2" name="OrderBillingDetails.PostalAddress2" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Town/City :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" readonly="readonly" id="City" name="OrderBillingDetails.City" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">County :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" readonly="readonly" id="County" name="OrderBillingDetails.County" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Post Code :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" readonly="readonly" id="PostalCode" name="OrderBillingDetails.PostalCode" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Country :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" readonly="readonly" id="Country" name="OrderBillingDetails.Country" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Phone Number :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" readonly="readonly" id="Phone" name="OrderBillingDetails.Phone" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="page-header">
+                                        <h4>Shipping Details</h4>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="row row-padding">
+                                                <label class="col-sm-1 horizontal-label"> &nbsp; </label>
+                                                <div class="col-sm-11 checkbox">
+                                                    <label>
+                                                        <input type="checkbox" id="isBillingAddress"> Check the box if shipping address is same as billing address.
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">First Name :</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control input-sm" id="sp_FirstName" name="OrderShippingDetails.FirstName" />
+                                                </div>
+                                                <label class="col-sm-2 horizontal-label">Last Name :</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" class="form-control input-sm" id="sp_LastName" name="OrderShippingDetails.LastName" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Company Name :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" id="sp_company" name="OrderShippingDetails.Company" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Address Line 1 :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" id="sp_address" name="OrderShippingDetails.PostalAddress" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Address Line 2 : <i class="fa fa-info-circle" title="Optional"></i></label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" id="sp_address2" name="OrderShippingDetails.PostalAddress2" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Town/City :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" id="sp_City" name="OrderShippingDetails.City" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">County :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" id="sp_County" name="OrderShippingDetails.County" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Post Code :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" id="sp_PostalCode" name="OrderShippingDetails.PostalCode" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Country :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control input-sm" id="sp_Country" name="OrderShippingDetails.Country" />
+                                                </div>
+                                            </div>
+                                            <div class="row row-padding">
+                                                <label class="col-sm-3 horizontal-label">Phone Number :</label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" class="form-control input-sm" id="sp_Phone" name="OrderShippingDetails.Phone" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-right">
+                <div class="btn-group btn-group-xs" role="group">
+                    <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                    <button type="submit" class="btn btn-success" form="frm" onclick="$('#sr').val('save');"> <i class="fa fa-save"></i> Save</button>
+                    <button type="submit" class="btn btn-primary" form="frm" onclick="$('#sr').val('saveanother');">Save &amp; Create Another</button>
+                    <button type="submit" class="btn btn-info" form="frm" onclick="$('#sr').val('savemarkpaid');">Save &amp; Mark Paid</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script src="~/Scripts/App/Ecommerce.js"></script>
+<script src="~/Scripts/notify.min.js"></script>
+    <script>
+
+        $(function () {
+            var packID = 1;
+            BindPackagesData(packID)
+        });
+        $("#menu-toggle").css("display", "none");
+        $('#list-group').find('input:text').val('');
+    </script>
+}
+

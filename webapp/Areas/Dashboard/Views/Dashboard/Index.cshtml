@@ -1,0 +1,664 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    var recentPages = ViewBag.RecentPages as List<CMS.Entity.CmsPage>;
+    var recentSlides = ViewBag.RecentSlides as List<CMS.Entity.CmsSlide>;
+    var recentContents = ViewBag.RecentContents as List<CMS.Entity.CmsContent>;
+    var recentNews = ViewBag.RecentNews as List<CMS.Entity.CmsNews>;
+    var recentFiles = ViewBag.RecentFiles as List<CMS.Entity.CmsFile>;
+}
+
+@section styles{
+    <link href="~/Content/radial-progress.less" type="text/css" rel="stylesheet/less" />
+    <link href="~/Content/Morris Chart/morris.css" rel="stylesheet" />
+
+    <style>
+        .radial-progress {
+            margin: 0 auto;
+        }
+
+        .dhempbx {
+            background-color: #1565c0;
+            border: 1px solid #d0d1d4;
+            padding: 10px 10px 20px 10px;
+            color: #fff !important;
+        }
+
+            .dhempbx a {
+                color: #fff;
+            }
+
+            .dhempbx img {
+                height: 135px;
+                background-color: #fefefe;
+                padding: 4px;
+                border-radius: 85px;
+            }
+
+            .dhempbx h3 {
+                color: #fefefe;
+                font-size: 22px;
+                font-weight: 500;
+                margin: 10px 0 4px 0;
+            }
+
+        hr {
+            margin-top: 12px;
+            margin-bottom: 12px;
+        }
+
+        .nwsfdbx {
+            display: block;
+            position: relative;
+            background-color: #fff;
+            border: 1px solid #d0d1d4;
+            padding: 8px 10px 10px;
+            margin: 10px 0 10px 0;
+        }
+
+        .nsfdtitle {
+            display: block;
+            position: relative;
+            text-align: left;
+            color: #2f2f2f;
+            font-weight: bold;
+            font-family: Calibri;
+            font-size: 14px;
+        }
+
+        .ntfcn {
+            display: block;
+            position: relative;
+            text-align: right;
+            color: #959595;
+        }
+
+        .nwsfdbx .pinkclr {
+            background-color: #fff !important;
+        }
+
+        .media-left, .media-right {
+            vertical-align: top;
+        }
+
+        .dbrgtbx {
+            background: #fff;
+        }
+
+        .dbrgtbx {
+            display: block;
+            position: relative;
+            background-color: #fbfbfb;
+            /*border: 1px solid #d0d1d4;*/
+            padding: 15px;
+        }
+
+        .appstbx {
+            display: block;
+            position: relative;
+            width: 100%;
+            border: 1px solid #d0d1d4;
+            background-color: #fff;
+        }
+
+            .appstbx ul {
+                margin-bottom: 0;
+            }
+
+        .list-unstyled {
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .appstbx ul li {
+            padding: 10px 0;
+        }
+
+        .appstbx ul li {
+            border-bottom: 1px solid #d0d1d4;
+            text-align: center;
+            padding: 15px 0;
+        }
+
+            .appstbx ul li .apppstjob {
+                text-transform: uppercase;
+                font-size: 14px;
+            }
+
+        .apppstjob {
+            color: #717171;
+        }
+
+        .list-unstyled a {
+            color: #717171;
+            display: block;
+            text-decoration: none;
+        }
+
+            .list-unstyled a:hover {
+                text-decoration: none;
+                background-color: #1565c0;
+                color: #fefefe;
+            }
+
+                .list-unstyled a:hover .apppstjob {
+                    text-decoration: none;
+                    background-color: #1565c0;
+                    color: #fefefe;
+                }
+    </style>
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="">
+            <div class="dhempbx">
+                <a href="~/Secure/Account" class="pull-right"><i class="fa fa-edit"></i></a>
+                <div class="clearfix"></div>
+                <div align="center">
+                    <img class="media-object img-centre img-circle" src="~/Content/Uploads/Dp/@(CurrentUser.Id).jpg" style="width: 135px; height: 135px;" onerror="this.onerror = null; this.src = '/Content/Images/user.png';">
+                    <h3 href="~/Secure/Account" class="no-margin">@CurrentUser.FullName</h3>
+                    <p>@CurrentUser.Email</p>
+                    <p style="font-size:11px;"><strong>@CurrentUser.Role</strong></p>
+                    <p style="font-size:10px; padding-top:2px;">Last Login: <cite title="Source Title">@CurrentUser.LastLoginDate</cite></p>
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="nwsfdbx">
+                <div class="row">
+                    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7" style="padding-right:0;">
+                        <div class="nsfdtitle">Recent activity</div>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 pdlft">
+                        <div class="ntfcn"> <a href="~/Secure/AppLog" target="_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="5 comments"><span class="glyphicon glyphicon-comment s-20"></span></a> <!--<span class="badge badge-notify" >5</span>--> </div>
+                    </div>
+                </div>
+                <hr />
+
+                <div class="media pinkclr" style="margin-top: 5px;">
+                    <div class="media-left media-middle" style="border:1px solid #d0d1d4"> <a href="#" target="_blank" style="padding:5px;"> <i class="fa fa-exchange fa-5x"></i> </a> </div>
+                    <div class="media-body" style="padding-left:8px;">
+                        <a href="#" target="_blank">Mr.Super Admin</a> Profile viewed, Module of <a href="#" target="_blank">Account</a>
+                        <div class="nsfddt s-14">26/10/2016 05:33:19 PM</div>
+                    </div>
+                </div>
+            </div>
+            <div class="appstbx">
+                <ul class="list-unstyled">
+                    <a href="#">
+                        <li>
+                            <div class="apppstjob s-12">Website Pages</div>
+                            <div class="apppstjob appnotxt s-30">12</div>
+                            <div style="font-size:13px;">all website web pages</div>
+                        </li>
+                    </a>
+                    <a href="#">
+                        <li>
+                            <div class="apppstjob s-12">Billing</div>
+                            <div class="apppstjob appnotxt s-30">12</div>
+                            <div style="font-size:13px;">all employees billing</div>
+                        </li>
+                    </a>
+                    <a href="#">
+                        <li>
+                            <div class="apppstjob s-12">Website Pages</div>
+                            <div class="apppstjob appnotxt s-30">12</div>
+                            <div style="font-size:13px;">all website web pages</div>
+                        </li>
+                    </a>
+                    <a href="#">
+                        <li>
+                            <div class="apppstjob s-12">Website Pages</div>
+                            <div class="apppstjob appnotxt s-30">12</div>
+                            <div style="font-size:13px;">all website web pages</div>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="">
+            <div class="dbrgtbx">
+                <div class="row">
+                    <div class="col-md-12" style="min-height:350px;">
+                        <span class="nsfdtitle pull-left"> <i class="fa fa-area-chart"></i> Application Statistics </span>
+                        <span class="disabled pull-left"> &nbsp; (insights related to system modules)</span>
+                        <div class="clearfix"></div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="patients-bar-chart" style="height: 250px; position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                                    <svg height="250" version="1.1" width="600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="overflow: hidden; position: relative;"><desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.2</desc><defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs><text x="57.5" y="131" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">$0</tspan></text><path fill="none" stroke="#aaaaaa" d="M70,131H932" stroke-width="0.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="57.5" y="104.5" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">$2,500</tspan></text><path fill="none" stroke="#aaaaaa" d="M70,104.5H932" stroke-width="0.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="57.5" y="78" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">$5,000</tspan></text><path fill="none" stroke="#aaaaaa" d="M70,78H932" stroke-width="0.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="57.5" y="51.5" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">$7,500</tspan></text><path fill="none" stroke="#aaaaaa" d="M70,51.5H932" stroke-width="0.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="57.5" y="25" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">$10,000</tspan></text><path fill="none" stroke="#aaaaaa" d="M70,25H932" stroke-width="0.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path><text x="896.0833333333334" y="143.5" text-anchor="middle" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">Dec</tspan></text><text x="752.4166666666666" y="143.5" text-anchor="middle" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">Oct</tspan></text><text x="680.5833333333334" y="143.5" text-anchor="middle" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">Sep</tspan></text><text x="536.9166666666667" y="143.5" text-anchor="middle" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">Jul</tspan></text><text x="465.0833333333333" y="143.5" text-anchor="middle" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">Jun</tspan></text><text x="393.25" y="143.5" text-anchor="middle" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">May</tspan></text><text x="249.58333333333334" y="143.5" text-anchor="middle" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">Mar</tspan></text><text x="177.75" y="143.5" text-anchor="middle" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">Feb</tspan></text><text x="105.91666666666666" y="143.5" text-anchor="middle" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal" transform="matrix(1,0,0,1,0,7)"><tspan style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);" dy="4">Jan</tspan></text><rect x="78.97916666666666" y="25" width="25.4375" height="106" rx="0" ry="0" fill="#0b62a4" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="107.41666666666666" y="35.599999999999994" width="25.4375" height="95.4" rx="0" ry="0" fill="#7a92a3" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="150.81249999999997" y="51.5" width="25.4375" height="79.5" rx="0" ry="0" fill="#0b62a4" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="179.24999999999997" y="62.099999999999994" width="25.4375" height="68.9" rx="0" ry="0" fill="#7a92a3" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="222.64583333333331" y="78" width="25.4375" height="53" rx="0" ry="0" fill="#0b62a4" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="251.08333333333331" y="88.6" width="25.4375" height="42.400000000000006" rx="0" ry="0" fill="#7a92a3" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="294.4791666666667" y="51.5" width="25.4375" height="79.5" rx="0" ry="0" fill="#0b62a4" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="322.9166666666667" y="62.099999999999994" width="25.4375" height="68.9" rx="0" ry="0" fill="#7a92a3" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="366.3125" y="78" width="25.4375" height="53" rx="0" ry="0" fill="#0b62a4" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="394.75" y="88.6" width="25.4375" height="42.400000000000006" rx="0" ry="0" fill="#7a92a3" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="438.1458333333333" y="51.5" width="25.4375" height="79.5" rx="0" ry="0" fill="#0b62a4" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="466.5833333333333" y="62.099999999999994" width="25.4375" height="68.9" rx="0" ry="0" fill="#7a92a3" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="509.9791666666667" y="25" width="25.4375" height="106" rx="0" ry="0" fill="#0b62a4" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="538.4166666666667" y="35.599999999999994" width="25.4375" height="95.4" rx="0" ry="0" fill="#7a92a3" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="581.8124999999999" y="25" width="25.4375" height="106" rx="0" ry="0" fill="#0b62a4" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="610.2499999999999" y="35.599999999999994" width="25.4375" height="95.4" rx="0" ry="0" fill="#7a92a3" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="653.6458333333333" y="25" width="25.4375" height="106" rx="0" ry="0" fill="#0b62a4" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="682.0833333333333" y="35.599999999999994" width="25.4375" height="95.4" rx="0" ry="0" fill="#7a92a3" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="725.4791666666666" y="25" width="25.4375" height="106" rx="0" ry="0" fill="#0b62a4" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="753.9166666666666" y="35.599999999999994" width="25.4375" height="95.4" rx="0" ry="0" fill="#7a92a3" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="797.3124999999999" y="25" width="25.4375" height="106" rx="0" ry="0" fill="#0b62a4" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="825.7499999999999" y="35.599999999999994" width="25.4375" height="95.4" rx="0" ry="0" fill="#7a92a3" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="869.1458333333333" y="25" width="25.4375" height="106" rx="0" ry="0" fill="#0b62a4" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect><rect x="897.5833333333333" y="35.599999999999994" width="25.4375" height="95.4" rx="0" ry="0" fill="#7a92a3" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect></svg><div class="morris-hover morris-default-style" style="left: 340.25px; top: 47px; display: block;">
+                                        <div class="morris-hover-row-label">May</div><div class="morris-hover-point" style="color: #0b62a4">
+                                            Series A:
+                                            $5,000
+                                        </div><div class="morris-hover-point" style="color: #7a92a3">
+                                            Series B:
+                                            $4,000
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <img src="~/Content/Images/img-40.jpg" style="width:100%; height:280px;" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="dbrgtbx" style="border: 1px solid #d0d1d4;">
+            <div class="row">
+                <div class="col-md-12" style="min-height:350px;">
+                    <div class="nsfdtitle"> <i class="fa fa-calendar"></i> Scheduled Tasks </div>
+                    <div class="disabled"> (calender for tasks)</div>
+                    <div class="clearfix"></div>
+                    <hr />
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+</div>
+
+@*<div class="row" style="margin-top:25px; margin-bottom:40px;">
+        <div class="col-md-12 text-center">
+            <div class="btn-group mobile-btn-group" role="group">
+                <a href="~/CMS/WebPage/Record" class="btn btn-link"><i class="fa fa-2x fa-file-o"></i><br> Create New Page</a>
+                <a href="~/CMS/WebContent/Record" class="btn btn-link"><i class="fa fa-2x fa-file-text-o"></i><br> Create New Content</a>
+                <a href="~/CMS/WebSlide/Record" class="btn btn-link"><i class="fa fa-2x fa-file-image-o"></i><br> Create New Slide</a>
+                <a href="~/CMS/Newsletter/Record" class="btn btn-link"><i class="fa fa-2x fa-envelope-o"></i><br> Create New Newsletter</a>
+                <a href="~/CMS/WebNews/Record" class="btn btn-link"><i class="fa fa-2x fa-newspaper-o"></i><br> Create News</a>
+                <a href="javascript://" class="btn btn-link"><i class="fa fa-2x fa-user"></i><br> Create Lead Contact</a>
+                <a href="javascript://" class="btn btn-link"><i class="fa fa-2x fa-gavel"></i><br> Create New Tender</a>
+                <a href="javascript://" class="btn btn-link"><i class="fa fa-2x fa-money"></i><br> Create New Bill</a>
+            </div>
+        </div>
+    </div>*@
+
+@*<div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Monthly Stats</h4>
+                    <div class="form-inline" style="float: right; margin-top:-24px;">
+                        <div class="form-group no-margin pull-left">
+                            <select id="monthFilter" class="form-control input-sm">
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9" selected="">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="form-group no-margin pull-left">
+                            <select id="yearFilter" class="form-control input-sm">
+                                <option value="2016" selected="">2016</option>
+                                <option value="2015">2015</option>
+                                <option value="2014">2014</option>
+                                <option value="2013">2013</option>
+                                <option value="2012">2012</option>
+                                <option value="2011">2011</option>
+                                <option value="2010">2010</option>
+                                <option value="2009">2009</option>
+                            </select>
+                        </div>
+                        <button type="button" id="filterStats" class="btn btn-sm btn-primary"><i class="fa fa-filter"></i></button>
+                    </div>
+                </div>
+                <div id="FilteredStats">
+                    <table class="table table-condensed table-hover" style="margin:0 !important;">
+                        <tbody>
+                            <tr>
+                                <th class="text-center info">Website Pages</th>
+                                <th class="text-center success">Billing</th>
+                                <th class="text-center warning">Tenders</th>
+                            </tr>
+                            <tr>
+                                <td class="info">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="list-group">
+                                                <a href="javascript://" class="list-group-item list-group-item-info no-border font-mobile-xs">
+                                                    <span class="badge">0</span>
+                                                    Published
+                                                </a>
+                                                <a href="javascript://" class="list-group-item list-group-item-success no-border font-mobile-xs">
+                                                    <span class="badge">0</span>
+                                                    Un Published
+                                                </a>
+                                                <a href="javascript://" class="list-group-item list-group-item-warning no-border font-mobile-xs">
+                                                    <span class="badge">0</span>
+                                                    Total
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="radial-progress radial-progress-mobile" data-progress="0">
+                                                <div class="circle">
+                                                    <div class="mask full">
+                                                        <div class="fill"></div>
+                                                    </div>
+                                                    <div class="mask half">
+                                                        <div class="fill"></div>
+                                                        <div class="fill fix"></div>
+                                                    </div>
+                                                    <div class="shadow"></div>
+                                                </div>
+                                                <div class="inset">
+                                                    <div class="percentage">
+                                                        <div class="numbers"><span>-</span><span>0%</span><span>1%</span><span>2%</span><span>3%</span><span>4%</span><span>5%</span><span>6%</span><span>7%</span><span>8%</span><span>9%</span><span>10%</span><span>11%</span><span>12%</span><span>13%</span><span>14%</span><span>15%</span><span>16%</span><span>17%</span><span>18%</span><span>19%</span><span>20%</span><span>21%</span><span>22%</span><span>23%</span><span>24%</span><span>25%</span><span>26%</span><span>27%</span><span>28%</span><span>29%</span><span>30%</span><span>31%</span><span>32%</span><span>33%</span><span>34%</span><span>35%</span><span>36%</span><span>37%</span><span>38%</span><span>39%</span><span>40%</span><span>41%</span><span>42%</span><span>43%</span><span>44%</span><span>45%</span><span>46%</span><span>47%</span><span>48%</span><span>49%</span><span>50%</span><span>51%</span><span>52%</span><span>53%</span><span>54%</span><span>55%</span><span>56%</span><span>57%</span><span>58%</span><span>59%</span><span>60%</span><span>61%</span><span>62%</span><span>63%</span><span>64%</span><span>65%</span><span>66%</span><span>67%</span><span>68%</span><span>69%</span><span>70%</span><span>71%</span><span>72%</span><span>73%</span><span>74%</span><span>75%</span><span>76%</span><span>77%</span><span>78%</span><span>79%</span><span>80%</span><span>81%</span><span>82%</span><span>83%</span><span>84%</span><span>85%</span><span>86%</span><span>87%</span><span>88%</span><span>89%</span><span>90%</span><span>91%</span><span>92%</span><span>93%</span><span>94%</span><span>95%</span><span>96%</span><span>97%</span><span>98%</span><span>99%</span><span>100%</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="success">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="list-group">
+                                                <a href="javascript://" class="list-group-item list-group-item-info no-border font-mobile-xs">
+                                                    <span class="badge">0</span>
+                                                    Paid
+                                                </a>
+                                                <a href="javascript://" class="list-group-item list-group-item-warning no-border font-mobile-xs">
+                                                    <span class="badge">0</span>
+                                                    Un Paid
+                                                </a>
+                                                <a href="javascript://" class="list-group-item list-group-item-success no-border font-mobile-xs">
+                                                    <span class="badge">0</span>
+                                                    Total
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="radial-progress radial-progress-mobile" data-progress="0">
+                                                <div class="circle">
+                                                    <div class="mask full">
+                                                        <div class="fill fill-blue"></div>
+                                                    </div>
+                                                    <div class="mask half">
+                                                        <div class="fill fill-blue"></div>
+                                                        <div class="fill fill-blue fix"></div>
+                                                    </div>
+                                                    <div class="shadow"></div>
+                                                </div>
+                                                <div class="inset">
+                                                    <div class="percentage">
+                                                        <div class="numbers"><span>-</span><span>0%</span><span>1%</span><span>2%</span><span>3%</span><span>4%</span><span>5%</span><span>6%</span><span>7%</span><span>8%</span><span>9%</span><span>10%</span><span>11%</span><span>12%</span><span>13%</span><span>14%</span><span>15%</span><span>16%</span><span>17%</span><span>18%</span><span>19%</span><span>20%</span><span>21%</span><span>22%</span><span>23%</span><span>24%</span><span>25%</span><span>26%</span><span>27%</span><span>28%</span><span>29%</span><span>30%</span><span>31%</span><span>32%</span><span>33%</span><span>34%</span><span>35%</span><span>36%</span><span>37%</span><span>38%</span><span>39%</span><span>40%</span><span>41%</span><span>42%</span><span>43%</span><span>44%</span><span>45%</span><span>46%</span><span>47%</span><span>48%</span><span>49%</span><span>50%</span><span>51%</span><span>52%</span><span>53%</span><span>54%</span><span>55%</span><span>56%</span><span>57%</span><span>58%</span><span>59%</span><span>60%</span><span>61%</span><span>62%</span><span>63%</span><span>64%</span><span>65%</span><span>66%</span><span>67%</span><span>68%</span><span>69%</span><span>70%</span><span>71%</span><span>72%</span><span>73%</span><span>74%</span><span>75%</span><span>76%</span><span>77%</span><span>78%</span><span>79%</span><span>80%</span><span>81%</span><span>82%</span><span>83%</span><span>84%</span><span>85%</span><span>86%</span><span>87%</span><span>88%</span><span>89%</span><span>90%</span><span>91%</span><span>92%</span><span>93%</span><span>94%</span><span>95%</span><span>96%</span><span>97%</span><span>98%</span><span>99%</span><span>100%</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="warning">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="list-group">
+                                                <a href="javascript://" class="list-group-item list-group-item-info no-border font-mobile-xs">
+                                                    <span class="badge">0</span>
+                                                    Published
+                                                </a>
+                                                <a href="javascript://" class="list-group-item list-group-item-warning no-border font-mobile-xs">
+                                                    <span class="badge">0</span>
+                                                    Un Published
+                                                </a>
+                                                <a href="javascript://" class="list-group-item list-group-item-success no-border font-mobile-xs">
+                                                    <span class="badge">0</span>
+                                                    Total
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="radial-progress radial-progress-mobile" data-progress="0">
+                                                <div class="circle">
+                                                    <div class="mask full">
+                                                        <div class="fill fill-gray"></div>
+                                                    </div>
+                                                    <div class="mask half">
+                                                        <div class="fill fill-gray"></div>
+                                                        <div class="fill fill-gray fix"></div>
+                                                    </div>
+                                                    <div class="shadow"></div>
+                                                </div>
+                                                <div class="inset">
+                                                    <div class="percentage">
+                                                        <div class="numbers"><span>-</span><span>0%</span><span>1%</span><span>2%</span><span>3%</span><span>4%</span><span>5%</span><span>6%</span><span>7%</span><span>8%</span><span>9%</span><span>10%</span><span>11%</span><span>12%</span><span>13%</span><span>14%</span><span>15%</span><span>16%</span><span>17%</span><span>18%</span><span>19%</span><span>20%</span><span>21%</span><span>22%</span><span>23%</span><span>24%</span><span>25%</span><span>26%</span><span>27%</span><span>28%</span><span>29%</span><span>30%</span><span>31%</span><span>32%</span><span>33%</span><span>34%</span><span>35%</span><span>36%</span><span>37%</span><span>38%</span><span>39%</span><span>40%</span><span>41%</span><span>42%</span><span>43%</span><span>44%</span><span>45%</span><span>46%</span><span>47%</span><span>48%</span><span>49%</span><span>50%</span><span>51%</span><span>52%</span><span>53%</span><span>54%</span><span>55%</span><span>56%</span><span>57%</span><span>58%</span><span>59%</span><span>60%</span><span>61%</span><span>62%</span><span>63%</span><span>64%</span><span>65%</span><span>66%</span><span>67%</span><span>68%</span><span>69%</span><span>70%</span><span>71%</span><span>72%</span><span>73%</span><span>74%</span><span>75%</span><span>76%</span><span>77%</span><span>78%</span><span>79%</span><span>80%</span><span>81%</span><span>82%</span><span>83%</span><span>84%</span><span>85%</span><span>86%</span><span>87%</span><span>88%</span><span>89%</span><span>90%</span><span>91%</span><span>92%</span><span>93%</span><span>94%</span><span>95%</span><span>96%</span><span>97%</span><span>98%</span><span>99%</span><span>100%</span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel panel-success">
+                <div class="panel-heading text-center">
+                    <h3 class="panel-title"><i class="fa fa-money"></i> Financial Performance</h3>
+                </div>
+                <div id="performance-bar-chart" style="height: 170px;"></div>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Latest Tenders</h4>
+                </div>
+
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="media-heading">Media heading</h4>
+                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
+                        </div>
+                        <div class="media-right">
+                            <a href="#">
+                                <img alt="64x64" class="media-object" data-src="holder.js/64x64" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTcwMzI4YTE2YSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1NzAzMjhhMTZhIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxNC41IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" data-holder-rendered="true" style="width: 64px; height: 64px;">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="media-heading">Media heading</h4>
+                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
+                        </div>
+                        <div class="media-right">
+                            <a href="#">
+                                <img alt="64x64" class="media-object" data-src="holder.js/64x64" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTcwMzI4YTE2YSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1NzAzMjhhMTZhIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxNC41IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" data-holder-rendered="true" style="width: 64px; height: 64px;">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="media-heading">Media heading</h4>
+                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
+                        </div>
+                        <div class="media-right">
+                            <a href="#">
+                                <img alt="64x64" class="media-object" data-src="holder.js/64x64" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTcwMzI4YTE2YSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1NzAzMjhhMTZhIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxNC41IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" data-holder-rendered="true" style="width: 64px; height: 64px;">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="media-heading">Media heading</h4>
+                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
+                        </div>
+                        <div class="media-right">
+                            <a href="#">
+                                <img alt="64x64" class="media-object" data-src="holder.js/64x64" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTcwMzI4YTE2YSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1NzAzMjhhMTZhIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxNC41IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" data-holder-rendered="true" style="width: 64px; height: 64px;">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="media-heading">Media heading</h4>
+                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
+                        </div>
+                        <div class="media-right">
+                            <a href="#">
+                                <img alt="64x64" class="media-object" data-src="holder.js/64x64" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTcwMzI4YTE2YSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1NzAzMjhhMTZhIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxNC41IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" data-holder-rendered="true" style="width: 64px; height: 64px;">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <form class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" required />
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="list-group">
+                <a href="javascript://" class="list-group-item clr-skyblue fa-2x">Getting Started <i class="fa fa-chevron-right"></i></a>
+                <a href="javascript://" class="list-group-item">
+                    <p class="text-center clr-green" style="font-size:20px;">Configuration Completeness</p>
+                    <hr />
+                    <div class="radial-progress" data-progress="90">
+                        <div class="circle">
+                            <div class="mask full">
+                                <div class="fill"></div>
+                            </div>
+                            <div class="mask half">
+                                <div class="fill"></div>
+                                <div class="fill fix"></div>
+                            </div>
+                            <div class="shadow"></div>
+                        </div>
+                        <div class="inset">
+                            <div class="percentage">
+                                <div class="numbers"><span>-</span><span>0%</span><span>1%</span><span>2%</span><span>3%</span><span>4%</span><span>5%</span><span>6%</span><span>7%</span><span>8%</span><span>9%</span><span>10%</span><span>11%</span><span>12%</span><span>13%</span><span>14%</span><span>15%</span><span>16%</span><span>17%</span><span>18%</span><span>19%</span><span>20%</span><span>21%</span><span>22%</span><span>23%</span><span>24%</span><span>25%</span><span>26%</span><span>27%</span><span>28%</span><span>29%</span><span>30%</span><span>31%</span><span>32%</span><span>33%</span><span>34%</span><span>35%</span><span>36%</span><span>37%</span><span>38%</span><span>39%</span><span>40%</span><span>41%</span><span>42%</span><span>43%</span><span>44%</span><span>45%</span><span>46%</span><span>47%</span><span>48%</span><span>49%</span><span>50%</span><span>51%</span><span>52%</span><span>53%</span><span>54%</span><span>55%</span><span>56%</span><span>57%</span><span>58%</span><span>59%</span><span>60%</span><span>61%</span><span>62%</span><span>63%</span><span>64%</span><span>65%</span><span>66%</span><span>67%</span><span>68%</span><span>69%</span><span>70%</span><span>71%</span><span>72%</span><span>73%</span><span>74%</span><span>75%</span><span>76%</span><span>77%</span><span>78%</span><span>79%</span><span>80%</span><span>81%</span><span>82%</span><span>83%</span><span>84%</span><span>85%</span><span>86%</span><span>87%</span><span>88%</span><span>89%</span><span>90%</span><span>91%</span><span>92%</span><span>93%</span><span>94%</span><span>95%</span><span>96%</span><span>97%</span><span>98%</span><span>99%</span><span>100%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="row no-margin">
+                <div class="col-md-12 no-padding mobile-landscape-col-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-aqua"><i class="fa fa-file-text"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Invoices</span>
+                            <span class="info-box-number">90</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 no-padding mobile-landscape-col-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-green"><i class="fa fa-money"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Paid Bills</span>
+                            <span class="info-box-number">$ 120.00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 no-padding mobile-landscape-col-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-yellow"><i class="fa fa-file-o"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Website Pages</span>
+                            <span class="info-box-number">4</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+@section scripts{
+    <script src="~/Scripts/Morris Chart/raphael-min.js"></script>
+    @*<script src="~/Scripts/Morris Chart/morris.min.js"></script>*@
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.6.1/less.min.js" type="text/javascript"></script>
+    @*<script>
+        $(function () {
+            //--- Bar Chart
+            Morris.Bar({
+                element: 'performance-bar-chart',
+                data: [{
+                    y: 'Jan',
+                    a: 100000,
+                    b: 7000,
+                }, {
+                    y: 'Feb',
+                    a: 237788,
+                    b: 12322,
+                }, {
+                    y: 'Mar',
+                    a: 775651,
+                    b: 77253,
+                }, {
+                    y: 'Apr',
+                    a: 122233,
+                    b: 122233,
+                }, {
+                    y: 'May',
+                    a: 7787,
+                    b: 2234,
+                }, {
+                    y: 'Jun',
+                    a: 99882,
+                    b: 55323,
+                }, {
+                    y: 'Jul',
+                    a: 90889,
+                    b: 56465,
+                }, {
+                    y: 'Aug',
+                    a: 187658,
+                    b: 123312,
+                }, {
+                    y: 'Sep',
+                    a: 126757,
+                    b: 12332,
+                }, {
+                    y: 'Oct',
+                    a: 0,
+                    b: 0,
+                }, {
+                    y: 'Nov',
+                    a: 0,
+                    b: 0,
+                }, {
+                    y: 'Dec',
+                    a: 0,
+                    b: 0,
+                }],
+                preUnits: '$',
+                xkey: 'y',
+                ykeys: ['a', 'b'],
+                labels: ['Total', 'Paid'],
+                hideHover: 'auto',
+                resize: true
+            });
+            //---
+
+        });
+    </script>*@
+}

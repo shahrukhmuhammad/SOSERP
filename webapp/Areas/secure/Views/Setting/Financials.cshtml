@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Financials";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+    <style>
+        ul.stage-Nav > li.list-group > a.list-group-item::after {
+            left: 95%;
+        }
+    </style>
+    }
+
+<ul class="nav nav-tabs">
+
+</ul>

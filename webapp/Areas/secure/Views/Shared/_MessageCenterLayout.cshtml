@@ -1,0 +1,319 @@
+﻿@{
+    var successMsg = TempData["SuccessMsg"] != null ? TempData["SuccessMsg"].ToString() : "";
+    var errorMsg = TempData["ErrorMsg"] != null ? TempData["ErrorMsg"].ToString() : "";
+}
+
+@functions{
+    bool IsCurrentArea(string a)
+    {
+        var area = ViewContext.RouteData.DataTokens["area"].ToString();
+        return string.Compare(a, area, true) == 0;
+    }
+    bool IsCurrentController(string c)
+    {
+        var controller = ViewContext.RouteData.GetRequiredString("controller");
+        return string.Compare(c, controller, true) == 0;
+    }
+    bool IsCurrentAction(string c, string a)
+    {
+        var action = ViewContext.RouteData.GetRequiredString("controller") + ViewContext.RouteData.GetRequiredString("action");
+        return string.Compare(c + a, action, true) == 0;
+    }
+}
+
+@functions{
+    
+    #region Set Location
+    string SetActiveArea(string area)
+    {
+        var res = IsCurrentArea(area);
+        return res ? "active in" : null;
+    }
+    string SetActiveController(string controller)
+    {
+        var res = IsCurrentController(controller);
+        return res ? "list-group-item-success in" : null;
+    }
+    string SetActiveAction(string controller, string action)
+    {
+        var res = IsCurrentAction(controller, action);
+        return res ? "list-group-item-success in" : null;
+    }
+    string SetActiveSubAction(string controller, string action)
+    {
+        var res = IsCurrentAction(controller, action);
+        return res ? "info" : null;
+    }
+    #endregion
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>@ViewBag.Title - @AppSettings.GetVal("app:BrowserTitle")</title>
+    <link rel="shortcut icon" href="~/appfavicon.ico" type="image/x-icon">
+    <link href="~/Content/App/MessageCenter.css" rel="stylesheet" />
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (string.IsNullOrEmpty(CurrentUser.Theme))
+        {
+            <link rel="stylesheet" href="~/Content/Bootstrap/bootstrap-LumenTheme.css" />
+        }
+        else
+        {
+            <link rel="stylesheet" href="~/Content/Bootstrap/bootstrap-@(CurrentUser.Theme)Theme.css" />
+        }
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/Content/Bootstrap/bootstrap-LumenTheme.css" />
+    }
+
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+        <style>
+            .ae-toolbar-add{
+                z-index:999999999 !important;
+            }
+            .ae-toolbar-styles{
+                z-index:99999999 !important;
+            }
+            .cke_editable{
+                min-height:150px;
+            }
+        </style>
+    }
+
+    @Styles.Render("~/Content/BaseApp")
+    @Styles.Render("~/Content/CustomBaseApp")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <div id="notifyMe" class="notifications bottom-right"></div>
+    <div id="loading-mask"><img src="~/Content/Images/loader.gif" alt="Loading" /></div>
+
+
+
+    @{Html.RenderPartial("~/Areas/Secure/Views/Shared/_Header.cshtml");}
+    <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
+        <div class="mail-box">
+            <div id="sideBar-Menu-Container" class="col-md-3 hidden-xs">
+
+                <div class="inbox-body">
+                    <a href="#myModal" data-toggle="modal" title="Compose" class="btn btn-compose">
+                        <i class="fa fa-pencil-square-o"></i> Compose
+                    </a>
+                    <!-- Modal -->
+                    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
+                        <div class="modal-dialog">
+                            <div class="modal-content" id="modal-content">
+                                @{ Html.RenderPartial("_ComposeMessage"); }
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                </div>
+                <div id="sideBar-Menu-Container" class="col-md-12 hidden-xs">
+                    <div class="panel-group hidden-print" id="sideBar-accordion" role="tablist" aria-multiselectable="true">
+                        @if (IsCurrentController("MessageCenter"))
+                        {
+                        if (Request.IsAuthenticated)
+                        {
+                        <div>
+                            @*<div class="panel panel-default">
+                                <div class="panel-heading no-padding" role="tab">
+                                    <h4 class="panel-title">
+                                        <a class="list-group-item @SetActiveAction("MessageCenter", "New")" href="~/Secure/MessageCenter/New"><i class="fa fa-plus text-primary"></i> Create New Message</a>
+                                    </h4>
+                                </div>
+                            </div>*@
+                            <div class="panel panel-default">
+                                <div class="panel-heading no-padding" role="tab">
+                                    <h4 class="panel-title">
+                                        <a class="list-group-item @SetActiveAction("MessageCenter", "Index")" href="~/Secure/MessageCenter"><i class="fa fa-envelope text-info"></i> Inbox</a>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading no-padding" role="tab">
+                                    <h4 class="panel-title">
+                                        <a class="list-group-item @SetActiveAction("MessageCenter", "Outbox")" href="~/Secure/MessageCenter/Outbox"><i class="fa fa-send text-success"></i> Outbox</a>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading no-padding" role="tab">
+                                    <h4 class="panel-title">
+                                        <a class="list-group-item @SetActiveAction("MessageCenter", "Draft")" href="~/Secure/MessageCenter/Draft"><i class="fa fa-inbox text-warning"></i> Draft</a>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading no-padding" role="tab">
+                                    <h4 class="panel-title">
+                                        <a class="list-group-item @SetActiveAction("MessageCenter", "Draft")" href="~/Secure/MessageCenter/Trash"><i class="fa fa-trash text-danger"></i> Trash</a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 no-padding-left">
+                @if (!IsCurrentArea("Dashboard"))
+                {
+                <div class="row hidden-print">
+                    <div class="col-md-12 hidden-xs">
+                        <ul class="breadcrumb hidden-print">
+                            @Helper.BreadCrumb(Html, Request.RequestContext)
+                        </ul>
+                        <div class="breadcrumb-btn btn-group btn-group-xs hidden-print" role="group">
+                            <a href="javascript://" onclick="window.print();" class="btn btn-warning" title="Print this Page"><i class="fa fa-print"></i></a>
+                            <a href="javascript://" onclick='window.location.href="mailto:?subject="+document.title+"&body="+escape(window.location.href);' class="btn btn-info" title="Email this Page"><i class="fa fa-envelope"></i></a>
+                            <a href="@Request.Url.AbsolutePath" download class="btn btn-primary" title="Download this Page"><i class="fa fa-download"></i></a>
+                            <a href="javascript://" onclick="requestFullScreen()" class="btn btn-default" title="Full Screen"><i class="fa fa-arrows-alt"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 visible-xs">
+                        <ul class="breadcrumb hidden-print">
+                            @Helper.BreadCrumb(Html, Request.RequestContext)
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 visible-xs">
+                        <div class="well well-sm text-center" style="height:27px; margin-bottom:6px;">
+                            <div class="breadcrumb-btn btn-group btn-group-xs hidden-print" role="group">
+                                <a href="javascript://" onclick="window.print();" class="btn btn-warning" title="Print this Page"><i class="fa fa-print"></i></a>
+                                <a href="javascript://" onclick='window.location.href="mailto:?subject="+document.title+"&body="+escape(window.location.href);' class="btn btn-info" title="Email this Page"><i class="fa fa-envelope"></i></a>
+                                <a href="@Request.Url.AbsolutePath" download class="btn btn-primary" title="Download this Page"><i class="fa fa-download"></i></a>
+                                <a href="javascript://" onclick="requestFullScreen()" class="btn btn-default" title="Full Screen"><i class="fa fa-arrows-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+                @RenderBody()
+            </div>
+        </div>
+    
+    @{Html.RenderPartial("~/Areas/Secure/Views/Shared/_Footer.cshtml");}
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/Bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/BaseApp")
+
+    @RenderSection("scripts", required: false)
+
+    @Scripts.Render("~/bundles/CustomBaseApp")
+
+
+    <!-- SignalR -->
+    <!--Reference the SignalR library. -->
+    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+    <!--Reference the autogenerated SignalR hub script. -->
+    <script src="~/signalr/hubs"></script>
+    <!--Add script to update the page and send messages.-->
+    <script src="~/Scripts/SignalR Functions/BaseApp.js"></script>
+    <!-- End SignalR -->
+
+    <script type="text/javascript">
+        function requestFullScreen() {
+            if ((document.fullScreenElement && document.fullScreenElement !== null) ||
+             (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+                if (document.documentElement.requestFullScreen) {
+                    document.documentElement.requestFullScreen();
+                } else if (document.documentElement.mozRequestFullScreen) {
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullScreen) {
+                    document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (document.cancelFullScreen) {
+                    document.cancelFullScreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitCancelFullScreen) {
+                    document.webkitCancelFullScreen();
+                }
+            }
+        }
+
+        @if (!string.IsNullOrEmpty(successMsg))
+        {
+            <text>
+            $('#notifyMe').notify({
+                message: { text: '@successMsg' },
+                transition: 'fade',
+                type: 'success'
+            }).show();
+            </text>
+        }
+        @if (!string.IsNullOrEmpty(errorMsg))
+        {
+            <text>
+            $('#notifyMe').notify({
+                message: { text: '@errorMsg' },
+                transition: 'fade',
+                type: 'danger'
+            }).show();
+            </text>
+        }
+
+        //--- Server Time
+        var currenttime = '@DateTime.Now.ToString("MMM dd, yyyy H:mm:ss")';
+        var montharray = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+        var serverdate = new Date(currenttime);
+        function padlength(what) { var output = (what.toString().length == 1) ? "0" + what : what; return output; };
+        function displaytime() {
+            serverdate.setSeconds(serverdate.getSeconds() + 1)
+            var datestring = montharray[serverdate.getMonth()] + " " + serverdate.getDate() + ", " + serverdate.getFullYear()
+
+            if (padlength(serverdate.getHours()) >= 12) {
+                makehourtime = padlength(serverdate.getHours()) - 12;
+                merid = 'PM';
+            }
+            else {
+                makehourtime = padlength(serverdate.getHours());
+                merid = 'AM';
+            }
+            if (makehourtime == 0) makehourtime = 12;
+
+            var timestring = makehourtime + ":" + padlength(serverdate.getMinutes()) + ":" + padlength(serverdate.getSeconds()) + " " + merid;
+            document.getElementById("servertime").innerHTML = datestring + " " + timestring;
+            document.getElementById("servertime-mobile").innerHTML = datestring + " " + timestring;
+        }
+        setInterval("displaytime()", 1000);
+        //---
+    </script>
+
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+                $(function () {
+                    $("#Message").summernote({ height: 200 });
+                });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('Message');
+            });
+        </script>
+    }
+</body>
+</html>

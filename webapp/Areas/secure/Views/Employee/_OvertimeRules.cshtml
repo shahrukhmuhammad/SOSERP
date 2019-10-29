@@ -1,0 +1,56 @@
+﻿
+<form id="frm" class="form-Modal" method="post" action="~/Secure/Employee/SaveOvertimeRuleSettings">
+    <div class="modal-content">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="Id" value="" />
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Overtime Rules</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row form-group">
+                <label class="col-sm-4 col-sm-offset-2 horizontal-label">Overtime Calculation Method</label>
+                <div class="col-sm-4">
+                    <select name="employee:OvertimeMethod" id="overtimeMethod" class="form-control input-sm">
+                        <option value="">-Select-</option>
+                        <option value="Daily" @(AppSettings.GetVal("employee:OvertimeMethod") == "Daily" ? "selected" : "")>Daily</option>
+                        <option value="Weekly" @(AppSettings.GetVal("employee:OvertimeMethod") == "Weekly" ? "selected" : "")>Weekly</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-4 col-sm-offset-2 horizontal-label">Regular Hours Per Week</label>
+                <div class="col-sm-4">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control input-sm numericMask" id="overtimeWeekly" name="employee:OvertimeWeekly" value="@AppSettings.GetVal("employee:OvertimeWeekly")" />
+                        <div class="input-group-addon">hour(s)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-4 col-sm-offset-2 horizontal-label">Regular Hours Per Day</label>
+                <div class="col-sm-4">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control input-sm numericMask" id="overtimeDaily" name="employee:OvertimeDaily" value="@AppSettings.GetVal("employee:OvertimeDaily")" />
+                        <div class="input-group-addon">hour(s)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-4 col-sm-offset-2 horizontal-label"> Also calculate daily double time after</label>
+                <div class="col-sm-4">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control input-sm numericMask" id="DailyDoubleTime" name="employee:DailyDoubleTime" value="@AppSettings.GetVal("employee:DailyDoubleTime")" />
+                        <div class="input-group-addon">hour(s)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,391 @@
+﻿
+@{
+    ViewBag.Title = "Company's Overview";
+    var allOffices = ViewBag.AllOffices as List<BaseApp.Entity.Office>;
+}
+
+@section styles{
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.businessHours/1.0.1/jquery.businessHours.css" rel="stylesheet" />
+    }
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <i class="fa fa-5x fa-wrench" style="max-height:140px;"></i>
+        @*<h3>Company</h3>*@
+        <h3>Control, protect and secure your company settings, all in one place</h3>
+        <p>This section gives you quick access to settings and tools that let you safeguard your data, protect your privacy and decide how your information can make <strong>@AppSettings.GetVal("app:Title") @AppSettings.GetVal("app:Version")</strong> services work better for you.</p>
+    </div>
+
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Success!</strong> @TempData["SuccessMsg"]
+        </div>
+    }
+
+    @if (TempData["ErrorMsg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Error!</strong> @TempData["ErrorMsg"]
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-12">
+            <form id="frm" class="col-md-12 form-Modal" method="post" enctype="multipart/form-data">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h4 class="modal-title" style="color:#fefefe;">@*@ViewBag.Title*@ Setup</h4>
+                        @*<div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Cancel / Back"><i class="fa fa-close"></i></a>
+                            <button type="submit" class="btn btn-success" title="Save"><i class="fa fa-check"></i></button>
+                        </div>*@
+                    </div>
+                    <div class="panel-body">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="returnUrl" value="/Secure/Company/Settings" />
+                        <div class="row">
+                            <div class="col-sm-12">
+                                @*<div class="form-group">
+                                        <label>Application Start</label>
+                                        <select name="app:StartURL" class="form-control input-sm">
+                                            @foreach (var x in AppModule.GetAll())
+                                            {
+                                                <option value="/@(x.Id == "CMS" ? "" : "")" @(AppSettings.GetVal("app:StartURL").Contains(x.Id) ? "selected" : "")>@x.Title</option>
+                                            }
+                                        </select>
+                                    </div>*@
+                                <table class="table table-condensed table-striped" style="text-align: left; font-size: 15px;">
+                                    <tr>
+                                        <th style="padding:8px; width:165px;">System Title: </th>
+                                        <td style="padding:8px 65px;"> <span>@AppSettings.GetVal("app:Title") &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a> </span> <span style="display:none"><input name="app:Title" type="text" class="form-control input-sm" value="@AppSettings.GetVal("app:Title")" required /></span> </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding:8px;">Browser Title: </th>
+                                        <td style="padding:8px 65px;"> <span>@AppSettings.GetVal("app:BrowserTitle") &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a> </span> <span style="display:none"><input name="app:BrowserTitle" type="text" class="form-control input-sm" value="@AppSettings.GetVal("app:BrowserTitle")" required /></span> </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding:8px;">CDN Path: </th>
+                                        <td style="padding:8px 65px;"> <span>@AppSettings.GetVal("app:CDNPath") &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a> </span> <span style="display:none"><input name="app:CDNPath" type="url" class="form-control input-sm" value="@AppSettings.GetVal("app:CDNPath")" required /></span> </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding:8px;">Verified Email: </th>
+                                        <td style="padding:8px 65px;"> <span>@AppSettings.GetVal("contact:Email") &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a> </span> <span style="display:none"><input name="contact:Email" type="email" class="form-control input-sm" value="@AppSettings.GetVal("contact:Email")" required /></span> </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding:8px;">Verified Phone: </th>
+                                        <td style="padding:8px 65px;"> <span>@AppSettings.GetVal("contact:Phone") &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a> </span> <span style="display:none"><input name="contact:Phone" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:Phone")" required /></span> </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding:8px;">System Logo: </th>
+                                        <td style="padding:8px 65px;"> 
+                                            <span>
+                                                <img id="logo-Preview" src="~/Content/Images/applogo.png" class="img-responsive" style="max-height:110px;"> &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                            </span> 
+                                            <span class="caption" style="display:none">
+                                                <input type="file" class="form-control input-sm" id="logo" name="logo" onchange="previewImage(this,'#logo-Preview')" />
+                                            </span> 
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding:8px;">System Favicon: </th>
+                                        <td style="padding:8px 65px;">
+                                            <span>
+                                                <img id="favicon-Preview" src="~/appfavicon.ico" class="img-responsive" style="max-height:50px;"> &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i> </a>
+                                            </span>
+                                            <span class="caption" style="display:none">
+                                                <input type="file" class="form-control input-sm" id="favicon" name="favicon" onchange="previewImage(this, '#favicon-Preview')" />
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding:8px;">Default Currency: </th>
+                                        <td style="padding:8px 65px;">
+                                            <span>
+                                                $ &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                            </span>
+                                            <span class="caption" style="display:none">
+                                                <input name="Currency" type="text" class="form-control input-sm" value="Currency" required />
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding:8px;">Default Time Zone: </th>
+                                        <td style="padding:8px 65px;">
+                                            <span>
+                                                GST &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                            </span>
+                                            <span class="caption" style="display:none">
+                                                <input name="TimeZone" type="text" class="form-control input-sm" value="TimeZone" required />
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding:8px;">Date Format: </th>
+                                        <td style="padding:8px 65px;">
+                                            <span>
+                                                DD/MM/YYYY &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                            </span>
+                                            <span class="caption" style="display:none">
+                                                <input name="TimeZone" type="text" class="form-control input-sm" value="TimeZone" required />
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding:8px;">Time Format: </th>
+                                        <td style="padding:8px 65px;">
+                                            <span>
+                                                24 Hours &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                            </span>
+                                            <span class="caption" style="display:none">
+                                                <input name="TimeZone" type="text" class="form-control input-sm" value="TimeZone" required />
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding:8px;">Hours of Operation: </th>
+                                        <td style="padding:8px 65px;">
+                                            <div id="businessHoursContainer3"></div>
+                                            @*<span>
+                                                Sunday 9:00am to 5pm &nbsp; &nbsp; <a href="javascript://"><i class="fa fa-pencil-square-o text-warning"></i></a>
+                                            </span>*@
+                                            @*<span class="caption" style="display:none">
+                                                <input name="TimeZone" type="text" class="form-control input-sm" value="TimeZone" required />
+                                            </span>*@
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                @*<div class="form-group">
+                                    <label class="col-sm-4">System Title</label>
+                                    <div class="col-sm-8">
+                                        <input name="app:Title" type="text" class="form-control input-sm" value="@AppSettings.GetVal("app:Title")" required />
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group" style="margin-top:10px;">
+                                    <label class="col-sm-4">Browser Title</label>
+                                    <div class="col-sm-8">
+                                        <input name="app:BrowserTitle" type="text" class="form-control input-sm" value="@AppSettings.GetVal("app:BrowserTitle")" required />
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group" style="margin-top:10px;">
+                                    <label class="col-sm-4">CDN Path</label>
+                                    <div class="col-sm-8">
+                                        <input name="app:CDNPath" type="url" class="form-control input-sm" value="@AppSettings.GetVal("app:CDNPath")" required />
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group" style="margin-top:10px;">
+                                    <label class="col-sm-4">Contact Email</label>
+                                    <div class="col-sm-8">
+                                        <input name="contact:Email" type="email" class="form-control input-sm" value="@AppSettings.GetVal("contact:Email")" required />
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group" style="margin-top:10px;">
+                                    <label class="col-sm-4">Contact Phone</label>
+                                    <div class="col-sm-8">
+                                        <input name="contact:Phone" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:Phone")" required />
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group" style="margin-top:10px;">
+                                    <label>System Logo <a href="javascript://" title="For best experience use PNG format file type for logo."><i class="fa fa-info-circle"></i></a></label>
+                                    <div class="thumbnail text-center">
+                                        <img id="logo-Preview" src="~/Content/Images/applogo.png" class="img-responsive img-centre" style="max-height:210px;">
+                                        <div class="caption">
+                                            <input type="file" class="form-control input-sm" id="logo" name="logo" onchange="previewImage(this,'#logo-Preview')" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group" style="margin-top:10px;">
+                                    <label>System Favicon <a href="javascript://" title="Updated favicon icon can take upto 1 day to show in browser because of browser cache issue."><i class="fa fa-info-circle"></i></a></label>
+                                    <div class="thumbnail text-center">
+                                        <img id="favicon-Preview" src="~/appfavicon.ico" class="img-responsive img-centre" style="max-height:50px;">
+                                        <div class="caption">
+                                            <input type="file" class="form-control input-sm" id="favicon" name="favicon" onchange="previewImage(this, '#favicon-Preview')" />
+                                        </div>
+                                    </div>
+                                </div>*@
+                            </div>
+                            @*<div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>System Logo <a href="javascript://" title="For best experience use PNG format file type for logo."><i class="fa fa-info-circle"></i></a></label>
+                                    <div class="thumbnail text-center">
+                                        <img id="logo-Preview" src="~/Content/Images/applogo.png" class="img-responsive img-centre" style="max-height:210px;">
+                                        <div class="caption">
+                                            <input type="file" class="form-control input-sm" id="logo" name="logo" onchange="previewImage(this,'#logo-Preview')" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>System Favicon <a href="javascript://" title="Updated favicon icon can take upto 1 day to show in browser because of browser cache issue."><i class="fa fa-info-circle"></i></a></label>
+                                    <div class="thumbnail text-center">
+                                        <img id="favicon-Preview" src="~/appfavicon.ico" class="img-responsive img-centre" style="max-height:50px;">
+                                        <div class="caption">
+                                            <input type="file" class="form-control input-sm" id="favicon" name="favicon" onchange="previewImage(this, '#favicon-Preview')" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+                        </div>
+
+                        @*<div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Contact Address</label>
+                                    <input name="contact:Address" type="text" class="form-control input-sm" value="@AppSettings.GetVal("contact:Address")" required />
+                                </div>
+                            </div>
+                        </div>*@
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @*<div class="col-md-6">
+        <div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Company/Settings" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-gears text-info"></i> Company Settings <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Manage your system settings and the data we use to personalise your experience.
+                </div>
+                <a href="~/Secure/Company/Settings" class="btn btn-link">Change company settings</a>
+                <table class="table table-striped table-condensed no-margin">
+                    <tr>
+                        <th class="text-right">Title</th>
+                        <td>@AppSettings.GetVal("app:Title")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Version</th>
+                        <td>@AppSettings.GetVal("app:Version")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Browser Title</th>
+                        <td>@AppSettings.GetVal("app:BrowserTitle")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">CDN</th>
+                        <td>@AppSettings.GetVal("app:CDNPath")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Contact Email</th>
+                        <td>@AppSettings.GetVal("contact:Email")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Contact Phone</th>
+                        <td>@AppSettings.GetVal("contact:Phone")</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Contact Address</th>
+                        <td>@AppSettings.GetVal("contact:Address")</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        
+    </div>*@
+    <div class="col-md-6">
+        @*<div class="panel panel-default panel-Custom">
+            <a href="~/Secure/Office" class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-building-o text-info"></i> Offices <i class="fa fa-angle-right pull-right text-muted"></i></h3>
+            </a>
+            <div class="panel-body no-padding">
+                <div class="caption">
+                    Manage your application offices, settings and the data we use to personalise your experience.
+                </div>
+                <a href="~/Secure/Office" class="btn btn-link">Manage offices</a>
+                <table class="table table-striped table-condensed no-margin">
+                    @if (allOffices.Count == 0)
+                    {
+                        <tr>
+                            <td>No office found.</td>
+                            <td><a href="~/Secure/Office/Record"><i class="fa fa-plus"></i> Create an office</a></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <th>Office</th>
+                            <th>Manager</th>
+                        </tr>
+                    }
+                    @foreach (var x in allOffices)
+                    {
+                        <tr>
+                            <td><a href="~/Secure/Office/Details/@x.Id">@x.Title</a></td>
+                            <td><a href="~/AccessControl/Details/@x.ContactId">@x.Contact.FullName</a></td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>*@
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.businessHours/1.0.1/jquery.businessHours.js"></script>
+
+<script>
+        (function() {
+            //Rainbow.color();
+
+            var businessHoursManager1 = $("#businessHoursContainer1").businessHours();
+            $("#btnSerialize").click(function() {
+                $("#businessHoursOutput1").val(JSON.stringify(businessHoursManager1.serialize()));
+            });
+
+            $("#btnInit").click(function() {
+                try{
+                    var businessHours = jQuery.parseJSON($("#businessHoursData").val());
+                    $("#businessHoursContainerJson").businessHours({
+                        operationTime: businessHours
+                    });
+                }catch(e) {
+                    alert("JSON non valid: " + e.message);
+                }
+            });
+
+            var businessHoursManager2 = $("#businessHoursContainer2").businessHours({
+                checkedColorClass: "workingBusinssDay",
+                inputDisabled: true,
+                uncheckedColorClass: "dayOff",
+                dayTmpl: '<div class="dayContainer">' +
+                        '<div data-original-title="" class="colorBox"><input type="checkbox" class="invisible operationState"/></div>' +
+                        '<div class="weekday"></div></div>'
+            });
+
+            var b3 = $("#businessHoursContainer3");
+            var businessHoursManagerBootstrap = b3.businessHours({
+                postInit:function(){
+                    b3.find('.operationTimeFrom, .operationTimeTill').timepicker({
+                        'timeFormat': 'H:i',
+                        'step': 15
+                    });
+                },
+                dayTmpl: '<div class="dayContainer" style="width: 80px;">' +
+                        '<div data-original-title="" class="colorBox"><input type="checkbox" class="invisible operationState"/></div>' +
+                        '<div class="weekday"></div>' +
+                        '<div class="operationDayTimeContainer">' +
+                        '<div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-sun-o"></i></span><input type="text" name="startTime" class="mini-time form-control operationTimeFrom" value=""/></div>' +
+                        '<div class="operationTime input-group"><span class="input-group-addon"><i class="fa fa-moon-o"></i></span><input type="text" name="endTime" class="mini-time form-control operationTimeTill" value=""/></div>' +
+                        '</div></div>'
+            });
+        })();
+</script>
+    }

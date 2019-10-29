@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "HRMS Dashboard";
+    //var listEmployee = ViewBag.EmployeeList as List<HRMS.Employee>;
+    //var recentSlides = ViewBag.RecentSlides as List<CMS.Entity.CmsSlide>;
+    //var recentContents = ViewBag.RecentContents as List<CMS.Entity.CmsContent>;
+    //var recentNews = ViewBag.RecentNews as List<CMS.Entity.CmsNews>;
+    //var recentFiles = ViewBag.RecentFiles as List<CMS.Entity.CmsFile>;
+}
+
+<div class="row no-margin">
+    <div class="col-md-12 well well-sm bg-transparent">
+        <div class="row">
+            <div class="col-xs-6 col-sm-2">
+                <a href="~/CMS/WebPage/Record" class="btn btn-link btn-xs fullWidth">Create New Order</a>
+            </div>
+            <div class="col-xs-6 col-sm-2">
+                <a href="~/CMS/WebContent/Record" class="btn btn-link btn-xs fullWidth">Create New Product</a>
+            </div>
+            <div class="col-xs-6 col-sm-2">
+                <a href="~/CMS/WebSlide/Record" class="btn btn-link btn-xs fullWidth">Create New Category</a>
+            </div>
+            <div class="col-xs-6 col-sm-2">
+                <a href="~/CMS/Newsletter/Record" class="btn btn-link btn-xs fullWidth">Create Brand</a>
+            </div>
+            <div class="col-xs-6 col-sm-2">
+                <a href="~/CMS/WebNews/Record" class="btn btn-link btn-xs fullWidth">Create Purchase Order</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">Users List </h4>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-3">
+                    <a href="~/CMS" class="small-box bg-aqua-gradient">
+                        <div class="inner">
+                            <div class="icon"><i class="fa fa-file-code-o"></i></div>
+                            <div class="caption">
+                                @*<p>Total: <span class="count">@recentPages.Where(x => x.Status == CMS.Entity.CmsPageStatus.Draft).Count()</span></p>*@
+                                @*<p>Total: <span class="count">@recentPages.Count()</span></p>*@
+                            </div>
+                        </div>
+                        <span class="small-box-footer">Orders</span>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="~/CMS/WebNews" class="small-box bg-light-blue-gradient">
+                        <div class="inner">
+                            <div class="icon"><i class="fa fa-newspaper-o"></i></div>
+                            <div class="caption">
+                                @*<p>Total: <span class="count">@recentNews.Count()</span></p>*@
+                            </div>
+                        </div>
+                        <span class="small-box-footer">Website Orders</span>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="~/CMS/WebContent" class="small-box bg-teal-gradient">
+                        <div class="inner">
+                            <div class="icon"><i class="fa fa-file-text-o"></i></div>
+                            <div class="caption">
+                                @*<p>Total: <span class="count">@recentContents.Count()</span></p>*@
+                            </div>
+                        </div>
+                        <span class="small-box-footer">Trade Orders</span>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="~/CMS/WebSlide" class="small-box bg-purple-gradient">
+                        <div class="inner">
+                            <div class="icon"><i class="fa fa-file-image-o"></i></div>
+                            <div class="caption">
+                                @*<p>Total: <span class="count">@recentSlides.Count()</span></p>*@
+                            </div>
+                        </div>
+                        <span class="small-box-footer">New Orders</span>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="javascript://" class="small-box bg-aqua-gradient">
+                        <div class="inner">
+                            <div class="icon"><i class="fa fa-file-image-o"></i></div>
+                            <div class="caption">
+                                @*<p>Total: <span class="count">@recentSlides.Count()</span></p>*@
+                            </div>
+                        </div>
+                        <span class="small-box-footer">Completed Orders</span>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="javascript://" class="small-box bg-purple-gradient">
+                        <div class="inner">
+                            <div class="icon"><i class="fa fa-newspaper-o"></i></div>
+                            <div class="caption">
+                                @*<p>Total: <span class="count">@recentSlides.Count()</span></p>*@
+                            </div>
+                        </div>
+                        <span class="small-box-footer">Cancelled Orders</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">Stock</h4>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-3">
+                    <a href="javascript://" class="small-box bg-aqua-gradient">
+                        <div class="inner">
+                            <div class="icon"><i class="fa fa-file-image-o"></i></div>
+                            <div class="caption">
+                                @*<p>Total: <span class="count">@recentSlides.Count()</span></p>*@
+                            </div>
+                        </div>
+                        <span class="small-box-footer">Total Products</span>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="javascript://" class="small-box bg-light-blue-gradient">
+                        <div class="inner">
+                            <div class="icon"><i class="fa fa-file-image-o"></i></div>
+                            <div class="caption">
+                                @*<p>Total: <span class="count">@recentSlides.Count()</span></p>*@
+                            </div>
+                        </div>
+                        <span class="small-box-footer">Low Inventory</span>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="javascript://" class="small-box bg-aqua-gradient">
+                        <div class="inner">
+                            <div class="icon"><i class="fa fa-file-image-o"></i></div>
+                            <div class="caption">
+                                @*<p>Total: <span class="count">@recentSlides.Count()</span></p>*@
+                            </div>
+                        </div>
+                        <span class="small-box-footer">Out of Stock</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

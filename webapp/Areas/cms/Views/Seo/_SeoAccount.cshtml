@@ -1,0 +1,103 @@
+﻿@model CMS.Entity.CmsSeoAccount
+
+<form class="form-Modal frm" method="post" enctype="multipart/form-data" action="~/CMS/Seo/UpdateSeoAccount">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#seoAccount-Modal').modal('hide')"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">@Model.Provider</h4>
+        </div>
+        <div class="modal-body">
+            
+            @if (Model.Provider == "Google")
+            {
+                <div>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs nav-justified" role="tablist">
+                        <li role="presentation" class="active"><a class="bg-aqua-gradient text-white" style="height:50px; margin:0;" href="#google-ClientIdHave-Div" aria-controls="google-ClientIdHave-Div" role="tab" data-toggle="tab">Already have Client ID ?</a></li>
+                        <li role="presentation"><a class="bg-aqua-gradient text-white" style="height:50px; margin:0;" href="#google-ClientIdNotHave-Div" aria-controls="google-ClientIdNotHave-Div" role="tab" data-toggle="tab">Don't have Google Client ID? Click here to generate one</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="google-ClientIdHave-Div">
+                            <div class="well">
+                                <div class="form-group">
+                                    <label>Client ID</label>
+                                    <input type="text" class="form-control" name="ClientId" value="@Model.ClientId" required />
+                                </div>
+                                <div class="form-group text-right">
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> @(string.IsNullOrEmpty(Model.ClientId) ? "Save" : "Change")</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="google-ClientIdNotHave-Div">
+                            <div class="well well-sm">
+                                <p>To create a Google API Console project and client ID, follow these steps:</p>
+                                <ol>
+                                    <li>
+                                        Go to the <a href="https://console.developers.google.com/project/_/apiui/apis/library" target="_blank">Google API Console</a>.
+                                    </li>
+                                    <li>
+                                        From the project drop-down, select an existing
+                                        <b>project</b>, or create a new one by selecting <b>Create a new project</b>.
+                                        <div class="alert alert-info" role="alert" style="margin:10px;">
+                                            <b>Note:</b>  Use a single project to hold all platform instances of your app
+                                            (Android, iOS, web, etc.), each with a different Client ID.
+                                        </div>
+                                    </li>
+                                    <li>
+                                        In the sidebar under "<b>API Manager</b>", select <b>Credentials</b>, then select
+                                        the <b>OAuth consent screen</b> tab.
+                                        <ol>
+                                            <li>
+                                                Choose an <b>Email Address</b>, specify a <b>Product Name</b>, and
+                                                press <b>Save</b>.
+                                            </li>
+                                        </ol>
+                                    </li>
+
+                                    <li>
+                                        In the <b>Credentials</b> tab, select the <b>New credentials</b> drop-down list,
+                                        and choose <b>OAuth client ID</b>.
+                                    </li>
+                                    <li>
+                                        Under <b class="uitext">Application type</b>, select <b>Web application</b>.
+                                        <br>
+                                        Register the origins from which your app is allowed to access the Google APIs,
+                                        as follows. An origin is a unique combination of protocol, hostname, and port.
+                                        <ol>
+                                            <li>
+                                                In the <b class="uitext">Authorized JavaScript origins</b> field, copy and paste the following URL.
+                                                <div class="alert alert-info" style="margin:10px;">@(Request.IsSecureConnection ? "https" : "http")://@Request.Url.Authority</div>
+                                            </li>
+                                            <li>
+                                                In the <b class="uitext">Authorized redirect URI</b> field, copy and paste the following URL.
+                                                <div class="alert alert-info" style="margin:10px;">@(Request.IsSecureConnection ? "https" : "http")://@Request.Url.Authority/gOauth</div>
+                                            </li>
+                                            <li>Press the <b>Create</b> button.</li>
+                                        </ol>
+                                    </li>
+
+                                    <li>
+                                        From the resulting <b class="uitext">OAuth client dialog box</b>,
+                                        copy the <b class="uitext">Client ID</b>, place it in above textbox and save it.
+                                        That's all you need to do, It will activate your all google products in the system.
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" class="btn btn-default" onclick="$('#seoAccount-Modal').modal('hide')"><i class="fa fa-times"></i> Cancel</a>
+            </div>
+        </div>
+    </div>
+</form>

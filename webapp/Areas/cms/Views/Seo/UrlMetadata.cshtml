@@ -1,0 +1,71 @@
+﻿@model List<CMS.Entity.CmsPage>
+@{
+    ViewBag.Title = "Page Optimization";
+}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs nav-justified custom-Nav-Tabs" role="tablist">
+    <li role="presentation" class="first-child"><a href="~/CMS/Seo/Metadata"><i class="fa fa-search"></i> Metadata</a></li>
+    <li role="presentation" class="active"><a href="~/CMS/Seo/UrlMetadata"><i class="fa fa-link"></i> Page Optimization</a></li>
+    <li role="presentation"><a href="~/CMS/Seo/Keyword"><i class="fa fa-key"></i> Keywords Management</a></li>
+    <li role="presentation" class="last-child"><a href="~/CMS/Seo/Sitemap"><i class="fa fa-sitemap"></i> Sitemap</a></li>
+</ul>
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover" id="metadata-dataTable">
+                <thead>
+                    <tr>
+                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Tags" id="metadata-dataTable_0" /></th>
+                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="URL" id="metadata-dataTable_1" /></th>
+                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Name" id="metadata-dataTable_2" /></th>
+                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Browser Title" id="metadata-dataTable_3" /></th>
+                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Status" id="metadata-dataTable_4" /></th>
+                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="PR" id="metadata-dataTable_5" /></th>
+                        <th class="text-center" width="100px">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int rankInt = 1; }
+                    @foreach (var x in Model)
+                    {
+                        <tr>
+                            <td>@x.Tags</td>
+                            <td>/@x.Slug</td>
+                            <td>@x.Name</td>
+                            <td>@x.BrowserTitle</td>
+                            <td><label class="label label-@(x.Status == CMS.Entity.CmsPageStatus.Published ? "success" : "warning")">@x.Status</label></td>
+                            <td>@rankInt</td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-xs" role="group">
+                                    <a href="~/CMS/Seo/PageMetadata/@x.Id" class="btn btn-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        rankInt++;
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#metadata-dataTable", [0, 1, 2, 3, 4, 5], [6]);
+        });
+    </script>
+}

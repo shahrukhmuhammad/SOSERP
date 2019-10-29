@@ -1,0 +1,24 @@
+﻿
+<div class="row">
+    <div class="col-md-3">
+        <select class="form-control" multiple id="browse-item" style="height:180px;overflow: hidden;padding: 5px">
+            <option value="Employees">Employees</option>
+        </select>
+    </div>
+    <div class="col-md-9">
+        <div id="browse-suggested-box"></div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#browse-item').on('click', function () {
+            var id = $(this).val();
+            $('#suggested-box').html('');
+            $.get("/Secure/TaskManagement/_SuggestedList", function (d) {
+                $('#browse-suggested-box').html(d);
+                filterDataTable("#tasks-dataTable", [0, 1, 2, 3, 4]);
+            });
+        });
+    });
+</script>

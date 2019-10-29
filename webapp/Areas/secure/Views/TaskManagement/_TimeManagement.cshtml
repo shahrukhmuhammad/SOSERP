@@ -1,0 +1,504 @@
+﻿
+<style>
+    /*.repeat-link .active{
+        padding: 8px 15px;
+        background: #1bffd5;
+        color: #000;
+    }*/
+    @@media (max-width: 576px){
+        .repeat-link{
+            padding: 5px;
+            background: #c1c1c1;
+            color: #000;
+        }
+        .rp-active{
+            padding: 5px;
+            background: #1bffd5;
+            color: #000;
+        }
+        .repeat-link:focus{
+            padding: 5px;
+            background: #1bffd5;
+            color: #07ba15;
+        }
+    }
+    @@media (min-width: 576px){
+        .repeat-link{
+            padding: 8px 15px;
+            background: #c1c1c1;
+            color: #000;
+        }
+        .rp-active{
+            padding: 8px 15px;
+            background: #1bffd5;
+            color: #000;
+        }
+        .repeat-link:focus{
+            padding: 8px 15px;
+            background: #1bffd5;
+            color: #07ba15;
+        }
+    }
+</style>
+
+<div class="row" style="margin-top:8px;">
+    <div class="col-sm-12">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <i class="fa fa-clock-o"></i> Time Management <i class="fa fa-angle-down"></i>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="row form-group">
+                                    <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Start Date</h5>
+                                    <div class="col-sm-4">
+                                        <div class='input-group date datetimepicker1'>
+                                            <input type='text' class="form-control" />
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Deadline</h5>
+                                    <div class="col-sm-4">
+                                        <div class='input-group date datetimepicker2'>
+                                            <input type='text' class="form-control" />
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Scheduled Duration</h5>
+                                    <div class="col-sm-4">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-xs-4">
+                                                <input type='number' class="form-control" />
+                                                <div class="text-center">
+                                                    Days
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 col-xs-4">
+                                                <input type='number' class="form-control" />
+                                                <div class="text-center">
+                                                    Hours
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 col-xs-4">
+                                                <input type='number' class="form-control" />
+                                                <div class="text-center">
+                                                    Minutes
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <h5 class="col-sm-2 modal-title" style="margin:8px 0;"></h5>
+                                    <div class="col-sm-10" style="border-top:1px solid rgb(191, 191, 191); padding-top:8px;">
+                                        <div>
+                                            <label><input type="checkbox" /> Manager can change deadline</label>
+                                            <span style="margin-left:8px;"><i class="fa fa-question-circle"></i></span>
+                                        </div>
+                                        <div>
+                                            <label><input type="checkbox" /> Skip weekends and holidays</label>
+                                            <span style="margin-left:8px;">  <i class="fa fa-question-circle"></i></span>
+                                        </div>
+                                        <div>
+                                            <label><input type="checkbox" /> Approve task when completed</label>
+                                            <span style="margin-left:8px;"><i class="fa fa-question-circle"></i></span>
+                                        </div>
+                                        <div>
+                                            <label><input type="checkbox" /> Add to favorites</label>
+                                            <span style="margin-left:8px;"><i class="fa fa-question-circle"></i></span>
+                                        </div>
+                                        <div>
+                                            <label><input type="checkbox" /> Add to working day plan</label>
+                                            <span style="margin-left:8px;"><i class="fa fa-question-circle"></i></span>
+                                        </div>
+                                        <div>
+                                            <label><input type="checkbox" /> Track task percentage completion</label>
+                                            <span style="margin-left:8px;"><i class="fa fa-question-circle"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group" style="border-top:1px solid rgb(191, 191, 191);">
+                                    <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Time tracking</h5>
+                                    <div class="col-sm-10" style="margin-top:6px;">
+                                        <div>
+                                            <label class="col-sm-3"><input type="checkbox" id="taskplanned-click" /> Task planned time </label>
+                                            <div class="col-sm-9" id="taskplanned-tab" style="display:none">
+                                                <div class="col-md-3 no-padding">
+                                                    <input type="number" class="form-control" />
+                                                </div>
+                                                <h5 class="col-md-3">
+                                                    Hours
+                                                </h5>
+                                                <div class="col-md-3 no-padding">
+                                                    <input type="number" class="form-control" />
+                                                </div>
+                                                <h5 class="col-md-3">
+                                                    Minutes
+                                                </h5>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group" style="border-top:1px solid rgb(191, 191, 191);">
+                                    <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Remind about task</h5>
+                                    <div class="col-sm-10" style="margin-top:6px;">
+                                        <a href="javascript://"> <i class="fa fa-plus"></i> Add reminder</a> <span>via instant messanger or email</span>
+                                    </div>
+                                </div>
+                                <div class="row form-group" style="border-top:1px solid rgb(191, 191, 191);">
+                                    <h5 class="col-sm-2 modal-title visible-xs" style="margin:8px 0;"> <span class="pull-left"> Repeat task </span> <input type="checkbox" class="visible-xs pull-left" style="margin-left:15px;" /> <span class="clearfix"></span> </h5>
+                                    <h5 class="col-sm-2 modal-title hidden-xs" style="margin:8px 0;">Repeat task </h5>
+                                    <div class="col-sm-10" style="margin-top:6px;">
+                                        <div class="hidden-xs">
+                                            <label><input type="checkbox" /> Active </label>
+                                        </div>
+                                        <div id="main-links">
+                                            <h5 class="col-sm-2">repeat term</h5> 
+                                            <div class="col-md-10" style="margin-top:3px;">
+                                                <a href="javascript://" class="repeat-link rp-active" data-phase="day">
+                                                    day
+                                                </a>
+                                                <a href="javascript://" data-phase="week" class="repeat-link">
+                                                    week
+                                                </a>
+                                                <a data-phase="month" href="javascript://" class="repeat-link">
+                                                    month
+                                                </a>
+                                                <a data-phase="year" href="javascript://" class="repeat-link">
+                                                    year
+                                                </a>
+                                            </div> 
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="row" style="margin-top:4px;">
+                                            <div class="col-sm-12" id="day-tab">
+                                                <h5 class="col-sm-2 no-padding">every</h5>
+                                                <div class="col-sm-5 no-padding">
+                                                    <div class="col-md-3 no-padding">
+                                                        <input type="number" class="form-control" />
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <select class="form-control">
+                                                            <option value="any">any</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-5 no-padding">
+                                                    <h5 class="col-md-6 no-padding">
+                                                        Day with an interval of
+                                                    </h5>
+                                                    <div class="col-md-6 text-left no-padding">
+                                                        <label> <input type="number" value="0" class="form-control col-sm-8" style="width:50%;" /> <span class="col-sm-2" style="margin-top:8px;">mo. </span> </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12" id="week-tab" style="display:none">
+                                                <h5 class="col-sm-2 no-padding">every</h5>
+                                                <div class="col-sm-10 no-padding">
+                                                    <div class="col-md-3 no-padding">
+                                                        <input type="number" class="form-control" />
+                                                    </div>
+                                                    <h5 class="col-md-9">
+                                                        week
+                                                    </h5>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="col-sm-12" style="padding:10px; background-color:#eeeeee; margin:8px 0">
+                                                    <label class="col-sm-1 no-padding"><input type="checkbox" /> Sun </label>
+                                                    <label class="col-sm-1 no-padding"><input type="checkbox" /> Mon </label>
+                                                    <label class="col-sm-1 no-padding"><input type="checkbox" /> Tue </label>
+                                                    <label class="col-sm-1 no-padding"><input type="checkbox" /> Wed </label>
+                                                    <label class="col-sm-1 no-padding"><input type="checkbox" /> Thu </label>
+                                                    <label class="col-sm-1 no-padding"><input type="checkbox" /> Fri </label>
+                                                    <label class="col-sm-1 no-padding"><input type="checkbox" /> Sat </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12" id="month-tab" style="display:none">
+                                                <h5 class="col-sm-2 no-padding">
+                                                    <label><input type="radio" name="MonthEvery" checked="checked" /> every</label>
+                                                </h5>
+                                                <div class="col-sm-10 no-padding">
+                                                    <div class="col-md-1 no-padding">
+                                                        <input type="number" class="form-control" />
+                                                    </div>
+                                                    <h5 class="col-md-2">
+                                                        day of every
+                                                    </h5>
+                                                    <div class="col-md-1 no-padding">
+                                                        <input type="number" class="form-control" />
+                                                    </div>
+                                                    <h5 class="col-md-2">
+                                                        month
+                                                    </h5>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <h5 class="col-sm-2 no-padding">
+                                                    <label><input type="radio" name="MonthEvery" /> every</label>
+                                                </h5>
+                                                <div class="col-sm-10 no-padding">
+                                                    <div class="col-md-3 no-padding">
+                                                        <select class="form-control">
+                                                            <option value="first">first</option>
+                                                            <option value="second">second</option>
+                                                            <option value="third">third</option>
+                                                            <option value="fourth">fourth</option>
+                                                            <option value="last">last</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3 no-padding">
+                                                        <select class="form-control">
+                                                            <option value="Sunday">Sunday</option>
+                                                            <option value="Monday">Monday</option>
+                                                            <option value="Tuesday">Tuesday</option>
+                                                            <option value="Wednesday">Wednesday</option>
+                                                            <option value="Thursday">Thursday</option>
+                                                            <option value="Friday">Friday</option>
+                                                            <option value="Saturday">Saturday</option>
+                                                        </select>
+                                                    </div>
+                                                    <h5 class="col-md-1">
+                                                        every
+                                                    </h5>
+                                                    <div class="col-md-2">
+                                                        <input type="number" class="form-control" />
+                                                    </div>
+                                                    <h5 class="col-md-1 no-padding">
+                                                        month
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12" id="year-tab" style="display:none">
+                                                <h5 class="col-sm-2 no-padding">
+                                                    <label><input type="radio" name="YearEvery" checked="checked" /> every</label>
+                                                </h5>
+                                                <div class="col-sm-10 no-padding">
+                                                    <div class="col-md-1 no-padding">
+                                                        <input type="number" class="form-control" />
+                                                    </div>
+                                                    <h5 class="col-md-1">
+                                                        day
+                                                    </h5>
+                                                    <div class="col-md-3 no-padding">
+                                                        <select class="form-control">
+                                                            <option value="January">January</option>
+                                                            <option value="February">February</option>
+                                                            <option value="March">March</option>
+                                                            <option value="April">April</option>
+                                                            <option value="May">May</option>
+                                                            <option value="June">June</option>
+                                                            <option value="July">July</option>
+                                                            <option value="August">August</option>
+                                                            <option value="September">September</option>
+                                                            <option value="October">October</option>
+                                                            <option value="November">November</option>
+                                                            <option value="December">December</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <h5 class="col-sm-2 no-padding">
+                                                    <label><input type="radio" name="YearEvery" /> every</label>
+                                                </h5>
+                                                <div class="col-sm-10 no-padding">
+                                                    <div class="col-md-3 no-padding">
+                                                        <select class="form-control">
+                                                            <option value="first">first</option>
+                                                            <option value="second">second</option>
+                                                            <option value="third">third</option>
+                                                            <option value="fourth">fourth</option>
+                                                            <option value="last">last</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3 no-padding">
+                                                        <select class="form-control">
+                                                            <option value="Sunday">Sunday</option>
+                                                            <option value="Monday">Monday</option>
+                                                            <option value="Tuesday">Tuesday</option>
+                                                            <option value="Wednesday">Wednesday</option>
+                                                            <option value="Thursday">Thursday</option>
+                                                            <option value="Friday">Friday</option>
+                                                            <option value="Saturday">Saturday</option>
+                                                        </select>
+                                                    </div>
+                                                    <h5 class="col-md-1">
+                                                        month
+                                                    </h5>
+                                                    <div class="col-md-3">
+                                                        <select class="form-control">
+                                                            <option value="January">January</option>
+                                                            <option value="February">February</option>
+                                                            <option value="March">March</option>
+                                                            <option value="April">April</option>
+                                                            <option value="May">May</option>
+                                                            <option value="June">June</option>
+                                                            <option value="July">July</option>
+                                                            <option value="August">August</option>
+                                                            <option value="September">September</option>
+                                                            <option value="October">October</option>
+                                                            <option value="November">November</option>
+                                                            <option value="December">December</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h5><strong>Repeat until:</strong></h5>
+                                                <div class="clearfix"></div>
+                                                <div class="col-sm-6" style="padding:10px; background-color:#d3d3d3; margin:2px 0">
+                                                    <label><input type="radio" name="rpUntil" /> no end date </label>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="col-sm-6" style="padding:10px; background-color:#d3d3d3; margin:2px 0">
+                                                    <label class="col-md-4 no-padding"><input type="radio" name="rpUntil" /> end date </label>
+                                                    <div class="col-md-8 no-padding">
+                                                        <input type="text" class="form-control input-sm datetimepicker1" />
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="col-sm-6" style="padding:10px; background-color:#d3d3d3; margin:2px 0">
+                                                    <label class="col-md-4 no-padding"><input type="radio" name="rpUntil" /> complete after </label>
+                                                    <div class="col-md-3 no-padding">
+                                                        <input type="number" class="form-control input-sm" />
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        iteration
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingTwo">
+                    <h4 class="panel-title">
+                        @*<a role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">*@
+                            <i class="fa fa-cubes"></i> More <i class="fa fa-angle-down"></i>
+                        @*</a>*@
+                        (<a href="javascript://" id="add-client-click" style="font-size:13px">Add Client,</a> <a href="javascript://" style="font-size:13px">Subtasks,</a> <a href="javascript://" style="font-size:13px">Related tasks,</a> <a href="javascript://" style="font-size:13px">Parent task,</a>)
+                    </h4>
+                </div>
+                <div class="panel-body" style="padding:0;">
+                    <div class="row" style="display:none;" id="add-client">
+                        <div class="col-sm-12" style="padding-left: 12px;margin-left: 12px;padding-right: 12px;margin-right: 12px;">
+                            <div class="row form-group">
+                                <h5 class="col-sm-2 modal-title" style="margin:8px 0;">CRM</h5>
+                                <div class="col-sm-10">
+                                    <div style="padding:10px 0;">
+                                        <a href="javascript://" id="crmSectionSearch" class="col-md-1 no-padding" style="font-size:16px; margin-top:10px;">Select</a>
+                                        <select id="select-CRMClient" name="CRMClient" class="demo-default col-sm-10 col-xs-10 input-sm" placeholder="Type name">
+                                            <option value="">Type name</option>
+                                            <option value="Reyan Cambel">Reyan Cambel</option>
+                                            <option value="Luis Hycks">Luis Hycks</option>
+                                            <option value="Voughan Thomas">Voughan Thomas</option>
+                                            <option value="Lee Marshal">Lee Marshal</option>
+                                        </select>
+                                        <div class="clearfix"></div>
+                                        <div id="crmSection-box-panel" class="advance-search-box" style="display:none;"><div id="loading-mask-inner" align="center" style="margin: 12% 0;"><img src="~/Content/Images/loader.gif" style="height:60px;" alt="Loading" /></div></div>
+                                    </div>
+                                    <div>
+                                        <label><input type="checkbox" /> Allow client to check task status</label>
+                                        <span style="margin-left:8px;"><i class="fa fa-question-circle"></i></span>
+                                    </div>
+                                    <div>
+                                        <label><input type="checkbox" /> Inform client when task is complete</label>
+                                        <span style="margin-left:8px;"><i class="fa fa-question-circle"></i></span>
+                                    </div>
+                                    <div>
+                                        <label><input type="checkbox" /> Allow client to send feedback</label>
+                                        <span style="margin-left:8px;"><i class="fa fa-question-circle"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Location Specific Task</h5>
+                                <div class="col-sm-4">
+                                    <div>
+                                        <label><input type="checkbox" /> </label>
+                                        <span style="margin-left:8px;"><i class="fa fa-question-circle"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-2.2.3.js"></script>
+<script>
+    $(function () {
+        $('#select-CRMClient').selectize({
+            plugins: ['remove_button'],
+            openOnFocus: false
+        });
+        $('.repeat-link').on('click', function () {
+            $('#main-links .repeat-link').removeClass('rp-active');
+            $(this).addClass('rp-active');
+            if ($(this).data('phase') == 'week') {
+                //$('#week-tab').css('display', 'block');
+                $('#day-tab').hide();
+                $('#month-tab').hide();
+                $('#year-tab').hide();
+                $('#week-tab').show();
+            }
+            else if ($(this).data('phase') == 'day') {
+                $('#week-tab').hide();
+                $('#month-tab').hide();
+                $('#year-tab').hide();
+                $('#day-tab').show();
+            }
+            else if ($(this).data('phase') == 'month') {
+                $('#week-tab').hide();
+                $('#day-tab').hide();
+                $('#year-tab').hide();
+                $('#month-tab').show();
+            }
+            else if ($(this).data('phase') == 'year') {
+                $('#week-tab').hide();
+                $('#day-tab').hide();
+                $('#month-tab').hide();
+                $('#year-tab').show();
+            }
+        });
+
+        $('#add-client-click').on('click', function () {
+            $('#add-client').toggle(300);
+        });
+
+        $('#taskplanned-click').on('click', function () {
+            $('#taskplanned-tab').toggle(300);
+        });
+    });
+</script>

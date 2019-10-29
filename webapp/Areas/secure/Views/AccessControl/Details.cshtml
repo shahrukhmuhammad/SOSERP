@@ -1,0 +1,156 @@
+﻿@model BaseApp.Entity.AppUser
+@{
+    ViewBag.Title = Model.FullName;
+    var updatedUser = ViewBag.UpdatedUser as BaseApp.Entity.AppUser;
+    var createdUser = ViewBag.CreatedUser as BaseApp.Entity.AppUser;
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">@ViewBag.Title</h3>
+        <div class="btn-group btn-group-xs" role="group">
+            <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Cancel / Back"><i class="fa fa-close"></i></a>
+            <a href="javascript://" onclick="changeStatus('@Url.Action("ChangeStatus")', '@Model.Id')" class="btn @(Model.Status == BaseApp.Entity.AppUserStatus.Active ? "btn-warning" : "btn-success")" title="@(Model.Status == BaseApp.Entity.AppUserStatus.Active ? "Suspend" : "Active")"><i class="fa @(Model.Status == BaseApp.Entity.AppUserStatus.Active ? "fa-ban" : "fa-check")"></i></a>
+            <a href="~/Secure/AccessControl/Record/@Model.Id" class="btn btn-primary" title="Edit"><i class="fa fa-edit"></i></a>
+            <a href="javascript://" onclick="deleteRecord('@Url.Action("Delete")', '@Model.Id','@Url.Action("Index")')" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="thumbnail">
+                    <img class="img-responsive img-circle img-centre" src="~/Content/Uploads/Dp/@(Model.Id).jpg" style="max-height:140px;" onerror="this.onerror = null; this.src = '/Content/Images/user.png';">
+                    <table class="table table-striped">
+                        <tr>
+                            <td class="text-right">Code</td>
+                            <th>@Model.Code</th>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Username</td>
+                            <th>@Model.Username</th>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Role</td>
+                            <th>
+                                @Model.Role.Code @Model.Role.Title
+                                <br />
+                                <span style="font-weight:normal;">Permissions</span>
+                                <br />
+                                @if (Model.Role.Permissions == "All")
+                                {
+                                    <span style="font-weight:normal;">All</span>
+                                }
+                                else
+                                {
+                                    <ul class="no-padding no-margin" style="list-style:none; font-weight:normal;">
+                                        @foreach (var p in Model.Role.PermissionsList)
+                                        {
+                                            <li><i class="fa fa-check text-success"></i> @p.ToSpacedTitleCase()</li>
+                                        }
+                                    </ul>
+                                }
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <th class="text-right">Status</th>
+                        <td>
+                            @if (Model.Status == BaseApp.Entity.AppUserStatus.Active)
+                            {
+                                <label class="label label-success">Active</label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">Suspended</label>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Last Logged In</th>
+                        <td>@Model.LastLogin</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">First Name</th>
+                        <td>@Model.FirstName</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Middle Name</th>
+                        <td>@Model.MiddleName</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Last Name</th>
+                        <td>@Model.LastName</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Gender</th>
+                        <td>@Model.Gender.ToSpacedTitleCase()</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Date of Birth</th>
+                        <td>@Model.DateOfBirth.ToShortDateString()</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <th class="text-right">Email</th>
+                        <td>@Model.Email</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Home Phone</th>
+                        <td>@Model.HomePhone</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Work Phone</th>
+                        <td>@Model.WorkPhone</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Address Line 1</th>
+                        <td>@Model.AddressLine1</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Address Line 2</th>
+                        <td>@Model.AddressLine2</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Zip Code</th>
+                        <td>@Model.ZipCode</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">City</th>
+                        <td>@Model.City</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">State</th>
+                        <td>@Model.State</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Country</th>
+                        <td>@Html.CountriesListWithCode().Where(x => x.Value == Model.Country).FirstOrDefault().Text</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Updated By</th>
+                        <td>@updatedUser.FullName on @Model.UpdatedOn</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">Created By</th>
+                        <td>@createdUser.FullName on @Model.CreatedOn</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-right">
+        <div class="btn-group" role="group">
+            <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+            <a href="javascript://" onclick="changeStatus('@Url.Action("ChangeStatus")', '@Model.Id')" class="btn @(Model.Status == BaseApp.Entity.AppUserStatus.Active ? "btn-warning" : "btn-success")"><i class="fa @(Model.Status == BaseApp.Entity.AppUserStatus.Active ? "fa-ban" : "fa-check")"></i> @(Model.Status == BaseApp.Entity.AppUserStatus.Active ? "Suspend" : "Active")</a>
+            <a href="~/Secure/AccessControl/Record/@Model.Id" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+            <a href="javascript://" onclick="deleteRecord('@Url.Action("Delete")', '@Model.Id','@Url.Action("Index")')" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,404 @@
+﻿@model CMS.Entity.CmsSubsite
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    ViewBag.Title = (queryId == null ? "Add New Subsite" : "Edit " + Model.LandingPage.Name);
+    var allPages = ViewBag.AllPages as List<CMS.Entity.CmsPage>;
+    int orderLength = allPages.Where(x => x.ParentId == null).Count();
+}
+
+@section styles{
+
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet" />
+    <link href="~/Content/Bootstrap Typehead/tokenfield-typeahead.css" rel="stylesheet" />
+    <link href="~/Content/Bootstrap Typehead/bootstrap-tokenfield.css" rel="stylesheet" />
+
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+    <style>
+        ul.stage-Nav > li.list-group > a.list-group-item::after {
+            left: 90%;
+        }
+    </style>
+}
+
+<ul class="nav nav-tabs nav-justified stage-Nav">
+    <li class="list-group">
+        <a id="carousel-Step1" href="javascript://" class="list-group-item active">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">1. Subsite Vitals</h5>
+            <p class="list-group-item-text small text-left">URL, Name, Ordering & other settings</p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step2" href="javascript://" class="list-group-item">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">2. Landing Page Contents</h5>
+            <p class="list-group-item-text small text-left">Contents editor, Add contents</p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step3" href="javascript://" class="list-group-item">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">3. SEO Settings</h5>
+            <p class="list-group-item-text small text-left">Page SEO metadata settings</p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step4" href="javascript://" class="list-group-item last">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">4. Review & Publish</h5>
+            <p class="list-group-item-text small text-left">Review page settings & publish page</p>
+        </a>
+    </li>
+</ul>
+
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong>
+        @TempData["ErrorMsg"]
+    </div>
+}
+
+<div id="div-Carousel" class="carousel slide" data-ride="carousel" data-interval="false">
+    <form id="page-frm" class="carousel-inner" role="listbox" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="item @(Request["tab"] == null ? "active" : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Subsite Settings</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="window.history.back()" data-placement="bottom" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                            <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 2);" data-placement="bottom" class="btn btn-success">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Subsite Title</label>
+                                    <input type="text" class="form-control input-sm alphanumericNoSpaceMask" id="Title" name="Title" value="@Model.Title" required @(Model.IsSystem ? "readonly" : "") autofocus />
+                                </div>
+                                <div class="form-group">
+                                    <label>Route Name</label>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-addon">/</div>
+                                        <input type="text" class="form-control input-sm alphanumericNoSpaceMask" id="LandingPageSlug" name="LandingPageSlug" value="@Model.LandingPage.Slug" required @(Model.IsSystem ? "readonly" : "") autofocus />
+                                        <input type="hidden" id="LandingPageId" name="LandingPageId" value="@Model.LandingPage.Id" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Landing Page Name</label>
+                                    <input id="Name" type="text" class="form-control input-sm" name="LandingPage.Name" value="@Model.LandingPage.Name" required />
+                                </div>
+                                <div class="form-group">
+                                    <label>Browser Title</label>
+                                    <input id="BrowserTitle" type="text" class="form-control input-sm" name="LandingPage.BrowserTitle" value="@Model.LandingPage.BrowserTitle" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Subsite Description</label>
+                                    <textarea class="form-control input-sm" name="Description" style="height:180px;">@Model.Description</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Parent</label>
+                                    <select id="ParentId" name="LandingPage.ParentId" class="form-control input-sm" @(Model.IsSystem ? "disabled" : "")>
+                                        <option value="">-- No Parent --</option>
+                                        @foreach (var x in allPages.Where(x => x.ParentId == null).ToList())
+                                        {
+                                            <option value="@x.Id" @(Model.LandingPage.ParentId == x.Id ? "selected" : "" )>@x.Name</option>
+                                        }
+                                    </select>
+                                    @if (Model.IsSystem)
+                                    {
+                                        <input type="hidden" id="ParentId" name="LandingPage.ParentId" value="@Model.LandingPage.ParentId" />
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Order</label>
+                                    <select id="PageOrder" name="LandingPage.PageOrder" class="form-control input-sm" required>
+                                        @for (int i = 1; i <= orderLength; i++)
+                                        {
+                                            <option value="@i" @(Model.LandingPage.PageOrder == i ? "selected" : "" )>@i</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Page is a Link <a href="javascript://" title="If page is a linked URL then check the checkbox and write URL."><i class="fa fa-info-circle"></i></a></label>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-addon">
+                                            <div class="checkbox no-margin"><label style="min-height:11px;"><input type="checkbox" id="IsLink" name="LandingPage.IsLink" value="@(Model.LandingPage.IsLink ? "true" : "false")" @(Model.LandingPage.IsLink ? "checked" : "") /></label></div>
+                                        </div>
+                                        <input type="url" class="form-control" id="LinkUrl" name="LandingPage.LinkUrl" value="@Model.LandingPage.LinkUrl" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Page is an external link <a href="javascript://" title="Choose whether the page should open in new tab or not."><i class="fa fa-info-circle"></i></a></label>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-addon">
+                                            <div class="checkbox no-margin"><label style="min-height:11px;"><input type="checkbox" id="LinkTarget" name="LandingPage.LinkTarget" value="@(Model.LandingPage.LinkTarget ? "true" : "false")" @(Model.LandingPage.LinkTarget ? "checked" : "") /></label> Externel</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Show Page On</label>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-addon">
+                                            <div class="checkbox no-margin"><label style="min-height:11px;"><input type="checkbox" id="Menu" name="LandingPage.Menu" value="@(Model.LandingPage.Menu ? "true" : "false")" @(Model.LandingPage.Menu ? "checked" : "") /> Menu</label></div>
+                                        </div>
+                                        <div class="input-group-addon">
+                                            <div class="checkbox no-margin"><label style="min-height:11px;"><input type="checkbox" id="Footer" name="LandingPage.Footer" value="@(Model.LandingPage.Footer ? "true" : "false")" @(Model.LandingPage.Footer ? "checked" : "") /> Footer</label></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label>Tags <a href="javascript://" title="Type tag and hit enter or tab to add another one."><i class="fa fa-info-circle"></i></a></label>
+                                    <input id="tags-typehead" class="form-control input-sm" name="LandingPage.Tags" value="@Model.LandingPage.Tags" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                            <a href="javascript://" class="btn btn-success" onclick="carouselFormValidate(this, '#div-Carousel', 2);">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "loc" ? "active" : "" ) : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Page Contents</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 3);" data-placement="bottom" class="btn btn-success review-btn">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <textarea type="text" class="form-control" id="Contents" name="LandingPage.Contents">@Model.LandingPage.Contents</textarea>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="javascript://" class="btn btn-success review-btn" onclick="carouselFormValidate(this, '#div-Carousel', 3);">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "config" ? "active" : "" ) : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Optional SEO Settings</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 3)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 4);" data-placement="bottom" class="btn btn-success review-btn">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <textarea type="text" class="form-control" id="Metadata" name="LandingPage.Metadata" rows="10">@Model.LandingPage.Metadata</textarea>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 3)" class="btn btn-default" role="button"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="javascript://" class="btn btn-success review-btn" onclick="carouselFormValidate(this, '#div-Carousel', 4);">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "config" ? "active" : "" ) : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Review your changes</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 4)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                            <button name="submit" value="draft" type="submit" class="btn btn-warning">Save as draft <i class="fa fa-angle-right"></i></button>
+                            <button name="submit" value="publish" type="submit" class="btn btn-success">Publish Page <i class="fa fa-angle-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-striped">
+                                        <tr>
+                                            <th class="text-right">Page URL</th>
+                                            <td id="review-URL"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Page Name</th>
+                                            <td id="review-Name"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Page Browser Title</th>
+                                            <td id="review-BrowserTitle"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Page is a child of</th>
+                                            <td id="review-Parent"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Page Order</th>
+                                            <td id="review-PageOrder"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-striped">
+                                        <tr>
+                                            <th class="text-right">Page is a link</th>
+                                            <td id="review-IsLink"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Page Link</th>
+                                            <td id="review-LinkUrl"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Should page open in new tab</th>
+                                            <td id="review-LinkTarget"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Show Page in Menu</th>
+                                            <td id="review-Menu"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Show Page in Footer</th>
+                                            <td id="review-Footer"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Page Tags</th>
+                                            <td id="review-Tags"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="review-Metadata" class="col-md-12 well well-sm" style="margin-top:15px;"></div>
+                            <div id="review-Contents" class="col-md-12" style="margin-top:15px;"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 4)" class="btn btn-default" role="button"><i class="fa fa-chevron-left"></i> Back</a>
+                            @if (!Model.IsSystem)
+                            {
+                                <button name="submit" value="draft" type="submit" class="btn btn-warning">Save as draft <i class="fa fa-angle-right"></i></button>
+                            }
+                            <button name="submit" value="publish" type="submit" class="btn btn-success">Publish Page <i class="fa fa-angle-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section scripts{
+    <!--  Bootstrap Typehead  -->
+    <script src="~/Scripts/Bootstrap Typehead/bootstrap-tokenfield.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+            $(function () {
+                $("#Contents").summernote({ height: 200 });
+            });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('Contents');
+            });
+        </script>
+    }
+    <script>
+        $(function () {
+            $('#tags-typehead').on('tokenfield:createdtoken', function (e) { }).tokenfield({ createTokensOnBlur: true });
+
+            $("#page-frm").validate({
+                rules: {
+                    LandingPageSlug: {
+                        remote: {
+                            url: "@Url.Action("CheckUniqueSlug", "WebPage")",
+                            type: "post",
+                            data: {
+                                Slug: function () {
+                                    return $("#LandingPageSlug").val();
+                                },
+                                Id: function () {
+                                    return $("#LandingPageId").val();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+
+            $('.review-btn').click(function (e) {
+                $("#review-URL").text($("#LandingPageSlug").val());
+                $("#review-Name").text($("#Name").val());
+                $("#review-BrowserTitle").text($("#BrowserTitle").val());
+                $("#review-Parent").text($("#ParentId option:selected").text());
+                $("#review-PageOrder").text($("#PageOrder").val());
+                $("#review-IsLink").text($("#IsLink").val());
+                $("#review-LinkUrl").text($("#LinkUrl").val());
+                $("#review-LinkTarget").text($("#LinkTarget").val());
+                $("#review-Menu").text($("#Menu").val());
+                $("#review-Footer").text($("#Footer").val());
+                $("#review-Tags").text($("#tags-typehead").val());
+                $("#review-Contents").html($('.ae-editable').html());
+                $("#review-Metadata").text($('#Metadata').val());
+            });
+        });
+    </script>
+}

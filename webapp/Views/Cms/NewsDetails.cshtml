@@ -1,0 +1,23 @@
+﻿@model CMS.Entity.CmsNews
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">@ViewBag.Title</h3>
+        <div class="btn-group btn-group-xs" role="group">
+            <label class="btn btn-info">@Model.DateTime.ToShortDateString()</label>
+            <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Back"><i class="fa fa-angle-left"></i> Back</a>
+        </div>
+    </div>
+    <div class="panel-body">
+        @Html.Raw(Model.Details)
+    </div>
+    <div class="panel-footer text-right">
+        <div class="btn-group" role="group">
+            <label class="btn btn-info">@Model.DateTime.ToShortDateString()</label>
+            <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+        </div>
+    </div>
+</div>

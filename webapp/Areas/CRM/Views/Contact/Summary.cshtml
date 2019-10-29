@@ -1,0 +1,815 @@
+﻿@model Contact
+@{
+    ViewBag.Title = Model.FullName;
+    var orderDetails = ViewBag.OrderDetails as IList<Ecommerce.Entity.OrderDetail>;
+}
+
+@section styles{
+<link href="~/Content/App/Ecommerce.css" rel="stylesheet" />
+    <style>
+    </style>
+}
+
+<div class="user-Profile">
+    <div class="row tb-padding">
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="progress">
+                <a href="javascript://" class="progress-bar @(Model.Status == ContactStatus.Invited ? "progress-bar-info" : "progress-bar-muted") dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 20%; position:relative;">
+                    @if (Model.Status == ContactStatus.Invited)
+                    {
+                        <img src="~/Content/Images/tick.png" style="position: absolute; height: 25px; left: 10px; top: 5px;" />
+                    }
+                    Invited
+                </a>
+                @*<ul class="dropdown-menu" style="top:-122px; width:auto;">
+                        <li><a href="javascript://"><img src="~/Content/Images/tick.png" style="height: 20px;" />  Invited On: @DateTime.UtcNow by Super Admin</a></li>
+                        <li><a href="javascript://">Last Reminder Sent On: @DateTime.UtcNow by Super Admin</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="javascript://" class="btn btn-primary"><i class="fa fa-share"></i> Send Reminder</a></li>
+                    </ul>*@
+                <a href="javascript://" class="progress-bar @(Model.Status == ContactStatus.Active ? "progress-bar-info" : "progress-bar-muted")" style="width: 20%; position:relative;">
+                    @if (Model.Status == ContactStatus.Active)
+                    {
+                        <img src="~/Content/Images/tick.png" style="position: absolute; height: 25px; left: 10px; top: 5px;" />
+                    }
+                    Active
+                </a>
+                @*<ul class="dropdown-menu" style="top:-122px; width:auto;">
+                        <li><a href="javascript://"><img src="~/Content/Images/tick.png" style="height: 20px;" />  Registered On: @DateTime.UtcNow by Super Admin</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="javascript://" class="btn btn-primary"><i class="fa fa-share"></i> Send Reminder</a></li>
+                    </ul>*@
+                <a href="javascript://" class="progress-bar  @(Model.Status == ContactStatus.Inactive ? "progress-bar-info" : "progress-bar-muted")" style="width: 20%; position:relative;">
+                    @if (Model.Status == ContactStatus.Inactive)
+                    {
+                        <img src="~/Content/Images/tick.png" style="position: absolute; height: 25px; left: 10px; top: 5px;" />
+                    }
+                    InActive
+                </a>
+                @*<ul class="dropdown-menu" style="top:-122px; width:auto;">
+                        <li><a href="javascript://"><img src="~/Content/Images/tick.png" style="height: 20px;" />  In Progress From: @DateTime.UtcNow by Super Admin</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="javascript://" class="btn btn-primary"><i class="fa fa-share"></i> Send Quote</a></li>
+                    </ul>*@
+                <a href="javascript://" class="progress-bar  @(Model.Status == ContactStatus.Suspended ? "progress-bar-info" : "progress-bar-muted")" style="width: 20%; position:relative;">
+                    @if (Model.Status == ContactStatus.Suspended)
+                    {
+                        <img src="~/Content/Images/tick.png" style="position: absolute; height: 25px; left: 10px; top: 5px;" />
+                    }
+                    Suspended
+                </a>
+                <a href="javascript://" class="progress-bar  @(Model.Status == ContactStatus.PendingApproval ? "progress-bar-info" : "progress-bar-muted")" style="width: 20%; position:relative;">
+                    @if (Model.Status == ContactStatus.PendingApproval)
+                    {
+                        <img src="~/Content/Images/tick.png" style="position: absolute; height: 25px; left: 10px; top: 5px;" />
+                    }
+                    Pending
+                </a>
+                @*<ul class="dropdown-menu" style="top:-122px; width:auto;">
+                        <li><a href="javascript://">Last Purchase On: @DateTime.UtcNow by Super Admin</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="javascript://" class="btn btn-primary"><i class="fa fa-share"></i> Send Reminder</a></li>
+                    </ul>*@
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-3">
+            <img src="~/Content/Uploads/CRM/@(Model.Id).jpg" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/user.png';" />
+        </div>
+        <div class="col-sm-6">
+            <div class="page-header">
+                <h1 style="margin-top:0;">@Model.FullName <small>(@Model.Code)</small></h1>
+                <div class="btn-group btn-group-lg">
+                    <a href="~/CRM/Contact/Record/@Model.Id?r=@((int)Model.ContactType)" class="btn btn-link text-muted" title="Edit"><i class="fa fa-edit"></i></a>
+                </div>
+            </div>
+            @*<div class="row">
+                    <div class="col-sm-4 text-right">
+                        <h4 class="text-muted" style="margin-top:0;">Targeted for:</h4>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4 style="margin-top:0;">@Model.TargetedFor.ToSpacedTitleCase()</h4>
+                    </div>
+                </div>*@
+            <div class="row">
+                <div class="col-sm-4 text-right">
+                    <h4 class="text-muted" style="margin-top:0;">Source:</h4>
+                </div>
+                <div class="col-sm-8">
+                    <h4 style="margin-top:0;">@Model.Source.ToSpacedTitleCase()</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 text-right">
+                    <h4 class="text-muted" style="margin-top:0;">Status:</h4>
+                </div>
+                <div class="col-sm-8">
+                    <h4 style="margin-top:0;">@Model.Status.ToSpacedTitleCase()</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 text-right">
+                    <h4 class="text-muted" style="margin-top:0;">Account Type:</h4>
+                </div>
+                <div class="col-sm-8">
+                    <h4 style="margin-top:0;">
+                        @Model.ContactType.ToSpacedTitleCase()
+                        @if (Model.SelectedContactTypes.Count() > 0)
+                        {
+                            foreach (var item in Model.SelectedContactTypes)
+                            {
+                                <span>, @item.ContactType.ToSpacedTitleCase()</span>
+                            }
+                        }
+
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3 text-right">
+            <div class="btn-group btn-group-vertical fullWidth" role="group">
+                <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-envelope"></i> Message</a>
+                <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-calendar-o"></i> Add Note</a>
+                <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-clipboard"></i> Add Reminder</a>
+                <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-link"></i> Link to Company</a>
+                @if (Model.ContactType == ContactType.Supplier)
+                {
+                    <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-file-o"></i> Create PO</a>
+                }
+                else
+                {
+                    <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-file-o"></i> Create Sale Lead</a>
+                }
+                <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-file-text-o"></i> Send Invoice</a>
+                <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-money"></i> Make Payment</a>
+                <a href="javascript://" class="btn btn-link text-muted"><i class="fa fa-gear"></i> Export</a>
+            </div>
+        </div>
+    </div>
+    @if (!string.IsNullOrEmpty(Model.Description))
+    {
+        <div class="well no-border bg-transparent">
+            <p>@Model.Description</p>
+        </div>
+    }
+    <div class="row tb-padding">
+        <div class="col-sm-9 col-sm-offset-2">
+            <div class="circle-btns circle-Newbtns">
+                <a class="active" href="#details" aria-controls="details" role="tab" data-toggle="tab" onclick="$(this).parent().find('a').removeClass('active'); $(this).addClass('active');">
+                    <p class="title">Contact Details</p>
+                </a>
+                    <a href="#purchase" aria-controls="purchase" role="tab" data-toggle="tab" onclick="$(this).parent().find('a').removeClass('active'); $(this).addClass('active');">
+                        <p class="title">Purchase Orders</p>
+                        <p class="count">1</p>
+                    </a>
+                <a href="#sales" aria-controls="sales" role="tab" data-toggle="tab" onclick="$(this).parent().find('a').removeClass('active'); $(this).addClass('active');">
+                    <p class="title">Sale Orders</p>
+                    <p class="count">93</p>
+                </a>
+                <a href="#documents" aria-controls="documents" role="tab" data-toggle="tab" onclick="$(this).parent().find('a').removeClass('active'); $(this).addClass('active');">
+                    <p class="title">Contact Documents</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active" id="details">
+        @if (Model.ContactType == ContactType.Supplier || Model.ContactType == ContactType.Trader || Model.ContactType == ContactType.DropShipper || Model.ContactType == ContactType.TraderDropShipper)
+        {
+            <div class="row tb-padding">
+                <div class="col-sm-12">
+                    <div class="page-header">
+                        <h4>Company Profile</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-5 text-right">
+                                    Trading Name
+                                </div>
+                                <div class="col-sm-7">
+                                    @Model.Company.Title
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5 text-right">
+                                    Business Type
+                                </div>
+                                <div class="col-sm-7">
+                                    @Model.Company.Type
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-6 text-right">
+                                    Name of Director/Owner of Business
+                                </div>
+                                <div class="col-sm-6">
+                                    @Model.Company.ResponsiblePerson
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 text-right">
+                                    N.I Number
+                                </div>
+                                <div class="col-sm-6">
+                                    @Model.Company.NINumber
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="row tb-padding">
+            <div class="col-sm-4">
+                <div class="page-header">
+                    <h4>Telephone</h4>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 text-right">
+                        Primary
+                    </div>
+                    <div class="col-sm-9">
+                        @Model.Phone <span class="text-muted">(@Model.PrimaryPhoneType)</span>
+                    </div>
+                </div>
+                @foreach (var x in Model.MorePhones)
+            {
+                    <div class="row">
+                        <div class="col-sm-3 text-right">
+
+                        </div>
+                        <div class="col-sm-9">
+                            @x.Phone <span class="text-muted">(@x.Type)</span>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-sm-4">
+                <div class="page-header">
+                    <h4>Email</h4>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 text-right">
+                        Primary
+                    </div>
+                    <div class="col-sm-9">
+                        @Model.Email <span class="text-muted">(@Model.PrimaryEmailType)</span>
+                    </div>
+                </div>
+                @foreach (var x in Model.MoreEmails)
+            {
+                    <div class="row">
+                        <div class="col-sm-3 text-right">
+
+                        </div>
+                        <div class="col-sm-9">
+                            @x.Email <span class="text-muted">(@x.Type)</span>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-sm-4">
+                <div class="page-header">
+                    <h4>Other</h4>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 no-padding-left text-right">
+                        Skype ID
+                    </div>
+                    <div class="col-sm-9">
+                        @Model.SkypeID
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 text-right">
+                        Facebook
+                    </div>
+                    <div class="col-sm-9">
+                        @Model.Facebook
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 text-right">
+                        Twitter
+                    </div>
+                    <div class="col-sm-9">
+                        @Model.Twitter
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row tb-padding">
+            <div class="col-sm-12">
+                <div class="page-header">
+                    <h4>Personal Information</h4>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-5 text-right">
+                                Date of Birth
+                            </div>
+                            <div class="col-sm-7">
+                                @Model.DateOfBirth
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5 text-right">
+                                Gender
+                            </div>
+                            <div class="col-sm-7">
+                                @Model.Gender
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5 text-right">
+                                Fax
+                            </div>
+                            <div class="col-sm-7">
+                                @Model.Fax
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5 text-right">
+                                Website
+                            </div>
+                            <div class="col-sm-7">
+                                @Model.Website
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-3 text-right">
+                                Address
+                            </div>
+                            <div class="col-sm-9">
+                                @Model.AddressLine1
+                                <br />
+                                @Model.AddressLine2
+                                <br />
+                                @Model.City <span>(@Model.ZipCode)</span>
+                                <br />
+                                @Model.State, @Html.CountriesListWithCode().Where(x => x.Value == Model.Country).FirstOrDefault().Text
+                            </div>
+                        </div>
+                    </div>
+                    @foreach (var x in Model.MoreAddresses)
+                    {
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <div class="col-sm-3 text-right">
+
+                                </div>
+                                <div class="col-sm-9">
+                                    @x.AddressLine1
+                                    <br />
+                                    @x.AddressLine2
+                                    <br />
+                                    @x.City <span>(@x.ZipCode)</span>
+                                    <br />
+                                    @x.State, @Html.CountriesListWithCode().Where(y => y.Value == x.Country).FirstOrDefault().Text
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="sales">
+        <div class="row tb-padding">
+            <div class="col-sm-12">
+                <div class="form-Modal">
+                    <div class="modal-content">
+                        <div class="modal-body modal-pading">
+                            <div class="table-responsive">
+                                <table id="Orders-dataTable" class="table table-hover table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th width="45px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Order ID" id="dataTable_0" /></th>
+                                            <th width="130px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Product Details" id="dataTable_1" /></th>
+                                            <th width="60px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Buyer Details" id="dataTable_2" /></th>
+                                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Order Source" id="dataTable_3" /></th>
+                                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Sold For" id="dataTable_4" /></th>
+                                            <th width="35px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Qty" id="dataTable_5" /></th>
+                                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Total" id="dataTable_6" /></th>
+                                            <th width="50px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Order Date" id="dataTable_7" /></th>
+                                            <th width="155px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Postage Package" id="dataTable_8" /></th>
+                                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Order Status" id="dataTable_9" /></th>
+                                            <th class="text-center" width="70px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var x in ViewBag.SalesGrid as IList<Ecommerce.Entity.Order>)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @x.OrderId
+                                                </td>
+                                                <td>
+                                                    @if (orderDetails.Where(y => y.OrderId == x.OrderId).ToList().Count() > 1)
+                                                    {
+                                                        <ul class="mutiItem list-group">
+                                                            @foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <div class="imgDiv">
+                                                                        <img id="img-Preview" src="~/Content/Uploads/Ecommerce/p_@(item.ProductId).jpg" class="img-responsive grid-img" onerror="this.onerror = null; this.src = '/Content/Images/img.png';" />
+                                                                        @item.Sku
+                                                                    </div>
+                                                                    <small class="text-primary"><a href="#">@item.Description </a></small>
+                                                                    <div class="clearfix"></div>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                                        {
+                                                            <div class="imgDiv">
+                                                                <img id="img-Preview" src="~/Content/Uploads/Ecommerce/p_@(item.ProductId).jpg" class="img-responsive grid-img" onerror="this.onerror = null; this.src = '/Content/Images/img.png';" />
+                                                                @item.Sku
+                                                            </div>
+                                                            <small class="text-primary"><a href="#">@item.Description </a></small>
+                                                        }
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <span class="text-primary"><a href="javascript://">@x.ContactTitle</a></span> <br />
+                                                    <span class="text-primary">Acct Type </span> <br />
+                                                    @if (x.IsDropShipper)
+                                                    { <text> Dropshipper</text>}
+                                                    else if (x.IsTrader)
+                                                    { <text> Trader </text>}
+                                                </td>
+
+                                                <td>
+                                                    @x.OrderSource
+                                                </td>
+                                                <td>
+                                                    @if (orderDetails.Where(y => y.OrderId == x.OrderId).ToList().Count() > 1)
+                                                    {
+                                                        <ul class="mutiItem list-group">
+                                                            @foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    @AppSettings.GetVal("CurrencySymbol") @item.Price
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                                        {
+                                                            @AppSettings.GetVal("CurrencySymbol") @item.Price
+                                                        }
+                                                    }
+
+                                                </td>
+                                                <td>
+                                                    @if (orderDetails.Where(y => y.OrderId == x.OrderId).ToList().Count() > 1)
+                                                    {
+                                                        <ul class="mutiItem list-group">
+                                                            @foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    @item.Quantity
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                                        {
+                                                            @item.Quantity
+                                                        }
+                                                    }
+                                                </td>
+
+                                                <td>
+                                                    @AppSettings.GetVal("CurrencySymbol") @x.OrderTotal
+
+                                                </td>
+                                                <td>
+                                                    @x.DateTime.ToString("dd/MM/yyyy hh:mm tt")
+                                                </td>
+                                                <td>
+                                                    @x.shippingpackagesDetails <br />
+                                                    <span>(@x.shippingpackagesDeliveryTime)</span><br />
+                                                    <span><b>Cost: </b>@AppSettings.GetVal("CurrencySymbol") @x.shippingpackagesPrice</span><br />
+                                                    <span><b>Tracking No</b> @x.ShippingCode </span>
+                                                </td>
+                                                <td>
+                                                    @x.OrderStatus
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-xs" role="group">
+                                                        <a href="/Ecommerce/Order/SaleOrderDetail/@x.OrderId" class="btn btn-primary" title="View"><i class="fa fa-eye"></i></a>
+                                                        @*<a href="javascript://" onclick="' + deleteRecordData + '" class="btn btn-danger" title="Cancel"><i class="fa fa-times"></i></a>*@
+                                                        @*<div class="dropdown pull-left">
+                                                    <a role="button" data-toggle="dropdown" class="dropdown-toggle btn btn-primary btn-xs" href="#">
+                                                        <span class="caret"></span>
+                                                    </a>
+                                                    <ul class="dropdown-menu gridDropdown">
+                                                        <li><a href="javascript://">Print Postage labels/Invoices</a></li>
+                                                        <li><a href="javascript://">View & Process Order</a></li>
+                                                        <li><a href="javascript://">Mark as Dispatched</a></li>
+                                                        <li><a href="javascript://">Add Tracking Details</a></li>
+                                                        <li><a href="javascript://">Update Postage Package</a></li>
+                                                    </ul>
+                                                </div>*@
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="purchase">
+        <div class="row tb-padding">
+            <div class="col-sm-12">
+                <div class="form-Modal">
+                    <div class="modal-content">
+                        <div class="modal-body modal-pading">
+                            <div class="table-responsive">
+                                <table id="Purchase-dataTable" class="table table-hover table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th width="50px"><input class="form-control input-sm input-tbl" type="text" placeholder="PO ID" id="dataTable_0" /></th>
+                                            <th width="140px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Product Details" id="dataTable_1" /></th>
+                                            <th width="100px;"><input class="form-control input-sm input-tbl" type="text" placeholder="Buyer Details" id="dataTable_2" /></th>
+                                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Purchase Price" id="dataTable_3" /></th>
+                                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Qty" id="dataTable_4" /></th>
+                                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Total" id="dataTable_5" /></th>
+                                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="PO Date" id="dataTable_6" /></th>
+                                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="PO Status" id="dataTable_7" /></th>
+                                            <th class="text-center" width="70px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var x in ViewBag.POList as IList<Ecommerce.Entity.Order>)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @x.OrderId
+                                                </td>
+                                                <td>
+                                                    @if (orderDetails.Where(y => y.OrderId == x.OrderId).ToList().Count() > 1)
+                                                    {
+                                                        <ul class="mutiItem list-group">
+                                                            @foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    <div class="imgDiv">
+                                                                        <img id="img-Preview" src="~/Content/Uploads/Ecommerce/p_@(item.ProductId).jpg" class="img-responsive grid-img" onerror="this.onerror = null; this.src = '/Content/Images/img.png';" />
+                                                                        @item.Sku
+                                                                    </div>
+                                                                    <small class="text-primary"><a href="#">@item.Description </a></small>
+                                                                    <div class="clearfix"></div>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                                        {
+                                                            <div class="imgDiv">
+                                                                <img id="img-Preview" src="~/Content/Uploads/Ecommerce/p_@(item.ProductId).jpg" class="img-responsive grid-img" onerror="this.onerror = null; this.src = '/Content/Images/img.png';" />
+                                                                @item.Sku
+                                                            </div>
+                                                            <small class="text-primary"><a href="#">@item.Description </a></small>
+                                                        }
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <span class="text-primary"><a href="javascript://">@x.ContactTitle</a></span> <br />
+                                                    <span class="text-primary">Acct Type </span> <br />
+                                                    @if (x.IsDropShipper)
+                                                    { <text> Dropshipper</text>}
+                                                    else if (x.IsTrader)
+                                                    { <text> Trader </text>}
+                                                </td>
+                                                <td>
+                                                    @if (orderDetails.Where(y => y.OrderId == x.OrderId).ToList().Count() > 1)
+                                                    {
+                                                        <ul class="mutiItem list-group">
+                                                            @foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    @AppSettings.GetVal("CurrencySymbol") @item.Price
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                                        {
+                                                            @AppSettings.GetVal("CurrencySymbol") @item.Price
+                                                        }
+                                                    }
+
+                                                </td>
+                                                <td>
+                                                    @if (orderDetails.Where(y => y.OrderId == x.OrderId).ToList().Count() > 1)
+                                                    {
+                                                        <ul class="mutiItem list-group">
+                                                            @foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                                            {
+                                                                <li class="list-group-item">
+                                                                    @item.Quantity
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var item in orderDetails.Where(y => y.OrderId == x.OrderId).ToList())
+                                                        {
+                                                            @item.Quantity
+                                                        }
+                                                    }
+                                                </td>
+
+                                                <td>
+                                                    @AppSettings.GetVal("CurrencySymbol") @x.OrderTotal
+
+                                                </td>
+                                                <td>
+                                                    @x.DateTime.ToString("dd/MM/yyyy hh:mm tt")
+                                                </td>
+                                                <td>
+                                                    @x.OrderStatus
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="btn-group btn-group-xs" role="group">
+                                                        <a href="/Ecommerce/Order/SaleOrderDetail/@x.OrderId" class="btn btn-primary" title="View"><i class="fa fa-eye"></i></a>
+                                                        @*<a href="javascript://" onclick="' + deleteRecordData + '" class="btn btn-danger" title="Cancel"><i class="fa fa-times"></i></a>
+                                                        <div class="dropdown pull-left">
+                                                            <a role="button" data-toggle="dropdown" class="dropdown-toggle btn btn-primary btn-xs" href="#">
+                                                                <span class="caret"></span>
+                                                            </a>
+                                                            <ul class="dropdown-menu gridDropdown">
+                                                                <li><a href="javascript://">Print Postage labels/Invoices</a></li>
+                                                                <li><a href="javascript://">View & Process Order</a></li>
+                                                                <li><a href="javascript://">Mark as Dispatched</a></li>
+                                                                <li><a href="javascript://">Add Tracking Details</a></li>
+                                                                <li><a href="javascript://">Update Postage Package</a></li>
+                                                            </ul>
+                                                        </div>*@
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="documents">
+        <div class="row tb-padding">
+            <div class="col-sm-12">
+                <h1>Documents</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    @*<div class="row">
+            <div class="col-sm-4">
+                <div class="page-header">
+                    <h4>Current projects</h4>
+                </div>
+                <p>Recruiting Manager 1</p>
+                <p>Recruiting Manager 2</p>
+            </div>
+            <div class="col-sm-4">
+                <div class="page-header">
+                    <h4>Complete Projects</h4>
+                </div>
+                <p><strike>Recruiting SEO spec 1</strike></p>
+                <p><strike>Recruiting SEO spec 2</strike></p>
+            </div>
+            <div class="col-sm-4">
+                <div class="page-header">
+                    <h4>On hold or canceled projects</h4>
+                </div>
+                <p>Recruiting SEO spec 3</p>
+            </div>
+        </div>*@
+    @*<div class="well well-sm">
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <div class="summaryView-btns btn-group" role="group">
+                        <a href="javascript://" class="btn btn-default"><i class="fa fa-calendar-o"></i><br> Add Event</a>
+                        <a href="javascript://" class="btn btn-primary"><i class="fa fa-share"></i><br> Move to <br /> Accounts</a>
+                        <a href="javascript://" class="btn btn-info"><i class="fa fa-envelope"></i><br> Send Message</a>
+                        <a href="~/CRM/Contact/LeadRecord/@Model.Id" class="btn btn-warning"><i class="fa fa-share"></i><br> Edit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="bs-callout bs-callout-primary">
+                    <h3>@Model.FullName</h3>
+                    <h4>@Model.Code</h4>
+                    <p>Primary Email: <span class="text-bold">@Model.Email <small>(@Model.PrimaryEmailType)</small></span></p>
+                    <p>Primary Phone: <span class="text-bold">@Model.Phone <small>(@Model.PrimaryPhoneType)</small></span></p>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h5>More Emails</h5>
+                            <div class="table-responsive">
+                                <table class="table table-condensed table-hover">
+                                    @foreach (var x in Model.MoreEmails)
+                                    {
+                                        <tr>
+                                            <th>@x.Type</th>
+                                            <th>@x.Email</th>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <h5>More Phones</h5>
+                            <div class="table-responsive">
+                                <table class="table table-condensed table-hover">
+                                    @foreach (var x in Model.MorePhones)
+                                    {
+                                        <tr>
+                                            <th>@x.Type</th>
+                                            <th>@x.Phone</th>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="bs-callout bs-callout-primary">
+                    <h4>Address</h4>
+                    <div class="table-responsive">
+                        <table class="table table-condensed table-hover">
+                            <tbody>
+                                <tr>
+                                    <th>@Model.AddressLine1</th>
+                                </tr>
+                                <tr>
+                                    <th>@Model.AddressLine2</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>City: <span class="text-bold">@Model.City <small>(@Model.ZipCode)</small></span></p>
+                    <p>State <span class="text-bold">@Model.State</span> Country: <span class="text-bold">@Html.CountriesListWithCode().Where(x => x.Value == Model.Country).FirstOrDefault().Text</span></p>
+                </div>
+            </div>
+        </div>*@
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#Orders-dataTable", [1,2,3,4,5,6,7,8,9], [0,10]);
+            filterDataTable("#Purchase-dataTable", [1, 2, 3, 4, 5, 6, 7], [0, 8]);
+        });
+    </script>
+}

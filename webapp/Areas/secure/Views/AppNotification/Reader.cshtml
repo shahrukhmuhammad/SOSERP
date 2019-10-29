@@ -1,0 +1,52 @@
+﻿@model List<BaseApp.Entity.AppNotification>
+
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Alerts" data-placement="bottom">
+    <i class="fa fa-globe" style="font-size:21px;"></i>
+    @if (Model.Where(x => x.IsRead == false).Count() > 0)
+    {
+        <span class="badge" style="background-color:#ff0000;font-size:10px; font-family:'Times New Roman'; padding:3px;">@Model.Where(x => x.IsRead == false).Count()</span>
+    }
+</a>
+<div class="dropdown-menu no-padding">
+    <div class="form-Modal">
+        <div class="modal-content">
+            <div class="modal-header sm-padding">
+                <a href="~/Secure/AppNotification"><h6 class="modal-title">Alerts</h6></a>
+                <div class="btn-group btn-group-xs" role="group">
+                    <a href="javascript://" class="btn btn-link markAllRead-notification"><small>Mark all as read</small></a>
+                    @if (CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All))
+                    {
+                        <a href="~/Secure/Config/Notification" class="btn btn-link"><small>Settings</small></a>
+                    }
+                </div>
+            </div>
+            <div class="list-group no-margin" style="max-height:240px; overflow-y:auto;">
+                @if (Model.Count() > 0)
+                {
+                    foreach (var x in Model)
+                    {
+                        <div class="list-group-item @(!x.IsRead ? "list-group-item-warning" : "") no-radius sm-padding">
+                            <span class="badge no-radius">@x.CreatedOn.GetTimeSpan()</span>
+                            <h6 class="list-group-item-heading" style="font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:250px;">@x.Title</h6>
+                            <p style="font-size:9px; margin-top:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:270px;">@x.Description</p>
+
+                            <div class="btn-group btn-group-xs pull-right" role="group" style="margin-right:10px; margin-top:-25px;">
+                                <a class="btn btn-primary notification-item" data-id="@x.Id" href="~/Secure/AppNotification/Details/@x.Id"><i class="fa fa-eye"></i></a>
+                                <a class="btn btn-info notification-item" data-id="@x.Id" href="@x.ActionUrl"><i class="fa fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <small class="list-group-item sm-padding text-center">No record found</small>
+                }
+            </div>
+            <div class="modal-footer no-padding">
+                <div class="well well-sm no-margin no-padding text-center">
+                    <a href="~/Secure/AppNotification" class="btn btn-link btn-sm fullWidth">See all alerts</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

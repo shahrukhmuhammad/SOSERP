@@ -1,0 +1,1040 @@
+﻿@{
+    ViewBag.Title = "Ecommerce Settings";
+    var ecommerce = AppModule.GetById("Ecommerce");
+}
+
+@section styles{
+    <link href="~/Content/materialDesignSwitch.css" rel="stylesheet" />
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+    <style>
+        ul.stage-Nav > li.list-group > a.list-group-item::after {
+            left: 90%;
+        }
+
+        .cke_textarea_inline .container {
+            width: 965px;
+        }
+        .scTitle {
+            text-decoration:none !important;
+        }
+    </style>
+}
+
+<ul class="nav nav-tabs nav-justified stage-Nav">
+    <li class="list-group">
+        <a id="carousel-Step1" href="javascript://" class="list-group-item active">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">1. Configurations</h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step2" href="javascript://" class="list-group-item">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">
+                2. General Settings
+            </h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step3" href="javascript://" class="list-group-item">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">
+                3. Shipping Management
+            </h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step4" href="javascript://" class="list-group-item last">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">4. Review</h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+</ul>
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> @TempData["ErrorMsg"]
+    </div>
+}
+
+<div id="div-Carousel" class="carousel slide" data-ride="carousel" data-interval="false">
+    <form id="frm" class="carousel-inner" role="listbox" action="~/secure/setting/Ecommerce" method="post">
+        <div class="carousel-inner form" role="listbox">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="/Secure/Setting/Ecommerce" />
+            <div class="item @(Request["tab"] == null ? "active" : "")">
+                <div class="form-Modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Configurations</h4>
+                            <div class="btn-group btn-group-xs" role="group">
+                                <a href="javascript://" onclick="window.history.back()" data-placement="bottom" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                                <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 2);" data-placement="bottom" class="btn btn-success">Next <i class="fa fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <span class="pull-right">
+                                        <input data-id="Model-Status" type="checkbox" class="switch" value="@(ecommerce.Status ? "true" : "false")" @(ecommerce.Status ? "checked" : "") />
+                                        <input id="Model-Status" name="ecommerceStatus" type="hidden" value="@(ecommerce.Status ? "true" : "false")" />
+                                    </span>
+                                    <h4 class="list-group-item-heading">Activate / Deactivate Module</h4>
+                                    <p class="list-group-item-text">Choose whether this module should be accessable and workable or not.</p>
+                                </li>
+                            </ul>
+
+                            <div class="form-group">
+                                <label>Message to show</label>
+                                <textarea id="Message" name="ecommerceMessage">@Html.Raw(ecommerce.Message)</textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer text-right">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                                <a href="javascript://" class="btn btn-success" onclick="carouselFormValidate(this, '#div-Carousel', 2);">Next <i class="fa fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "loc" ? "active" : "") : "")">
+                <div class="form-Modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Ecommerce Settings</h4>
+                            <div class="btn-group btn-group-xs" role="group">
+                                <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                                <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 3);" data-placement="bottom" class="btn btn-success review-btn">Next <i class="fa fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row top-padding">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-1 horizontal-label">VAT <a href="javascript://" title="Value Added Tax"><i class="fa fa-info-circle"></i></a></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group input-group-sm">
+                                                        <input id="ecommerce-Tax" name="Tax" type="number" class="form-control input-sm" value="@AppSettings.GetVal("Tax")" required autofocus />
+                                                        <span class="input-group-addon">%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <div class="material-switch pull-right">
+                                                <input id="includeVATforTrader" class="includeVATforTrader" name="inventory:includeVATforTrader" type="checkbox" data-val="@AppSettings.GetVal("inventory:includeVATforTrader")" value="@AppSettings.GetVal("inventory:includeVATforTrader")" @(AppSettings.GetVal<bool>("inventory:includeVATforTrader") ? "checked" : "") />
+                                                <label for="includeVATforTrader" class="label-success includeVATforTrader"></label>
+                                            </div>
+                                            <h4 class="list-group-item-heading"> Apply VAT (for trade Ordres)</h4>
+                                            <p class="list-group-item-text">
+                                                Enable approval will Apply VAT for trade Ordres.
+                                            </p>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="material-switch pull-right">
+                                                <input id="includeVATforRetailer" class="includeVATforRetailer" name="inventory:IncludeVATforRetailer" type="checkbox" data-val="@AppSettings.GetVal("inventory:IncludeVATforRetailer")" value="@AppSettings.GetVal("inventory:IncludeVATforRetailer")" @(AppSettings.GetVal<bool>("inventory:IncludeVATforRetailer") ? "checked" : "") />
+                                                <label for="includeVATforRetailer" class="label-success includeVATforRetailer"></label>
+                                            </div>
+                                            <h4 class="list-group-item-heading">Apply VAT (for retail Ordres) </h4>
+                                            <p class="list-group-item-text">
+                                                Enable approval will Apply VAT for retail Ordres.
+                                            </p>
+                                        </li>
+                                    </ul>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>Trade Pricing By <small>(trader/ bulk buyer)</small></label>
+                                                <div class='form-inline'>
+                                                    <label> @Html.RadioButton("TradePriceBy", AppSettings.GetVal("trade:PriceBy"), AppSettings.GetVal("trade:PriceBy") == "quantity" ? true : false, new { @value = "quantity" }) Quantity</label> &nbsp; &nbsp;
+                                                    <label> @Html.RadioButton("TradePriceBy", AppSettings.GetVal("trade:PriceBy"), AppSettings.GetVal("trade:PriceBy") == "productprice" ? true : false, new { @value = "productprice" }) Product Price</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Low Inventory Warning</label>
+                                                <input id="LowInventory" name="LowInventory" type="text" class="form-control input-sm" value="@AppSettings.GetVal("LowInventory")" required autofocus />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>SKU Prefix (Abbreviation)</label> <br />
+                                                <input id="SkuPrefix" name="SkuPrefix" type="text" class="form-control input-sm" value="@AppSettings.GetVal("SkuPrefix")" required autofocus />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>SKU Counter</label> <br />
+                                                <input id="SkuStartsFrom" name="SkuStartsFrom" type="text" class="form-control input-sm" value="@AppSettings.GetVal("SkuStartsFrom")" required autofocus />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Returns &amp; Exchange Validity</label> <br />
+                                                <div class="input-group input-group-sm">
+                                                    <input id="ReturnsValidity" name="ReturnsValidity" type="number" class="form-control input-sm" value="@AppSettings.GetVal("ReturnsValidity")" required autofocus />
+                                                    <span class="input-group-addon">day(s)</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Package Sizes</label> <br />
+                                                <input id="PackageSize" name="PackageSize" type="text" class="form-control input-sm" value="@AppSettings.GetVal("PackageSize")" required autofocus />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <div class="material-switch pull-right">
+                                                <input id="OutOfStock" class="OutOfStock" name="inventory:OutOfStock" type="checkbox" data-val="@AppSettings.GetVal("inventory:OutOfStock")" value="@AppSettings.GetVal("inventory:OutOfStock")" @(AppSettings.GetVal<bool>("inventory:OutOfStock") ? "checked" : "") />
+                                                <label for="OutOfStock" class="label-success OutOfStock"></label>
+                                            </div>
+                                            <h4 class="list-group-item-heading"> Out of Stock</h4>
+                                            <p class="list-group-item-text">
+                                                Enable approval will show out of stock (on website).
+                                            </p>
+                                        </li>
+                                    </ul>
+
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <div class="material-switch pull-right">
+                                                <input id="MinimumOrderQuantity" class="MinimumOrderQuantity" name="MinimumOrderQuantity" type="checkbox" data-val="@AppSettings.GetVal("MinimumOrderQuantity")" value="@(AppSettings.GetVal<bool>("MinimumOrderQuantity") ? "true" : "false")" @(AppSettings.GetVal<bool>("MinimumOrderQuantity") ? "checked" : "") />
+                                                <label for="MinimumOrderQuantity" class="label-success MinimumOrderQuantity"></label>
+                                            </div>
+                                            <h4 class="list-group-item-heading">Minimum Order Quantity </h4>
+                                            <p class="list-group-item-text">
+                                                Choose whether you want to set minimum order quantity.
+                                            </p>
+                                            <div class="row" style="margin-top:10px; display:none;" id="Minimum-Order-Quantity">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 horizontal-label"><strong>For Trade Orders : </strong></label>
+                                                        <div class="col-sm-8">
+                                                            <div class="input-group input-group-sm">
+                                                                <span class="input-group-addon">@AppSettings.GetVal("CurrencySymbol")</span>
+                                                                <input id="FreeShippingForTradeAccounts" name="inventory:FreeShippingForRegularAccounts" type="number" class="form-control input-sm" value="@AppSettings.GetVal("inventory:FreeShippingForRegularAccounts")" autofocus />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">Free shipping policies <small>(Minimum Order Amount for free shipping)</small></h4>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul class="list-group">
+                                                <li class="list-group-item">
+                                                    <div class="material-switch pull-right">
+                                                        <input id="ShippingFreeForAll" class="ShippingFreeForAll" name="Shipping:FreeForAll" type="checkbox" data-val="@AppSettings.GetVal("Shipping:FreeForAll")" value="@AppSettings.GetVal("Shipping:FreeForAll")" @(AppSettings.GetVal<bool>("Shipping:FreeForAll") ? "checked" : "") />
+                                                        <label for="ShippingFreeForAll" class="label-success ShippingFreeForAll"></label>
+                                                    </div>
+                                                    <h4 class="list-group-item-heading"> Free Shipping On All Orders</h4>
+                                                    <p class="list-group-item-text">
+                                                        Enable approval will allow free shipping on all orders.
+                                                    </p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="material-switch pull-right">
+                                                        <input id="ShippingFreeForEconomy" class="ShippingFreeForEconomy" name="Shipping:FreeForEconomy" type="checkbox" data-val="@AppSettings.GetVal("Shipping:FreeForEconomy")" value="@AppSettings.GetVal("Shipping:FreeForEconomy")" @(AppSettings.GetVal<bool>("Shipping:FreeForEconomy") ? "checked" : "") />
+                                                        <label for="ShippingFreeForEconomy" class="label-success ShippingFreeForEconomy"></label>
+                                                    </div>
+                                                    <h4 class="list-group-item-heading">Free Economy Shipping </h4>
+                                                    <p class="list-group-item-text">
+                                                        Enable approval will allow free economy shipping.
+                                                    </p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="material-switch pull-right">
+                                                        <input id="ShippingFreeForStandard" class="ShippingFreeForStandard" name="Shipping:FreeForExpress" type="checkbox" data-val="@AppSettings.GetVal("Shipping:FreeForExpress")" value="@AppSettings.GetVal("Shipping:FreeForExpress")" @(AppSettings.GetVal<bool>("Shipping:FreeForExpress") ? "checked" : "") />
+                                                        <label for="ShippingFreeForStandard" class="label-success ShippingFreeForStandard"></label>
+                                                    </div>
+                                                    <h4 class="list-group-item-heading">Free Standard Shipping </h4>
+                                                    <p class="list-group-item-text">
+                                                        Enable approval will allow free standard shipping.
+                                                    </p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="material-switch pull-right">
+                                                        <input id="ShippingFreeForExpress" class="ShippingFreeForExpress" name="Shipping:FreeForStandard" type="checkbox" data-val="@AppSettings.GetVal("Shipping:FreeForStandard")" value="@AppSettings.GetVal("Shipping:FreeForStandard")" @(AppSettings.GetVal<bool>("Shipping:FreeForStandard") ? "checked" : "") />
+                                                        <label for="ShippingFreeForExpress" class="label-success ShippingFreeForExpress"></label>
+                                                    </div>
+                                                    <h4 class="list-group-item-heading">Free Express Shipping </h4>
+                                                    <p class="list-group-item-text">
+                                                        Enable approval will allow free express shipping.
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer text-right">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
+                                <a href="javascript://" class="btn btn-success review-btn" onclick="carouselFormValidate(this, '#div-Carousel', 3);">Next <i class="fa fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "loc" ? "active" : "" ) : "")">
+                <div class="form-Modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Shipping Management Settings</h4>
+                            <div class="btn-group btn-group-xs" role="group">
+                                <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                                <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 3);" data-placement="bottom" class="btn btn-success review-btn">Next <i class="fa fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">Payment Options</h4>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul class="list-group">
+                                                <li class="list-group-item">
+                                                    <div class="material-switch pull-right">
+                                                        <input id="OnlinePayment" class="OnlinePayment" name="ClickAndCollect:OnlinePayment" type="checkbox" data-val="@AppSettings.GetVal("ClickAndCollect:OnlinePayment")" value="@(AppSettings.GetVal<bool>("ClickAndCollect:OnlinePayment") ? "true" : "false")" @(AppSettings.GetVal<bool>("ClickAndCollect:OnlinePayment") ? "checked" : "") />
+                                                        <label for="OnlinePayment" class="label-success OnlinePayment"></label>
+                                                    </div>
+                                                    <h4 class="list-group-item-heading">Online Payment </h4>
+                                                    <p class="list-group-item-text">
+                                                        Enable approval will allow online payment.
+                                                    </p>
+                                                    <div class="row" style="margin-top:10px; display:none;" id="online-payment">
+                                                        <div class="col-sm-12">
+                                                            <div class="row">
+                                                                <ul class="list-group">
+                                                                    <li class="list-group-item">
+                                                                        <label class="col-sm-4">
+                                                                            PayPal Payments Pro
+                                                                            @if (AppSettings.GetVal("PaymentGateway") == "PayPalPaymentsPro")
+                                                                            {
+                                                                                <span class="label label-success"> Active </span>
+                                                                            }
+                                                                        </label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="btn-group btn-group-xs" role="group">
+                                                                                <a href="javascript://" data-id="" class="btn btn-info" data-toggle="modal" data-target="#paypalPaymentsProDlg" title="Configure"><i class="fa fa-gear"></i> Configure</a>
+                                                                                <a href="javascript://" class="btn btn-warning btnApply" data-id="PayPalPaymentsPro" title="Apply Settings"><i class="fa fa-check"></i> Apply</a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <label class="col-sm-4">
+                                                                            PayPal Advanced
+                                                                            @if (AppSettings.GetVal("PaymentGateway") == "PayPalAdvanced")
+                                                                            {
+                                                                                <span class="label label-success"> Active </span>
+                                                                            }
+                                                                        </label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="btn-group btn-group-xs" role="group">
+                                                                                <a href="javascript://" data-id="" class="btn btn-info" data-toggle="modal" data-target="#paypalAdvancedDlg" title="Configure"><i class="fa fa-gear"></i> Configure</a>
+                                                                                <a href="javascript://" class="btn btn-warning btnApply" data-id="PayPalAdvanced" title="Apply Settings"><i class="fa fa-check"></i> Apply</a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <label class="col-sm-4">
+                                                                            Authorize.Net
+                                                                        </label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="btn-group btn-group-xs" role="group">
+                                                                                <a href="javascript://" data-id="" class="btn btn-info disabled" data-toggle="modal" data-target="#authorizeNetDlg" title="Configure"><i class="fa fa-gear"></i> Configure</a>
+                                                                                @*<a href="javascript://" class="btn btn-warning" title="Apply Settings"><i class="fa fa-check"></i> Apply</a>*@
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <label class="col-sm-4"> Sage Pay</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="btn-group btn-group-xs" role="group">
+                                                                                <a href="javascript://" data-id="" class="btn btn-info disabled" data-toggle="modal" data-target="#sagePayDlg" title="Configure"><i class="fa fa-gear"></i> Configure</a>
+                                                                                @*<a href="javascript://" class="btn btn-warning" title="Apply Settings"><i class="fa fa-check"></i> Apply</a>*@
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <label class="col-sm-4"> Brain Tree</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="btn-group btn-group-xs" role="group">
+                                                                                <a href="javascript://" data-id="" class="btn btn-info disabled" data-toggle="modal" data-target="#brainTreeDlg" title="Configure"><i class="fa fa-gear"></i> Configure</a>
+                                                                                @*<a href="javascript://" class="btn btn-warning" title="Apply Settings"><i class="fa fa-check"></i> Apply</a>*@
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="material-switch pull-right">
+                                                        <input id="BankPayment" class="BankPayment" name="ClickAndCollect:BankPayment" type="checkbox" data-val="@AppSettings.GetVal("ClickAndCollect:BankPayment")" value="@(AppSettings.GetVal<bool>("ClickAndCollect:BankPayment") ? "true" : "false")" @(AppSettings.GetVal<bool>("ClickAndCollect:BankPayment") ? "checked" : "") />
+                                                        <label for="BankPayment" class="label-success BankPayment"></label>
+                                                    </div>
+                                                    <h4 class="list-group-item-heading">Bank Payment</h4>
+                                                    <p class="list-group-item-text">
+                                                        Enable approval will allow bank payment.
+                                                    </p>
+                                                    <div class="row" style="margin-top:10px; display:none;" id="bank-details">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group">
+                                                                <label> <strong> Bank Details </strong> <a href="javascript://" title="Please provide Account Title, Account Number, Branch Code"><i class="fa fa-info-circle"></i></a></label>
+                                                                <textarea id="BankDetails" name="Shipping:BankDetails">@Html.Raw(AppSettings.GetVal("Shipping:BankDetails"))</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="material-switch pull-right">
+                                                        <input id="CashOnDelivery" class="CashOnDelivery" name="Shipping:CashOnDelivery" type="checkbox" data-val="@AppSettings.GetVal("Shipping:CashOnDelivery")" value="@AppSettings.GetVal("Shipping:CashOnDelivery")" @(AppSettings.GetVal<bool>("Shipping:CashOnDelivery") ? "checked" : "") />
+                                                        <label for="CashOnDelivery" class="label-success CashOnDelivery"></label>
+                                                    </div>
+                                                    <h4 class="list-group-item-heading"> Cash On Delivery</h4>
+                                                    <p class="list-group-item-text">
+                                                        Enable approval will allow Cash On Delivery.
+                                                    </p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="material-switch pull-right">
+                                                        <input id="PaymentAtPickup" class="PaymentAtPickup" name="ClickAndCollect:PaymentAtPickup" type="checkbox" data-val="@AppSettings.GetVal("ClickAndCollect:PaymentAtPickup")" value="@AppSettings.GetVal("ClickAndCollect:PaymentAtPickup")" @(AppSettings.GetVal<bool>("ClickAndCollect:PaymentAtPickup") ? "checked" : "") />
+                                                        <label for="PaymentAtPickup" class="label-success PaymentAtPickup"></label>
+                                                    </div>
+                                                    <h4 class="list-group-item-heading">Payment At Pickup</h4>
+                                                    <p class="list-group-item-text">
+                                                        Enable approval will allow payment at pickup.
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">Delivery Options </h4>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul class="list-group">
+                                                <li class="list-group-item">
+                                                    <div class="material-switch pull-right">
+                                                        <input id="OnlineOrder" class="OnlineOrder" name="Shipping:OnlineOrder" type="checkbox" data-val="@AppSettings.GetVal("Shipping:OnlineOrder")" value="@AppSettings.GetVal("Shipping:OnlineOrder")" @(AppSettings.GetVal<bool>("Shipping:OnlineOrder") ? "checked" : "") />
+                                                        <label for="OnlineOrder" class="label-success OnlineOrder"></label>
+                                                    </div>
+                                                    <h4 class="list-group-item-heading">Home Delivery </h4>
+                                                    <p class="list-group-item-text">
+                                                        Enable approval will allow online orders.
+                                                    </p>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <div class="material-switch pull-right">
+                                                        <input id="ClickAndCollect" class="ClickAndCollect" name="Shipping:ClickAndCollect" type="checkbox" data-val="@AppSettings.GetVal("Shipping:ClickAndCollect")" value="@(AppSettings.GetVal<bool>("Shipping:ClickAndCollect") ? "true" : "false")" @(AppSettings.GetVal<bool>("Shipping:ClickAndCollect") ? "checked" : "") />
+                                                        <label for="ClickAndCollect" class="label-success ClickAndCollect"></label>
+                                                    </div>
+                                                    <h4 class="list-group-item-heading">Local Pickup </h4>
+                                                    <p class="list-group-item-text">
+                                                        Enable approval will allow local pickups.
+                                                    </p>
+                                                    <div class="row" style="margin-top:10px; display:none;" id="Click-And-Collect">
+                                                        <div class="col-sm-12">
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <label>Pickup Hours From</label> <br />
+                                                                        <input id="PickupHoursFrom" name="Shipping:PickupHoursFrom" type="text" class="form-control input-sm" value="@AppSettings.GetVal("Shipping:PickupHoursFrom")" required autofocus />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Pickup Hours To</label> <br />
+                                                                        <input id="PickupHoursTo" name="Shipping:PickupHoursTo" type="text" class="form-control input-sm" value="@AppSettings.GetVal("Shipping:PickupHoursTo")" required autofocus />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <label>Maximum Pickup Before </label> <br />
+                                                                        <div class="input-group input-group-sm">
+                                                                            <input id="MaximumPickupBefore" name="Shipping:MaximumPickupBefore" type="number" class="form-control input-sm" value="@AppSettings.GetVal("Shipping:MaximumPickupBefore")" required autofocus />
+                                                                            <span class="input-group-addon">Day(s)</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Minimum Pickup After</label> <br />
+                                                                        <div class="input-group input-group-sm">
+                                                                            <input id="MinimumPickupAfter" name="Shipping:MinimumPickupAfter" type="number" class="form-control input-sm" value="@AppSettings.GetVal("Shipping:MinimumPickupAfter")" required autofocus />
+                                                                            <span class="input-group-addon">Day(s)</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <label>Company Name</label> <br />
+                                                                        <input id="LocalPickupCompany" name="ClickAndCollect:Company" type="text" class="form-control input-sm" value="@AppSettings.GetVal("ClickAndCollect:Company")" required autofocus />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Address Line 1</label> <br />
+                                                                        <input id="LocalPickupAddressLine1" name="ClickAndCollect:AddressLine1" type="text" class="form-control input-sm" value="@AppSettings.GetVal("ClickAndCollect:AddressLine1")" required autofocus />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Address Line 2 <a href="javascript://" title="Optional"><i class="fa fa-info-circle"></i></a></label> <br />
+                                                                        <input id="LocalPickupAddressLine2" name="ClickAndCollect:AddressLine2" type="text" class="form-control input-sm" value="@AppSettings.GetVal("ClickAndCollect:AddressLine2")" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Town/City</label> <br />
+                                                                        <input id="LocalPickupCity" name="ClickAndCollect:City" type="text" class="form-control input-sm" value="@AppSettings.GetVal("ClickAndCollect:City")" required autofocus />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <label>County</label> <br />
+                                                                        <input id="LocalPickupCounty" name="ClickAndCollect:County" type="text" class="form-control input-sm" value="@AppSettings.GetVal("ClickAndCollect:County")" required autofocus />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Post Code</label> <br />
+                                                                        <input id="LocalPickupPostCode" name="ClickAndCollect:PostCode" type="text" class="form-control input-sm" value="@AppSettings.GetVal("ClickAndCollect:PostCode")" required autofocus />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Country</label> <br />
+                                                                        <input id="LocalPickupCountry" name="ClickAndCollect:Country" type="text" class="form-control input-sm" value="@AppSettings.GetVal("ClickAndCollect:Country")" required autofocus />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Phone Number</label> <br />
+                                                                        <input id="LocalPickupPhone" name="ClickAndCollect:Phone" type="text" class="form-control input-sm" value="@AppSettings.GetVal("ClickAndCollect:Phone")" required autofocus />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-Modal">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Shipping Companies</h4><br/>
+                                                        <div class="btn-group btn-group-xs pull-right" role="group">
+                                                            <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleCompanies","Ecommerce")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                                                            <a href="javascript://" class="btn btn-primary addNewCompany"><i class="fa fa-plus"></i> Add New Company</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-body" style="padding: 10px!important;">
+                                                        <div class="table-responsive">
+                                                            <table id="shippingCompany-dataTable" class="table table-hover table-condensed">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                                                                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Company Name" id="dataTable_0" /></th>
+                                                                        <th class="text-center" width="100px;">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @*@foreach (var x in Model)
+                                                                        {
+                                                                            <tr>
+                                                                                <td><input type="checkbox" class="checkIt" value="@x.ShippingCompanyId" /></td>
+                                                                                <td>@x.Title</td>
+                                                                                <td>@x.CompanyWebAddrress</td>
+                                                                                <td>@x.TrackingUrl</td>
+                                                                                <td class="text-center">
+                                                                                    <div class="btn-group btn-group-xs" role="group">
+                                                                                        <a href="~/CMS/WebPage/Step1/@x.ShippingCompanyId" class="btn btn-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }*@
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="form-Modal">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Shipping Packages</h4>
+                                                        <div class="btn-group btn-group-xs pull-right" role="group">
+                                                            <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiplePages")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                                                            <a href="javascript://" class="btn btn-primary addNewPackage"><i class="fa fa-plus"></i> Add New Package</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-body" style="padding: 10px!important;">
+                                                        <div class="table-responsive">
+                                                            <table id="shippingPackages-dataTable" class="table table-hover table-condensed">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th><input type="checkbox" onchange='checkAll(this, "checkIt")' /></th>
+                                                                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_0" /></th>
+                                                                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Type" id="dataTable_1" /></th>
+                                                                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Delivery Time" id="dataTable_2" /></th>
+                                                                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Price" id="dataTable_3" /></th>
+                                                                        <th class="text-center" width="100px;">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-Modal">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Shipping Postcodes</h4>
+                                                        <div class="btn-group btn-group-xs" role="group">
+                                                            <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleCompanies","Ecommerce")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                                                            <a href="javascript://" class="btn btn-primary addNewPostCode"><i class="fa fa-plus"></i> Add New </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-body" style="padding: 10px!important;">
+                                                        <div class="table-responsive">
+                                                            <table id="shippingPostCodes-dataTable" class="table table-hover table-condensed">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>
+                                                                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="PostCode" id="dataTable_0" /></th>
+                                                                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Restriction Level" id="dataTable_1" /></th>
+                                                                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="FirstItem Price" id="dataTable_2" /></th>
+                                                                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Each Additional Item Price" id="dataTable_3" /></th>
+                                                                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Created On" id="dataTable_4" /></th>
+                                                                        <th class="text-center" width="100px;">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer text-right">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
+                                <a href="javascript://" class="btn btn-success review-btn" onclick="carouselFormValidate(this, '#div-Carousel', 3);">Next <i class="fa fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "config" ? "active" : "" ) : "")">
+                <div class="form-Modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Review your changes</h4>
+                            <div class="btn-group btn-group-xs" role="group">
+                                <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 3)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                                <button type="submit" class="btn btn-success" data-placement="bottom"><i class="fa fa-check"></i> Submit</button>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="table-responsive">
+                                        <table class="table table-condensed table-striped">
+                                            <tr>
+                                                <th class="text-right">Ecommerce Application Status</th>
+                                                <td>
+                                                    <span id="review-Application-On" class="label label-success" hidden>ON</span>
+                                                    <span id="review-Application-Off" class="label label-danger" hidden>OFF</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-right">Tax (VAT)</th>
+                                                <td>
+                                                    <span id="review-vat"></span> &percnt;
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-right">Minimum Order Qty (For Trade Orders)</th>
+                                                <td id="review-FreeShippingForTradeAccounts"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-right">Minimum Order Qty (For Dropship Orders)</th>
+                                                <td id="review-FreeShippingForRegularAccounts"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-right">Returns &amp; Exchange Validity</th>
+                                                <td id="review-ReturnsValidity"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-right">Low Inventory Warning</th>
+                                                <td id="review-LowInventory"></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer text-right">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 3)" class="btn btn-default" role="button"><i class="fa fa-chevron-left"></i> Back</a>
+                                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div class="modal fade" id="addNewCompany-Modal" tabindex="-1" role="dialog" aria-labelledby="addNewCompany-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+<div class="modal fade" id="addNewPackage-Modal" tabindex="-1" role="dialog" aria-labelledby="addNewPackage-Modal" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+    </div>
+</div>
+
+<div class="modal fade" id="addNewPostCode-Modal" tabindex="-1" role="dialog" aria-labelledby="addNewPostCode-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+<div class="modal fade" id="paypalPaymentsProDlg" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Paypal Payments Pro</h4>
+            </div>
+            <form id="frmPro" action="~/Secure/Ecommerce/SavePaymentGatewaySettings" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="/Secure/Integration/PaymentGateway" />
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Username: </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control input-sm" name="PayPalPaymentsPro:Username" value="@AppSettings.GetVal("PayPalPaymentsPro:Username")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Password: </label>
+                                <div class="col-md-9">
+                                    <input type="password" class="form-control input-sm" name="PayPalPaymentsPro:Password" value="@AppSettings.GetVal("PayPalPaymentsPro:Password")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Signature: </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control input-sm" name="PayPalPaymentsPro:Signature" value="@AppSettings.GetVal("PayPalPaymentsPro:Signature")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="paypalAdvancedDlg" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Paypal Advanced</h4>
+            </div>
+            <form id="frmAdvance" action="~/Secure/Ecommerce/SavePaymentGatewaySettings" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="/Secure/Integration/PaymentGateway" />
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Partner: </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control input-sm" name="PayPalAdvanced:Partner" value="@AppSettings.GetVal("PayPalAdvanced:Partner")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Vendor: </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control input-sm" name="PayPalAdvanced:Vendor" value="@AppSettings.GetVal("PayPalAdvanced:Vendor")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">User: </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control input-sm" name="PayPalAdvanced:User" value="@AppSettings.GetVal("PayPalAdvanced:User")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Password: </label>
+                                <div class="col-md-9">
+                                    <input type="password" class="form-control input-sm" name="PayPalAdvanced:Password" value="@AppSettings.GetVal("PayPalAdvanced:Password")" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="authorizeNetDlg" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Authorize.Net</h4>
+            </div>
+            @using (Ajax.BeginForm("SaveAuthorizeNet", "Settings", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "authorizenet-loader" }))
+            {
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Transaction Key: </label>
+                                <div class="col-md-9">
+                                    @*@Html.TextBox("TransactionKey", Settings.Get.AuthorizeNet.TransactionKey, new { @class = "form-control input-sm", data_val_required = "The Transaction Key field is required.", data_val = "true" })*@
+                                    <input type="text" class="form-control input-sm" id="TransactionKey" name="TransactionKey" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                <label class="col-md-3">Admin ID: </label>
+                                <div class="col-md-9">
+                                    @*@Html.TextBox("AdminID", Settings.Get.AuthorizeNet.AdminID, new { @class = "form-control input-sm", data_val_required = "The Admin ID field is required.", data_val = "true" })*@
+                                    <input type="text" class="form-control input-sm" id="AdminID" name="AdminID" required autofocus />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            }
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="sagePayDlg" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Sage Pay</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row form-group">
+                            <label class="col-md-3"></label>
+                            <div class="col-md-9">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="brainTreeDlg" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Brain Tree</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row form-group">
+                            <label class="col-md-3"></label>
+                            <div class="col-md-9">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+            $(function () {
+                $("#Message").summernote({ height: 200 });
+                $("#BankDetails").summernote({ height: 200 });
+            });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('Message');
+                makeAlloyEditor('BankDetails');
+            });
+        </script>
+    }
+
+<script>
+        $(function () {
+            $('.review-btn').click(function (e) {
+                if ($("#Model-Status").val() === "true") {
+                    $("#review-Application-On").show();
+                    $("#review-Application-Off").hide();
+                };
+
+                if ($("#Model-Status").val() === "false") {
+                    $("#review-Application-Off").show();
+                    $("#review-Application-On").hide();
+                };
+            });
+        });
+    </script>
+<script>
+    $(function () {
+            filterDataTable("#shippingCompany-dataTable", [1], [0, 2]);
+            getshippingCompanies("#shippingCompany-dataTable");
+
+            filterDataTable("#shippingPackages-dataTable", [1, 2, 3, 4], [0, 5]);
+            getshippingPackages("#shippingPackages-dataTable","0");
+
+            $('#shippingCompany-dataTable_length,#shippingCompany-dataTable_filter,#shippingPackages-dataTable_length,#shippingPackages-dataTable_filter').css('display', 'none');
+
+            filterDataTable("#shippingPostCodes-dataTable", [1, 2, 3, 4, 5], [0, 6]);
+            getshippingPostcodes("#shippingPostCodes-dataTable");
+        });
+</script>
+<script>
+        $(function () {
+            $('.review-btn').click(function (e) {
+
+                if ($("#Model-Status").val() === "true") {
+                    $("#review-Application-On").show();
+                    $("#review-Application-Off").hide();
+                };
+
+                if ($("#Model-Status").val() === "false") {
+                    $("#review-Application-Off").show();
+                    $("#review-Application-On").hide();
+                };
+
+                $("#review-vat").text($("#ecommerce-Tax").val());
+                $("#review-FreeShippingForTradeAccounts").text($("#FreeShippingForTradeAccounts").val());
+                $("#review-FreeShippingForRegularAccounts").text($("#FreeShippingForRegularAccounts").val());
+                $("#review-ReturnsValidity").text($("#ReturnsValidity").val() + " days");
+                $("#review-LowInventory").text($("#LowInventory").val());
+                $("#review-LateShipping").text($("#LateShipping").val() + " days");
+            });
+        });
+</script>
+    <script src="~/Scripts/App/EcommerceSettings.js"></script>
+}

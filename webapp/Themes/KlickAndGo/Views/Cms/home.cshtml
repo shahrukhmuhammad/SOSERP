@@ -1,0 +1,16 @@
+﻿@{
+    Layout = "~/Themes/KlicknGo/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Model.BrowserTitle;
+    var homepageMetadata = ViewBag.WebsiteMetadata as List<CMS.Entity.CmsSeoMetadata>;
+    if (homepageMetadata != null)
+    {
+        if (homepageMetadata.Count() > 0)
+        {
+            homepageMetadata = homepageMetadata.Where(x => x.AllPages == false).ToList();
+        }
+    }
+}
+
+<div>
+
+</div>

@@ -1,0 +1,552 @@
+﻿@model List<BaseApp.Entity.ExtraFieldSection>
+@{
+    ViewBag.Title = "Employees Settings";
+}
+
+
+<form id="frm" class="user-Profile bg-info" method="post" style="padding-bottom:110px;">
+    <div id="dynamic-Sections">
+        <div class="page-header">
+            <h3 class="text-center">Manage Employee Data Fields</h3>
+        </div>
+        @foreach (var x in Model)
+        {
+            if (!x.ParentId.HasValue)
+            {
+                <div class="row tb-padding">
+                    <div class="col-sm-12 sectionContainer" data-id="@x.Id">
+                        <div class="page-header">
+                            @if (!x.IsSystem)
+                            {
+                                <input type="text" class="sectionName" placeholder="Section Title" value="@x.Section" required />
+                                <div class="btn-group btn-group-xs" role="group">
+                                    <a href="javascript://" class="text-muted remCF"><i class="fa fa-times"></i></a>
+                                </div>
+                            }
+                            else
+                            {
+                                <h4>@x.Section</h4>
+                            }
+                        </div>
+                        <div class="page-body">
+                            @if (x.IsSystem)
+                            {
+                                if (x.Section == "Vitals")
+                                {
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            First Name
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Middle Name
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Last Name
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Department
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            ID
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Gender
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Date of Birth
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                }
+                                if (x.Section == "Telephone")
+                                {
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Home
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Work
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                }
+                                if (x.Section == "Email")
+                                {
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Primary
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                }
+                                if (x.Section == "Address")
+                                {
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Address Line 1
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Address Line 2
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Zip Code
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            City
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            State
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Country
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                }
+                                if (x.Section == "Employment Terms")
+                                {
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Employment Status
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Starting Date
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Contract Expiring
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Pay Rate
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-2 no-padding text-right">
+                                            Salary Cycle
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-1">
+
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                            @if (x.Fields != null)
+                            {
+                                foreach (var f in x.Fields)
+                                {
+                                    <div class="row form-group fieldContainer" data-id="@f.Id" data-type="@f.FieldType">
+                                        <div class="col-sm-2 no-padding">
+                                            <input type="text" class="form-control input-sm text-right transparent-input fieldName" value="@f.FieldName" />
+                                        </div>
+                                        <div class="col-sm-4">
+                                            
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <a href="javascript://" class="text-muted remField"><i class="fa fa-times"></i></a>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+
+                            <div class="btn-group btn-group-xs" style="position:absolute; bottom:-30px; left:170px;" role="group">
+                                <div class="btn-group btn-group-xs" role="group">
+                                    <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus"></i> Add New field</button>
+                                    <ul class="dropdown-menu" style="width:auto;">
+                                        <li><a href="javascript://" class="dynamic-Field-AddString">String</a></li>
+                                        <li><a href="javascript://" class="dynamic-Field-AddDate">Date</a></li>
+                                        <li><a href="javascript://" class="dynamic-Field-AddCheckbox">Yes / No</a></li>
+                                        <li><a href="javascript://" class="dynamic-Field-AddNumber">Number</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+        <div class="col-sm-12" style="position: absolute; bottom: 10px; left: -8px;">
+            <div class="page-header no-margin"></div>
+            <div class="page-header no-margin">
+                <button class="btn btn-link fullWidth dynamic-Section-Add" type="button"><i class="fa fa-plus"></i> Add New Section</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            //--- Dynamic Sections
+            $("body").on("click", ".dynamic-Section-Add", function () {
+                var uuid = guid();
+
+                var markup = '<div class="row tb-padding"><div class="col-sm-12 sectionContainer" data-id="' + uuid + '">';
+                markup += '<div class="page-header"><input type="text" class="sectionName" placeholder="Section Title" value="New Section" required /><div class="btn-group btn-group-xs" role="group"><a href="javascript://" class="text-muted remCF"><i class="fa fa-times"></i></a></div></div>';
+                markup += '<div class="page-body"><div class="btn-group btn-group-xs" style="position:absolute; bottom:-30px; left:170px;" role="group"><div class="btn-group btn-group-xs" role="group"><button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus"></i> Add New field</button><ul class="dropdown-menu" style="width:auto;"><li><a href="javascript://" class="dynamic-Field-AddString">String</a></li><li><a href="javascript://" class="dynamic-Field-AddDate">Date</a></li><li><a href="javascript://" class="dynamic-Field-AddCheckbox">Yes / No</a></li><li><a href="javascript://" class="dynamic-Field-AddNumber">Number</a></li></ul></div></div></div>';
+                markup += '</div></div>';
+                $("#dynamic-Sections").append(markup);
+                $.ajax({
+                    type: "POST",
+                    url: "/Secure/Employee/AddSection",
+                    data: {
+                        Id: uuid,
+                        Section: "New Section",
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    },
+                    success: function (response) {
+                        //alert(response);
+                    }
+                });
+            });
+            $("#dynamic-Sections").on('click', '.remCF', function () {
+                $(this).parent().parent().parent().parent().remove();
+
+                var itemId = $(this).closest('.sectionContainer').attr("data-id");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Secure/Employee/DeleteSection",
+                    data: {
+                        Id: itemId,
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    },
+                    success: function (response) {
+                        //alert(response);
+                    }
+                });
+            });
+            //---
+
+            //--- Dynamic Fields
+            $("body").on("click", ".dynamic-Field-AddString", function () {
+                var uuid = guid();
+                var markup = '<div class="row form-group fieldContainer" data-id="' + uuid + '" data-type="string"><div class="col-sm-2 no-padding"><input type="text" class="form-control input-sm text-right transparent-input fieldName" value="New String Field" /></div><div class="col-sm-4"></div><div class="col-sm-1"><a href="javascript://" class="text-muted remField"><i class="fa fa-times"></i></a></div></div>';
+                $(this).closest('.page-body').append(markup);
+
+                var parentId = $(this).closest('.sectionContainer').attr("data-id");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Secure/Employee/AddField",
+                    data: {
+                        ParentId: parentId,
+                        Id: uuid,
+                        FieldType: "string",
+                        FieldName: "New String Field"
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    },
+                    success: function (response) {
+                        //alert(response);
+                    }
+                });
+            });
+            $("body").on("click", ".dynamic-Field-AddDate", function () {
+                var uuid = guid();
+                var markup = '<div class="row form-group fieldContainer" data-id="' + uuid + '" data-type="date"><div class="col-sm-2 no-padding"><input type="text" class="form-control input-sm text-right transparent-input fieldName" value="New Date Field" /></div><div class="col-sm-4"></div><div class="col-sm-1"><a href="javascript://" class="text-muted remField"><i class="fa fa-times"></i></a></div></div>';
+                $(this).closest('.page-body').append(markup);
+
+                var parentId = $(this).closest('.sectionContainer').attr("data-id");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Secure/Employee/AddField",
+                    data: {
+                        ParentId: parentId,
+                        Id: uuid,
+                        FieldType: "date",
+                        FieldName: "New Date Field"
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    },
+                    success: function (response) {
+                        //alert(response);
+                    }
+                });
+            });
+            $("body").on("click", ".dynamic-Field-AddCheckbox", function () {
+                var uuid = guid();
+                var markup = '<div class="row form-group fieldContainer" data-id="' + uuid + '" data-type="checkbox"><div class="col-sm-2 no-padding"><input type="text" class="form-control input-sm text-right transparent-input fieldName" value="New Checkbox Field" /></div><div class="col-sm-4"></div><div class="col-sm-1"><a href="javascript://" class="text-muted remField"><i class="fa fa-times"></i></a></div></div>';
+                $(this).closest('.page-body').append(markup);
+
+                var parentId = $(this).closest('.sectionContainer').attr("data-id");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Secure/Employee/AddField",
+                    data: {
+                        ParentId: parentId,
+                        Id: uuid,
+                        FieldType: "checkbox",
+                        FieldName: "New Checkbox Field"
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    },
+                    success: function (response) {
+                        //alert(response);
+                    }
+                });
+            });
+            $("body").on("click", ".dynamic-Field-AddNumber", function () {
+                var uuid = guid();
+                var markup = '<div class="row form-group fieldContainer" data-id="' + uuid + '" data-type="number"><div class="col-sm-2 no-padding"><input type="text" class="form-control input-sm text-right transparent-input fieldName" value="New Number Field" /></div><div class="col-sm-4"></div><div class="col-sm-1"><a href="javascript://" class="text-muted remField"><i class="fa fa-times"></i></a></div></div>';
+                $(this).closest('.page-body').append(markup);
+
+                var parentId = $(this).closest('.sectionContainer').attr("data-id");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Secure/Employee/AddField",
+                    data: {
+                        ParentId: parentId,
+                        Id: uuid,
+                        FieldType: "number",
+                        FieldName: "New Number Field"
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    },
+                    success: function (response) {
+                        //alert(response);
+                    }
+                });
+            });
+
+            $("#dynamic-Sections").on('click', '.remField', function () {
+                $(this).parent().parent().remove();
+
+                var itemId = $(this).closest('.fieldContainer').attr("data-id");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Secure/Employee/DeleteField",
+                    data: {
+                        Id: itemId,
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    },
+                    success: function (response) {
+                        //alert(response);
+                    }
+                });
+
+            });
+            //---
+
+            //--- Ajax Update Section On Leave
+            $("body").on("focusout", ".sectionName", function () {
+                var itemId = $(this).closest('.sectionContainer').attr("data-id");
+                var itemName = $(this).val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Secure/Employee/UpdateSection",
+                    data: {
+                        Id: itemId,
+                        Section: itemName,
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    },
+                    success: function (response) {
+                        //alert(response);
+                    }
+                });
+            });
+            //---
+
+            //--- Ajax Update Field On Leave
+            $("body").on("focusout", ".fieldName", function () {
+                var itemId = $(this).closest('.fieldContainer').attr("data-id");
+                var itemType = $(this).closest('.fieldContainer').attr("data-type");
+                var itemName = $(this).val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Secure/Employee/UpdateField",
+                    data: {
+                        Id: itemId,
+                        FieldType: itemType,
+                        FieldName: itemName,
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    },
+                    success: function (response) {
+                        //alert(response);
+                    }
+                });
+            });
+            //---
+        });
+
+        function guid() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                  .toString(16)
+                  .substring(1);
+            }
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+              s4() + '-' + s4() + s4() + s4();
+        };
+    </script>
+}

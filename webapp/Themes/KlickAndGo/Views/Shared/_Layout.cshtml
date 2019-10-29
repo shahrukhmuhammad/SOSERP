@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<html lang="en" class="noIE">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <title>@ViewBag.Title</title>
+    @Html.Raw(AppSettings.GetVal("website:CustomCode"))
+    @Html.Partial("_HeadRoot")
+    @RenderSection("head", false)
+
+    <style type="text/css">
+
+        text
+        {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            pointer-events: none;
+        }
+
+        #chart
+        {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            top: 0;
+            left: -376px;
+        }
+
+        #question
+        {
+            position:absolute;
+            width: 200px;
+            height: 500px;
+            top: 0;
+            left: 520px;
+        }
+
+            #question h1
+            {
+
+                font-family: Open Sans, "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                position: absolute;
+                padding: 0;
+                margin: 0;
+                top: 50%;
+                -webkit-transform: translate(0,-50%);
+                transform: translate(0,-50%);
+            }
+    </style>
+</head>
+
+<body id="rinkit-com-online-shopping-for-your-home-and-garden" class="template-index catalog-product-view catalog-product-view product-wooden-balance-bikes-for-3-year-olds-uk">
+
+    <div class="wsmenucontainer clearfix">
+        @if (Request.QueryString["type"] == "tradeportal")
+        {
+            @Html.Partial("HeaderTradePortal")
+        }
+        else
+        {
+            if (String.Equals(ViewContext.RouteData.Values["controller"].ToString(), "cart", StringComparison.OrdinalIgnoreCase))
+            {
+                if (ViewContext.RouteData.GetRequiredString("action") == "Checkout")
+                {
+
+                }
+                else
+                {
+                    @Html.Partial("Header")
+                }
+            }
+            else
+            {
+                @Html.Partial("Header")
+            }
+        }
+
+        @RenderBody()
+        
+        @if (String.Equals(ViewContext.RouteData.Values["controller"].ToString(), "cart", StringComparison.OrdinalIgnoreCase))
+        {
+            if (ViewContext.RouteData.GetRequiredString("action") == "Checkout")
+            {
+
+            }
+            else
+            {
+                @Html.Partial("Footer")
+            }
+        }
+        else
+        {
+            @Html.Partial("Footer")
+        }
+    </div>
+
+    @Html.Partial("_Footer")
+
+    @RenderSection("foot", false)
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var dialogShown = $.cookie('dialogShown');
+
+            if (!dialogShown) {
+                //alert("shown");
+                $(window).load(function () {
+                    $("#chart").css('display', 'block');
+                    $.cookie('dialogShown', 1);
+                });
+            }
+            else {
+                //alert("hide");
+                $("#chart").css('display', 'none');
+            }
+        });
+    </script>
+
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8" src="~/Themes/KlickAndGo/Content/js/wheel.js"></script>
+
+</body>
+</html>

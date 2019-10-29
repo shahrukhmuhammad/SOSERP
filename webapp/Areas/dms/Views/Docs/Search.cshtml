@@ -1,0 +1,96 @@
+﻿@model List<DmsItem>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script>
+        if (window.self == window.top) parent.window.location = document.location.origin;
+    </script>
+
+    <title>Document Manager</title>
+    <meta name="viewport" content="width=device-width" />
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (string.IsNullOrEmpty(CurrentUser.Theme))
+        {
+            <link rel="stylesheet" href="~/Content/Bootstrap/bootstrap-SpacelabTheme.css" />
+        }
+        else
+        {
+            <link rel="stylesheet" href="~/Content/Bootstrap/bootstrap-@(CurrentUser.Theme)Theme.css" />
+        }
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/Content/Bootstrap/bootstrap-SpacelabTheme.css" />
+    }
+
+    @Styles.Render("~/Content/BaseApp")
+    <link href="~/Content/DMS/bootstrap-dms.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body>
+    <div class="row dms-toolbar">
+        <div class="col-sm-8 dms-tools">
+            @*<div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-default disabled" disabled><span class="fa fa-upload"></span> Upload <span class="caret"></span></button>
+                </div>*@
+            <button type="button" class="btn btn-default btn-sm disabled" disabled><span class="fa fa-upload"></span></button>
+
+            <button type="button" class="btn btn-default btn-sm disabled" disabled><span class="fa fa-download"></span></button>
+
+            <button type="button" class="btn btn-default btn-sm disabled" disabled><span class="glyphicon glyphicon-trash"></span></button>
+            <button type="button" class="btn btn-default btn-sm disabled" disabled><i class="fa fa-folder"></i></button>
+
+            <button type="button" class="btn btn-default btn-sm" id="dmsTbRefresh" title="Refresh" data-toggle="tooltip" data-placement="bottom"><span class="glyphicon glyphicon-refresh"></span></button>
+
+            <div class="btn-group btn-group-sm">
+                <button type="button" id="dmsTbShare" disabled class="btn btn-default dropdown-toggle" title="Share" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-envelope"></i> Share <span class="caret"></span></button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li><a href="javascript://" class="dmsTbShare" data-type="Links"><i class="fa fa-chain fa-fw"></i>&nbsp; Email files as links</a></li>
+                    <li class="disabled"><a href="javascript://"><i class="fa fa-paperclip fa-fw"></i>&nbsp; Email as attachment</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <form id="dmsSearchForm" method="get" action="@BaseUrl.GetBaseUrl()/DMS/Docs/Search/@Request.RequestContext.RouteData.Values["id"]/?mode=@Request["mode"]">
+                <a data-toggle="tooltip" title="Close Search" data-placement="bottom" href="~/dms/index/@Request.RequestContext.RouteData.Values["id"]/?p=@Request.RequestContext.RouteData.Values["id"]" class="glyphicon glyphicon-remove dms-close-search-btn"></a>
+                <div class="input-group input-group-sm">
+                    <input type="hidden" name="mode" value="@Request["mode"]" />
+                    <input type="text" name="q" required class="form-control" placeholder="Search" value="@Request["q"]">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <ul class="breadcrumb">
+        <li>Search</li>
+        <li><a href="@BaseUrl.GetBaseUrl()/DMS/Docs/search/@Request.RequestContext.RouteData.Values["id"]/?q=@Request["q"]&mode=@Request["mode"]">@Request["q"]</a></li>
+    </ul>
+
+    @{ Html.RenderAction("DmsItems", "Docs", new { model = Model }); }
+
+    <div id="dms-mask"><i class='fa fa-refresh fa-spin fa-5x help-block'></i></div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/Bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/BaseApp")
+    <script>
+        var dmsPath = '@BaseUrl.GetBaseUrl()/DMS/Docs';
+        var parentId = p = '@Request.RequestContext.RouteData.Values["id"]';
+        var mode = '@Request["mode"]';
+    </script>
+    <script src="~/Scripts/DMS/dmsbase.js"></script>
+    <script src="~/Scripts/jquery.filedrop.js"></script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+﻿@model List<BaseApp.Entity.AppUser>
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    var allOffices = ViewBag.AllOffices as List<BaseApp.Entity.Office>;
+    var office = new BaseApp.Entity.Office();
+    if (queryId == null)
+    {
+        ViewBag.Title = "All Contacts";
+    }
+    else
+    {
+        office = ViewBag.Office as BaseApp.Entity.Office;
+        ViewBag.Title = office.Title + "'s Contacts";
+    }
+}
+
+<div class="well well-sm no-margin">
+    <fieldset>
+        <legend class="no-margin" style="font-size:12px;">
+            Showing Results from @(queryId == null ? "All Offices" : office.Title)
+            <div class="btn-group btn-group-xs pull-right" role="group" style="margin-top:-5px;">
+                @if (queryId != null)
+                {
+                    <a href="~/Secure/Office/Details/@office.Id" class="btn btn-default"><i class="fa fa-info"></i> Go to Details</a>
+                }
+                <a href="javascript://" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-building"></i> @(queryId == null ? "All Offices" : office.Title) <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="@(queryId == null ? "active" : "")"><a href="~/Secure/AccessControl">All Offices</a></li>
+                    @foreach (var x in allOffices)
+                    {
+                        <li class="@(queryId != null ? (queryId.ToString() == x.Id.ToString() ? "active" : "") : "")"><a href="~/Secure/AccessControl/Index/@x.Id">@x.Code - @x.Title</a></li>
+                    }
+                </ul>
+            </div>
+        </legend>
+        <table class="table table-striped table-hover table-condensed">
+            @if (queryId != null)
+            {
+                <thead>
+                    <tr>
+                        <th>Office</th>
+                        <th>Manager</th>
+                        <th>Departments</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@office.Title</td>
+                        <td><a href="~/Secure/AccessControl/Details/@office.ContactId">@office.Contact.FullName</a></td>
+                        <td>
+                            @if (office.Departments.Count() > 0)
+                            {
+                                <ul class="no-margin" style="padding:0 10px;">
+                                    @foreach (var dept in office.Departments)
+                                    {
+                                        <li><a href="~/Secure/Office/DepartmentDetails/@dept.Id">@dept.Title</a></li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span>No department found.</span>
+                            }
+                        </td>
+                        <td>@office.Description</td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+    </fieldset>
+</div>
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Back"><i class="fa fa-angle-left"></i></a>
+                @if (queryId == null)
+                {
+                    <a href="javascript://" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Add New Contact">
+                        <i class="fa fa-user-plus"></i> <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" style="margin-left:-106px;">
+                        @foreach (var x in allOffices)
+                        {
+                            <li><a href="~/Secure/AccessControl/Record?o=@x.Id">@x.Code - @x.Title</a></li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <a href="~/Secure/AccessControl/Record?o=@office.Id" class="btn btn-primary" title="Add New Contact"><i class="fa fa-user-plus"></i></a>
+                }
+            </div>
+        </div>
+        <div class="modal-body">
+            <table id="dataTable" class="table table-striped table-hover table-bordered table-condensed">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        @if (queryId == null)
+                        {
+                            <th>Office</th>
+                        }
+                        <th>Role</th>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Status</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var x in Model)
+                    {
+                        <tr>
+                            <td><a href="~/Secure/AccessControl/Details/@x.Id">@x.Code</a></td>
+                            @if (queryId == null)
+                            {
+                                <td><a href="~/Secure/Office/Details/@x.OfficeId">@x.Office.Title</a></td>
+                            }
+                            <td><a href="~/Secure/AccessControl/Roles">@x.Role.Code @x.Role.Title</a></td>
+                            <td>@x.Username</td>
+                            <td>@x.FullName</td>
+                            <td>
+                                @if (x.Status == BaseApp.Entity.AppUserStatus.Active)
+                                {
+                                    <label class="label label-success">Active</label>
+                                }
+                                else
+                                {
+                                    <label class="label label-danger">Suspended</label>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-xs" role="group">
+                                    <a href="~/Secure/AccessControl/Details/@x.Id" class="btn btn-primary" title="Details"><i class="fa fa-eye"></i></a>
+                                    @if (CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.Contact))
+                                    {
+                                        <a href="~/Secure/AccessControl/Record/@x.Id" class="btn btn-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                        <a href="javascript://" onclick="changeStatus('@Url.Action("ChangeStatus")', '@x.Id')" class="btn @(x.Status == BaseApp.Entity.AppUserStatus.Active ? "btn-warning" : "btn-success")" title="@(x.Status == BaseApp.Entity.AppUserStatus.Active ? "Suspend" : "Active")"><i class="fa @(x.Status == BaseApp.Entity.AppUserStatus.Active ? "fa-ban" : "fa-check")"></i></a>
+                                        <a href="javascript://" onclick="deleteRecord('@Url.Action("Delete")', '@x.Id')" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                @if (queryId == null)
+                {
+                    <a href="javascript://" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-user-plus"></i> Add New Contact <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        @foreach (var x in allOffices)
+                        {
+                            <li><a href="~/Secure/AccessControl/Record?o=@x.Id">@x.Code - @x.Title</a></li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <a href="~/Secure/AccessControl/Record?o=@office.Id" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New Contact</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            @if (queryId == null)
+            {
+                @: filterDataTable("#dataTable", [0, 1, 2, 3, 4, 5], [6]);
+            }
+            else
+            {
+                @: filterDataTable("#dataTable", [0, 1, 2, 3, 4], [5]);
+            }
+        });
+    </script>
+}

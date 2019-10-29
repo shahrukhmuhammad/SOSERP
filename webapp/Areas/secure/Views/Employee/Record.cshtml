@@ -1,0 +1,468 @@
+﻿@model BaseApp.Entity.AppUser
+@{
+    var extras = ViewBag.Extras as List<BaseApp.Entity.ExtraFieldSection>;
+
+    var queryId = ViewContext.RouteData.Values["Id"];
+    ViewBag.Title = (queryId == null ? "Add New Account" : "Edit Account");
+    var dpSrc = (queryId == null ? "../../Content/Images/base-user.jpg" : "../../../Content/Uploads/Dp/" + Model.Id + ".jpg");
+    var allOffices = ViewBag.AllOffices as List<BaseApp.Entity.Office>;
+
+    var fieldIndex = 0;
+}
+
+
+<form id="lead-frm" class="user-Profile" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+    <input type="hidden" id="Type" name="Type" value="@(Request["t"] != null ? Convert.ToInt32(Request["t"]) : (int)Model.Type)" />
+
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            <div class="btn-group" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top:15px;">
+        <div class="col-sm-3 img-container">
+            <img id="img-Preview" src="@dpSrc" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
+            <input type="file" class="form-control input-sm file-select" id="file" name="file" onchange="previewImage(this,'#img-Preview')" />
+            <div class="img-overlay">
+                <a class="btn btn-default btn-xs" href="javascript://"><i class="fa fa-edit"></i> Edit</a>
+            </div>
+        </div>
+        <div class="col-sm-9 bordered-section">
+            <div class="row" style="border-bottom:1px solid #000000">
+                <div class="col-sm-3">
+                    <div class="row form-group">
+                        <label class="col-sm-2 horizontal-label">ID: </label>
+                        <div class="col-sm-10" style="margin-top:4px;">
+                            @Model.Code
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Department</label>
+                        <div class="col-sm-8">
+                            <select name="OfficeId" class="form-control input-sm" required>
+                                <option value="">-Select-</option>
+                                @foreach (var x in allOffices)
+                                {
+                                    <option value="@x.Id" @(Model.OfficeId == x.Id ? "selected" : "")>@x.Title</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top:18px;">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-sm" name="FirstName" value="@Model.FirstName" placeholder="First Name" required autofocus />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-sm" name="MiddleName" value="@Model.MiddleName" placeholder="Middle Name" />
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-sm" name="LastName" value="@Model.LastName" placeholder="Last Name" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Gender</label>
+                        <div class="col-sm-9">
+                            <select name="Gender" class="form-control input-sm" required>
+                                <option value="@((int)BaseApp.Entity.AppUserGender.Male)" @(Model.Gender == BaseApp.Entity.AppUserGender.Male ? "selected" : "")>@BaseApp.Entity.AppUserGender.Male</option>
+                                <option value="@((int)BaseApp.Entity.AppUserGender.Female)" @(Model.Gender == BaseApp.Entity.AppUserGender.Female ? "selected" : "")>@BaseApp.Entity.AppUserGender.Female</option>
+                                <option value="@((int)BaseApp.Entity.AppUserGender.Other)" @(Model.Gender == BaseApp.Entity.AppUserGender.Other ? "selected" : "")>@BaseApp.Entity.AppUserGender.Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Date of Birth</label>
+                        <div class="col-sm-8">
+                            <input name="DateOfBirth" class="form-control input-sm" type="date" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" required autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @foreach (var x in extras.Where(x => x.Section == "Vitals").ToList())
+            {
+                foreach (var f in x.Fields)
+                {
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">@f.FieldName</label>
+                        <div class="col-sm-8">
+                            <input type="hidden" name="Extras[@fieldIndex].ExtraId" value="@f.Id" />
+                            @if (f.FieldType == "checkbox")
+                            {
+                                <input type="checkbox" class="form-control input-sm" value="@(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? "false" : Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value)" name="Extras[@fieldIndex].Value" style="width: 20px; height: 20px; margin-top: 0px;" @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? "" : (Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value == "true" ? "checked" : "")) />
+                            }
+                            else
+                            {
+                                <input type="@(f.FieldType == "string" ? "text" : f.FieldType)" class="form-control input-sm" name="Extras[@fieldIndex].Value" value="@(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() != null ? Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value : "")" />
+                            }
+                        </div>
+                    </div>
+                    fieldIndex++;
+                }
+            }
+        </div>
+    </div>
+    
+    <div class="row tb-padding">
+        <div class="col-sm-6">
+            <div class="page-header">
+                <h4>Telephone</h4>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-4 horizontal-label">Home</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control input-sm phoneMask" name="HomePhone" value="@Model.HomePhone" required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 horizontal-label">Work</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control input-sm phoneMask" name="WorkPhone" value="@Model.WorkPhone" required />
+                    </div>
+                </div>
+                @foreach (var x in extras.Where(x => x.Section == "Telephone").ToList())
+                {
+                    foreach (var f in x.Fields)
+                    {
+                        <div class="form-group">
+                            <label class="col-sm-4 horizontal-label">@f.FieldName</label>
+                            <div class="col-sm-8">
+                                <input type="hidden" name="Extras[@fieldIndex].ExtraId" value="@f.Id" />
+                                @if (f.FieldType == "checkbox")
+                                {
+                                    <input type="checkbox" class="form-control input-sm" value="@(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? "false" : Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value)" name="Extras[@fieldIndex].Value" style="width: 20px; height: 20px; margin-top: 0px;" @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? "" : (Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value == "true" ? "checked" : "")) />
+                                }
+                                else
+                                {
+                                    <input type="@(f.FieldType == "string" ? "text" : f.FieldType)" class="form-control input-sm" name="Extras[@fieldIndex].Value" value="@(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() != null ? Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value : "")" />
+                                }
+                            </div>
+                        </div>
+                        fieldIndex++;
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="page-header">
+                <h4>Email</h4>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-3 horizontal-label">Primary</label>
+                    <div class="col-sm-9">
+                        <input type="email" class="form-control input-sm" id="Email" name="Email" value="@Model.Email" required />
+                    </div>
+                </div>
+                @foreach (var x in extras.Where(x => x.Section == "Email").ToList())
+                {
+                    foreach (var f in x.Fields)
+                    {
+                        <div class="form-group">
+                            <label class="col-sm-3 horizontal-label">@f.FieldName</label>
+                            <div class="col-sm-9">
+                                <input type="hidden" name="Extras[@fieldIndex].ExtraId" value="@f.Id" />
+                                @if (f.FieldType == "checkbox")
+                                {
+                                    <input type="checkbox" class="form-control input-sm" value="@(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? "false" : Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value)" name="Extras[@fieldIndex].Value" style="width: 20px; height: 20px; margin-top: 0px;" @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? "" : (Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value == "true" ? "checked" : "")) />
+                                }
+                                else
+                                {
+                                    <input type="@(f.FieldType == "string" ? "text" : f.FieldType)" class="form-control input-sm" name="Extras[@fieldIndex].Value" value="@(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() != null ? Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value : "")" />
+                                }
+                            </div>
+                        </div>
+                        fieldIndex++;
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row tb-padding">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h4>Address Information</h4>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Address Line 1</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control input-sm" name="AddressLine1" value="@Model.AddressLine1" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Address Line 2</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control input-sm" name="AddressLine2" value="@Model.AddressLine2" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Zip Code</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control input-sm" name="ZipCode" value="@Model.ZipCode" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">City</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control input-sm" name="City" value="@Model.City" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">State</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control input-sm" name="State" value="@Model.State" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="row form-group">
+                        <label class="col-sm-3 horizontal-label">Country</label>
+                        <div class="col-sm-9">
+                            <select name="Country" class="form-control input-sm">
+                                @foreach (var c in Html.CountriesListWithCode())
+                                {
+                                    <option value="@c.Value" selected="@(Model.Country == c.Value)">@c.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            @foreach (var x in extras.Where(x => x.Section == "Address").ToList())
+            {
+                foreach (var f in x.Fields)
+                {
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">@f.FieldName</label>
+                        <div class="col-sm-8">
+                            <input type="hidden" name="Extras[@fieldIndex].ExtraId" value="@f.Id" />
+                            @if (f.FieldType == "checkbox")
+                            {
+                                <input type="checkbox" class="form-control input-sm" value="@(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? "false" : Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value)" name="Extras[@fieldIndex].Value" style="width: 20px; height: 20px; margin-top: 0px;" @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? "" : (Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value == "true" ? "checked" : "")) />
+                            }
+                            else
+                            {
+                                <input type="@(f.FieldType == "string" ? "text" : f.FieldType)" class="form-control input-sm" name="Extras[@fieldIndex].Value" value="@(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() != null ? Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value : "")" />
+                            }
+                        </div>
+                    </div>
+                    fieldIndex++;
+                }
+            }
+        </div>
+    </div>
+
+    <div class="row tb-padding">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h4>Employment Terms</h4>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="row form-group">
+                        <label class="col-sm-6 horizontal-label">Employment Status</label>
+                        <div class="col-sm-6">
+                            <select name="EmploymentStatus" class="form-control input-sm" required>
+                                <option value="">-Select-</option>
+                                <option value="@((int)BaseApp.Entity.AppUserEmploymentStatus.FullTime)" @(Model.EmploymentStatus == BaseApp.Entity.AppUserEmploymentStatus.FullTime ? "selected" : "")>@BaseApp.Entity.AppUserEmploymentStatus.FullTime.ToSpacedTitleCase()</option>
+                                <option value="@((int)BaseApp.Entity.AppUserEmploymentStatus.PartTime)" @(Model.EmploymentStatus == BaseApp.Entity.AppUserEmploymentStatus.PartTime ? "selected" : "")>@BaseApp.Entity.AppUserEmploymentStatus.PartTime.ToSpacedTitleCase()</option>
+                                @*<option value="@((int)BaseApp.Entity.AppUserEmploymentStatus.Contract)" @(Model.EmploymentStatus == BaseApp.Entity.AppUserEmploymentStatus.Contract ? "selected" : "")>@BaseApp.Entity.AppUserEmploymentStatus.Contract.ToSpacedTitleCase()</option>
+                                <option value="@((int)BaseApp.Entity.AppUserEmploymentStatus.Temporary)" @(Model.EmploymentStatus == BaseApp.Entity.AppUserEmploymentStatus.Temporary ? "selected" : "")>@BaseApp.Entity.AppUserEmploymentStatus.Temporary.ToSpacedTitleCase()</option>
+                                <option value="@((int)BaseApp.Entity.AppUserEmploymentStatus.Internee)" @(Model.EmploymentStatus == BaseApp.Entity.AppUserEmploymentStatus.Internee ? "selected" : "")>@BaseApp.Entity.AppUserEmploymentStatus.Internee.ToSpacedTitleCase()</option>
+                                <option value="@((int)BaseApp.Entity.AppUserEmploymentStatus.Trainee)" @(Model.EmploymentStatus == BaseApp.Entity.AppUserEmploymentStatus.Trainee ? "selected" : "")>@BaseApp.Entity.AppUserEmploymentStatus.Trainee.ToSpacedTitleCase()</option>*@
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Pay Rate</label>
+                        <div class="col-sm-8">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-addon">$</div>
+                                <input type="text" class="form-control input-sm decimalMask" name="Employment.PayRate" value="@Model.Employment.PayRate" required />
+                                <div class="input-group-addon">/hour</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Overtime Rate</label>
+                        <div class="col-sm-8">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-addon">$</div>
+                                <input type="text" class="form-control input-sm decimalMask" name="Employment.OvertimeRate" value="@Model.Employment.OvertimeRate" required />
+                                <div class="input-group-addon">/hour</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="row form-group">
+                        <label class="col-sm-6 horizontal-label">Salary Cycle</label>
+                        <div class="col-sm-6">
+                            <select name="Employment.SalaryCycle" class="form-control input-sm" required>
+                                <option value="">-Select-</option>
+                                <option value="@((int)BaseApp.Entity.AppUserSalaryCycle.Weekly)" @(Model.Employment.SalaryCycle == BaseApp.Entity.AppUserSalaryCycle.Weekly ? "selected" : "")>@BaseApp.Entity.AppUserSalaryCycle.Weekly.ToSpacedTitleCase()</option>
+                                <option value="@((int)BaseApp.Entity.AppUserSalaryCycle.BiWeekly)" @(Model.Employment.SalaryCycle == BaseApp.Entity.AppUserSalaryCycle.BiWeekly ? "selected" : "")>@BaseApp.Entity.AppUserSalaryCycle.BiWeekly.ToSpacedTitleCase()</option>
+                                <option value="@((int)BaseApp.Entity.AppUserSalaryCycle.SemiWeekly)" @(Model.Employment.SalaryCycle == BaseApp.Entity.AppUserSalaryCycle.SemiWeekly ? "selected" : "")>@BaseApp.Entity.AppUserSalaryCycle.SemiWeekly.ToSpacedTitleCase()</option>
+                                <option value="@((int)BaseApp.Entity.AppUserSalaryCycle.EveryFourWeeks)" @(Model.Employment.SalaryCycle == BaseApp.Entity.AppUserSalaryCycle.EveryFourWeeks ? "selected" : "")>@BaseApp.Entity.AppUserSalaryCycle.EveryFourWeeks.ToSpacedTitleCase()</option>
+                                <option value="@((int)BaseApp.Entity.AppUserSalaryCycle.Monthly)" @(Model.Employment.SalaryCycle == BaseApp.Entity.AppUserSalaryCycle.Monthly ? "selected" : "")>@BaseApp.Entity.AppUserSalaryCycle.Monthly.ToSpacedTitleCase()</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Starting Date</label>
+                        <div class="col-sm-8">
+                            <input type="date" class="form-control input-sm" name="Employment.StartingDate" value="@Model.Employment.StartingDate.ToString("yyyy-MM-dd")" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Contract Expiring</label>
+                        <div class="col-sm-8">
+                            <input type="date" class="form-control input-sm" name="Employment.TermEnding" value="@Model.Employment.TermEnding.ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @foreach (var x in extras.Where(x => x.Section == "Address").ToList())
+            {
+                foreach (var f in x.Fields)
+                {
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">@f.FieldName</label>
+                        <div class="col-sm-8">
+                            <input type="hidden" name="Extras[@fieldIndex].ExtraId" value="@f.Id" />
+                            @if (f.FieldType == "checkbox")
+                            {
+                                <input type="checkbox" class="form-control input-sm" value="@(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? "false" : Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value)" name="Extras[@fieldIndex].Value" style="width: 20px; height: 20px; margin-top: 0px;" @(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? "" : (Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value == "true" ? "checked" : "")) />
+                            }
+                            else
+                            {
+                                <input type="@(f.FieldType == "string" ? "text" : f.FieldType)" class="form-control input-sm" name="Extras[@fieldIndex].Value" value="@(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() != null ? Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value : "")" />
+                            }
+                        </div>
+                    </div>
+                    fieldIndex++;
+                }
+            }
+        </div>
+    </div>
+
+    @foreach (var x in extras)
+    {
+        if (!x.IsSystem)
+        {
+            if (!x.ParentId.HasValue)
+            {
+                <div class="row tb-padding">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <h4>@x.Section</h4>
+                        </div>
+                        <div class="page-body">
+                            @if (x.Fields != null)
+                            {
+                                foreach (var f in x.Fields)
+                                {
+                                    <div class="row form-group">
+                                        <div class="col-sm-3 no-padding text-right">
+                                            @f.FieldName
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input type="hidden" name="Extras[@fieldIndex].ExtraId" value="@f.Id" />
+                                            @if (f.FieldType == "checkbox")
+                                            {
+                                                <input type="checkbox" class="form-control input-sm" value="@(Model.Extras.Count() > 0 ? (Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? (string.IsNullOrEmpty(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value) ? "false" : "false") : Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value) : "false")" name="Extras[@fieldIndex].Value" style="width: 20px; height: 20px; margin-top: 0px;" @(Model.Extras.Count() > 0 ? (Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() == null ? "" : (Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value == "true" ? "checked" : "")) : "") />
+                                            }
+                                            else
+                                            {
+                                                <input type="@(f.FieldType == "string" ? "text" : f.FieldType)" class="form-control input-sm" name="Extras[@fieldIndex].Value" value="@(Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault() != null ? Model.Extras.Where(e => e.ExtraId == f.Id).FirstOrDefault().Value : "")" />
+                                            }
+                                        </div>
+                                    </div>
+                                    fieldIndex++;
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }
+
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            <div class="btn-group" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#lead-frm").validate({
+                rules: {
+                    Email: {
+                        remote: {
+                            url: "@Url.Action("CheckDuplicateEmail", "Contact", new { Area = "CRM" })",
+                            type: "post",
+                            data: {
+                                Email: function () {
+                                    return $("#Email").val();
+                                },
+                                Id: function () {
+                                    return $("#Id").val();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,145 @@
+﻿
+<div class="col-sm-12" style="padding: 10px 15px;margin: 10px 15px;">
+    <div class="row form-group">
+        <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Title</h5>
+        <div class="col-sm-8">
+            <input type='text' class="form-control" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Event Type</h5>
+        <div class="col-sm-8">
+            <select class="form-control">
+                <option value="Appointment">Appointment</option>
+                <option value="Meeting">Meeting</option>
+                <option value="Conference">Conference</option>
+                <option value="Seminar">Seminar</option>
+                <option value="Webinar">Webinar</option>
+                <option value="Dinning">Dinning</option>
+                <option value="Call">Call</option>
+                <option value="Party">Party</option>
+                <option value="Fair">Fair</option>
+                <option value="Promotional Event">Promotional Event</option>
+            </select>
+        </div>
+    </div>
+    <div class="row form-group">
+        <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Description</h5>
+        <div class="col-sm-8">
+            <textarea id="EventDetails" rows="3" class="form-control" style="border:1px solid #808080" name="EventDetails"></textarea>
+        </div>
+    </div>
+    <div class="row form-group">
+        <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Event Organizer</h5>
+        <div class="col-sm-10 no-padding">
+            <select id="organizer-Event" name="assignees[]" multiple class="demo-default col-sm-10 col-xs-10" placeholder="Type employees name to assign">
+                <option value="">Type employees name to assign</option>
+                <option value="Reyan Cambel">Reyan Cambel</option>
+                <option value="Luis Hycks">Luis Hycks</option>
+                <option value="Voughan Thomas">Voughan Thomas</option>
+                <option value="Lee Marshal">Lee Marshal</option>
+            </select>
+        </div>
+    </div>
+    <div class="row form-group">
+        <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Show Organizer's Contact Detail to RSVP</h5>
+        <div class="col-sm-8">
+            <label><input type="checkbox" /></label>
+        </div>
+    </div>
+    <div class="row form-group">
+        <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Location</h5>
+        <div class="col-sm-8">
+            <input type='text' class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <h5 class="col-sm-2 modal-title" style="margin:8px 0;">Event Schedule</h5>
+        <div class="col-md-8">
+            <div class="col-sm-8" style="padding:10px; background-color:#d3d3d3; margin:2px 0">
+                <label class="col-md-4 no-padding"><input type="radio" name="rpUntil" /> Start Date </label>
+                <div class="col-md-8 no-padding">
+                    <input type="text" class="form-control input-sm datetimepicker1" />
+                </div>
+            </div>
+            <div class="col-sm-8" style="padding:10px; background-color:#d3d3d3; margin:2px 0">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label class="col-md-5 no-padding" style="margin-top:6px;"> Start Time </label>
+                        <div class="col-md-7 no-padding">
+                            <input type="text" class="form-control input-sm datetimepicker1" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-md-5 no-padding" style="margin-top:6px;"> End Time </label>
+                        <div class="col-md-7 no-padding">
+                            <input type="text" class="form-control input-sm datetimepicker1" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-sm-8" style="padding:10px; background-color:#d3d3d3; margin:2px 0">
+                <label><input type="radio" name="rpUntil" /> At the closing of task </label>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-sm-8" style="padding:10px; background-color:#d3d3d3; margin:2px 0">
+                <label><input type="radio" name="rpUntil" /> Throughout the task </label>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-sm-8" style="padding:10px; background-color:#d3d3d3; margin:2px 0">
+                <label class="col-md-4 no-padding"><input type="radio" name="rpUntil" /> Select Datetime </label>
+                <div class="col-md-8 no-padding">
+                    <input type="text" class="form-control input-sm datetimepicker1" />
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <h5 class="col-sm-2 modal-title" style="margin:8px 0;">RSVP</h5>
+        <div class="col-md-8 no-padding" style="margin:8px 0;">
+            <select id="select-Event" name="assignees[]" multiple class="demo-default col-sm-12 col-xs-12" placeholder="Type employees name to assign">
+                <option value="">Type employees name to assign</option>
+                <option value="Reyan Cambel">Reyan Cambel</option>
+                <option value="Luis Hycks">Luis Hycks</option>
+                <option value="Voughan Thomas">Voughan Thomas</option>
+                <option value="Lee Marshal">Lee Marshal</option>
+            </select>
+
+            <div class="col-sm-12 col-xs-12">
+                <label><input type="checkbox" /> Send Invite</label>
+                <span style="margin-left:8px;"><i class="fa fa-question-circle"></i></span>
+            </div>
+            <div class="col-sm-12 col-xs-12">
+                <label><input type="checkbox" /> Capture Response</label>
+                <span style="margin-left:8px;"><i class="fa fa-question-circle"></i></span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+        <script src="~/Scripts/jquery-2.2.3.js"></script>
+        <script src="~/Scripts/Bootstrap DateTimePicker/bootstrap-datetimepicker.js"></script>
+        <script src="~/Scripts/Bootstrap DateTimePicker/moment.js"></script>
+        <script src="~/Content/SelectJS/js/selectize.js"></script>
+        <script src="~/Content/SelectJS/js/index.js"></script>
+        <script>
+            $(function () {
+                $('.datetimepicker1').datetimepicker();
+
+                $('#select-Event').selectize({
+                    plugins: ['remove_button'],
+                    openOnFocus: false
+                });
+
+                $('#organizer-Event').selectize({
+                    plugins: ['remove_button'],
+                    openOnFocus: false
+                });
+
+                makeAlloyEditor('EventDetails');
+            });
+        </script>

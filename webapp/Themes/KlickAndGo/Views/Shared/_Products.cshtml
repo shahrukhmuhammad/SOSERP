@@ -1,0 +1,335 @@
+﻿@model IEnumerable<Framework.Data.CatalogProduct>
+@section head{
+  }
+
+
+@if (Request["viewmode"] == null || Request.QueryString["viewmode"] == "grid" || Request["viewmode"] == "")
+{
+    <div class="collection-grid view-grid animated  fadeInUp" data-animation="fadeInUp">
+        @foreach (var a in Model)
+        {
+            
+  <div class="col-md-4 col-sm-6 col-xs-6 element mb30">
+
+               
+                <div id="container">
+                    <div class="main_box">
+                        <div class="box_1">
+
+
+                            <div class="product-image">
+                                <a href="~/product/@a.Slug" class="coll-img coll-5382671750">
+                                    <img src="@Url.Action("Img", "Cdn", new { id = a.ProductId, s = "s", t = "p", target = "Website"})" alt="@a.Title">
+                                </a>
+                            </div>
+
+                        </div>
+                       
+                        <div class="desc" >
+    <h5 style="font-weight:500;font-size:18px; line-height:23px;text-transform:uppercase;">
+                            <a href="~/product/@a.Slug" rel="tag"style="color:#0978d8;">@a.Title</a>
+        
+    </h5>
+                            <div style="margin-top:5px;color: grey;">
+                                by @a.ManufacturerId
+                            </div>
+                            <h5 style="font-weight: 500;color: black;margin-top:8px;font-size:16px;">Model: </h5>
+                            <div class="price" style="padding-bottom:15px;">
+                            
+                              <span class="money"style="font-weight: 600;margin-top:5px;" >
+                                    @Settings.Get.CurrencySymbol @((decimal)10/100+a.RetailPrice)
+                                </span>
+                            </div>
+        <div class="price">
+           
+                <a href="#" class="btn btn-default" title="Add to Whishlist">
+                    <i class="fa fa-heart"></i>
+                </a>
+
+                <a href="#" class="btn btn-default" title="View Detail">
+                    <i class="fa fa-eye"></i>
+                </a>
+
+                <a href="#" class="btn btn-default ui" title="Price" data-tooltip="@Settings.Get.CurrencySymbol@a.RetailPrice" data-position="top center">
+                    <i class="fa fa-money"></i>
+                    <span class="tooltip"> price</span>
+                </a>
+
+                    <a title="Add to Cart" href="#" class="btn btn-default">
+                      
+                        <i class="fa fa-shopping-cart"></i>
+                    </a>
+               
+               
+
+</div>
+                            <!-- Modal -->
+                           
+                        
+                            </div>
+                       
+                    </div>
+                </div>
+            </div>
+           
+          
+
+        }
+
+    </div>
+
+}
+else
+{
+
+}
+
+@if (Request["viewmode"] == null || Request.QueryString["viewmode"] == "grid" || Request["viewmode"] == "")
+{
+}
+else
+{
+    foreach (var a in Model)
+    {
+        <div class="row view-grid animated  fadeInUp" data-animation="fadeInUp">
+
+            <div class="collection-list">
+
+                <div class="main_box" style="">
+                    <div class="box_1">
+                        <div class="col-sm-4">
+                            <div class="list-image">
+                                <a href="~/product/@a.Slug">
+                                    <img src="@Url.Action("Img", "Cdn", new { id = a.ProductId, s = "s", t = "p", target = "Website"})" alt="@a.Title">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="product-details">
+
+
+                                <h2>
+                                    <a href="~/product/@a.Slug" rel="tag">@a.Title</a>
+                                </h2>
+
+                                <p>@a.ShortDescription </p>
+                                <div class="price">
+                                    <span class="money">@Settings.Get.CurrencySymbol@a.RetailPrice</span>
+                                </div>
+
+                                <form method="post" action="/cart/add">
+
+
+                                    <a href="~/product/@a.Slug" class="btn_c">More Info</a>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    }
+
+}
+
+
+
+@*@if (Request["viewmode"] == null || Request.QueryString["viewmode"] == "grid" || Request["viewmode"] == "")
+{
+                        <div class="collection-grid view-grid animated  fadeInUp" data-animation="fadeInUp">
+@foreach (var a in Model)
+{
+
+                            <div class="col-md-4 col-sm-6 col-xs-6 element mb30">
+
+                                <style type="text/css">
+                                    .cart-icon
+                                    {
+                                        background-color: #04468d;
+                                        width: 30px;
+                                        height: 30px;
+                                        position: relative;
+                                        text-align: center;
+                                        line-height: 30px;
+                                        border-radius: 50%;
+                                        box-shadow: none;
+                                        -moz-transition: color 0.3s;
+                                        -webkit-transition: color 0.3s;
+                                        -o-transition: color 0.3s;
+                                        transition: color 0.3s;
+                                    }
+
+                                    #container
+                                    {
+                                        position: relative;
+                                        width: 100%;
+                                    }
+
+                                    .image
+                                    {
+                                        opacity: 1;
+                                        display: block;
+                                        width: 100%;
+                                        height: auto;
+                                        transition: .5s ease;
+                                        backface-visibility: hidden;
+                                    }
+
+                                    .middle
+                                    {
+                                        transition: .5s ease;
+                                        opacity: 0;
+                                        position: absolute;
+                                        top: 50%;
+                                        left: 50%;
+                                        transform: translate(-50%, -50%);
+                                        -ms-transform: translate(-50%, -50%);
+                                    }
+
+                                    #container:hover .image
+                                    {
+                                        opacity: 0.7;
+                                    }
+
+                                    #container:hover .middle
+                                    {
+                                          opacity: 1;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+                                    }
+
+                                    .text
+                                    {
+                                        background-color: #4CAF50;
+                                        color: white;
+                                        font-size: 16px;
+                                        padding: 16px 32px;
+                                    }
+                                </style>  
+                                <div id="container">
+                                    <div class="main_box">
+                                        <div class="box_1">
+
+
+                                            <div class="product-image">
+                                                <a href="~/product/@a.Slug" class="coll-img coll-5382671750">
+                                                    <img src="@Url.Action("Img", "Cdn", new { id = a.ProductId, s = "s", t = "p", target = "Website"})" alt="@a.Title">
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                        <div class="middle">
+                                            <div class="cart-icon" style="">
+                                                <a href="javascript://" onclick="window.location='@Url.Action("Add", "Cart", new { @id = a.ProductId })'">
+                                                    <i class="fa fa-shopping-cart" style="color:white"></i>
+                                                </a>
+
+                                            </div>
+                                            <div class="cart-icon">
+
+                                                <i class="fa fa-heart" style="color:white"></i>
+                                            </div>
+                                            <div class="cart-icon">
+
+                                                <i class="fa fa-share-alt-square" style="color:white"></i>
+                                            </div>
+                                            <div class="cart-icon">
+                                                <a href="~/product/@a.Slug">
+                                                    <i class="fa fa-eye" style="color:white"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="desc">
+                                            <h5><a href="~/product/@a.Slug" rel="tag">@a.Title</a></h5>
+
+                                            <div class="price"><span class="money"> @Settings.Get.CurrencySymbol@a.RetailPrice
+                                                </span> </div>
+                                        </div>
+
+                                        @*<div class="review_line">
+                                            <a href="#">
+
+                                                <span class="stamped-product-reviews-badge" data-id="5382671750" style="display:block;">
+                                                    <span class="stamped-badge" data-rating="5">
+                                                        <span class="stamped-starrating stamped-badge-starrating">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                        </span>
+                                                        <span class="stamped-badge-caption" data-reviews="1" data-rating="5">1</span>
+                                                    </span>
+                                                </span>
+                                            </a>
+                                        </div>*@
+
+                                    @*</div>
+    </div>
+                                    </div>
+
+    }
+
+                            </div>
+
+    }
+    else
+    {
+
+    }
+
+    @if (Request["viewmode"] == null || Request.QueryString["viewmode"] == "grid" || Request["viewmode"] == "")
+    {
+    }
+    else
+    {
+        foreach (var a in Model)
+        {
+            <div class="row view-grid animated  fadeInUp" data-animation="fadeInUp">
+
+                <div class="collection-list">
+
+                    <div class="main_box" style="">
+                        <div class="box_1">
+                            <div class="col-sm-4">
+                                <div class="list-image">
+                                    <a href="~/product/@a.Slug">
+                                        <img src="@Url.Action("Img", "Cdn", new { id = a.ProductId, s = "s", t = "p", target = "Website"})" alt="@a.Title">
+    </a>
+                                </div>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="product-details">
+
+
+                                    <h2>
+                                        <a href="~/product/@a.Slug" rel="tag">@a.Title</a> </h2>
+
+                                    <p>@a.ShortDescription </p>
+                                    <div class="price">
+                                    <span class="money">@Settings.Get.CurrencySymbol@a.RetailPrice</span></div>
+
+                                    <form method="post" action="/cart/add">
+
+
+                                        <a href="~/product/@a.Slug" class="btn_c">More Info</a>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        }
+
+    }*@
+ @section foot{
+    }

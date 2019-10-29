@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<html lang="en" class="noIE">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Html.Raw(AppSettings.GetVal("website:CustomCode"))
+    @Html.Partial("_HeadRoot")
+    @RenderSection("head", false)
+</head>
+<body id="rinkit-com-online-shopping-for-your-home-and-garden" class="template-index catalog-product-view catalog-product-view product-wooden-balance-bikes-for-3-year-olds-uk">
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>

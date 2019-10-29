@@ -1,0 +1,74 @@
+﻿.form-Modal > .modal-content {
+    /*background: #f7f7f7;*/
+}
+.cke_editable {
+    min-height: 100px;
+    background:#ffffff;
+    border: 1px solid #e0dede;
+}
+
+.diskuf-uploader {
+    zoom: 1;
+    position: relative;
+    text-decoration:line-through
+    /*padding: 15px;*/
+}
+
+.wd-fa-add-file-light {
+    display: block;
+}
+
+.wd-fa-add-file-from-main .wd-fa-add-file-light-text {
+    border: 2px dashed transparent;
+    padding: 14px 0 0;
+    -webkit-transition: border-color .2s linear;
+    transition: border-color .2s linear;
+    min-height: 50px;
+}
+
+.wd-fa-add-file-light-title {
+    display: block;
+    color: #0b66c3;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 2px;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.wd-fa-add-file-light-title {
+    display: block;
+    color: #0b66c3;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 2px;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.wd-fa-add-file-light-descript {
+    color: #8a8b8b;
+    display: block;
+    font-size: 12px;
+    text-align: center;
+}
+
+.diskuf-uploader input {
+    filter: alpha(opacity=0) !important;
+    font-size: 57px !important;
+    height: 84px !important;
+    right: 0 !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    top: 0px !important;
+    cursor: pointer !important;
+}
+
+.panel-heading a{
+    color:#211e1e;
+    margin:0 5px;
+}

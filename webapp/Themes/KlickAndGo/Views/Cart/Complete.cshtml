@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Order Complete";
+    Layout = "~/Themes/KlickAndGo/Views/Shared/_Layout.cshtml";
+}
+
+
+@section head{
+    <style type="text/css">
+        .btn:hover {
+    background: #ffffff;
+    color: #04468d;
+}
+    </style>
+    <link href='//fonts.googleapis.com/css?family=Open Sans:400,600' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open Sans:400,600' rel='stylesheet' type='text/css'>
+    <link href="~/Themes/KlickAndGo/Content/cdn.shopify.com/app/services/8825910/assets/v2-ltr-2017-09-19-0b20e000d80995df86f7fbc195bf4962-16094182073911761634.css" rel="stylesheet" media="all" />
+    <script src="~/Themes/KlickAndGo/Content/cdn.shopify.com/s/assets/checkout_2017-09-19-3bb09355085bf13b64bea607e9196470733e44061824553835d1c1338d06c156.js"></script>
+
+}
+<div id="content" data-content="">
+    <div class="wrap">
+        
+           
+        <div class="main" role="main" style="width:100%;">
+            <div class="main__header">
+                <ul class="breadcrumb ">
+                    <li class="breadcrumb__item breadcrumb__item--completed">
+                        <a class="breadcrumb__link" href="@Url.Action("Index","Cart")">Cart</a>
+                        <svg class="icon-svg icon-svg--size-10 breadcrumb__chevron-icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M2 1l1-1 4 4 1 1-1 1-4 4-1-1 4-4"></path></svg>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--current">
+                        <a class="breadcrumb__link" href="@Url.Action("Checkout","Cart")">
+                            Customer information
+                        </a>
+                        <svg class="icon-svg icon-svg--size-10 breadcrumb__chevron-icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M2 1l1-1 4 4 1 1-1 1-4 4-1-1 4-4"></path></svg>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--blank">
+                        <a class="breadcrumb__link" href="@Url.Action("Review","Cart", new { @id = ViewContext.RouteData.Values["id"] })">
+                            Order Detail
+                        </a>
+                        <svg class="icon-svg icon-svg--size-10 breadcrumb__chevron-icon rtl-flip" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path d="M2 1l1-1 4 4 1 1-1 1-4 4-1-1 4-4"></path></svg>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--blank">
+                        <a class="breadcrumb__link" href="@Url.Action("PaymentOptions","Cart", new { @id = ViewContext.RouteData.Values["id"] })">Payment method</a>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--blank">
+                        <span class="breadcrumb__text">
+                            Payment
+                        </span>
+                    </li>
+                    <li class="breadcrumb__item breadcrumb__item--blank">
+                        <span class="breadcrumb__text">
+                           Complete
+                        </span>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="main__content">
+                <div class="step" data-step="payment_method">
+                    <div class="step__sections">
+                        <div class="section section--reductions">
+                            <div class="section__header">
+                                <h2 class="section__title"></h2>
+                            </div>
+                            <div class="section__content">
+                              @Html.Raw(ViewBag.Status)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+           
+                <a class="btn_c" href="~/">Back To Home</a>
+                                
+                           
+                           
+                        </div>
+                    </div>
+                </div>
+
+           

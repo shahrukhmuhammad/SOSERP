@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "Employees";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <style>
+        .circle-btns > a > .count {
+            font-size: 15px !important;
+        }
+    </style>
+}
+
+<div style="min-height:430px; color:#080808">
+    <div >
+        @{ Html.RenderAction("_AllEmployees", "Employee"); }
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#employees-dataTable", [1, 2, 3, 4, 5, 6], [0, 7]);
+        });
+    </script>
+}

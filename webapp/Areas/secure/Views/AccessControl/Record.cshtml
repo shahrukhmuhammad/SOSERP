@@ -1,0 +1,202 @@
+﻿@model BaseApp.Entity.AppUser
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    ViewBag.Title = (queryId == null ? "Add New User" : "Edit User");
+    var dpSrc = (queryId == null ? "../../Content/Images/user.png" : "../../../Content/Uploads/Dp/" + Model.Id + ".jpg");
+    //var office = ViewBag.Office as BaseApp.Entity.Office;
+    var allRoles = ViewBag.AllRoles as List<BaseApp.Entity.AppRole>;
+}
+
+<form id="user-frm" class="panel panel-default" method="post" enctype="multipart/form-data">
+    <div class="panel-heading">
+        <h3 class="panel-title">@ViewBag.Title</h3>
+        <div class="btn-group btn-group-xs" role="group">
+            <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Cancel / Back"><i class="fa fa-close"></i></a>
+            <button type="submit" class="btn btn-success" title="Save"><i class="fa fa-check"></i></button>
+        </div>
+    </div>
+    <div class="panel-body">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-4">
+                <div class="thumbnail text-center">
+                    <img id="img-Preview" src="@dpSrc" class="img-responsive img-centre" style="max-height:128px;" onerror="this.onerror = null; this.src = '/Content/Images/user.png';">
+                    <div class="caption">
+                        <input type="file" class="form-control input-sm" id="file" name="file" onchange="previewImage(this,'#img-Preview')" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="hidden">
+                        <div class="form-group">
+                            <label>Code</label>
+                            <input type="text" class="form-control input-sm" name="Code" value="@(queryId == null ? "*Auto-Generated" : Model.Code)" readonly />
+                        </div>
+                    </div>
+                    @*<div class="col-md-4">
+                        <div class="form-group">
+                            <label>Office</label>
+                            <input type="text" class="form-control input-sm" value="@(office.Title == null ? "*Auto-Generated" : office.Title )" readonly />
+                        </div>
+                    </div>*@
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select name="RoleId" class="form-control input-sm" required autofocus>
+                                @foreach (var x in allRoles)
+                                {
+                                    <option value="@x.Id" @(Model.RoleId == x.Id ? "selected" : "")>@x.Code @x.Title</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" class="form-control input-sm" id="Username" name="Username" value="@Model.Username" required />
+                            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" class="form-control input-sm" name="FirstName" value="@Model.FirstName" required />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Middle Name</label>
+                            <input type="text" class="form-control input-sm" name="MiddleName" value="@Model.MiddleName" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control input-sm" name="LastName" value="@Model.LastName" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control input-sm" name="Email" value="@Model.Email" required />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select name="Gender" class="form-control input-sm" required>
+                                <option value="@((int)BaseApp.Entity.AppUserGender.Male)" @(Model.Gender == BaseApp.Entity.AppUserGender.Male ? "selected" : "")>@BaseApp.Entity.AppUserGender.Male.ToSpacedTitleCase()</option>
+                                <option value="@((int)BaseApp.Entity.AppUserGender.Female)" @(Model.Gender == BaseApp.Entity.AppUserGender.Female ? "selected" : "")>@BaseApp.Entity.AppUserGender.Female.ToSpacedTitleCase()</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <div class="input-group input-group-sm datePicker">
+                        <input name="DateOfBirth" class="form-control input-sm" type="text" value="@Model.DateOfBirth.ToShortDateString()" required autocomplete="off">
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Home Phone</label>
+                    <input type="text" class="form-control input-sm phoneMask" name="HomePhone" value="@Model.HomePhone" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Work Phone</label>
+                    <input type="text" class="form-control input-sm phoneMask" name="WorkPhone" value="@Model.WorkPhone" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Address Line 1</label>
+                    <input type="text" class="form-control input-sm" name="AddressLine1" value="@Model.AddressLine1" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Address Line 2</label>
+                    <input type="text" class="form-control input-sm" name="AddressLine2" value="@Model.AddressLine2" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Town/City</label>
+                    <input type="text" class="form-control input-sm" name="City" value="@Model.City" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>County/State</label>
+                    <input type="text" class="form-control input-sm" name="State" value="@Model.State" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Post Code/Zip Code</label>
+                    <input type="text" class="form-control input-sm" name="ZipCode" value="@Model.ZipCode" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Country</label>
+                    <select name="Country" class="form-control input-sm">
+                        @foreach (var c in Html.CountriesListWithCode())
+                        {
+                            <option value="@c.Value" selected="@(Model.Country == c.Value)">@c.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-right">
+        <div class="btn-group btn-group-sm" role="group">
+            <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script type="text/javascript">
+        $("#user-frm").validate({
+            rules: {
+                Username: {
+                    remote: {
+                        url: "@Url.Action("CheckDuplicateUsername", "Account", new { Area = "Secure" })",
+                        type: "post",
+                        data: {
+                            Username: function () {
+                                return $("#Username").val();
+                            },
+                            Id: function () {
+                                return $("#Id").val();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

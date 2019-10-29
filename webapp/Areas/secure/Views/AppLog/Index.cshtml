@@ -1,0 +1,71 @@
+﻿@model List<BaseApp.Entity.AppLog>
+@{
+    ViewBag.Title = "My Activity Log";
+}
+
+<div class="form-Modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Back"><i class="fa fa-angle-left"></i></a>
+                @*<a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')" class="btn btn-danger forceRedirect" title="Delete"><i class="fa fa-trash"></i></a>*@
+            </div>
+        </div>
+        <div class="modal-body">
+            @*<ul class="no-padding" style="list-style:none;">
+                @foreach (var x in Model)
+                {
+                    <li>@x.CreatedOn.ToShortDateString() &nbsp; @x.CreatedOn.ToString("hh:mm:ss tt") &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  @x.Title - @x.Module</li>
+                }
+            </ul>*@
+
+            <div class="table-responsive">
+                <table id="dataTable" class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Date" id="dataTable_0" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Time" id="dataTable_1" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_2" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Module" id="dataTable_3" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Location" id="dataTable_4" /></th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td>@x.CreatedOn.ToShortDateString()</td>
+                                <td>@x.CreatedOn.ToString("hh:mm:ss tt")</td>
+                                <td>@x.Title</td>
+                                <td>@x.Module</td>
+                                <td>@x.Location</td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <a href="~/Secure/AppLog/Details/@x.Id" class="btn btn-primary" title="View Details"><i class="fa fa-eye"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                @*<a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultiple")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            //filterDataTable("#dataTable", [1, 2, 3, 4], [0, 5]);
+            filterDataTable("#dataTable", [0, 1, 2, 3, 4], [5]);
+        });
+    </script>
+}

@@ -1,0 +1,119 @@
+﻿<form id="frm" class="form-Modal" method="post" action="~/Secure/Employee/SaveOvertimeRatesSettings">
+    <div class="modal-content">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="Id" value="" />
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Custom Overtime Rates</h4>
+        </div>
+        <div class="modal-body">
+            <table class="table" align="center">
+                <thead>
+                    <tr>
+                        <th class="text-left">Employee Type</th>
+                        <th class="text-center">Overtime Rates (percentage of regular rates)</th>
+                        <th class="text-center">Double time rates</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Full Time - 40 Hour per week</td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-sm" name="payrollOvertime:FullTime" value="@AppSettings.GetVal("payrollOvertime:FullTime")" />
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-sm" name="payrollDoubleTime:FullTime" value="@AppSettings.GetVal("payrollDoubleTime:FullTime")" />
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Part time - Less then 40 hours per week</td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-sm" name="payrollOvertime:PartTime" value="@AppSettings.GetVal("payrollOvertime:PartTime")" />
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-sm" name="payrollDoubleTime:PartTime" value="@AppSettings.GetVal("payrollDoubleTime:PartTime")" />
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Varying weekly hours (no fixed hours)</td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-sm" name="payrollOvertime:VaryingWeekly" value="@AppSettings.GetVal("payrollOvertime:VaryingWeekly")" />
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-sm" name="payrollDoubleTime:VaryingWeekly" value="@AppSettings.GetVal("payrollDoubleTime:VaryingWeekly")" />
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Contractor</td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-sm" name="payrollOvertime:Contractor" value="@AppSettings.GetVal("payrollOvertime:Contractor")" />
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-sm" name="payrollDoubleTime:Contractor" value="@AppSettings.GetVal("payrollDoubleTime:Contractor")" />
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Per diem</td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-sm" name="payrollOvertime:Perdiem" value="@AppSettings.GetVal("payrollOvertime:Perdiem")" />
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-sm" name="payrollDoubleTime:Perdiem" value="@AppSettings.GetVal("payrollDoubleTime:Perdiem")" />
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Freelance</td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-sm" name="payrollOvertime:Freelance" value="@AppSettings.GetVal("payrollOvertime:Freelance")" />
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control input-sm" name="payrollDoubleTime:Freelance" value="@AppSettings.GetVal("payrollDoubleTime:Freelance")" />
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</form>

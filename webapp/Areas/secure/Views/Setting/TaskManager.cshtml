@@ -1,0 +1,235 @@
+﻿
+@{
+    ViewBag.Title = "Task Manager";
+    Layout = "~/Areas/Secure/Views/Shared/_Layout.cshtml";
+    var taskManager = AppModule.GetById("TaskManager");
+}
+
+@section styles{
+    <link href="~/Content/materialDesignSwitch.css" rel="stylesheet" />
+    @if (Request.Browser.IsMobileDevice)
+        {
+        @Styles.Render("~/Content/SummerNote")
+    }
+    else
+    {
+        <link href="~/Content/alloy-editor/assets/alloy-editor-ocean.css" rel="stylesheet" />
+    }
+    <style>
+        ul.stage-Nav > li.list-group > a.list-group-item::after {
+            left: 93%;
+        }
+
+        .cke_textarea_inline .container {
+            width: 965px;
+        }
+    </style>
+    }
+
+<ul class="nav nav-tabs nav-justified stage-Nav">
+    <li class="list-group">
+        <a id="carousel-Step1" href="javascript://" class="list-group-item active">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">1. Configurations</h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step2" href="javascript://" class="list-group-item">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">
+                2. Settings
+            </h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+    <li class="list-group">
+        <a id="carousel-Step3" href="javascript://" class="list-group-item last">
+            <i class="fa fa-angle-right"></i>
+            <h5 class="list-group-item-heading">3. Review</h5>
+            <p class="list-group-item-text small"></p>
+        </a>
+    </li>
+</ul>
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> @TempData["SuccessMsg"]
+    </div>
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Error!</strong> @TempData["ErrorMsg"]
+    </div>
+}
+
+<div id="div-Carousel" class="carousel slide" data-ride="carousel" data-interval="false">
+    <form id="frm" class="carousel-inner" role="listbox" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="/Secure/Setting/TaskManager" />
+        <div class="item @(Request["tab"] == null ? "active" : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Configurations</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="window.history.back()" data-placement="bottom" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                            <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 2);" data-placement="bottom" class="btn btn-success">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <span class="pull-right">
+                                    <input data-id="Model-Status" type="checkbox" class="switch" value="@(taskManager.Status ? "true" : "false")" @(taskManager.Status ? "checked" : "") />
+                                    <input id="Model-Status" name="taskmanagerStatus" type="hidden" value="@(taskManager.Status ? "true" : "false")" />
+                                </span>
+                                <h4 class="list-group-item-heading">Activate / Deactivate Module</h4>
+                                <p class="list-group-item-text">Choose whether this module should be accessable and workable or not.</p>
+                            </li>
+                        </ul>
+
+                        <div class="form-group">
+                            <label>Message to show</label>
+                            <textarea id="Message" name="taskManagerMessage">@Html.Raw(taskManager.Message)</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                            <a href="javascript://" class="btn btn-success" onclick="carouselFormValidate(this, '#div-Carousel', 2);">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "loc" ? "active" : "" ) : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Task Management</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="javascript://" onclick="carouselFormValidate(this, '#div-Carousel', 3);" data-placement="bottom" class="btn btn-success review-btn">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <div class="material-switch pull-right">
+                                            <input id="employeeTaskCreation" class="employeeTaskCreation" name="employee:TaskCreation" type="checkbox" data-val="@AppSettings.GetVal("employee:TaskCreation")" value="@AppSettings.GetVal("employee:TaskCreation")" @(AppSettings.GetVal<bool>("employee:TaskCreation") ? "checked" : "") />
+                                            <label for="employeeTaskCreation" class="label-success employeeTaskCreation"></label>
+                                        </div>
+                                        <h4 class="list-group-item-heading">Do you want to allow employees to create new tasks? </h4>
+                                        <p class="list-group-item-text">
+                                            <a href="#">Enable this feature for employees to create new task</a>
+                                        </p>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="material-switch pull-right">
+                                            <input id="employeeAcceptNRejectTask" class="employeeAcceptNRejectTask" name="employee:AcceptNRejectTask" type="checkbox" data-val="@AppSettings.GetVal("employee:AcceptNRejectTask")" value="@AppSettings.GetVal("employee:AcceptNRejectTask")" @(AppSettings.GetVal<bool>("employee:AcceptNRejectTask") ? "checked" : "") />
+                                            <label for="employeeAcceptNRejectTask" class="label-success employeeAcceptNRejectTask"></label>
+                                        </div>
+                                        <h4 class="list-group-item-heading">Do you want to allow employees consent to accept task?</h4>
+                                        <p class="list-group-item-text">
+                                            <a href="#">Enable this feature for employees to accept or reject tasks</a>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="javascript://" class="btn btn-success review-btn" onclick="carouselFormValidate(this, '#div-Carousel', 3);">Next <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="item @(Request["tab"] != null ? (Request["tab"].ToString() == "config" ? "active" : "" ) : "")">
+            <div class="form-Modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Review your changes</h4>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 3)" class="btn btn-default" data-placement="bottom"><i class="fa fa-chevron-left"></i> Back</a>
+                            <button type="submit" class="btn btn-success" data-placement="bottom"><i class="fa fa-check"></i> Submit</button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-striped">
+                                        <tr>
+                                            <th class="text-right">Task Management Application Status</th>
+                                            <td>
+                                                <span id="review-Application-On" class="label label-success" hidden>ON</span>
+                                                <span id="review-Application-Off" class="label label-danger" hidden>OFF</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="javascript://" onclick="carouselFormValidatePrev('#div-Carousel', 2)" class="btn btn-default" role="button"><i class="fa fa-chevron-left"></i> Back</a>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+@section scripts{
+    @if (Request.Browser.IsMobileDevice)
+    {
+        @Scripts.Render("~/bundles/SummerNote")
+        <script>
+            $(function () {
+                $("#Message").summernote({ height: 200 });
+            });
+        </script>
+    }
+    else
+    {
+        <script src="~/Content/alloy-editor/alloy-editor-all.js"></script>
+        <script>
+            $(function () {
+                makeAlloyEditor('Message');
+            });
+        </script>
+    }
+    <script>
+        $(function () {
+            $('.review-btn').click(function (e) {
+                if ($("#Model-Status").val() === "true") {
+                    $("#review-Application-On").show();
+                    $("#review-Application-Off").hide();
+                };
+
+                if ($("#Model-Status").val() === "false") {
+                    $("#review-Application-Off").show();
+                    $("#review-Application-On").hide();
+                };
+            });
+        });
+    </script>
+    <script src="~/Scripts/App/EmployeeSettings.js"></script>
+}

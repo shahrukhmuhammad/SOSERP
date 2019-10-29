@@ -1,0 +1,166 @@
+﻿@model List<HRM_Vew_Employee>
+
+<style>
+    .menu-links a:hover {
+        text-decoration: none;
+    }
+</style>
+
+@*<div class="text-center">
+        <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
+                <button class="btn btn-primary" type="button" onclick="$(this).parent().parent().find('.btn-primary').removeClass('btn-primary').addClass('btn-default'); $(this).removeClass('btn-default').addClass('btn-primary'); $('#employees-dataTable_1').val('').trigger('keyup')">
+                    Total
+                    <br />
+                    <i class="fa fa-2x">@Model.Count()</i>
+                </button>
+            </div>
+            <div class="btn-group" role="group">
+                <button class="btn btn-default" type="button" onclick="$(this).parent().parent().find('.btn-primary').removeClass('btn-primary').addClass('btn-default'); $(this).removeClass('btn-default').addClass('btn-primary'); $('#employees-dataTable_1').val('Manager').trigger('keyup')">
+                    Manager
+                    <br />
+                    <i class="fa fa-2x">@Model.Where(x => x.Type == BaseApp.Entity.AppUserType.Manager).Count()</i>
+                </button>
+            </div>
+            <div class="btn-group" role="group">
+                <button class="btn btn-default" type="button" onclick="$(this).parent().parent().find('.btn-primary').removeClass('btn-primary').addClass('btn-default'); $(this).removeClass('btn-default').addClass('btn-primary'); $('#employees-dataTable_1').val('Employee').trigger('keyup')">
+                    Employee
+                    <br />
+                    <i class="fa fa-2x">@Model.Where(x => x.Type == BaseApp.Entity.AppUserType.Employee).Count()</i>
+                </button>
+            </div>
+        </div>
+    </div>*@
+
+<div class="form-Modal">
+    <div class="modal-content bg-transparent">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                Employees Management
+                <span class="pull-right menu-links">
+                    <a href="javascript://" class="text-muted" title="go to previous" style="margin:0 8px;" onclick="window.history.back()">
+                        <i class="fa fa-angle-left"></i> <span class="grid-buttons"> Go Back</span>
+                    </a>
+                    @*<a href="javascript://" class="text-danger forceRedirect" title="delete record" style="margin:0 8px;" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleEmployees")', '.checkIt')">
+                        <i class="fa fa-trash"></i>
+                    </a>*@
+                    <a href="@Url.Action("Record","Employee")" style="margin:0 8px;" title="add new">
+                        <i class="fa fa-plus-circle text-primary"></i> <span class="grid-buttons"> Add New Employee</span>
+                    </a>
+                </span>
+            </h3>
+
+            @*<div class="btn-group btn-group-xs" role="group">
+                    <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                    <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleEmployees")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                    <div class="btn-group btn-group-xs" role="group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-plus"></i> Add New <span class="fa fa-angle-down"></span>
+                        </button>
+                        <ul class="dropdown-menu" style="width:auto; left:-70px;">
+                            <li><a href="~/Secure/Employee/Record?t=2">Manager</a></li>
+                            <li><a href="~/Secure/Employee/Record?t=3">Employee</a></li>
+                        </ul>
+                    </div>
+                </div>*@
+        </div>
+        <div class="row" style="margin:15px 0">
+            <div class="col-md-12">
+                <ul class="nav nav-pills">
+                    <li><a href="#" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-hdd-o"></i> &nbsp; All</a></li>
+                    <li><a href="#" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-user"></i> &nbsp; Active</a></li>
+                    <li><a href="#" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-adjust"></i> &nbsp; Invited</a></li>
+                    <li><a href="#" class="btn btn-default" style="padding:6px 20px;"> <i style="font-size:16px;" class="fa fa-user-times"></i> &nbsp; Suspended</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table id="employees-dataTable" class="table table-hover table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="checkAll(this, 'checkIt');" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="ID" id="employees-dataTable_0" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Name" id="employees-dataTable_1" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="CNIC" id="employees-dataTable_2" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Region" id="employees-dataTable_3" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Post" id="employees-dataTable_4" /></th>
+                            <th><input class="form-control input-sm input-tbl" type="text" placeholder="Status" id="employees-dataTable_5" /></th>
+                            <th class="text-center" width="100px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.HRMS))
+                                    {
+                                        <input type="checkbox" class="checkIt" value="@x.EmployeeId" />
+                                    }
+                                </td>
+                                <td><a href="~/Secure/Employee/Details/@x.EmployeeId">@x.Code</a></td>
+                                <td>@x.Name</td>
+                                <td>@x.CNIC</td>
+                                <td>
+                                    @x.Region
+                                </td>
+                                <td>@x.Post</td>
+                                <td>
+                                    @if (x.Status == Convert.ToByte(AppUserStatus.UnVerified))
+                                    {
+                                        <label class="label label-warning">Un Verified</label>
+                                    }
+                                    @if (x.Status == Convert.ToByte(AppUserStatus.Active))
+                                    {
+                                        <label class="label label-success">Active</label>
+                                    }
+                                    @if (x.Status == Convert.ToByte(AppUserStatus.Suspended))
+                                    {
+                                        <label class="label label-danger">Suspended</label>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <a href="~/Secure/Employee/Details/@x.EmployeeId" class="btn btn-primary" title="Details"><i class="fa fa-eye"></i></a>
+                                        @if (CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.Contact))
+                                        {
+                                            <a href="@Url.Action("Record","Employee")/@x.EmployeeId" class="btn btn-info" title="Edit"><i class="fa fa-edit"></i></a>
+                                            <a href="javascript://" onclick="deleteRecord('@Url.Action("Delete")', '@x.EmployeeId')" class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="pull-right menu-links">
+                <a href="javascript://" class="text-muted" title="go to previous" style="margin:0 8px;" onclick="window.history.back()">
+                    <i class="fa fa-angle-left fa-2x"></i> <span class="grid-buttons"> Go Back</span>
+                </a>
+                @*<a href="javascript://" class="text-danger forceRedirect" title="delete record" style="margin:0 8px;" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleEmployees")', '.checkIt')">
+                    <i class="fa fa-trash fa-2x"></i>
+                </a>*@
+                <a href="@Url.Action("Record","Employee")" style="margin:0 8px;" title="add new">
+                    <i class="fa fa-plus-circle fa-2x text-primary"></i> <span class="grid-buttons"> Add New Employee</span>
+                </a>
+            </div>
+            @*<div class="btn-group btn-group-sm" role="group">
+                    <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                    <a href="javascript://" onclick="deleteMultipleRecords('@Url.Action("DeleteMultipleEmployees")', '.checkIt')" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-plus"></i> Add New <span class="fa fa-angle-down"></span>
+                        </button>
+                        <ul class="dropdown-menu" style="width:auto; left:-70px;">
+                            <li><a href="~/Secure/Employee/Record?t=2">Manager</a></li>
+                            <li><a href="~/Secure/Employee/Record?t=3">Employee</a></li>
+                        </ul>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+</div>

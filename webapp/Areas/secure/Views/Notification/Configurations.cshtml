@@ -1,0 +1,317 @@
+﻿
+@{
+    ViewBag.Title = "Notifications";
+}
+
+@section styles{
+    <style>
+        .fa.true-icon {
+            color: #007FCC;
+            font-size: 20px;
+        }
+        .fa.false-icon {
+            color: #D22D2D;
+            font-size: 20px;
+        }
+    </style>
+}
+<div class="form-Modal">
+    @if (AppModule.GetById("CMS").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewCMS, BaseApp.Entity.AppPermission.CMS))
+    {
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Website Management Notifications</h4>
+                @*<div class="btn-group btn-group-xs" role="group">
+                        <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                        <a href="javascript://" onclick="" class="btn btn-danger forceRedirect"><i class="fa fa-trash"></i> Delete</a>
+                        <a href="~/Ecommerce/Order/InventorySale" class="btn btn-primary"><i class="fa fa-plus"></i> Create New Order</a>
+                    </div>*@
+            </div>
+            <div class="modal-body modal-pading">
+                <div class="table-responsive">
+                    <table id="WebsiteManagementNotifications-dataTable" class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                @*<th><input type="checkbox" onchange="checkAll(this, 'checkIt')" /></th>*@
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_0" /></th>
+                                <th class="col-sm-5"><input class="form-control input-sm input-tbl" type="text" placeholder="Description" id="dataTable_1" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Active" id="dataTable_2" /></th>
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Apply To" id="dataTable_3" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Is Email" id="dataTable_4" /></th>
+                                <th class="text-center col-sm-1">Configure</th>
+                            </tr>
+                        </thead>
+                        @*<tbody>
+                                @foreach (var x in ViewBag.NotificationsList as IList<AppSettingNotifications>)
+                                {
+                                    <tr>
+                                        <td>
+                                            @x.NotificationTitle
+                                        </td>
+                                        <td>
+                                            @x.Description
+                                        </td>
+                                        <td align="center">
+                                            @if (x.IsActive)
+                                            {  <i class="fa fa-check true-icon"></i> }
+                                            else
+                                            { <i class="fa fa-close false-icon"></i>}
+                                        </td>
+                                        <td align="center">
+                                            <strong> @x.ApplyFor </strong><br />
+                                            <span>
+                                                @if (x.ApplyFor == ApplyFor.Custom)
+                                                {
+                                                    foreach (var item in notifyRepo.GetCustomRolesList(x.Id))
+                                                    {
+                                                        <text> @Enum.GetName(typeof(AppUserRole), item), </text>
+                                                    }
+                                                }
+                                            </span>
+                                        </td>
+                                        <td align="center">
+                                            @if (x.IsEmail)
+                                            {  <i class="fa fa-check true-icon"></i> }
+                                            else
+                                            { <i class="fa fa-close false-icon"></i>}
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-xs btn-primary btn_edit" href="javascript://" data-id="@x.Id" title="Configure"><i class="fa fa-gear"></i> Configure</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>*@
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    @if (AppModule.GetById("Ecommerce").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewEcommerce, BaseApp.Entity.AppPermission.Ecommerce))
+    {
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Ecommerce Notifications</h4>
+            </div>
+            <div class="modal-body modal-pading">
+                <div class="table-responsive">
+                    <table id="EcommerceNotifications-dataTable" class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-3"><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_0" /></th>
+                                <th class="col-sm-4"><input class="form-control input-sm input-tbl" type="text" placeholder="Description" id="dataTable_1" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Active" id="dataTable_2" /></th>
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Apply To" id="dataTable_3" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Is Email" id="dataTable_4" /></th>
+                                <th class="text-center col-sm-1">Configure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var x in ViewBag.NotificationsList as IList<NotificaitionSettings>)
+                            {
+                                <tr>
+                                    <td>
+                                        @x.NotificationTitle
+                                    </td>
+                                    <td>
+                                        @x.Description
+                                    </td>
+                                    <td align="center">
+                                        @if (x.IsActive)
+                                        {  <i class="fa fa-check true-icon"></i> }
+                                        else
+                                        { <i class="fa fa-close false-icon"></i>}
+                                    </td>
+                                    <td align="center">
+                                        <strong> @x.ApplyFor </strong><br />
+                                        <span>
+                                            @*@if (x.ApplyFor == ApplyFor.Custom)
+                                            {
+                                                foreach (var item in notifyRepo.GetCustomRolesList(x.Id))
+                                                {
+                                                    <text> @Enum.GetName(typeof(AppUserRole), item), </text>
+                                                }
+                                            }*@
+                                        </span>
+                                    </td>
+                                    <td align="center">
+                                        @if (x.IsEmail)
+                                        {  <i class="fa fa-check true-icon"></i> }
+                                        else
+                                        { <i class="fa fa-close false-icon"></i>}
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-xs btn-primary btn_configure" href="javascript://" data-id="@x.Id" title="Configure"><i class="fa fa-gear"></i> Configure</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    @if (AppModule.GetById("Employees").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewHRM, BaseApp.Entity.AppPermission.HRM))
+    {
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">HRM Notifications</h4>
+            </div>
+            <div class="modal-body modal-pading">
+                <div class="table-responsive">
+                    <table id="HRMNotifications-dataTable" class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_0" /></th>
+                                <th class="col-sm-5"><input class="form-control input-sm input-tbl" type="text" placeholder="Description" id="dataTable_1" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Active" id="dataTable_2" /></th>
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Apply To" id="dataTable_3" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Is Email" id="dataTable_4" /></th>
+                                <th class="text-center col-sm-1">Configure</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    @if (AppModule.GetById("CRM").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewCRM, BaseApp.Entity.AppPermission.CRM))
+    {
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">CRM Notifications</h4>
+            </div>
+            <div class="modal-body modal-pading">
+                <div class="table-responsive">
+                    <table id="CRMNotifications-dataTable" class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_0" /></th>
+                                <th class="col-sm-5"><input class="form-control input-sm input-tbl" type="text" placeholder="Description" id="dataTable_1" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Active" id="dataTable_2" /></th>
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Apply To" id="dataTable_3" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Is Email" id="dataTable_4" /></th>
+                                <th class="text-center col-sm-1">Configure</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    @if (AppModule.GetById("TaskManager").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.TaskManagement))
+    {
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Task Manager Notifications</h4>
+            </div>
+            <div class="modal-body modal-pading">
+                <div class="table-responsive">
+                    <table id="TaskManagerNotifications-dataTable" class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_0" /></th>
+                                <th class="col-sm-5"><input class="form-control input-sm input-tbl" type="text" placeholder="Description" id="dataTable_1" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Active" id="dataTable_2" /></th>
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Apply To" id="dataTable_3" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Is Email" id="dataTable_4" /></th>
+                                <th class="text-center col-sm-1">Configure</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    @if (AppModule.GetById("Financials").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All))
+    {
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Financials Notifications</h4>
+            </div>
+            <div class="modal-body modal-pading">
+                <div class="table-responsive">
+                    <table id="FinancialsNotifications-dataTable" class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_0" /></th>
+                                <th class="col-sm-5"><input class="form-control input-sm input-tbl" type="text" placeholder="Description" id="dataTable_1" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Active" id="dataTable_2" /></th>
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Apply To" id="dataTable_3" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Is Email" id="dataTable_4" /></th>
+                                <th class="text-center col-sm-1">Configure</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    @if (AppModule.GetById("DMS").Status && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewDMS, BaseApp.Entity.AppPermission.DMS))
+    {
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Document Management Notifications</h4>
+            </div>
+            <div class="modal-body modal-pading">
+                <div class="table-responsive">
+                    <table id="DMSNotifications-dataTable" class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Title" id="dataTable_0" /></th>
+                                <th class="col-sm-5"><input class="form-control input-sm input-tbl" type="text" placeholder="Description" id="dataTable_1" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Active" id="dataTable_2" /></th>
+                                <th class="col-sm-2"><input class="form-control input-sm input-tbl" type="text" placeholder="Apply To" id="dataTable_3" /></th>
+                                <th class="col-sm-1"><input class="form-control input-sm input-tbl" type="text" placeholder="Is Email" id="dataTable_4" /></th>
+                                <th class="text-center col-sm-1">Configure</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    
+</div>
+
+<div class="modal fade" id="NotifyConfigure-Modal" tabindex="-1" role="dialog" aria-labelledby="NotifyConfigure-Modal" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        //$(function () {
+        //    filterDataTable("#Notifications-dataTable", [0, 1, 2, 3, 4,], [5]);
+        //    //getProducts("#Orders-dataTable");
+        //});
+        $(function () {
+            filterDataTable("#EcommerceNotifications-dataTable", [0, 1, 2, 3, 4, ], [5]);
+        });
+        //$(function () {
+        //    filterDataTable("#HRMNotifications-dataTable", [0, 1, 2, 3, 4, ], [5]);
+        //});
+        //$(function () {
+        //    filterDataTable("#CRMNotifications-dataTable", [0, 1, 2, 3, 4, ], [5]);
+        //});
+        //$(function () {
+        //    filterDataTable("#TaskManagerNotifications-dataTable", [0, 1, 2, 3, 4, ], [5]);
+        //});
+        //$(function () {
+        //    filterDataTable("#FinancialsNotifications-dataTable", [0, 1, 2, 3, 4, ], [5]);
+        //});
+        //$(function () {
+        //    filterDataTable("#DMSNotifications-dataTable", [0, 1, 2, 3, 4, ], [5]);
+        //});
+    </script>
+
+    @*<script src="~/Scripts/App/Ecommerce.js"></script>*@
+}
+

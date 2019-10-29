@@ -1,0 +1,57 @@
+﻿
+/*#region Products */
+
+table tbody tr td ul li {
+    padding: 2px !important;
+}
+
+/*#endregion */
+
+/*#region Orders */
+
+.gridDropdown {
+    margin-left: -180px;
+    width: 200px !important;
+}
+
+.modal-pading {
+    padding:5px !important;
+}
+
+.custom-padding li {
+    padding: 7px 10px !important;
+}
+
+.imgblock {
+    padding-right: 5px;
+}
+.grid-img {
+    height: 50px;
+    width: 50px;
+}
+
+.btn-custom {
+    padding-bottom: 1px !important; 
+}
+.bg-lightinfo {
+    background-color: #b7daef;
+}
+.txtbox {
+        width: 70px;
+        text-align: left;
+        border:none;
+        background-color:transparent;
+    }
+.row-padding {
+    padding-bottom: 4px;
+}
+/*#endregion */
+
+/*#region Purchases */
+.imgDiv {
+    width:60px;
+    float:left;
+}
+
+
+/*#endregion */

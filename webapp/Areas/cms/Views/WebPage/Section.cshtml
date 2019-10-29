@@ -1,0 +1,77 @@
+﻿@model CMS.Entity.CmsPageSection
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    ViewBag.Title = (queryId == null ? "Add New " + Model.Page.Name + " Section" : "Edit " + Model.Page.Name + " Section");
+    int orderLength = Model.Page.PageSections.Count() + (queryId == null ? 1 : 0);
+}
+
+@section styles{
+    @Styles.Render("~/Content/SummerNote")
+}
+
+<form id="frm" method="post" class="form-Modal">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="returnUrl" value="/CMS/WebPage/Record/@Model.Page.Id" />
+    <input type="hidden" name="PageId" value="@Model.Page.Id" />
+    <input type="hidden" name="Page.Name" value="@Model.Page.Name" />
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.Title</h4>
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default" title="Back"><i class="fa fa-angle-left"></i></a>
+                <button type="submit" class="btn btn-success" title="Submit"><i class="fa fa-check"></i></button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control input-sm" name="Name" value="@Model.Name" required autofocus />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="Status" class="form-control input-sm" required>
+                            <option value="@((int)CMS.Entity.CmsPageSectionStatus.Draft)" @(Model.Status == CMS.Entity.CmsPageSectionStatus.Draft ? "selected" : "")>@CMS.Entity.CmsPageSectionStatus.Draft</option>
+                            <option value="@((int)CMS.Entity.CmsPageSectionStatus.Published)" @(Model.Status == CMS.Entity.CmsPageSectionStatus.Published ? "selected" : "")>@CMS.Entity.CmsPageSectionStatus.Published</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Order</label>
+                        <select name="SectionOrder" class="form-control input-sm" required>
+                            @for (int i = 1; i <= orderLength; i++)
+                            {
+                                <option value="@i" @(Model.SectionOrder == i ? "selected" : "" )>@i</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Content</label>
+                    <textarea type="text" class="form-control" id="Section" name="Section">@Model.Section</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer text-right">
+            <div class="btn-group btn-group-sm" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-angle-left"></i> Back</a>
+                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    @Scripts.Render("~/bundles/SummerNote")
+    <script>
+        $(function () {
+            $("#Section").summernote({ height: 400 });
+        });
+    </script>
+}

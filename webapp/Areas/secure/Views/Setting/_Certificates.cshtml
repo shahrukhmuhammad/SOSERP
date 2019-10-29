@@ -1,0 +1,26 @@
+﻿@model IList<BaseApp.Entity.CertificateSettings>
+
+<table id="employeeCertificates-Table" class="table table-condensed table-striped">
+    <tbody id="employeeCertificates-records"></tbody>
+    <tfoot>
+        <tr>
+            <th>Title</th>
+            <th>Impact</th>
+            <th>Apply On</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td>@x.Title</td>
+                <td>@x.Impact</td>
+                <td>@x.AppliesTo</td>
+                <td>@x.Description</td>
+                <td style="width:80px;">
+                    <a href="javascript://" data-id="@x.Id" class="btn btn-xs btn-danger delemployeeCertificatesSection"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tfoot>
+</table>
