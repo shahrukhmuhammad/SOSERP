@@ -59,6 +59,20 @@
           <Property Name="UpdatedOn" Type="datetime" />
           <Property Name="UpdatedBy" Type="uniqueidentifier" />
         </EntityType>
+        <EntityType Name="EmpDocuments">
+          <Key>
+            <PropertyRef Name="DocumentId" />
+          </Key>
+          <Property Name="DocumentId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" />
+          <Property Name="Extension" Type="nvarchar" MaxLength="20" />
+          <Property Name="ContentType" Type="nvarchar" MaxLength="255" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
         <EntityType Name="EmpEmergencyContact">
           <Key>
             <PropertyRef Name="EmergencyContactId" />
@@ -408,6 +422,18 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__EmpDocume__Emplo__29221CFB">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmpDocuments" Type="Self.EmpDocuments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpDocuments">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__EmpEmerge__Emplo__7C4F7684">
           <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
           <End Role="EmpEmergencyContact" Type="Self.EmpEmergencyContact" Multiplicity="*" />
@@ -497,6 +523,7 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <EntitySet Name="Center" EntityType="Self.Center" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmpArmyInformation" EntityType="Self.EmpArmyInformation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmpBankDetails" EntityType="Self.EmpBankDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmpDocuments" EntityType="Self.EmpDocuments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmpEmergencyContact" EntityType="Self.EmpEmergencyContact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmpFingerPrints" EntityType="Self.EmpFingerPrints" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
@@ -633,6 +660,10 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <AssociationSet Name="FK__EmpBankDe__Emplo__76969D2E" Association="Self.FK__EmpBankDe__Emplo__76969D2E">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="EmpBankDetails" EntitySet="EmpBankDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EmpDocume__Emplo__29221CFB" Association="Self.FK__EmpDocume__Emplo__29221CFB">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmpDocuments" EntitySet="EmpDocuments" />
           </AssociationSet>
           <AssociationSet Name="FK__EmpEmerge__Emplo__7C4F7684" Association="Self.FK__EmpEmerge__Emplo__7C4F7684">
             <End Role="Employee" EntitySet="Employee" />
@@ -809,6 +840,7 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <NavigationProperty Name="EmpRejoinHistories" Relationship="Self.FK__EmpRejoin__Emplo__04E4BC85" FromRole="Employee" ToRole="EmpRejoinHistory" />
           <NavigationProperty Name="EmpSalaryDetails" Relationship="Self.FK__EmpSalary__Emplo__05D8E0BE" FromRole="Employee" ToRole="EmpSalaryDetails" />
           <NavigationProperty Name="EmpTransferHistories" Relationship="Self.FK__EmpTransf__Emplo__06CD04F7" FromRole="Employee" ToRole="EmpTransferHistory" />
+          <NavigationProperty Name="EmpDocuments" Relationship="SOSHRMSModel.FK__EmpDocume__Emplo__29221CFB" FromRole="Employee" ToRole="EmpDocument" />
         </EntityType>
         <EntityType Name="EmpPoliticalInformation">
           <Key>
@@ -1109,6 +1141,11 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           </AssociationSet>
           <FunctionImport Name="SP_Employee_GetMaxCode" ReturnType="Collection(String)" />
           <EntitySet Name="HRM_Vew_Employee" EntityType="SOSHRMSModel.HRM_Vew_Employee" />
+          <EntitySet Name="EmpDocuments" EntityType="SOSHRMSModel.EmpDocument" />
+          <AssociationSet Name="FK__EmpDocume__Emplo__29221CFB" Association="SOSHRMSModel.FK__EmpDocume__Emplo__29221CFB">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="EmpDocument" EntitySet="EmpDocuments" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="HRM_Vew_Employee">
           <Key>
@@ -1229,6 +1266,33 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <Property Name="RegionHead" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="SupervisorName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="EmpDocument">
+          <Key>
+            <PropertyRef Name="DocumentId" />
+          </Key>
+          <Property Name="DocumentId" Type="Guid" Nullable="false" />
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Extension" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ContentType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Employee" Relationship="SOSHRMSModel.FK__EmpDocume__Emplo__29221CFB" FromRole="EmpDocument" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK__EmpDocume__Emplo__29221CFB">
+          <End Type="SOSHRMSModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="SOSHRMSModel.EmpDocument" Role="EmpDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="EmpDocument">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1609,6 +1673,21 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmpDocuments">
+            <EntityTypeMapping TypeName="SOSHRMSModel.EmpDocument">
+              <MappingFragment StoreEntitySet="EmpDocuments">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="Extension" ColumnName="Extension" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="DocumentId" ColumnName="DocumentId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

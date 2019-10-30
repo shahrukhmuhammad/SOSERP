@@ -647,7 +647,46 @@ namespace HRMS
         }
         #endregion
 
-        
+        #region Documents
+        public List<EmpDocument> GetDocumentsByEmpId(Guid Id)
+        {
+            try
+            {
+                using (context = new SOSHRMSEntities())
+                {
+                    var ls = context.EmpDocuments.Where(x => x.EmployeeId == Id).ToList();
+                    //foreach (var item in ls)
+                    //{
+                    //    item.ContentType = 
+                    //}
+                    return ls;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void SaveDocs(List<EmpDocument> lsDocs)
+        {
+            try
+            {
+                using (context = new SOSHRMSEntities())
+                {
+                    context.EmpDocuments.AddRange(lsDocs);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        #endregion
+
+
+
     }
 
     public enum Gender
@@ -670,5 +709,13 @@ namespace HRMS
         Other,
         Permanent,
         HeadOffice,
+    }
+
+    public class DocList
+    {
+        public Guid EmployeeId { get; set; }
+        public string FileName { get; set; }
+        public string FilePath { get; set; }
+        public string Ext { get; set; }
     }
 }

@@ -152,17 +152,35 @@ namespace WebApp.Areas.HRMS.Controllers
                 }
                 if (documentFiles.Length > 0)
                 {
-                    var docDir = Server.MapPath("~/Content/Uploads/HRMS/EmployeeDocs/");
+                    var docDir = Server.MapPath($"~/{HRMContants.DOCUMENTS_PATH}");
                     string docfileName;
-
+                    var listDocs = new List<EmpDocument>();
+                    EmpDocument objDocs; //= new EmpDocument();
+                    
                     foreach (var item in documentFiles)
                     {
                         if (item != null)
                         {
-                            docfileName = $"{docDir}{model.EmployeeId}_{DateTime.Now.ToString("dd-MM-yyyy")}_{item.FileName}";
+                            objDocs = new EmpDocument();
+
+                            //docfileName = $"{docDir}{model.EmployeeId}_{DateTime.Now.ToString("dd-MM-yyyy")}_{item.FileName}";
+                            docfileName = $"{docDir}{model.EmployeeId}_{item.FileName}";
                             item.SaveAs(docfileName);
+                            
+                            objDocs.DocumentId = Guid.NewGuid();
+                            objDocs.EmployeeId = model.EmployeeId;
+                            objDocs.Title = System.IO.Path.GetFileNameWithoutExtension(item.FileName);
+                            objDocs.Extension = item.FileExtension();
+                            objDocs.ContentType = item.ContentType;
+                            objDocs.CreatedBy = CurrentUser.Id;
+                            objDocs.CreatedOn = DateTime.Now;
+                            listDocs.Add(objDocs);
                         }
                         
+                    }
+                    if (listDocs.Count > 0)
+                    {
+                        employeeRepo.SaveDocs(listDocs);
                     }
                     //documentFiles.SaveAs(dpPath + "ref-" + model.EmployeeId + ".jpg");
                 }
@@ -228,6 +246,20 @@ namespace WebApp.Areas.HRMS.Controllers
             //else
             //{
             return RedirectToAction("Employees");
+        }
+        #endregion
+
+        #region Documents
+        public ActionResult _EmpDocuments(Guid Id)
+        {
+            var list = employeeRepo.GetDocumentsByEmpId(Id);
+            foreach (var item in list)
+            {
+                //var dpPath = Server.MapPath("~/Content/Uploads/HRMS/Dp/");
+                //var docDir = $"~/{HRMContants.DOCUMENTS_PATH}";
+                item.ContentType = $"/{HRMContants.DOCUMENTS_PATH}{item.EmployeeId}_{item.Title}.{item.Extension}";
+            }
+            return PartialView(list);
         }
         #endregion
 

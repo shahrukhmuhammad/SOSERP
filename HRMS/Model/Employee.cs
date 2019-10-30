@@ -26,6 +26,7 @@ namespace HRMS.Model
             this.EmpRejoinHistories = new HashSet<EmpRejoinHistory>();
             this.EmpSalaryDetails = new HashSet<EmpSalaryDetail>();
             this.EmpTransferHistories = new HashSet<EmpTransferHistory>();
+            this.EmpDocuments = new HashSet<EmpDocument>();
         }
     
         public System.Guid EmployeeId { get; set; }
@@ -82,5 +83,7 @@ namespace HRMS.Model
         public virtual ICollection<EmpSalaryDetail> EmpSalaryDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmpTransferHistory> EmpTransferHistories { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EmpDocument> EmpDocuments { get; set; }
     }
 }

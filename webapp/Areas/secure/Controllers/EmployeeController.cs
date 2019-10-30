@@ -70,23 +70,23 @@ namespace WebApp.Areas.Secure.Controllers
         #region Profile View
         public ActionResult Details(Guid Id)
         {
-            var extraFieldSection = extras.GetByModule("Employee");
-            foreach (var x in extraFieldSection)
-            {
-                x.Fields = extras.GetByParentId(x.Id);
-            }
-            ViewBag.Extras = extraFieldSection;
+            //var extraFieldSection = extras.GetByModule("Employee");
+            //foreach (var x in extraFieldSection)
+            //{
+            //    x.Fields = extras.GetByParentId(x.Id);
+            //}
+            //ViewBag.Extras = extraFieldSection;
 
+            //var model = appUser.GetUserById(Id);
+            //if (model.OfficeId.HasValue)
+            //{
+            //    model.Office = ofcRepo.GetById(model.OfficeId.Value);
+            //    if (model.Office != null)
+            //    {
+            //        model.Office.Contact = appUser.GetUserById(model.Office.ContactId);
+            //    }
+            //}
             var model = appUser.GetUserById(Id);
-            if (model.OfficeId.HasValue)
-            {
-                model.Office = ofcRepo.GetById(model.OfficeId.Value);
-                if (model.Office != null)
-                {
-                    model.Office.Contact = appUser.GetUserById(model.Office.ContactId);
-                }
-            }
-
             model.Extras = appUser.GetExtrasByAppUserId(Id);
             return View(model);
         }

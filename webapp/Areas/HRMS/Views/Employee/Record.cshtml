@@ -439,7 +439,7 @@
             <div id="politicalInfo" class="tab-pane fade">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h4>Plitical Information</h4>
+                        <h4>Political Information</h4>
                         <div class="row form-group">
                             <label class="col-sm-4 horizontal-label">Police Station</label>
                             <div class="col-sm-8">
@@ -586,6 +586,15 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10">
+                        @if (Model != null && (Model.EmployeeId != null && Model.EmployeeId != Guid.Empty))
+                        {
+                            Html.RenderAction("_EmpDocuments", "Employee", new { Id = Model.EmployeeId });
+                        }
+                    </div>
+
                 </div>
             </div>
             <div id="armyInfo" class="tab-pane fade">
@@ -1523,145 +1532,7 @@
         </div>
 
     </div>
-    <div>
-        @*<div class="row tb-padding">
-                <div class="col-sm-12">
-                    <div class="page-header">
-                        <h4>Address Information</h4>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="row form-group">
-                                <label class="col-sm-3 horizontal-label">Address Line 1</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control input-sm" name="AddressLine1" value="" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="row form-group">
-                                <label class="col-sm-3 horizontal-label">Address Line 2</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control input-sm" name="AddressLine2" value="" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Zip Code</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control input-sm" name="ZipCode" value="" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="row form-group">
-                                <label class="col-sm-3 horizontal-label">City</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control input-sm" name="City" value="" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="row form-group">
-                                <label class="col-sm-3 horizontal-label">State</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control input-sm" name="State" value="" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="row form-group">
-                                <label class="col-sm-3 horizontal-label">Country</label>
-                                <div class="col-sm-9">
-                                    <select name="Country" class="form-control input-sm">
 
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>*@
-
-        @*<div class="row tb-padding">
-                <div class="col-sm-12">
-                    <div class="page-header">
-                        <h4>Employment Terms</h4>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="row form-group">
-                                <label class="col-sm-6 horizontal-label">Employment Status</label>
-                                <div class="col-sm-6">
-                                    <select name="EmploymentStatus" class="form-control input-sm" required>
-                                        <option value="">-Select-</option>
-
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Pay Rate</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-addon">$</div>
-                                        <input type="text" class="form-control input-sm decimalMask" name="Employment.PayRate" value="" required />
-                                        <div class="input-group-addon">/hour</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Overtime Rate</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group input-group-sm">
-                                        <div class="input-group-addon">$</div>
-                                        <input type="text" class="form-control input-sm decimalMask" name="Employment.OvertimeRate" value="" required />
-                                        <div class="input-group-addon">/hour</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="row form-group">
-                                <label class="col-sm-6 horizontal-label">Salary Cycle</label>
-                                <div class="col-sm-6">
-                                    <select name="Employment.SalaryCycle" class="form-control input-sm" required>
-                                        <option value="">-Select-</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Starting Date</label>
-                                <div class="col-sm-8">
-                                    <input type="date" class="form-control input-sm" name="Employment.StartingDate" value="" required />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Contract Expiring</label>
-                                <div class="col-sm-8">
-                                    <input type="date" class="form-control input-sm" name="Employment.TermEnding" value="" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
-    </div>
 
     <div class="row">
         <div class="col-sm-12 text-right">

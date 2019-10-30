@@ -1,0 +1,104 @@
+﻿@model List<EmpDocument>
+@{
+    var viewMode = "grid"; //Request["viewMode"];
+    if (viewMode == null)
+    {
+        viewMode = "list";
+    }
+}
+
+<div class="modal-body" style="padding:0;">
+
+    @if (viewMode == "list")
+    {
+        <div class="table-responsive">
+            <table id="dms-list-dataTable" class="table table-hover table-condensed" style="margin:0 !important;">
+                <thead>
+                    <tr>
+                        <th style="width:29px;"><input type="checkbox" id="selectall" @*@(Request["mode"] == DmsRenderMode.Browse.ToString() ? "disabled" : "")*@ /></th>
+                        <th><input class="form-control input-sm input-tbl" type="text" placeholder="Name" id="dataTable_0" /></th>
+                        <th style="width:100px" class="hidden-xs"><input class="form-control input-sm input-tbl" type="text" placeholder="Type" id="dataTable_1" /></th>                        
+                        <th style="width:117px" class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (EmpDocument x in Model)
+                    {
+                        <tr>
+                            <td style="width:29px;"><input type="checkbox" class="selectitem" data-id="@x.DocumentId" @*@(Request["mode"] == DmsRenderMode.Browse.ToString() ? "disabled" : "")*@ /></td>
+                            <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                <span class="dms-item">
+                                    @*class="@(Request["mode"] == DmsRenderMode.Browse.ToString() ? "dms-browse-item" : "dms-item")" data-type="@(x.ResourceType == DmsResourceType.File ? x.Extension : "Folder")" data-id="@x.Id" title="@(x.ResourceType == DmsResourceType.File ? x.Filename + Environment.NewLine + "Type: " + x.Type.ToUpper() + " File" + Environment.NewLine + "Size: " + x.FileSize.SizeSuffix() : x.Title + Environment.NewLine + "File folder")&#10;Data modified: @(x.DateModified.HasValue ? x.DateModified.Value.ToString("dd MMM yyyy hh:mm tt") : null)">*@
+                                    <img src="@(x.Extension.Equals("pdf") ? "/content/ext/pdf.png" : "/content/ext/jpg.png")" class="dms-icon-image" />  @x.Title.@x.Extension
+                                </span>
+                            </td>
+                            <td>@(x.Extension.Equals("pdf") ? "Document" : "Image")</td>
+                            <td style="width:100px" class="text-center">
+                                <div class="btn-group btn-group-xs">
+                                    @*<span class="btn btn-warning dms-title-btn" data-title="Rename" data-id="@x.DocumentId" data-text="@x.Title" data-hint="Type a naw name." data-toggle="tooltip" title="Rename"><i class="fa fa-terminal fa-fw"></i></span>
+                                    <span class="btn btn-default dms-revisions-btn" data-toggle="tooltip" data-id="@x.DocumentId" data-filename="@x.Title" title="Revisions"><i class="fa fa-sort-numeric-desc fa-fw"></i></span>*@
+                                    <span data-toggle="tooltip" class="btn btn-info dms-permissions-btn" title="Permissions" data-id="@x.DocumentId" data-filename="@x.Title"><i class="fa fa-eye-slash fa-fw"></i></span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    @if (viewMode == "grid")
+    {
+        if (Model.Count == 0)
+        {
+            <div class="text-center help-block" style="margin-top:80px; margin-bottom:80px">
+                <i class="fa fa-folder-open-o fa-5x"></i>
+                <p>No files</p>
+            </div>
+        }
+        else
+        {
+            <div class="row" style="margin-top:20px;">
+                @foreach (EmpDocument x in Model)
+                {
+                    <div class="col-sm-3 col-md-3">
+                        <div style="height:192px;" class="thumbnail text-center">
+                            <span class="badge-left"><input type="checkbox" class="selectitem" data-id="@x.DocumentId" /></span>
+                            <span class="badge-right"><i class="fa fa-heart-o"></i></span>
+
+                            <img src="@(x.Extension.Equals("pdf") ? "/content/ext/pdf.png" : x.ContentType)" style="width:64px;" class="dms-item" />
+                            <div class="caption">
+                                <p style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                    <span class="dms-browse-item">
+                                        @x.Title
+                                    </span>
+                                </p>
+                                <table class="table table-condensed table-striped" style="margin:0 !important; font-size:70%;">
+                                    <tr>
+                                        <th class="text-right">Type</th>
+                                        <th class="text-right">@(x.Extension.Equals("pdf") ? "Document" : "Image")</th>
+                                    </tr>
+                                </table>
+                                <div class="btn-group btn-group-xs">
+                                    <span class="btn btn-warning dms-title-btn" data-title="Rename" data-id="@x.DocumentId" data-text="@x.Title" data-hint="Type a naw name." data-toggle="tooltip" title="Rename"><i class="fa fa-terminal fa-fw"></i></span>
+                                    <span class="btn btn-default dms-revisions-btn" data-toggle="tooltip" data-id="@x.DocumentId" data-filename="@x.Title" title="Revisions"><i class="fa fa-sort-numeric-desc fa-fw"></i></span>
+                                    <span data-toggle="tooltip" class="btn btn-info dms-permissions-btn" title="Permissions" data-id="@x.DocumentId" data-filename="@x.Title"><i class="fa fa-eye-slash fa-fw"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+<div class="modal-footer" style="padding:0 15px;">
+    <span class="pull-left" style="line-height:30px">@Model.Count items</span>
+    <span class="pull-right">
+        @*@if (Request["mode"] == DmsRenderMode.Browse.ToString())
+            {
+            <button type="button" class="btn btn-default btn-sm" id="dms-close-modal">Close</button>
+                <button type="button" disabled class="btn btn-success btn-sm" id="dmsBrowseChooseBtn"><i class="fa fa-check-square-o"></i> Choose</button>
+        }*@
+    </span>
+</div>

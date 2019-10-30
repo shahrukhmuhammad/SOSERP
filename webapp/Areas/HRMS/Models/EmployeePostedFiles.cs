@@ -1,5 +1,7 @@
-﻿using System;
+﻿using HRMS.Model;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -20,7 +22,5 @@ namespace WebApp.Areas.HRMS
         public HttpPostedFileBase RightMiddleFinger { get; set; }
         public HttpPostedFileBase RightRingFinger { get; set; }
         public HttpPostedFileBase RightBabyFinger { get; set; }
-
-
     }
 }
