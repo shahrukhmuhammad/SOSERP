@@ -32,7 +32,7 @@ $(function () {
     //        }
     //    }
     //});
-
+   
     $('#dmsConfirmDialog .btn-success').click(function () {
         $('#dmsConfirmDialog').modal('hide');
         document.getElementsByName(frameName)[0].src = dmsPath + '/delete/?id=' + getSelection + '&parentId=' + parentId + "&prnt=" + p + "&mode=" + mode;

@@ -16,6 +16,7 @@ namespace HRMS.Model
     {
         public System.Guid DocumentId { get; set; }
         public System.Guid EmployeeId { get; set; }
+        public string DocumentType { get; set; }
         public string Title { get; set; }
         public string Extension { get; set; }
         public string ContentType { get; set; }

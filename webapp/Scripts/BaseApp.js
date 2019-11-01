@@ -512,9 +512,13 @@ $(function () {
     $(".zipCodeMask").inputmask({ "alias": "numeric", "allowMinus": false, "allowPlus": false });
     $(".alphanumericMask").inputmask('Regex', { regex: "[a-zA-Z0-9 ]{1,50}" });
     $(".alphanumericNoSpaceMask").inputmask('Regex', { regex: "[a-zA-Z0-9\-_]{1,50}" });
-    $(".cnicMask").inputmask({
-        "mask": "#####-#######-#",
-    });
+    $(".cnicMask").inputmask(
+        { "mask": "#####-#######-#" }
+    );
+
+    $(".onlyNumbers").inputmask(
+        "Regex", { regex: "[0-9]{1,14}" },
+    );
 });
 //--- 
 

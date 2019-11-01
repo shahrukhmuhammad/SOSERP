@@ -65,6 +65,7 @@
           </Key>
           <Property Name="DocumentId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DocumentType" Type="nvarchar" MaxLength="100" />
           <Property Name="Title" Type="nvarchar(max)" />
           <Property Name="Extension" Type="nvarchar" MaxLength="20" />
           <Property Name="ContentType" Type="nvarchar" MaxLength="255" />
@@ -1272,6 +1273,7 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           </Key>
           <Property Name="DocumentId" Type="Guid" Nullable="false" />
           <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="DocumentType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Extension" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ContentType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
@@ -1686,6 +1688,7 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
                 <ScalarProperty Name="ContentType" ColumnName="ContentType" />
                 <ScalarProperty Name="Extension" ColumnName="Extension" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
                 <ScalarProperty Name="DocumentId" ColumnName="DocumentId" />
               </MappingFragment>

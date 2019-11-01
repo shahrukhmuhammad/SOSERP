@@ -23,4 +23,17 @@ namespace WebApp.Areas.HRMS
         public HttpPostedFileBase RightRingFinger { get; set; }
         public HttpPostedFileBase RightBabyFinger { get; set; }
     }
+
+    public class DocumentPostedFiles
+    {
+        public HttpPostedFileBase DischargeBook { get; set; }
+        public HttpPostedFileBase EducationCertificate { get; set; }
+        public HttpPostedFileBase PoliceVerification { get; set; }
+        public HttpPostedFileBase SendForPoliceAttestion { get; set; }
+        public HttpPostedFileBase NadraAttested { get; set; }
+        public HttpPostedFileBase IdentityCardPension { get; set; }
+        public HttpPostedFileBase PositionBook { get; set; }
+        public HttpPostedFileBase CNICFrontCopy { get; set; }
+        public HttpPostedFileBase CNICBackCopy { get; set; }
+    }
 }

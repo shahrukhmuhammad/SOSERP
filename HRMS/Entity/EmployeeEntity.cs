@@ -30,6 +30,26 @@ namespace HRMS
             }
         }
 
+        public bool CheckDuplicateEmail(Guid Id, string CNIC)
+        {
+            try
+            {
+                using (context = new SOSHRMSEntities())
+                {
+                    var res = context.Employees.Where(x=> x.CNIC.Trim() == CNIC.Trim()).FirstOrDefault();
+                    if (res != null)
+                    {
+                        return res.EmployeeId == Id ? true : false;
+                    }
+                    else
+                        return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         //public string GetNextEmployeeCode()
         //{
         //    try
@@ -668,6 +688,21 @@ namespace HRMS
             }
         }
 
+        public EmpDocument GetDocumentById(Guid Id)
+        {
+            try
+            {
+                using (context = new SOSHRMSEntities())
+                {
+                    return context.EmpDocuments.Where(x => x.DocumentId == Id).FirstOrDefault();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public void SaveDocs(List<EmpDocument> lsDocs)
         {
             try
@@ -710,12 +745,16 @@ namespace HRMS
         Permanent,
         HeadOffice,
     }
-
-    public class DocList
+    public enum DoumentType
     {
-        public Guid EmployeeId { get; set; }
-        public string FileName { get; set; }
-        public string FilePath { get; set; }
-        public string Ext { get; set; }
+        DischargeBook,
+        EducationCertificate,
+        PoliceVerification,
+        SendForPoliceAttestion,
+        NadraAttested,
+        IdentityCardPension,
+        PositionBook,
+        CNICFrontCopy,
+        CNICBackCopy
     }
 }

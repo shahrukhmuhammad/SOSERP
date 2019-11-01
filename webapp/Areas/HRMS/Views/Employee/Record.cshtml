@@ -48,6 +48,7 @@
     @Html.HiddenFor(x => x.EmployeeId)
     @Html.HiddenFor(x => x.Code)
     @Html.HiddenFor(x => x.Status)
+    @Html.HiddenFor(x => x.ProjectId)
 
     <div class="row">
         <div class="col-sm-12 text-right">
@@ -131,7 +132,9 @@
                     <div class="row form-group">
                         <label class="col-sm-4 horizontal-label">C.N.I.C</label>
                         <div class="col-sm-8">
-                            @Html.TextBoxFor(x => x.CNIC, new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })
+                            @*@Html.TextBoxFor(x => x.CNIC, new { @class = "form-control input-sm", @autocomplete = "off"})*@
+                            <input type="text" id="CNIC" name="CNIC" value="@Model.CNIC" class="form-control input-sm cnic" data-inputmask="'mask': '99999-9999999-9'" placeholder="XXXXX-XXXXXXX-X" required="required">
+
                         </div>
                     </div>
                 </div>
@@ -150,7 +153,9 @@
                     <div class="row form-group">
                         <label class="col-sm-4 horizontal-label">Father C.N.I.C</label>
                         <div class="col-sm-8">
-                            @Html.TextBoxFor(x => x.FatherCNIC, new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })
+                            @*@Html.TextBoxFor(x => x.FatherCNIC, new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })*@
+                            <input type="text" id="FatherCNIC" name="FatherCNIC" value="@Model.FatherCNIC" class="form-control input-sm cnic" data-inputmask="'mask': '99999-9999999-9'" placeholder="XXXXX-XXXXXXX-X">
+
                         </div>
                     </div>
                 </div>
@@ -228,6 +233,8 @@
             <li><a data-toggle="tab" href="#transferHistory">Transfer History</a></li>
             <li><a data-toggle="tab" href="#fingers">Fingers</a></li>
             <li><a data-toggle="tab" href="#rejoinHistory">Re-Join History</a></li>
+            <li><a data-toggle="tab" href="#contractDetails">Contract Details</a></li>
+            <li><a data-toggle="tab" href="#salaryInformation">Salary Information</a></li>
         </ul>
 
         <div class="tab-content">
@@ -528,63 +535,70 @@
             <div id="document" class="tab-pane fade in">
                 <h4>Documents</h4>
                 <div class="row">
+                    @*<div class="col-sm-4">
+                            <div class="img-container">
+                                <img id="img-Preview" src="@docSrc" class="img-responsive img-centre" onerror="this.onerror = null; this.src = '/content/ext/folder.png';" />
+                            </div>
+                        </div>*@
                     <div class="col-sm-5">
-                        <div class="img-container">
-                            <img id="img-Preview" src="@docSrc" class="img-responsive img-centre" onerror="this.onerror = null; this.src = '/content/ext/folder.png';" />
-                            <input type="file" class="form-control input-sm file-select" id="documentFiles" name="documentFiles" accept="image/png,image/jpg,image/jpeg,application/pdf" multiple
-                                   data-multiple-caption="{count} files selected" />
-                            <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select files</a>
-
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Discharge Book <span class="req">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="file" class="form-control input-sm" name="DischargeBook" accept="image/png,image/jpg,image/jpeg,application/pdf" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Education Certificate <span class="req">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="file" class="form-control input-sm" name="EducationCertificate" accept="image/png,image/jpg,image/jpeg,application/pdf" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Police Verification </label>
+                            <div class="col-sm-8">
+                                <input type="file" class="form-control input-sm" name="PoliceVerification" accept="image/png,image/jpg,image/jpeg,application/pdf" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Send For Police Attestion </label>
+                            <div class="col-sm-8">
+                                <input type="file" class="form-control input-sm" name="SendForPoliceAttestion" accept="image/png,image/jpg,image/jpeg,application/pdf" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Nadra Attested <span class="req">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="file" class="form-control input-sm" name="NadraAttested" accept="image/png,image/jpg,image/jpeg,application/pdf" />
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <div class="row form-group">
-                            <div class="checkbox">
-                                <label>
-                                    @*<input type="checkbox" name="DischargeBook" value="@(Model.DischargeBook ? "true" : "false")" @(Model.DischargeBook ? "checked" : "") /> Discharge Book <span class="req">*</span>*@
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    @*<input type="checkbox" name="EducationCertificate" value="@(Model.EducationCertificate ? "true" : "false")" @(Model.EducationCertificate ? "checked" : "") />*@ EducationCertificate <span class="req">*</span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    @*<input type="checkbox" name="PoliceVerification" value="@(Model.PoliceVerification ? "true" : "false")" @(Model.PoliceVerification ? "checked" : "") />*@ Police Verification <span class="req">*</span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    @*<input type="checkbox" name="SendForPoliceAttestion" value="@(Model.SendForPoliceAttestion ? "true" : "false")" @(Model.SendForPoliceAttestion ? "checked" : "") />*@ Send For Police Attestion
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    @*<input type="checkbox" name="NadraAttested" value="@(Model.NadraAttested ? "true" : "false")" @(Model.NadraAttested ? "checked" : "") />*@ Nadra Attested <span class="req">*</span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    @*<input type="checkbox" name="IdentityCardPension" value="@(Model.IdentityCardPension ? "true" : "false")" @(Model.IdentityCardPension ? "checked" : "") />*@ Identity Card Pension
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    @*<input type="checkbox" name="PositionBook" value="@(Model.PositionBook ? "true" : "false")" @(Model.PositionBook ? "checked" : "") />*@ Book
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    @*<input type="checkbox" name="CNICFrontCopy" value="@(Model.CNICFrontCopy ? "true" : "false")" @(Model.CNICFrontCopy ? "checked" : "") />*@ CNIC Front Copy
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    @*<input type="checkbox" name="CNICBackCopy" value="@(Model.CNICBackCopy ? "true" : "false")" @(Model.CNICBackCopy ? "checked" : "") />*@ CNIC Back Copy
-                                </label>
+                            <label class="col-sm-4 horizontal-label">Identity Card Pension </label>
+                            <div class="col-sm-8">
+                                <input type="file" class="form-control input-sm" name="IdentityCardPension" accept="image/png,image/jpg,image/jpeg,application/pdf" />
                             </div>
                         </div>
+
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Position Book </label>
+                            <div class="col-sm-8">
+                                <input type="file" class="form-control input-sm" name="PositionBook" accept="image/png,image/jpg,image/jpeg,application/pdf" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">CNIC Front Copy </label>
+                            <div class="col-sm-8">
+                                <input type="file" class="form-control input-sm" name="CNICFrontCopy" accept="image/png,image/jpg,image/jpeg,application/pdf" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">CNIC Back Copy </label>
+                            <div class="col-sm-8">
+                                <input type="file" class="form-control input-sm" name="CNICBackCopy" accept="image/png,image/jpg,image/jpeg,application/pdf" />
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="row">
@@ -690,347 +704,7 @@
                 <div class="row">
                     <div>
                         @{
-                            if (references != null)
-                            {
-                                var Reference = references.ToArray();
-                                if (references.Count() == 2)
-                                {
-                                    <input type="hidden" name="Reference[0].ReferenceId" value="@Reference[0].ReferenceId" />
-                                    <input type="hidden" name="Reference[1].ReferenceId" value="@Reference[1].ReferenceId" />
-
-                                    <div class="col-sm-5">
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">&nbsp;</label>
-                                            <div class="col-sm-8">
-                                                <div class="img-container">
-                                                    <img id="reference1-img" src="@ref1Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
-                                                    <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference1Photo" onchange="previewImage(this,'#reference1-img')" accept="image/x-png,image/jpg,image/jpeg" />
-                                                    <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Name</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefName", Reference[0].RefName, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Address Type</label>
-                                            <div class="col-sm-8">
-                                                @*@Html.DropDownList("Reference[0].RefAddressType", EnumHelper.GetSelectList(typeof(AddressType)), "Select Address Type", new { @class = "form-control input-sm" })*@
-                                                <select name="Reference[0].RefAddressType" class="form-control input-sm" required>
-                                                    <option value="">-Select Address Type-</option>
-                                                    <option value="@((int)AddressType.Default)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Default ? "selected" : "")>@AddressType.Default</option>
-                                                    <option value="@((int)AddressType.HeadOffice)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.HeadOffice ? "selected" : "")>@AddressType.HeadOffice.ToSpacedTitleCase()</option>
-                                                    <option value="@((int)AddressType.Home)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Home ? "selected" : "")>@AddressType.Home</option>
-                                                    <option value="@((int)AddressType.Other)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Other ? "selected" : "")>@AddressType.Other</option>
-                                                    <option value="@((int)AddressType.Permanent)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Permanent ? "selected" : "")>@AddressType.Permanent</option>
-                                                    <option value="@((int)AddressType.Work)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Work ? "selected" : "")>@AddressType.Work</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Address</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefAddress", Reference[0].RefAddress, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">State</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefState", Reference[0].RefState, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Country</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefCountry", Reference[0].RefCountry, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">C.N.I.C</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefCNIC", Reference[0].RefCNIC, new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Profession</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefProfession", Reference[0].RefProfession, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Phone</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefPhone", Reference[0].RefPhone, new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Mobile</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefMobile", Reference[0].RefMobile, new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Email</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefEmail", Reference[0].RefEmail, new { @class = "form-control input-sm emailMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">&nbsp;</label>
-                                            <div class="col-sm-8">
-                                                <div class="img-container">
-                                                    <img id="reference2-img" src="@ref2Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
-                                                    <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference2Photo" onchange="previewImage(this,'#reference2-img')" accept="image/x-png,image/jpg,image/jpeg" />
-                                                    <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Name</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefName", Reference[1].RefName, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Address Type</label>
-                                            <div class="col-sm-8">
-                                                <select name="Reference[1].RefAddressType" class="form-control input-sm" required>
-                                                    <option value="">-Select Address Type-</option>
-                                                    <option value="@((int)AddressType.Default)" @(Convert.ToInt32(Reference[1].RefAddressType) == (int)AddressType.Default ? "selected" : "")>@AddressType.Default</option>
-                                                    <option value="@((int)AddressType.HeadOffice)" @(Convert.ToInt32(Reference[1].RefAddressType) == (int)AddressType.HeadOffice ? "selected" : "")>@AddressType.HeadOffice.ToSpacedTitleCase()</option>
-                                                    <option value="@((int)AddressType.Home)" @(Convert.ToInt32(Reference[1].RefAddressType) == (int)AddressType.Home ? "selected" : "")>@AddressType.Home</option>
-                                                    <option value="@((int)AddressType.Other)" @(Convert.ToInt32(Reference[1].RefAddressType) == (int)AddressType.Other ? "selected" : "")>@AddressType.Other</option>
-                                                    <option value="@((int)AddressType.Permanent)" @(Convert.ToInt32(Reference[1].RefAddressType) == (int)AddressType.Permanent ? "selected" : "")>@AddressType.Permanent</option>
-                                                    <option value="@((int)AddressType.Work)" @(Convert.ToInt32(Reference[1].RefAddressType) == (int)AddressType.Work ? "selected" : "")>@AddressType.Work</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Address</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefAddress", Reference[1].RefAddress, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">State</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefState", Reference[1].RefState, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Country</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefCountry", Reference[1].RefCountry, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">C.N.I.C</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefCNIC", Reference[1].RefCNIC, new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Profession</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefProfession", Reference[1].RefProfession, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Phone</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefPhone", Reference[1].RefPhone, new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Mobile</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefMobile", Reference[1].RefMobile, new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Email</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefEmail", Reference[1].RefEmail, new { @class = "form-control input-sm emailMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <input type="hidden" name="Reference[0].ReferenceId" value="@Reference[0].ReferenceId" />
-                                    <div class="col-sm-5">
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">&nbsp;</label>
-                                            <div class="col-sm-8">
-                                                <div class="img-container">
-                                                    <img id="reference1-img" src="@ref1Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
-                                                    <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference1Photo" onchange="previewImage(this,'#reference1-img')" accept="image/x-png,image/jpg,image/jpeg" />
-                                                    <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Name</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefName", Reference[0].RefName, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Address Type</label>
-                                            <div class="col-sm-8">
-                                                <select name="Reference[0].RefAddressType" class="form-control input-sm" required>
-                                                    <option value="">-Select Address Type-</option>
-                                                    <option value="@((int)AddressType.Default)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Default ? "selected" : "")>@AddressType.Default</option>
-                                                    <option value="@((int)AddressType.HeadOffice)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.HeadOffice ? "selected" : "")>@AddressType.HeadOffice.ToSpacedTitleCase()</option>
-                                                    <option value="@((int)AddressType.Home)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Home ? "selected" : "")>@AddressType.Home</option>
-                                                    <option value="@((int)AddressType.Other)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Other ? "selected" : "")>@AddressType.Other</option>
-                                                    <option value="@((int)AddressType.Permanent)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Permanent ? "selected" : "")>@AddressType.Permanent</option>
-                                                    <option value="@((int)AddressType.Work)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Work ? "selected" : "")>@AddressType.Work</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Address</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefAddress", Reference[0].RefAddress, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">State</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefState", Reference[0].RefState, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Country</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefCountry", Reference[0].RefCountry, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">C.N.I.C</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefCNIC", Reference[0].RefCNIC, new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Profession</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefProfession", Reference[0].RefProfession, new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Phone</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefPhone", Reference[0].RefPhone, new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Mobile</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefMobile", Reference[0].RefMobile, new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Email</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefEmail", Reference[0].RefEmail, new { @class = "form-control input-sm emailMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">&nbsp;</label>
-                                            <div class="col-sm-8">
-                                                <div class="img-container">
-                                                    <img id="reference2-img" src="@ref2Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
-                                                    <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference2Photo" onchange="previewImage(this,'#reference2-img')" accept="image/x-png,image/jpg,image/jpeg" />
-                                                    <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Name</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefName", "", new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Address Type</label>
-                                            <div class="col-sm-8">
-                                                <select name="Reference[1].RefAddressType" class="form-control input-sm" required>
-                                                    <option value="">-Select Address Type-</option>
-                                                    <option value="@((int)AddressType.Default)">@AddressType.Default</option>
-                                                    <option value="@((int)AddressType.HeadOffice)">@AddressType.HeadOffice.ToSpacedTitleCase()</option>
-                                                    <option value="@((int)AddressType.Home)">@AddressType.Home</option>
-                                                    <option value="@((int)AddressType.Other)">@AddressType.Other</option>
-                                                    <option value="@((int)AddressType.Permanent)">@AddressType.Permanent</option>
-                                                    <option value="@((int)AddressType.Work)">@AddressType.Work</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Address</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefAddress", "", new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">State</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefState", "", new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Country</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefCountry", "", new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">C.N.I.C</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefCNIC", "", new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Profession</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefProfession", "", new { @class = "form-control input-sm" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Phone</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefPhone", "", new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Mobile</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefMobile", "", new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <label class="col-sm-4 horizontal-label">Email</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefEmail", "", new { @class = "form-control input-sm emailMask", @autocomplete = "off" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-
-                            }
-                            else
+                            if (references == null || references.Count() == 0)
                             {
                                 <div>
                                     <div class="col-sm-5">
@@ -1087,7 +761,9 @@
                                         <div class="row form-group">
                                             <label class="col-sm-4 horizontal-label">C.N.I.C</label>
                                             <div class="col-sm-8">
-                                                @Html.TextBox("Reference[0].RefCNIC", "", new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })
+                                                <input type="text" name="Reference[0].RefCNIC" class="form-control input-sm cnic" data-inputmask="'mask': '99999-9999999-9'" placeholder="XXXXX-XXXXXXX-X">
+
+                                                @*@Html.TextBox("Reference[0].RefCNIC", "", new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })*@
                                             </div>
                                         </div>
                                         <div class="row form-group">
@@ -1168,7 +844,9 @@
                                         <div class="row form-group">
                                             <label class="col-sm-4 horizontal-label">C.N.I.C</label>
                                             <div class="col-sm-8">
-                                                @Html.TextBox("Reference[1].RefCNIC", "", new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })
+                                                @*@Html.TextBox("Reference[1].RefCNIC", "", new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })*@
+                                                <input type="text" name="Reference[1].RefCNIC" class="form-control input-sm cnic" data-inputmask="'mask': '99999-9999999-9'" placeholder="XXXXX-XXXXXXX-X">
+
                                             </div>
                                         </div>
                                         <div class="row form-group">
@@ -1197,6 +875,351 @@
                                         </div>
                                     </div>
                                 </div>
+                            }
+                            else
+                            {
+                                var Reference = references.ToArray();
+                                if (references.Count() == 2)
+                                {
+                                    <input type="hidden" name="Reference[0].ReferenceId" value="@Reference[0].ReferenceId" />
+                                    <input type="hidden" name="Reference[1].ReferenceId" value="@Reference[1].ReferenceId" />
+
+                                    <div class="col-sm-5">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">&nbsp;</label>
+                                            <div class="col-sm-8">
+                                                <div class="img-container">
+                                                    <img id="reference1-img" src="@ref1Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
+                                                    <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference1Photo" onchange="previewImage(this,'#reference1-img')" accept="image/x-png,image/jpg,image/jpeg" />
+                                                    <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Name</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefName", Reference[0].RefName, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Address Type</label>
+                                            <div class="col-sm-8">
+                                                @*@Html.DropDownList("Reference[0].RefAddressType", EnumHelper.GetSelectList(typeof(AddressType)), "Select Address Type", new { @class = "form-control input-sm" })*@
+                                                <select name="Reference[0].RefAddressType" class="form-control input-sm" required>
+                                                    <option value="">-Select Address Type-</option>
+                                                    <option value="@((int)AddressType.Default)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Default ? "selected" : "")>@AddressType.Default</option>
+                                                    <option value="@((int)AddressType.HeadOffice)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.HeadOffice ? "selected" : "")>@AddressType.HeadOffice.ToSpacedTitleCase()</option>
+                                                    <option value="@((int)AddressType.Home)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Home ? "selected" : "")>@AddressType.Home</option>
+                                                    <option value="@((int)AddressType.Other)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Other ? "selected" : "")>@AddressType.Other</option>
+                                                    <option value="@((int)AddressType.Permanent)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Permanent ? "selected" : "")>@AddressType.Permanent</option>
+                                                    <option value="@((int)AddressType.Work)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Work ? "selected" : "")>@AddressType.Work</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Address</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefAddress", Reference[0].RefAddress, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">State</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefState", Reference[0].RefState, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Country</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefCountry", Reference[0].RefCountry, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">C.N.I.C</label>
+                                            <div class="col-sm-8">
+                                                @*@Html.TextBox("Reference[0].RefCNIC", Reference[0].RefCNIC, new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })*@
+                                                <input type="text" id="RefCNIC" name="Reference[0].RefCNIC" value="@Reference[0].RefCNIC" class="form-control input-sm cnic" data-inputmask="'mask': '99999-9999999-9'" placeholder="XXXXX-XXXXXXX-X">
+
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Profession</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefProfession", Reference[0].RefProfession, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Phone</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefPhone", Reference[0].RefPhone, new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Mobile</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefMobile", Reference[0].RefMobile, new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Email</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefEmail", Reference[0].RefEmail, new { @class = "form-control input-sm emailMask", @autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">&nbsp;</label>
+                                            <div class="col-sm-8">
+                                                <div class="img-container">
+                                                    <img id="reference2-img" src="@ref2Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
+                                                    <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference2Photo" onchange="previewImage(this,'#reference2-img')" accept="image/x-png,image/jpg,image/jpeg" />
+                                                    <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Name</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefName", Reference[1].RefName, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Address Type</label>
+                                            <div class="col-sm-8">
+                                                <select name="Reference[1].RefAddressType" class="form-control input-sm" required>
+                                                    <option value="">-Select Address Type-</option>
+                                                    <option value="@((int)AddressType.Default)" @(Convert.ToInt32(Reference[1].RefAddressType) == (int)AddressType.Default ? "selected" : "")>@AddressType.Default</option>
+                                                    <option value="@((int)AddressType.HeadOffice)" @(Convert.ToInt32(Reference[1].RefAddressType) == (int)AddressType.HeadOffice ? "selected" : "")>@AddressType.HeadOffice.ToSpacedTitleCase()</option>
+                                                    <option value="@((int)AddressType.Home)" @(Convert.ToInt32(Reference[1].RefAddressType) == (int)AddressType.Home ? "selected" : "")>@AddressType.Home</option>
+                                                    <option value="@((int)AddressType.Other)" @(Convert.ToInt32(Reference[1].RefAddressType) == (int)AddressType.Other ? "selected" : "")>@AddressType.Other</option>
+                                                    <option value="@((int)AddressType.Permanent)" @(Convert.ToInt32(Reference[1].RefAddressType) == (int)AddressType.Permanent ? "selected" : "")>@AddressType.Permanent</option>
+                                                    <option value="@((int)AddressType.Work)" @(Convert.ToInt32(Reference[1].RefAddressType) == (int)AddressType.Work ? "selected" : "")>@AddressType.Work</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Address</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefAddress", Reference[1].RefAddress, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">State</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefState", Reference[1].RefState, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Country</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefCountry", Reference[1].RefCountry, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">C.N.I.C</label>
+                                            <div class="col-sm-8">
+                                                @*@Html.TextBox("Reference[1].RefCNIC", Reference[1].RefCNIC, new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })*@
+                                                <input type="text" name="Reference[1].RefCNIC" value="@Reference[1].RefCNIC" class="form-control input-sm cnic" data-inputmask="'mask': '99999-9999999-9'" placeholder="XXXXX-XXXXXXX-X">
+
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Profession</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefProfession", Reference[1].RefProfession, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Phone</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefPhone", Reference[1].RefPhone, new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Mobile</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefMobile", Reference[1].RefMobile, new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Email</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefEmail", Reference[1].RefEmail, new { @class = "form-control input-sm emailMask", @autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else if (references.Count() == 1)
+                                {
+                                    <input type="hidden" name="Reference[0].ReferenceId" value="@Reference[0].ReferenceId" />
+                                    <div class="col-sm-5">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">&nbsp;</label>
+                                            <div class="col-sm-8">
+                                                <div class="img-container">
+                                                    <img id="reference1-img" src="@ref1Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
+                                                    <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference1Photo" onchange="previewImage(this,'#reference1-img')" accept="image/x-png,image/jpg,image/jpeg" />
+                                                    <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Name</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefName", Reference[0].RefName, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Address Type</label>
+                                            <div class="col-sm-8">
+                                                <select name="Reference[0].RefAddressType" class="form-control input-sm" required>
+                                                    <option value="">-Select Address Type-</option>
+                                                    <option value="@((int)AddressType.Default)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Default ? "selected" : "")>@AddressType.Default</option>
+                                                    <option value="@((int)AddressType.HeadOffice)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.HeadOffice ? "selected" : "")>@AddressType.HeadOffice.ToSpacedTitleCase()</option>
+                                                    <option value="@((int)AddressType.Home)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Home ? "selected" : "")>@AddressType.Home</option>
+                                                    <option value="@((int)AddressType.Other)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Other ? "selected" : "")>@AddressType.Other</option>
+                                                    <option value="@((int)AddressType.Permanent)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Permanent ? "selected" : "")>@AddressType.Permanent</option>
+                                                    <option value="@((int)AddressType.Work)" @(Convert.ToInt32(Reference[0].RefAddressType) == (int)AddressType.Work ? "selected" : "")>@AddressType.Work</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Address</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefAddress", Reference[0].RefAddress, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">State</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefState", Reference[0].RefState, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Country</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefCountry", Reference[0].RefCountry, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">C.N.I.C</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="Reference[0].RefCNIC" value="@Reference[0].RefCNIC" class="form-control input-sm cnic" data-inputmask="'mask': '99999-9999999-9'" placeholder="XXXXX-XXXXXXX-X">
+                                                @*@Html.TextBox("Reference[0].RefCNIC", Reference[0].RefCNIC, new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })*@
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Profession</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefProfession", Reference[0].RefProfession, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Phone</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefPhone", Reference[0].RefPhone, new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Mobile</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefMobile", Reference[0].RefMobile, new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Email</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[0].RefEmail", Reference[0].RefEmail, new { @class = "form-control input-sm emailMask", @autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">&nbsp;</label>
+                                            <div class="col-sm-8">
+                                                <div class="img-container">
+                                                    <img id="reference2-img" src="@ref2Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
+                                                    <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference2Photo" onchange="previewImage(this,'#reference2-img')" accept="image/x-png,image/jpg,image/jpeg" />
+                                                    <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Name</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefName", "", new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Address Type</label>
+                                            <div class="col-sm-8">
+                                                <select name="Reference[1].RefAddressType" class="form-control input-sm" required>
+                                                    <option value="">-Select Address Type-</option>
+                                                    <option value="@((int)AddressType.Default)">@AddressType.Default</option>
+                                                    <option value="@((int)AddressType.HeadOffice)">@AddressType.HeadOffice.ToSpacedTitleCase()</option>
+                                                    <option value="@((int)AddressType.Home)">@AddressType.Home</option>
+                                                    <option value="@((int)AddressType.Other)">@AddressType.Other</option>
+                                                    <option value="@((int)AddressType.Permanent)">@AddressType.Permanent</option>
+                                                    <option value="@((int)AddressType.Work)">@AddressType.Work</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Address</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefAddress", "", new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">State</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefState", "", new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Country</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefCountry", "", new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">C.N.I.C</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="Reference[1].RefCNIC" class="form-control input-sm cnic" data-inputmask="'mask': '99999-9999999-9'" placeholder="XXXXX-XXXXXXX-X">
+                                                @*@Html.TextBox("Reference[1].RefCNIC", "", new { @class = "form-control input-sm cnicMask", @autocomplete = "off" })*@
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Profession</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefProfession", "", new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Phone</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefPhone", "", new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Mobile</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefMobile", "", new { @class = "form-control input-sm phoneMask", @autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 horizontal-label">Email</label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBox("Reference[1].RefEmail", "", new { @class = "form-control input-sm emailMask", @autocomplete = "off" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             }
 
                         }
@@ -1381,35 +1404,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        @*<div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Left Index Finger</label>
-                                <div class="col-sm-8">
-                                    @Html.TextBoxFor(x => x.LeftIndexFinger, new { @class = "form-control input-sm" })
-                                </div>
-                            </div>*@
-
-                        @*<div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Left Middle Finger</label>
-                                <div class="col-sm-8">
-                                    @Html.TextBoxFor(x => x.LeftMiddleFinger, new { @class = "form-control input-sm" })
-                                </div>
-                            </div>*@
-
-                        @*<div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Left Ring Finger</label>
-                                <div class="col-sm-8">
-                                    @Html.TextBoxFor(x => x.LeftRingFinger, new { @class = "form-control input-sm" })
-                                </div>
-                            </div>*@
-
-                        @*<div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Left Baby Finger</label>
-                                <div class="col-sm-8">
-                                    @Html.TextBoxFor(x => x.LeftBabyFinger, new { @class = "form-control input-sm" })
-                                </div>
-                            </div>
-                        *@
                     </div>
                     <div class="col-sm-6">
                         <h4>Right Hand Fingers</h4>
@@ -1460,39 +1454,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-                        @*<div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Right Thumb</label>
-                                <div class="col-sm-8">
-                                    @Html.TextBoxFor(x => x.RightThumb, new { @class = "form-control input-sm" })
-                                </div>
-                            </div>*@
-                        @*<div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Right Index Finger</label>
-                                <div class="col-sm-8">
-                                    @Html.TextBoxFor(x => x.RightIndexFinger, new { @class = "form-control input-sm" })
-                                </div>
-                            </div>*@
-                        @*<div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Right Middle Finger</label>
-                                <div class="col-sm-8">
-                                    @Html.TextBoxFor(x => x.RightMiddleFinger, new { @class = "form-control input-sm" })
-                                </div>
-                            </div>*@
-                        @*<div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Right Ring Finger</label>
-                                <div class="col-sm-8">
-                                    @Html.TextBoxFor(x => x.RightRingFinger, new { @class = "form-control input-sm" })
-                                </div>
-                            </div>*@
-                        @*<div class="row form-group">
-                                <label class="col-sm-4 horizontal-label">Right Baby Finger</label>
-                                <div class="col-sm-8">
-                                    @Html.TextBoxFor(x => x.RightBabyFinger, new { @class = "form-control input-sm" })
-                                </div>
-                            </div>*@
-
                     </div>
                 </div>
             </div>
@@ -1529,6 +1490,228 @@
                 </div>
             </div>
 
+            <div id="contractDetails" class="tab-pane fade">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>Contract Terms</h4>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Start Date</label>
+                            <div class="col-sm-8">
+                                <input type="date" class="form-control input-sm" name="StartDate" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">End Date <a href="javascript://" title="If fixed term contract."><i class="fa fa-info-circle"></i></a></label>
+                            <div class="col-sm-8">
+                                <input type="date" class="form-control input-sm" name="EndDate" />
+
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Trial End Date</label>
+                            <div class="col-sm-8">
+                                <input type="date" class="form-control input-sm" name="TrialEndDate" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Working Schedule</label>
+                            <div class="col-sm-8">
+                                <select class="form-control input-sm">
+                                    <option>Select Working Sechedule</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>Accounting</h4>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Analytic Account</label>
+                            <div class="col-sm-8">
+                                <select class="form-control input-sm">
+                                    <option>Select Analytic Account</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Salary Journal</label>
+                            <div class="col-sm-8">
+                                <select class="form-control input-sm">
+                                    <option>Select Salary Journal</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>Attendance Policy</h4>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Scheduled Pay</label>
+                            <div class="col-sm-8">
+                                <select class="form-control input-sm">
+                                    <option>Select Scheduled Pay</option>
+                                    <option>Weekly</option>
+                                    <option>Monthly</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-11">
+                        <h4>Notes</h4>
+                        <div class="row form-group">
+                            <textarea rows="1" class="form-control input-sm">
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="salaryInformation" class="tab-pane fade">
+                <h4>Monthly Advantages in Cash</h4>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Wage</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control input-sm" name="Wage" value="0.00" />
+                                    <div class="input-group-addon">/ month </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">House Rent Allowance (%)</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control input-sm" name="HouseRentAllowance" value="0.00" />
+                                    <div class="input-group-addon">/ month </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Transportation Allowance</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control input-sm" name="TransportationAllowance" value="0.00" />
+                                    <div class="input-group-addon">/ month </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Mobile Allowance</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control input-sm" name="MobileAllowance" value="0.00" />
+                                    <div class="input-group-addon">/ month </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Fuel Allowance</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control input-sm" name="FuelAllowance" value="0.00" />
+                                    <div class="input-group-addon">/ month </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Food/Laundary Allowance</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control input-sm" name="FoodLaundaryAllowance" value="0.00" />
+                                    <div class="input-group-addon">/ month </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Bike Maintenance Allowance</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control input-sm" name="BikeMaintenanceAllowance" value="0.00" />
+                                    <div class="input-group-addon">/ month </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Out Station Allowance</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control input-sm" name="OutStationAllowance" value="0.00" />
+                                    <div class="input-group-addon">/ month </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Medical Allowance</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control input-sm" name="MedicalAllowance" value="0.00" />
+                                    <div class="input-group-addon">/ month </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Scholarship Allowance</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control input-sm" name="ScholarshipAllowance" value="0.00" />
+                                    <div class="input-group-addon">/ month </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Supplementary Allowance</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control input-sm" name="SupplementaryAllowance" value="0.00" />
+                                    <div class="input-group-addon">/ month </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Gross Salary</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control input-sm" name="GrossSalary" value="0.00" />
+                                    <div class="input-group-addon">/ month </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <h4>Deductions</h4>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">TDS</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control input-sm" name="TDS" value="0.00" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Voluntary Provident Fund (%)</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control input-sm" name="VoluntaryProvidentFund" value="0.00" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">Medical Insurance</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control input-sm" name="MedicalInsurance" value="0.00" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 horizontal-label">GOSI Deduction</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control input-sm" name="GosiDeduction" value="0.00" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -1545,32 +1728,28 @@
 </form>
 
 @section scripts{
+
+    <script src="~/Scripts/Input Mask/amazonawsjQuery.inputmask.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
-
-            //$("ul#sampleTabs li.active a").addClass('activeNav');
-
-            //$("ul#sampleTabs li a").on('click', function () {
-            //    //debugger;
-            //    $("ul#sampleTabs li a").removeClass('activeNav');
-            //    //$("ul#sampleTabs li.active a").addClass('activeNav');
-            //    //alert('changed');
-            //});
+            $(".cnic").inputmask();
 
         });
         $(function () {
+            debugger;
             $("#lead-frm").validate({
                 rules: {
                     Email: {
                         remote: {
-                            url: "@Url.Action("CheckDuplicateEmail", "Contact", new { Area = "CRM" })",
+                            url: "@Url.Action("CheckDuplicateEmail", "Employee", new { Area = "HRMS" })",
                             type: "post",
                             data: {
                                 Email: function () {
-                                    return $("#Email").val();
+                                    return $("#CNIC").val();
                                 },
                                 Id: function () {
-                                    return $("#Id").val();
+                                    return $("#EmployeeId").val();
                                 }
                             }
                         }

@@ -29,7 +29,7 @@
         <AssociationConnector Association="SOSHRMSModel.FK__EmpSalary__Emplo__05D8E0BE" ManuallyRouted="false" />
         <AssociationConnector Association="SOSHRMSModel.FK__EmpTransf__Emplo__06CD04F7" ManuallyRouted="false" />
         <EntityTypeShape EntityType="SOSHRMSModel.HRM_Vew_Employee" Width="1.5" PointX="5.375" PointY="7.75" />
-        <EntityTypeShape EntityType="SOSHRMSModel.EmpDocument" Width="1.5" PointX="3" PointY="45.25" />
+        <EntityTypeShape EntityType="SOSHRMSModel.EmpDocument" Width="1.5" PointX="3" PointY="46.125" />
         <AssociationConnector Association="SOSHRMSModel.FK__EmpDocume__Emplo__29221CFB" />
       </Diagram>
     </edmx:Diagrams>

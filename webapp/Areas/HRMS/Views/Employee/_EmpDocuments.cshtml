@@ -7,6 +7,10 @@
     }
 }
 
+@section styles{
+    <link href="~/Content/DMS/dms.css" rel="stylesheet" />
+}
+
 <div class="modal-body" style="padding:0;">
 
     @if (viewMode == "list")
@@ -17,7 +21,7 @@
                     <tr>
                         <th style="width:29px;"><input type="checkbox" id="selectall" @*@(Request["mode"] == DmsRenderMode.Browse.ToString() ? "disabled" : "")*@ /></th>
                         <th><input class="form-control input-sm input-tbl" type="text" placeholder="Name" id="dataTable_0" /></th>
-                        <th style="width:100px" class="hidden-xs"><input class="form-control input-sm input-tbl" type="text" placeholder="Type" id="dataTable_1" /></th>                        
+                        <th style="width:100px" class="hidden-xs"><input class="form-control input-sm input-tbl" type="text" placeholder="Type" id="dataTable_1" /></th>
                         <th style="width:117px" class="text-center">Action</th>
                     </tr>
                 </thead>
@@ -36,7 +40,7 @@
                             <td style="width:100px" class="text-center">
                                 <div class="btn-group btn-group-xs">
                                     @*<span class="btn btn-warning dms-title-btn" data-title="Rename" data-id="@x.DocumentId" data-text="@x.Title" data-hint="Type a naw name." data-toggle="tooltip" title="Rename"><i class="fa fa-terminal fa-fw"></i></span>
-                                    <span class="btn btn-default dms-revisions-btn" data-toggle="tooltip" data-id="@x.DocumentId" data-filename="@x.Title" title="Revisions"><i class="fa fa-sort-numeric-desc fa-fw"></i></span>*@
+                                        <span class="btn btn-default dms-revisions-btn" data-toggle="tooltip" data-id="@x.DocumentId" data-filename="@x.Title" title="Revisions"><i class="fa fa-sort-numeric-desc fa-fw"></i></span>*@
                                     <span data-toggle="tooltip" class="btn btn-info dms-permissions-btn" title="Permissions" data-id="@x.DocumentId" data-filename="@x.Title"><i class="fa fa-eye-slash fa-fw"></i></span>
                                 </div>
                             </td>
@@ -62,25 +66,37 @@
                 {
                     <div class="col-sm-3 col-md-3">
                         <div style="height:192px;" class="thumbnail text-center">
-                            <span class="badge-left"><input type="checkbox" class="selectitem" data-id="@x.DocumentId" /></span>
-                            <span class="badge-right"><i class="fa fa-heart-o"></i></span>
+                            @*<span class="badge-left"><input type="checkbox" class="selectitem" data-id="@x.DocumentId" /></span>
+                                <span class="badge-right"><i class="fa fa-heart-o"></i></span>*@
 
-                            <img src="@(x.Extension.Equals("pdf") ? "/content/ext/pdf.png" : x.ContentType)" style="width:64px;" class="dms-item" />
+                            <p style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                <span class="dms-browse-item">
+                                    @x.DocumentType.ToSpacedTitleCase()
+                                </span>
+                            </p>
+                            <span class="dms-item" data-type="@x.Extension" data-id="@x.DocumentId">
+                                <img src="@(x.Extension.Equals("pdf") ? "/content/ext/pdf.png" : x.ContentType)" style="width:130px; max-height: 130px !important;" class="dms-item" />
+                            </span>
+
                             <div class="caption">
-                                <p style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                                    <span class="dms-browse-item">
-                                        @x.Title
-                                    </span>
-                                </p>
-                                <table class="table table-condensed table-striped" style="margin:0 !important; font-size:70%;">
+                                @*<p style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                        <span class="dms-browse-item">
+                                            @x.DocumentType.ToSpacedTitleCase()
+                                        </span>
+                                    </p>*@
+                                <table class="table table-condensed table-striped" style="margin:0 !important; font-size:80%;">
                                     <tr>
-                                        <th class="text-right">Type</th>
-                                        <th class="text-right">@(x.Extension.Equals("pdf") ? "Document" : "Image")</th>
+                                        <th class="text-right">Name</th>
+                                        <th class="text-right">@x.Title</th>
                                     </tr>
+                                    @*<tr>
+                                            <th class="text-right">Type</th>
+                                            <th class="text-right">@(x.Extension.Equals("pdf") ? "Document" : "Image")</th>
+                                        </tr>*@
                                 </table>
                                 <div class="btn-group btn-group-xs">
-                                    <span class="btn btn-warning dms-title-btn" data-title="Rename" data-id="@x.DocumentId" data-text="@x.Title" data-hint="Type a naw name." data-toggle="tooltip" title="Rename"><i class="fa fa-terminal fa-fw"></i></span>
-                                    <span class="btn btn-default dms-revisions-btn" data-toggle="tooltip" data-id="@x.DocumentId" data-filename="@x.Title" title="Revisions"><i class="fa fa-sort-numeric-desc fa-fw"></i></span>
+                                    @*<span class="btn btn-warning dms-title-btn" data-title="Rename" data-id="@x.DocumentId" data-text="@x.Title" data-hint="Type a naw name." data-toggle="tooltip" title="Rename"><i class="fa fa-terminal fa-fw"></i></span>
+                                        <span class="btn btn-default dms-revisions-btn" data-toggle="tooltip" data-id="@x.DocumentId" data-filename="@x.Title" title="Revisions"><i class="fa fa-sort-numeric-desc fa-fw"></i></span>*@
                                     <span data-toggle="tooltip" class="btn btn-info dms-permissions-btn" title="Permissions" data-id="@x.DocumentId" data-filename="@x.Title"><i class="fa fa-eye-slash fa-fw"></i></span>
                                 </div>
                             </div>
@@ -96,9 +112,16 @@
     <span class="pull-left" style="line-height:30px">@Model.Count items</span>
     <span class="pull-right">
         @*@if (Request["mode"] == DmsRenderMode.Browse.ToString())
-            {
-            <button type="button" class="btn btn-default btn-sm" id="dms-close-modal">Close</button>
-                <button type="button" disabled class="btn btn-success btn-sm" id="dmsBrowseChooseBtn"><i class="fa fa-check-square-o"></i> Choose</button>
-        }*@
+                {
+                <button type="button" class="btn btn-default btn-sm" id="dms-close-modal">Close</button>
+                    <button type="button" disabled class="btn btn-success btn-sm" id="dmsBrowseChooseBtn"><i class="fa fa-check-square-o"></i> Choose</button>
+            }*@
     </span>
 </div>
+
+
+
+@section scripts{
+    <script src="~/Scripts/flowplayer/flowplayer-3.2.13.min.js"></script>
+    <script src="~/Scripts/DMS/dms.js"></script>
+}

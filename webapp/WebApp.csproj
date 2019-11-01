@@ -1047,6 +1047,7 @@
     <Content Include="Areas\HRMS\Views\Employee\Employees.cshtml" />
     <Content Include="Areas\HRMS\Views\Employee\_AllEmployees.cshtml" />
     <Content Include="Areas\HRMS\Views\Employee\_EmpDocuments.cshtml" />
+    <Content Include="Areas\HRMS\Views\Employee\ViewDocument.cshtml" />
     <None Include="Properties\PublishProfiles\BaseApp %28Published%29.pubxml" />
     <None Include="Properties\PublishProfiles\BaseApp - A - CMS - V2.0 %28Published%29.pubxml" />
     <None Include="Properties\PublishProfiles\BaseApp - A - V3.0 %28Published%29.pubxml" />
@@ -1054,6 +1055,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Tenders Africa %28Published%29.pubxml" />
     <Content Include="Scripts\FusionChart\fusioncharts.powercharts.js" />
+    <Content Include="Scripts\Input Mask\amazonawsjQuery.inputmask.js" />
     <None Include="Scripts\jquery-2.2.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.3.js" />
     <Content Include="Scripts\jquery-2.2.3.min.js" />
