@@ -1051,7 +1051,6 @@
     <Content Include="Areas\HRMS\Views\Employee\_AllEmployees.cshtml" />
     <Content Include="Areas\HRMS\Views\Employee\_EmpDocuments.cshtml" />
     <Content Include="Areas\HRMS\Views\Employee\ViewDocument.cshtml" />
-    <Content Include="Areas\HRMS\Views\Employee\Index - Copy.cshtml" />
     <Content Include="Areas\HRMS\Views\Employee\Index.cshtml" />
     <None Include="Properties\PublishProfiles\BaseApp %28Published%29.pubxml" />
     <None Include="Properties\PublishProfiles\BaseApp - A - CMS - V2.0 %28Published%29.pubxml" />
