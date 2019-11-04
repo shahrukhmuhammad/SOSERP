@@ -8,6 +8,8 @@
     //var recentFiles = ViewBag.RecentFiles as List<CMS.Entity.CmsFile>;
 }
 
+<link href="https://cdn.oesmith.co.uk/morris-0.5.1.css" rel="stylesheet" />
+
 <div class="row no-margin">
     <div class="col-md-12 well well-sm bg-transparent">
         <div class="row">
@@ -34,121 +36,165 @@
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4 class="panel-title">Users List </h4>
+                <h4 class="panel-title">HRMS Dashboard </h4>
             </div>
             <div class="panel-body">
-                <div class="col-md-3">
-                    <a href="~/CMS" class="small-box bg-aqua-gradient">
-                        <div class="inner">
-                            <div class="icon"><i class="fa fa-file-code-o"></i></div>
-                            <div class="caption">
-                                @*<p>Total: <span class="count">@recentPages.Where(x => x.Status == CMS.Entity.CmsPageStatus.Draft).Count()</span></p>*@
-                                @*<p>Total: <span class="count">@recentPages.Count()</span></p>*@
-                            </div>
-                        </div>
-                        <span class="small-box-footer">Orders</span>
-                    </a>
+                <h3 class="text-primary text-center">
+                    Morris js charts
+                </h3>
+                <div class"row">
+                    <div class="col-sm-6 text-center">
+                        <label class="label label-success">Area Chart</label>
+                        <div id="area-chart"></div>
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <label class="label label-success">Line Chart</label>
+                        <div id="line-chart"></div>
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <label class="label label-success">Bar Chart</label>
+                        <div id="bar-chart"></div>
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <label class="label label-success">Bar stacked</label>
+                        <div id="stacked"></div>
+                    </div>
+                    <div class="col-sm-6 col-sm-offset-3 text-center">
+                        <label class="label label-success">Pie Chart</label>
+                        <div id="pie-chart"></div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <a href="~/CMS/WebNews" class="small-box bg-light-blue-gradient">
-                        <div class="inner">
-                            <div class="icon"><i class="fa fa-newspaper-o"></i></div>
-                            <div class="caption">
-                                @*<p>Total: <span class="count">@recentNews.Count()</span></p>*@
-                            </div>
-                        </div>
-                        <span class="small-box-footer">Website Orders</span>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="~/CMS/WebContent" class="small-box bg-teal-gradient">
-                        <div class="inner">
-                            <div class="icon"><i class="fa fa-file-text-o"></i></div>
-                            <div class="caption">
-                                @*<p>Total: <span class="count">@recentContents.Count()</span></p>*@
-                            </div>
-                        </div>
-                        <span class="small-box-footer">Trade Orders</span>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="~/CMS/WebSlide" class="small-box bg-purple-gradient">
-                        <div class="inner">
-                            <div class="icon"><i class="fa fa-file-image-o"></i></div>
-                            <div class="caption">
-                                @*<p>Total: <span class="count">@recentSlides.Count()</span></p>*@
-                            </div>
-                        </div>
-                        <span class="small-box-footer">New Orders</span>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="javascript://" class="small-box bg-aqua-gradient">
-                        <div class="inner">
-                            <div class="icon"><i class="fa fa-file-image-o"></i></div>
-                            <div class="caption">
-                                @*<p>Total: <span class="count">@recentSlides.Count()</span></p>*@
-                            </div>
-                        </div>
-                        <span class="small-box-footer">Completed Orders</span>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="javascript://" class="small-box bg-purple-gradient">
-                        <div class="inner">
-                            <div class="icon"><i class="fa fa-newspaper-o"></i></div>
-                            <div class="caption">
-                                @*<p>Total: <span class="count">@recentSlides.Count()</span></p>*@
-                            </div>
-                        </div>
-                        <span class="small-box-footer">Cancelled Orders</span>
-                    </a>
-                </div>
+                @*<div class="col-md-6">
+            <div id="chart-container">
+                FusionCharts will render here
             </div>
-        </div>
-    </div>
-    <div class="col-sm-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">Stock</h4>
+        </div>*@
+                <div>
+                    @*<div class="col-md-3">
+                <a href="~/CMS" class="small-box bg-aqua-gradient">
+                    <div class="inner">
+                        <div class="icon"><i class="fa fa-file-code-o"></i></div>
+                        <div class="caption">
+                            <p>Total: <span class="count">@recentPages.Where(x => x.Status == CMS.Entity.CmsPageStatus.Draft).Count()</span></p>
+                            <p>Total: <span class="count">@recentPages.Count()</span></p>
+                        </div>
+                    </div>
+                    <span class="small-box-footer">Orders</span>
+                </a>
             </div>
-            <div class="panel-body">
-                <div class="col-md-3">
-                    <a href="javascript://" class="small-box bg-aqua-gradient">
-                        <div class="inner">
-                            <div class="icon"><i class="fa fa-file-image-o"></i></div>
-                            <div class="caption">
-                                @*<p>Total: <span class="count">@recentSlides.Count()</span></p>*@
-                            </div>
+            <div class="col-md-3">
+                <a href="~/CMS/WebNews" class="small-box bg-light-blue-gradient">
+                    <div class="inner">
+                        <div class="icon"><i class="fa fa-newspaper-o"></i></div>
+                        <div class="caption">
+                            <p>Total: <span class="count">@recentNews.Count()</span></p>
                         </div>
-                        <span class="small-box-footer">Total Products</span>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="javascript://" class="small-box bg-light-blue-gradient">
-                        <div class="inner">
-                            <div class="icon"><i class="fa fa-file-image-o"></i></div>
-                            <div class="caption">
-                                @*<p>Total: <span class="count">@recentSlides.Count()</span></p>*@
-                            </div>
+                    </div>
+                    <span class="small-box-footer">Website Orders</span>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="~/CMS/WebContent" class="small-box bg-teal-gradient">
+                    <div class="inner">
+                        <div class="icon"><i class="fa fa-file-text-o"></i></div>
+                        <div class="caption">
+                            <p>Total: <span class="count">@recentContents.Count()</span></p>
                         </div>
-                        <span class="small-box-footer">Low Inventory</span>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="javascript://" class="small-box bg-aqua-gradient">
-                        <div class="inner">
-                            <div class="icon"><i class="fa fa-file-image-o"></i></div>
-                            <div class="caption">
-                                @*<p>Total: <span class="count">@recentSlides.Count()</span></p>*@
-                            </div>
+                    </div>
+                    <span class="small-box-footer">Trade Orders</span>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="~/CMS/WebSlide" class="small-box bg-purple-gradient">
+                    <div class="inner">
+                        <div class="icon"><i class="fa fa-file-image-o"></i></div>
+                        <div class="caption">
+                            <p>Total: <span class="count">@recentSlides.Count()</span></p>
                         </div>
-                        <span class="small-box-footer">Out of Stock</span>
-                    </a>
+                    </div>
+                    <span class="small-box-footer">New Orders</span>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="javascript://" class="small-box bg-aqua-gradient">
+                    <div class="inner">
+                        <div class="icon"><i class="fa fa-file-image-o"></i></div>
+                        <div class="caption">
+                            <p>Total: <span class="count">@recentSlides.Count()</span></p>
+                        </div>
+                    </div>
+                    <span class="small-box-footer">Completed Orders</span>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="javascript://" class="small-box bg-purple-gradient">
+                    <div class="inner">
+                        <div class="icon"><i class="fa fa-newspaper-o"></i></div>
+                        <div class="caption">
+                            <p>Total: <span class="count">@recentSlides.Count()</span></p>
+                        </div>
+                    </div>
+                    <span class="small-box-footer">Cancelled Orders</span>
+                </a>
+            </div>*@
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+@section scripts{
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.0/morris.min.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+            var data = [
+                { y: '2014', a: 50, b: 90 },
+                { y: '2015', a: 65, b: 75 },
+                { y: '2016', a: 50, b: 50 },
+                { y: '2017', a: 75, b: 60 },
+                { y: '2018', a: 80, b: 65 },
+                { y: '2019', a: 90, b: 70 },
+                { y: '2020', a: 100, b: 75 },
+                { y: '2021', a: 115, b: 75 },
+                { y: '2022', a: 120, b: 85 },
+                { y: '2023', a: 145, b: 85 },
+                { y: '2024', a: 160, b: 95 }
+            ],
+                config = {
+                    data: data,
+                    xkey: 'y',
+                    ykeys: ['a', 'b'],
+                    labels: ['Total Income', 'Total Outcome'],
+                    fillOpacity: 0.6,
+                    hideHover: 'auto',
+                    behaveLikeLine: true,
+                    resize: true,
+                    pointFillColors: ['#ffffff'],
+                    pointStrokeColors: ['black'],
+                    lineColors: ['gray', 'red']
+                };
+            config.element = 'area-chart';
+            Morris.Area(config);
+            config.element = 'line-chart';
+            Morris.Line(config);
+            config.element = 'bar-chart';
+            Morris.Bar(config);
+            config.element = 'stacked';
+            config.stacked = true;
+            Morris.Bar(config);
+            Morris.Donut({
+                element: 'pie-chart',
+                data: [
+                    { label: "Managers", value: 10 },
+                    { label: "Assistants", value: 15 },
+                    { label: "Employees", value: 45 },
+                    { label: "Crew", value: 100 }
+                ]
+            });
+        });
+
+    </script>
+}

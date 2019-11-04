@@ -245,6 +245,12 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="label label-success">Bar Chart</label>
+                                <div id="bar-chart"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -595,70 +601,72 @@
     <script src="~/Scripts/Morris Chart/raphael-min.js"></script>
     @*<script src="~/Scripts/Morris Chart/morris.min.js"></script>*@
 
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.6.1/less.min.js" type="text/javascript"></script>
-    @*<script>
-        $(function () {
-            //--- Bar Chart
-            Morris.Bar({
-                element: 'performance-bar-chart',
-                data: [{
-                    y: 'Jan',
-                    a: 100000,
-                    b: 7000,
-                }, {
-                    y: 'Feb',
-                    a: 237788,
-                    b: 12322,
-                }, {
-                    y: 'Mar',
-                    a: 775651,
-                    b: 77253,
-                }, {
-                    y: 'Apr',
-                    a: 122233,
-                    b: 122233,
-                }, {
-                    y: 'May',
-                    a: 7787,
-                    b: 2234,
-                }, {
-                    y: 'Jun',
-                    a: 99882,
-                    b: 55323,
-                }, {
-                    y: 'Jul',
-                    a: 90889,
-                    b: 56465,
-                }, {
-                    y: 'Aug',
-                    a: 187658,
-                    b: 123312,
-                }, {
-                    y: 'Sep',
-                    a: 126757,
-                    b: 12332,
-                }, {
-                    y: 'Oct',
-                    a: 0,
-                    b: 0,
-                }, {
-                    y: 'Nov',
-                    a: 0,
-                    b: 0,
-                }, {
-                    y: 'Dec',
-                    a: 0,
-                    b: 0,
-                }],
-                preUnits: '$',
-                xkey: 'y',
-                ykeys: ['a', 'b'],
-                labels: ['Total', 'Paid'],
-                hideHover: 'auto',
-                resize: true
-            });
-            //---
 
-        });
-    </script>*@
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.6.1/less.min.js" type="text/javascript"></script>
+    
+    @*<script>
+            $(function () {
+                //--- Bar Chart
+                Morris.Bar({
+                    element: 'performance-bar-chart',
+                    data: [{
+                        y: 'Jan',
+                        a: 100000,
+                        b: 7000,
+                    }, {
+                        y: 'Feb',
+                        a: 237788,
+                        b: 12322,
+                    }, {
+                        y: 'Mar',
+                        a: 775651,
+                        b: 77253,
+                    }, {
+                        y: 'Apr',
+                        a: 122233,
+                        b: 122233,
+                    }, {
+                        y: 'May',
+                        a: 7787,
+                        b: 2234,
+                    }, {
+                        y: 'Jun',
+                        a: 99882,
+                        b: 55323,
+                    }, {
+                        y: 'Jul',
+                        a: 90889,
+                        b: 56465,
+                    }, {
+                        y: 'Aug',
+                        a: 187658,
+                        b: 123312,
+                    }, {
+                        y: 'Sep',
+                        a: 126757,
+                        b: 12332,
+                    }, {
+                        y: 'Oct',
+                        a: 0,
+                        b: 0,
+                    }, {
+                        y: 'Nov',
+                        a: 0,
+                        b: 0,
+                    }, {
+                        y: 'Dec',
+                        a: 0,
+                        b: 0,
+                    }],
+                    preUnits: '$',
+                    xkey: 'y',
+                    ykeys: ['a', 'b'],
+                    labels: ['Total', 'Paid'],
+                    hideHover: 'auto',
+                    resize: true
+                });
+                //---
+
+            });
+        </script>*@
 }

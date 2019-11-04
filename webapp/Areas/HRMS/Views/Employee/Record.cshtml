@@ -36,7 +36,7 @@
 
     //src="/content/ext/folder.png"
 }
-
+<link href="~/Scripts/select2/select2.min.css" rel="stylesheet" />
 
 <form id="lead-frm" class="user-Profile" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
@@ -48,7 +48,7 @@
     @Html.HiddenFor(x => x.EmployeeId)
     @Html.HiddenFor(x => x.Code)
     @Html.HiddenFor(x => x.Status)
-    @Html.HiddenFor(x => x.ProjectId)
+    @Html.HiddenFor(x => x.SegmentId)
 
     <div class="row">
         <div class="col-sm-12 text-right">
@@ -115,6 +115,14 @@
                         <label class="col-sm-4 horizontal-label">Employee Code: </label>
                         <div class="col-sm-8" style="margin-top: 5px !important;">
                             @Model.Code
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Employee Type: </label>
+                        <div class="col-sm-8" style="margin-top: 5px !important;">
+                            @Html.DropDownListFor(x => x.EmployeeType, EnumHelper.GetSelectList(typeof(EmployeeType)), "Select Employee Type", new { @class = "form-control input-sm" })
                         </div>
                     </div>
                 </div>
@@ -185,15 +193,20 @@
                     <div class="row form-group">
                         <label class="col-sm-4 horizontal-label">Region</label>
                         <div class="col-sm-8">
-                            @Html.TextBoxFor(x => x.Region, new { @class = "form-control input-sm" })
+                            @*@Html.TextBoxFor(x => x.Region, new { @class = "form-control input-sm" })*@
+                            @Html.DropDownListFor(x => x.RegionId, (SelectList)ViewBag.RegionList, " Select Region ", new { @class = "form-control input-sm select2" })
                         </div>
                     </div>
                 </div>
+
                 <div class="col-sm-6">
                     <div class="row form-group">
                         <label class="col-sm-4 horizontal-label">Center</label>
                         <div class="col-sm-8">
-                            @Html.TextBoxFor(x => x.Center, new { @class = "form-control input-sm" })
+                            @*@Html.DropDownListFor(x => x.Center, " Select Center ", new { @class = "form-control input-sm" })*@
+                            <select id="Center" name="Center" class="form-control input-sm select2">
+                                <option> - Select Center - </option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -203,7 +216,9 @@
                     <div class="row form-group">
                         <label class="col-sm-4 horizontal-label">Post</label>
                         <div class="col-sm-8">
-                            @Html.TextBoxFor(x => x.Post, new { @class = "form-control input-sm" })
+                            @*@Html.TextBoxFor(x => x.PostId, new { @class = "form-control input-sm" })*@
+                            @Html.DropDownListFor(x => x.PostId, (SelectList)ViewBag.RegionList, " Select Post ", new { @class = "form-control input-sm select2" })
+
                         </div>
                     </div>
                 </div>
@@ -211,7 +226,9 @@
                     <div class="row form-group">
                         <label class="col-sm-4 horizontal-label">Supervisor</label>
                         <div class="col-sm-8">
-                            @Html.TextBoxFor(x => x.Supervisor, new { @class = "form-control input-sm" })
+                            @*@Html.TextBoxFor(x => x.SupervisorId, new { @class = "form-control input-sm" })*@
+                            @Html.DropDownListFor(x => x.SupervisorId, (SelectList)ViewBag.RegionList, " Select Supervisor ", new { @class = "form-control input-sm select2" })
+
                         </div>
                     </div>
                 </div>
@@ -1730,14 +1747,42 @@
 @section scripts{
 
     <script src="~/Scripts/Input Mask/amazonawsjQuery.inputmask.js"></script>
+    <script src="~/Scripts/App/Hrms.js"></script>
+    <script src="~/Scripts/select2/select2.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
             $(".cnic").inputmask();
+            $(".select2").select2();
+            //$('#Region,#Center').selectpicker({
+            //    liveSearch: true
+            //    //showSubtext: true
+            //});
+
+            $("ul#sampleTabs li a").addClass('inactiveNav');
+            $("ul#sampleTabs li.active a").removeClass('inactiveNav');
+            $("ul#sampleTabs li.active a").addClass('activeNav');
+
+            $("ul#sampleTabs li a").on('click', function () {
+                //debugger;
+                //alert($(this).attr('id'));
+                $("ul#sampleTabs li a").addClass('inactiveNav');
+                $(this).removeClass('activeNav');
+                $(this).removeClass('inactiveNav');
+                $(this).addClass('activeNav');
+            });
+
+            $('#Region').change(function () {
+                //debugger;
+                var url = '@Url.Action("GetCentersByRegionId", "Employee")';
+                var Id = $('#Region option:selected').attr('value');
+                var ddlId = $('#Center');
+                bindDropdown(ddlId, url, Id);
+            });
 
         });
         $(function () {
-            debugger;
+            //debugger;
             $("#lead-frm").validate({
                 rules: {
                     Email: {
@@ -1765,28 +1810,3 @@
         color: white;
     }
 </style>
-@section ScriptsEnd{
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            //debugger;//class="inactiveNav"
-            $("ul#sampleTabs li a").addClass('inactiveNav');
-            $("ul#sampleTabs li.active a").removeClass('inactiveNav');
-            $("ul#sampleTabs li.active a").addClass('activeNav');
-
-
-            $("ul#sampleTabs li a").on('click', function () {
-                //debugger;
-                //alert($(this).attr('id'));
-                $("ul#sampleTabs li a").addClass('inactiveNav');
-                $(this).removeClass('activeNav');
-                $(this).removeClass('inactiveNav');
-
-                $(this).addClass('activeNav');
-
-                //alert('changed');
-            });
-
-        });
-    </script>
-}

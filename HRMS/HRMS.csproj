@@ -59,10 +59,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\PostEntity.cs" />
+    <Compile Include="Entity\Common.cs" />
+    <Compile Include="Entity\CenterEntity.cs" />
+    <Compile Include="Entity\RegionEntity.cs" />
     <Compile Include="Entity\HRMContants.cs" />
     <Compile Include="Model\AutoMapperConfig.cs" />
     <Compile Include="Entity\EmployeeEntity.cs" />
     <Compile Include="Model\Center.cs">
+      <DependentUpon>HRMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\City.cs">
+      <DependentUpon>HRMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Department.cs">
       <DependentUpon>HRMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\EmpArmyInformation.cs">
@@ -116,10 +126,16 @@
     <Compile Include="Model\HRM_Vew_Employee.cs">
       <DependentUpon>HRMSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\Post.cs">
+      <DependentUpon>HRMSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\Project.cs">
       <DependentUpon>HRMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Region.cs">
+      <DependentUpon>HRMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Segment.cs">
       <DependentUpon>HRMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

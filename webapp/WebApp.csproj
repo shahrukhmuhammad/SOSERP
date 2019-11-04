@@ -582,6 +582,8 @@
     <Content Include="Content\Dropdown\noJS.css" />
     <Content Include="Content\operations.css" />
     <Content Include="Content\parallaxLogin.css" />
+    <Content Include="Scripts\select2\select2.min.css" />
+    <Content Include="Scripts\select2\select2.min.js" />
     <Content Include="Content\SelectJS\css\normalize.css" />
     <Content Include="Content\SelectJS\css\selectize.default.css" />
     <Content Include="Content\SelectJS\css\stylesheet.css" />
@@ -704,6 +706,7 @@
     <Content Include="Scripts\App\Ecommerce.js" />
     <Content Include="Scripts\App\EcommerceSettings.js" />
     <Content Include="Scripts\App\EmployeeSettings.js" />
+    <Content Include="Scripts\App\Hrms.js" />
     <Content Include="Scripts\App\imageuploadify.js" />
     <Content Include="Scripts\App\Offices.js" />
     <Content Include="Scripts\App\TasksManagement.js" />
@@ -1048,6 +1051,8 @@
     <Content Include="Areas\HRMS\Views\Employee\_AllEmployees.cshtml" />
     <Content Include="Areas\HRMS\Views\Employee\_EmpDocuments.cshtml" />
     <Content Include="Areas\HRMS\Views\Employee\ViewDocument.cshtml" />
+    <Content Include="Areas\HRMS\Views\Employee\Index - Copy.cshtml" />
+    <Content Include="Areas\HRMS\Views\Employee\Index.cshtml" />
     <None Include="Properties\PublishProfiles\BaseApp %28Published%29.pubxml" />
     <None Include="Properties\PublishProfiles\BaseApp - A - CMS - V2.0 %28Published%29.pubxml" />
     <None Include="Properties\PublishProfiles\BaseApp - A - V3.0 %28Published%29.pubxml" />

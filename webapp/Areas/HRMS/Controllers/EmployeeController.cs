@@ -15,10 +15,14 @@ namespace WebApp.Areas.HRMS.Controllers
     public class EmployeeController : AppController
     {
         private EmployeeEntity employeeRepo;
+        private RegionEntity regionRepo;
+        private CenterEntity centerRepo;
 
         public EmployeeController()
         {
             employeeRepo = new EmployeeEntity();
+            regionRepo = new RegionEntity();
+            centerRepo = new CenterEntity();
         }
         public ActionResult Employees()
         {
@@ -43,9 +47,19 @@ namespace WebApp.Areas.HRMS.Controllers
             {
                 model.Code = employeeRepo.GetNextEmployeeCode();
             }
+            ViewBag.RegionList = new SelectList(regionRepo.GetAllRegionsDropdown(), "Value", "Text");
+            //ViewBag.RegionList = new SelectList(regionRepo.GetAllRegionsDropdown(), "Value", "Text");
+            //ViewBag.RegionList = new SelectList(regionRepo.GetAllRegionsDropdown(), "Value", "Text");
+
+            //ViewBag.CenterList = new SelectList(centerRepo.GetCentersDropdown(), "Value", "Text");
             return View(model);
         }
 
+        public ActionResult Index()
+        {
+
+            return View();
+        }
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Record(HRM_Vew_Employee model, EmployeePostedFiles files, DocumentPostedFiles documentPostedFiles, List<EmpReference> Reference)
         {
@@ -398,6 +412,13 @@ namespace WebApp.Areas.HRMS.Controllers
             {
                 return Json("Email already exists.");
             }
+        }
+
+        [HttpPost]
+        public JsonResult GetCentersByRegionId(Guid Id)
+        {
+            //new SelectList(centerRepo.GetCentersDropdown(), "Id", "Title");
+            return Json(centerRepo.GetCentersDropdown(Id));
         }
         #endregion
 

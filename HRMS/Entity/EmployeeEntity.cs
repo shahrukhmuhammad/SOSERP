@@ -124,7 +124,7 @@ namespace HRMS
                     #region Employee Master
                     var employeeModel = Mapper.Map<Employee>(model);
                     employeeModel.EmployeeId = Guid.NewGuid();
-                    employeeModel.ProjectId = new Guid("2C4C0573-070F-499F-B800-22ED5356D5F7"); //For Guarding
+                    employeeModel.SegmentId = new Guid("2C4C0573-070F-499F-B800-22ED5356D5F7"); //For Guarding
                     context.Employees.Add(employeeModel);
                     context.SaveChanges();
                     #endregion
@@ -756,5 +756,10 @@ namespace HRMS
         PositionBook,
         CNICFrontCopy,
         CNICBackCopy
+    }
+    public enum EmployeeType
+    {
+        MANAGEMENT = 1,
+        CREW = 2
     }
 }

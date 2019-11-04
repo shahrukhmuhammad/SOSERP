@@ -2294,5 +2294,9 @@ body {
     width: 80px !important;
     height: 80px !important;
 }
+
+.select2 {
+    width: 100% !important;
+}
 /*------------------#endregion HRMS*/
 

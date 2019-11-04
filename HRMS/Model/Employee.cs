@@ -19,6 +19,7 @@ namespace HRMS.Model
         {
             this.EmpArmyInformations = new HashSet<EmpArmyInformation>();
             this.EmpBankDetails = new HashSet<EmpBankDetail>();
+            this.EmpDocuments = new HashSet<EmpDocument>();
             this.EmpEmergencyContacts = new HashSet<EmpEmergencyContact>();
             this.EmpFingerPrints = new HashSet<EmpFingerPrint>();
             this.EmpPoliticalInformations = new HashSet<EmpPoliticalInformation>();
@@ -26,11 +27,11 @@ namespace HRMS.Model
             this.EmpRejoinHistories = new HashSet<EmpRejoinHistory>();
             this.EmpSalaryDetails = new HashSet<EmpSalaryDetail>();
             this.EmpTransferHistories = new HashSet<EmpTransferHistory>();
-            this.EmpDocuments = new HashSet<EmpDocument>();
         }
     
         public System.Guid EmployeeId { get; set; }
-        public System.Guid ProjectId { get; set; }
+        public System.Guid SegmentId { get; set; }
+        public bool EmployeeType { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string CNIC { get; set; }
@@ -40,10 +41,6 @@ namespace HRMS.Model
         public string CurrentAddress { get; set; }
         public string ProfilePicture { get; set; }
         public string Phone { get; set; }
-        public string Region { get; set; }
-        public string Center { get; set; }
-        public string Supervisor { get; set; }
-        public string Post { get; set; }
         public string MotherName { get; set; }
         public string Education { get; set; }
         public string BloodGroup { get; set; }
@@ -64,11 +61,17 @@ namespace HRMS.Model
         public Nullable<System.Guid> UpdatedBy { get; set; }
         public Nullable<System.Guid> RegionId { get; set; }
         public Nullable<System.Guid> CenterId { get; set; }
+        public Nullable<System.Guid> PostId { get; set; }
+        public Nullable<System.Guid> SupervisorId { get; set; }
+        public Nullable<System.Guid> DepartmentId { get; set; }
     
+        public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmpArmyInformation> EmpArmyInformations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmpBankDetail> EmpBankDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EmpDocument> EmpDocuments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmpEmergencyContact> EmpEmergencyContacts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -83,7 +86,5 @@ namespace HRMS.Model
         public virtual ICollection<EmpSalaryDetail> EmpSalaryDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmpTransferHistory> EmpTransferHistories { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EmpDocument> EmpDocuments { get; set; }
     }
 }

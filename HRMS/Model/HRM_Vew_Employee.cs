@@ -15,7 +15,7 @@ namespace HRMS.Model
     public partial class HRM_Vew_Employee
     {
         public System.Guid EmployeeId { get; set; }
-        public System.Guid ProjectId { get; set; }
+        public System.Guid SegmentId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string CNIC { get; set; }
@@ -25,10 +25,6 @@ namespace HRMS.Model
         public string CurrentAddress { get; set; }
         public string ProfilePicture { get; set; }
         public string Phone { get; set; }
-        public string Region { get; set; }
-        public string Center { get; set; }
-        public string Supervisor { get; set; }
-        public string Post { get; set; }
         public string MotherName { get; set; }
         public string Education { get; set; }
         public string BloodGroup { get; set; }
@@ -125,5 +121,9 @@ namespace HRMS.Model
         public string CenterName { get; set; }
         public string RegionHead { get; set; }
         public string SupervisorName { get; set; }
+        public Nullable<System.Guid> PostId { get; set; }
+        public string PostName { get; set; }
+        public Nullable<System.Guid> SupervisorId { get; set; }
+        public string EmployeeType { get; set; }
     }
 }
