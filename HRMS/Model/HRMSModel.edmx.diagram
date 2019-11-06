@@ -23,11 +23,9 @@
         <EntityTypeShape EntityType="SOSHRMSModel.Segment" Width="1.5" PointX="2.75" PointY="0.75" />
         <AssociationConnector Association="SOSHRMSModel.FK__Center__RegionId__1F98B2C1" />
         <AssociationConnector Association="SOSHRMSModel.FK__Post__ProjectId__7B264821" />
-        <EntityTypeShape EntityType="SOSHRMSModel.Department" Width="1.5" PointX="0.75" PointY="24.875" />
         <EntityTypeShape EntityType="SOSHRMSModel.Designation" Width="1.5" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="SOSHRMSModel.Employee" Width="1.5" PointX="3" PointY="20.75" />
         <EntityTypeShape EntityType="SOSHRMSModel.HRM_Vew_Employee" Width="1.5" PointX="7.375" PointY="11.75" />
-        <AssociationConnector Association="SOSHRMSModel.FK__Employee__Depart__7E02B4CC" />
         <AssociationConnector Association="SOSHRMSModel.FK__EmpArmyIn__Emplo__73BA3083" />
         <AssociationConnector Association="SOSHRMSModel.FK__EmpBankDe__Emplo__76969D2E" />
         <AssociationConnector Association="SOSHRMSModel.FK__EmpDocume__Emplo__29221CFB" />
@@ -38,6 +36,8 @@
         <AssociationConnector Association="SOSHRMSModel.FK__EmpRejoin__Emplo__04E4BC85" />
         <AssociationConnector Association="SOSHRMSModel.FK__EmpSalary__Emplo__05D8E0BE" />
         <AssociationConnector Association="SOSHRMSModel.FK__EmpTransf__Emplo__06CD04F7" />
+        <EntityTypeShape EntityType="SOSHRMSModel.Department" Width="1.5" PointX="0.75" PointY="24.5" />
+        <AssociationConnector Association="SOSHRMSModel.FK__Employee__Depart__7E02B4CC" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

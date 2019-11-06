@@ -67,7 +67,6 @@ namespace HRMS.Model
         public Nullable<System.Guid> DepartmentId { get; set; }
         public Nullable<System.Guid> DesignationId { get; set; }
     
-        public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmpArmyInformation> EmpArmyInformations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -88,5 +87,6 @@ namespace HRMS.Model
         public virtual ICollection<EmpSalaryDetail> EmpSalaryDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmpTransferHistory> EmpTransferHistories { get; set; }
+        public virtual Department Department { get; set; }
     }
 }

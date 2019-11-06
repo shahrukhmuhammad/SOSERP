@@ -47,7 +47,7 @@ namespace WebApp.Areas.HRMS.Controllers
         {
             var model = new HRM_Vew_Employee();
             model = employeeRepo.GetUserById(Id);
-            //ViewBag.References = employeeRepo.GetReferencesByEmpId(Id);
+            ViewBag.References = employeeRepo.GetReferencesByEmpId(Id);
             //ViewBag.RegionList = new SelectList(regionRepo.GetAllRegionsDropdown(), "Value", "Text");
             //ViewBag.PostList = new SelectList(postRepo.GetPostsDropdown(), "Value", "Text");
             //ViewBag.EmployeeList = new SelectList(employeeRepo.GetEmployeeDropdown(), "Value", "Text");

@@ -274,6 +274,7 @@
     <Compile Include="Areas\Ecommerce\Controllers\SettingsController.cs" />
     <Compile Include="Areas\Ecommerce\EcommerceAreaRegistration.cs" />
     <Compile Include="Areas\HRMS\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\HRMS\Controllers\DepartmentController.cs" />
     <Compile Include="Areas\HRMS\Controllers\EmployeeController.cs" />
     <Compile Include="Areas\HRMS\HRMSAreaRegistration.cs" />
     <Compile Include="Areas\HRMS\Models\EmployeePostedFiles.cs" />
@@ -1054,6 +1055,8 @@
     <Content Include="Areas\HRMS\Views\Employee\ViewDocument.cshtml" />
     <Content Include="Areas\HRMS\Views\Employee\Index.cshtml" />
     <Content Include="Areas\HRMS\Views\Employee\Details.cshtml" />
+    <Content Include="Areas\HRMS\Views\Department\Deparments.cshtml" />
+    <Content Include="Areas\HRMS\Views\Department\_AllDeparments.cshtml" />
     <None Include="Properties\PublishProfiles\BaseApp %28Published%29.pubxml" />
     <None Include="Properties\PublishProfiles\BaseApp - A - CMS - V2.0 %28Published%29.pubxml" />
     <None Include="Properties\PublishProfiles\BaseApp - A - V3.0 %28Published%29.pubxml" />

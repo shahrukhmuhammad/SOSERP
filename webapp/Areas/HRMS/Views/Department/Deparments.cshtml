@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Department List";
+}
+
+@section styles{
+    <style>
+        .circle-btns > a > .count {
+            font-size: 16px !important;
+        }
+    </style>
+}
+
+<div class="user-Profile" style="min-height:430px;">
+    <div id="employees-Container">
+        @{ Html.RenderAction("_AllDepartments", "Department"); }
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            filterDataTable("#departments-dataTable", [1, 2, 3, 4, 5, 6], [0, 7],10);
+        });
+    </script>
+}
+

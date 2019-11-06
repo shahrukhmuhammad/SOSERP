@@ -34,7 +34,11 @@
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Code" Type="nvarchar" MaxLength="10" />
           <Property Name="Name" Type="nvarchar" MaxLength="150" />
-          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="Designation">
           <Key>
@@ -331,6 +335,7 @@
           <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
           <Property Name="UpdatedOn" Type="datetime" />
           <Property Name="UpdatedBy" Type="uniqueidentifier" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="Segment">
           <Key>
@@ -846,14 +851,9 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             <End Role="Project" EntitySet="Projects" />
             <End Role="Post" EntitySet="Posts" />
           </AssociationSet>
-          <EntitySet Name="Departments" EntityType="SOSHRMSModel.Department" />
           <EntitySet Name="Designations" EntityType="SOSHRMSModel.Designation" />
           <EntitySet Name="Employees" EntityType="SOSHRMSModel.Employee" />
           <EntitySet Name="HRM_Vew_Employee" EntityType="SOSHRMSModel.HRM_Vew_Employee" />
-          <AssociationSet Name="FK__Employee__Depart__7E02B4CC" Association="SOSHRMSModel.FK__Employee__Depart__7E02B4CC">
-            <End Role="Department" EntitySet="Departments" />
-            <End Role="Employee" EntitySet="Employees" />
-          </AssociationSet>
           <AssociationSet Name="FK__EmpArmyIn__Emplo__73BA3083" Association="SOSHRMSModel.FK__EmpArmyIn__Emplo__73BA3083">
             <End Role="Employee" EntitySet="Employees" />
             <End Role="EmpArmyInformation" EntitySet="EmpArmyInformations" />
@@ -893,6 +893,11 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <AssociationSet Name="FK__EmpTransf__Emplo__06CD04F7" Association="SOSHRMSModel.FK__EmpTransf__Emplo__06CD04F7">
             <End Role="Employee" EntitySet="Employees" />
             <End Role="EmpTransferHistory" EntitySet="EmpTransferHistories" />
+          </AssociationSet>
+          <EntitySet Name="Departments" EntityType="SOSHRMSModel.Department" />
+          <AssociationSet Name="FK__Employee__Depart__7E02B4CC" Association="SOSHRMSModel.FK__Employee__Depart__7E02B4CC">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Employee" EntitySet="Employees" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Center">
@@ -1174,6 +1179,7 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Guid" />
           <NavigationProperty Name="Centers" Relationship="SOSHRMSModel.FK__Center__RegionId__1F98B2C1" FromRole="Region" ToRole="Center" />
+          <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         <EntityType Name="Segment">
           <Key>
@@ -1206,16 +1212,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Department">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
-          <NavigationProperty Name="Employees" Relationship="SOSHRMSModel.FK__Employee__Depart__7E02B4CC" FromRole="Department" ToRole="Employee" />
-        </EntityType>
         <EntityType Name="Designation">
           <Key>
             <PropertyRef Name="Id" />
@@ -1267,7 +1263,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <Property Name="SupervisorId" Type="Guid" />
           <Property Name="DepartmentId" Type="Guid" />
           <Property Name="DesignationId" Type="Guid" />
-          <NavigationProperty Name="Department" Relationship="SOSHRMSModel.FK__Employee__Depart__7E02B4CC" FromRole="Employee" ToRole="Department" />
           <NavigationProperty Name="EmpArmyInformations" Relationship="SOSHRMSModel.FK__EmpArmyIn__Emplo__73BA3083" FromRole="Employee" ToRole="EmpArmyInformation" />
           <NavigationProperty Name="EmpBankDetails" Relationship="SOSHRMSModel.FK__EmpBankDe__Emplo__76969D2E" FromRole="Employee" ToRole="EmpBankDetail" />
           <NavigationProperty Name="EmpDocuments" Relationship="SOSHRMSModel.FK__EmpDocume__Emplo__29221CFB" FromRole="Employee" ToRole="EmpDocument" />
@@ -1278,6 +1273,7 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <NavigationProperty Name="EmpRejoinHistories" Relationship="SOSHRMSModel.FK__EmpRejoin__Emplo__04E4BC85" FromRole="Employee" ToRole="EmpRejoinHistory" />
           <NavigationProperty Name="EmpSalaryDetails" Relationship="SOSHRMSModel.FK__EmpSalary__Emplo__05D8E0BE" FromRole="Employee" ToRole="EmpSalaryDetail" />
           <NavigationProperty Name="EmpTransferHistories" Relationship="SOSHRMSModel.FK__EmpTransf__Emplo__06CD04F7" FromRole="Employee" ToRole="EmpTransferHistory" />
+          <NavigationProperty Name="Department" Relationship="SOSHRMSModel.FK__Employee__Depart__7E02B4CC" FromRole="Employee" ToRole="Department" />
         </EntityType>
         <EntityType Name="HRM_Vew_Employee">
           <Key>
@@ -1404,18 +1400,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <Property Name="DepartmentId" Type="Guid" />
           <Property Name="DepartmentName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
-        <Association Name="FK__Employee__Depart__7E02B4CC">
-          <End Type="SOSHRMSModel.Department" Role="Department" Multiplicity="0..1" />
-          <End Type="SOSHRMSModel.Employee" Role="Employee" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Department">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Employee">
-              <PropertyRef Name="DepartmentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__EmpArmyIn__Emplo__73BA3083">
           <End Type="SOSHRMSModel.Employee" Role="Employee" Multiplicity="1" />
           <End Type="SOSHRMSModel.EmpArmyInformation" Role="EmpArmyInformation" Multiplicity="*" />
@@ -1533,6 +1517,32 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             </Principal>
             <Dependent Role="EmpTransferHistory">
               <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <NavigationProperty Name="Employees" Relationship="SOSHRMSModel.FK__Employee__Depart__7E02B4CC" FromRole="Department" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK__Employee__Depart__7E02B4CC">
+          <End Type="SOSHRMSModel.Department" Role="Department" Multiplicity="0..1" />
+          <End Type="SOSHRMSModel.Employee" Role="Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="DepartmentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1814,6 +1824,7 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <EntitySetMapping Name="Regions">
             <EntityTypeMapping TypeName="SOSHRMSModel.Region">
               <MappingFragment StoreEntitySet="Region">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
@@ -1828,16 +1839,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             <EntityTypeMapping TypeName="SOSHRMSModel.Segment">
               <MappingFragment StoreEntitySet="Segment">
                 <ScalarProperty Name="SegmentName" ColumnName="SegmentName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Departments">
-            <EntityTypeMapping TypeName="SOSHRMSModel.Department">
-              <MappingFragment StoreEntitySet="Department">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2015,6 +2016,20 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="SegmentId" ColumnName="SegmentId" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="SOSHRMSModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

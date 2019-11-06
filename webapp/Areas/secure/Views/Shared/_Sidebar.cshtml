@@ -124,62 +124,83 @@
 
     @if ((IsCurrentArea("HRMS") && CurrentUser.HasAnyPermission(BaseApp.Entity.AppPermission.All, BaseApp.Entity.AppPermission.ViewHRMS, BaseApp.Entity.AppPermission.HRMS)))
     {
-        <div>
-            <div class="panel panel-default">
-                <div class="panel-heading no-padding" role="tab">
-                    <h4 class="panel-title">
-                        <a class="list-group-item @SetActiveAction("Dashboard", "Index")" href="@Url.Action("Index","Dashboard")"><i class="fa fa-dashboard clr-green"></i> Dashboard</a>
-                    </h4>
+            <div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveAction("Dashboard", "Index")" href="@Url.Action("Index","Dashboard")"><i class="fa fa-dashboard clr-green"></i> Dashboard</a>
+                        </h4>
+                    </div>
                 </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading no-padding" role="tab">
-                    <h4 class="panel-title">
-                        <a class="list-group-item @SetActiveAction("Employee", "Employees") @SetActiveAction("Employee", "Record") " href="@Url.Action("Employees","Employee")"><i class="fa fa-list-alt clr-green"></i> Employees</a>
-                    </h4>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading no-padding" role="tab">
-                    <h4 class="panel-title">
-                        @*<a class="list-group-item @SetActiveAction("TimeSheet", "Index")" href="~/Secure/TimeSheet"><i class="fa fa-clock-o clr-green"></i> Timesheets</a>*@
-                        <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-clock-o clr-green"></i> Timesheets</a>
+                
 
-                    </h4>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab" id="heading-employeeConfigurations">
+                        <h4 class="panel-title">
+                            <a class="list-group-item  @SetActiveController("Region")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-employeeConfigurations" aria-expanded="false" aria-controls="collapse-employeeConfigurations">
+                                <i class="fa fa-gears clr-blue"></i> Configurations <span class="badge"><i class="fa fa-angle-down"></i></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-employeeConfigurations" class="panel-collapse collapse @SetActiveController("Region")" role="tabpanel" aria-labelledby="heading-employeeConfigurations">
+                        <div class="list-group">
+                            <a class="list-group-item @SetActiveController("Department")" href="@Url.Action("Departments","Department")"><i class="fa fa-building clr-blue"></i> Department</a>
+                            <a class="list-group-item @SetActiveController("Designation")" href="@Url.Action("Designations","Designation")"><i class="fa fa-angle-up clr-blue"></i> Designation</a>
+                            <a class="list-group-item @SetActiveController("Region")" href="@Url.Action("Regions","Region")"><i class="fa fa-cube clr-blue"></i> Region</a>
+                            <a class="list-group-item @SetActiveController("Center")" href="@Url.Action("Centers","Center")"><i class="fa fa-gear clr-blue"></i> Center</a>
+                            <a class="list-group-item @SetActiveController("City")" href="@Url.Action("Cites","City")"><i class="fa fa-tree clr-blue"></i> City</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading no-padding" role="tab">
-                    <h4 class="panel-title">
-                        @*<a class="list-group-item @SetActiveAction("Employee", "Payrolls")" href="javascript://"><i class="fa fa-file clr-green"></i> Payrolls</a>*@
-                        <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-file clr-green"></i> Payrolls</a>
-
-                    </h4>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading no-padding" role="tab" id="heading-companySettings">
-                    <h4 class="panel-title">
-
-                        <a class="list-group-item  @SetActiveAction("Employee", "Settings") @SetActiveAction("Employee", "TimesheetSettings")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-companySettings" aria-expanded="false" aria-controls="collapse-companySettings">
-                            <i class="fa fa-gears clr-yellow"></i> Settings <span class="badge"><i class="fa fa-angle-down"></i></span>
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapse-companySettings" class="panel-collapse collapse @SetActiveAction("Employee", "Settings") @SetActiveAction("Employee", "TimesheetSettings") @SetActiveAction("Employee", "PayrollSettings")" role="tabpanel" aria-labelledby="heading-companySettings">
-                    <div class="list-group">
-                        <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-gear clr-yellow"></i> Manage Employee Data Fields</a>
-                        <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-gear clr-yellow"></i> Payroll Settings</a>
-                        <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-gear clr-yellow"></i> Timesheet Settings</a>
 
 
-                        @*<a class="list-group-item @SetActiveAction("Employee", "Settings")" href="~/Secure/Employee/Settings"><i class="fa fa-gear clr-yellow"></i> Manage Employee Data Fields</a>
-                        <a class="list-group-item @SetActiveAction("Employee", "PayrollSettings")" href="~/Secure/Employee/PayrollSettings"><i class="fa fa-gear clr-yellow"></i> Payroll Settings</a>
-                        <a class="list-group-item @SetActiveAction("Employee", "TimesheetSettings")" href="~/Secure/Employee/TimesheetSettings"><i class="fa fa-gear clr-yellow"></i> Timesheet Settings</a>*@
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            <a class="list-group-item @SetActiveController("Employee")" href="@Url.Action("Employees","Employee")"><i class="fa fa-list-alt clr-green"></i> Employees</a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            @*<a class="list-group-item @SetActiveAction("TimeSheet", "Index")" href="~/Secure/TimeSheet"><i class="fa fa-clock-o clr-green"></i> Timesheets</a>*@
+                            <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-clock-o clr-green"></i> Timesheets</a>
+
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab">
+                        <h4 class="panel-title">
+                            @*<a class="list-group-item @SetActiveAction("Employee", "Payrolls")" href="javascript://"><i class="fa fa-file clr-green"></i> Payrolls</a>*@
+                            <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-file clr-green"></i> Payrolls</a>
+
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading no-padding" role="tab" id="heading-companySettings">
+                        <h4 class="panel-title">
+                            <a class="list-group-item  @SetActiveAction("Employee", "Settings") @SetActiveAction("Employee", "TimesheetSettings")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-companySettings" aria-expanded="false" aria-controls="collapse-companySettings">
+                                <i class="fa fa-gears clr-yellow"></i> Settings <span class="badge"><i class="fa fa-angle-down"></i></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-companySettings" class="panel-collapse collapse @SetActiveAction("Employee", "Settings") @SetActiveAction("Employee", "TimesheetSettings") @SetActiveAction("Employee", "PayrollSettings")" role="tabpanel" aria-labelledby="heading-companySettings">
+                        <div class="list-group">
+                            <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-gear clr-yellow"></i> Manage Employee Data Fields</a>
+                            <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-gear clr-yellow"></i> Payroll Settings</a>
+                            <a href="javascript://" data-toggle="modal" data-target="#comingSoon-Modal" class="list-group-item"><i class="fa fa-gear clr-yellow"></i> Timesheet Settings</a>
+
+
+                            @*<a class="list-group-item @SetActiveAction("Employee", "Settings")" href="~/Secure/Employee/Settings"><i class="fa fa-gear clr-yellow"></i> Manage Employee Data Fields</a>
+                    <a class="list-group-item @SetActiveAction("Employee", "PayrollSettings")" href="~/Secure/Employee/PayrollSettings"><i class="fa fa-gear clr-yellow"></i> Payroll Settings</a>
+                    <a class="list-group-item @SetActiveAction("Employee", "TimesheetSettings")" href="~/Secure/Employee/TimesheetSettings"><i class="fa fa-gear clr-yellow"></i> Timesheet Settings</a>*@
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     }
 
     @if (IsCurrentController("Account"))
