@@ -1,4 +1,5 @@
-﻿using HRMS.Model;
+﻿using HRMS;
+using HRMS.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -36,4 +37,24 @@ namespace WebApp.Areas.HRMS
         public HttpPostedFileBase CNICFrontCopy { get; set; }
         public HttpPostedFileBase CNICBackCopy { get; set; }
     }
+
+    //public static class Utils {
+
+    //    public static bool IsFileExist(string file)
+    //    {
+    //        try
+    //        {
+    //            var absolutePath = HttpContext.Current.Server.MapPath(file);
+    //            if (File.Exists(absolutePath))
+    //                return true;
+    //            else
+    //                return false;
+    //        }
+    //        catch (Exception)
+    //        {
+    //            return false;
+    //        }
+            
+    //    }
+    //}
 }

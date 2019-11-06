@@ -32,7 +32,19 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="10" />
           <Property Name="Name" Type="nvarchar" MaxLength="150" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="Designation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DepartmentId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="10" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="EmpArmyInformation">
           <Key>
@@ -130,7 +142,7 @@
           </Key>
           <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="SegmentId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="EmployeeType" Type="bit" Nullable="false" />
+          <Property Name="EmployeeType" Type="tinyint" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="200" />
           <Property Name="Code" Type="nvarchar" MaxLength="10" />
           <Property Name="CNIC" Type="nvarchar" MaxLength="20" />
@@ -153,6 +165,7 @@
           <Property Name="NoOfChilds" Type="int" />
           <Property Name="NoOfBoys" Type="int" />
           <Property Name="NoOfGirls" Type="int" />
+          <Property Name="ProfileStatus" Type="tinyint" />
           <Property Name="Status" Type="tinyint" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
@@ -163,6 +176,7 @@
           <Property Name="PostId" Type="uniqueidentifier" />
           <Property Name="SupervisorId" Type="uniqueidentifier" />
           <Property Name="DepartmentId" Type="uniqueidentifier" />
+          <Property Name="DesignationId" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="EmpPoliticalInformation">
           <Key>
@@ -331,14 +345,15 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <Key>
             <PropertyRef Name="EmployeeId" />
             <PropertyRef Name="SegmentId" />
+            <PropertyRef Name="EmployeeType" />
             <PropertyRef Name="CreatedOn" />
             <PropertyRef Name="CreatedBy" />
-            <PropertyRef Name="EmployeeType" />
           </Key>
           <Property Name="EmployeeId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="SegmentId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="200" />
           <Property Name="Code" Type="nvarchar" MaxLength="10" />
+          <Property Name="EmployeeType" Type="tinyint" Nullable="false" />
           <Property Name="CNIC" Type="nvarchar" MaxLength="20" />
           <Property Name="FatherName" Type="nvarchar" MaxLength="200" />
           <Property Name="FatherCNIC" Type="nvarchar" MaxLength="20" />
@@ -445,7 +460,11 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <Property Name="PostId" Type="uniqueidentifier" />
           <Property Name="PostName" Type="nvarchar" MaxLength="500" />
           <Property Name="SupervisorId" Type="uniqueidentifier" />
-          <Property Name="EmployeeType" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ProfileStatus" Type="tinyint" />
+          <Property Name="DesignationId" Type="uniqueidentifier" />
+          <Property Name="DesignationTitle" Type="nvarchar" MaxLength="150" />
+          <Property Name="DepartmentId" Type="uniqueidentifier" />
+          <Property Name="DepartmentName" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <Association Name="FK__Center__RegionId__1F98B2C1">
           <End Role="Region" Type="Self.Region" Multiplicity="1" />
@@ -608,6 +627,7 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <EntitySet Name="Center" EntityType="Self.Center" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="City" EntityType="Self.City" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Designation" EntityType="Self.Designation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmpArmyInformation" EntityType="Self.EmpArmyInformation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmpBankDetails" EntityType="Self.EmpBankDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmpDocuments" EntityType="Self.EmpDocuments" Schema="dbo" store:Type="Tables" />
@@ -629,6 +649,7 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
     [HRM_Vew_Employee].[SegmentId] AS [SegmentId], 
     [HRM_Vew_Employee].[Name] AS [Name], 
     [HRM_Vew_Employee].[Code] AS [Code], 
+    [HRM_Vew_Employee].[EmployeeType] AS [EmployeeType], 
     [HRM_Vew_Employee].[CNIC] AS [CNIC], 
     [HRM_Vew_Employee].[FatherName] AS [FatherName], 
     [HRM_Vew_Employee].[FatherCNIC] AS [FatherCNIC], 
@@ -735,7 +756,11 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
     [HRM_Vew_Employee].[PostId] AS [PostId], 
     [HRM_Vew_Employee].[PostName] AS [PostName], 
     [HRM_Vew_Employee].[SupervisorId] AS [SupervisorId], 
-    [HRM_Vew_Employee].[EmployeeType] AS [EmployeeType]
+    [HRM_Vew_Employee].[ProfileStatus] AS [ProfileStatus], 
+    [HRM_Vew_Employee].[DesignationId] AS [DesignationId], 
+    [HRM_Vew_Employee].[DesignationTitle] AS [DesignationTitle], 
+    [HRM_Vew_Employee].[DepartmentId] AS [DepartmentId], 
+    [HRM_Vew_Employee].[DepartmentName] AS [DepartmentName]
     FROM [dbo].[HRM_Vew_Employee] AS [HRM_Vew_Employee]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK__Center__RegionId__1F98B2C1" Association="Self.FK__Center__RegionId__1F98B2C1">
@@ -799,13 +824,11 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <FunctionImport Name="SP_Employee_GetMaxCode" ReturnType="Collection(String)" />
           <EntitySet Name="Centers" EntityType="SOSHRMSModel.Center" />
           <EntitySet Name="Cities" EntityType="SOSHRMSModel.City" />
-          <EntitySet Name="Departments" EntityType="SOSHRMSModel.Department" />
           <EntitySet Name="EmpArmyInformations" EntityType="SOSHRMSModel.EmpArmyInformation" />
           <EntitySet Name="EmpBankDetails" EntityType="SOSHRMSModel.EmpBankDetail" />
           <EntitySet Name="EmpDocuments" EntityType="SOSHRMSModel.EmpDocument" />
           <EntitySet Name="EmpEmergencyContacts" EntityType="SOSHRMSModel.EmpEmergencyContact" />
           <EntitySet Name="EmpFingerPrints" EntityType="SOSHRMSModel.EmpFingerPrint" />
-          <EntitySet Name="Employees" EntityType="SOSHRMSModel.Employee" />
           <EntitySet Name="EmpPoliticalInformations" EntityType="SOSHRMSModel.EmpPoliticalInformation" />
           <EntitySet Name="EmpReferences" EntityType="SOSHRMSModel.EmpReference" />
           <EntitySet Name="EmpRejoinHistories" EntityType="SOSHRMSModel.EmpRejoinHistory" />
@@ -819,6 +842,14 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             <End Role="Region" EntitySet="Regions" />
             <End Role="Center" EntitySet="Centers" />
           </AssociationSet>
+          <AssociationSet Name="FK__Post__ProjectId__7B264821" Association="SOSHRMSModel.FK__Post__ProjectId__7B264821">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <EntitySet Name="Departments" EntityType="SOSHRMSModel.Department" />
+          <EntitySet Name="Designations" EntityType="SOSHRMSModel.Designation" />
+          <EntitySet Name="Employees" EntityType="SOSHRMSModel.Employee" />
+          <EntitySet Name="HRM_Vew_Employee" EntityType="SOSHRMSModel.HRM_Vew_Employee" />
           <AssociationSet Name="FK__Employee__Depart__7E02B4CC" Association="SOSHRMSModel.FK__Employee__Depart__7E02B4CC">
             <End Role="Department" EntitySet="Departments" />
             <End Role="Employee" EntitySet="Employees" />
@@ -863,11 +894,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             <End Role="Employee" EntitySet="Employees" />
             <End Role="EmpTransferHistory" EntitySet="EmpTransferHistories" />
           </AssociationSet>
-          <AssociationSet Name="FK__Post__ProjectId__7B264821" Association="SOSHRMSModel.FK__Post__ProjectId__7B264821">
-            <End Role="Project" EntitySet="Projects" />
-            <End Role="Post" EntitySet="Posts" />
-          </AssociationSet>
-          <EntitySet Name="HRM_Vew_Employee" EntityType="SOSHRMSModel.HRM_Vew_Employee" />
           </EntityContainer>
         <EntityType Name="Center">
           <Key>
@@ -891,14 +917,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <Property Name="Id" Type="Guid" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="RegionId" Type="Guid" />
-        </EntityType>
-        <EntityType Name="Department">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Employees" Relationship="SOSHRMSModel.FK__Employee__Depart__7E02B4CC" FromRole="Department" ToRole="Employee" />
         </EntityType>
         <EntityType Name="EmpArmyInformation">
           <Key>
@@ -994,57 +1012,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Guid" />
           <NavigationProperty Name="Employee" Relationship="SOSHRMSModel.FK__EmpFinger__Emplo__7D439ABD" FromRole="EmpFingerPrint" ToRole="Employee" />
-        </EntityType>
-        <EntityType Name="Employee">
-          <Key>
-            <PropertyRef Name="EmployeeId" />
-          </Key>
-          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
-          <Property Name="SegmentId" Type="Guid" Nullable="false" />
-          <Property Name="EmployeeType" Type="Boolean" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="CNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="FatherName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="FatherCNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="PermanentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CurrentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="ProfilePicture" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="MotherName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Education" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="BloodGroup" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="IdentificationMarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Height" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Weight" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="MaritalStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="NextToKIN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="WifeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="NoOfChilds" Type="Int32" />
-          <Property Name="NoOfBoys" Type="Int32" />
-          <Property Name="NoOfGirls" Type="Int32" />
-          <Property Name="Status" Type="Byte" />
-          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
-          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
-          <Property Name="UpdatedBy" Type="Guid" />
-          <Property Name="RegionId" Type="Guid" />
-          <Property Name="CenterId" Type="Guid" />
-          <Property Name="PostId" Type="Guid" />
-          <Property Name="SupervisorId" Type="Guid" />
-          <Property Name="DepartmentId" Type="Guid" />
-          <NavigationProperty Name="Department" Relationship="SOSHRMSModel.FK__Employee__Depart__7E02B4CC" FromRole="Employee" ToRole="Department" />
-          <NavigationProperty Name="EmpArmyInformations" Relationship="SOSHRMSModel.FK__EmpArmyIn__Emplo__73BA3083" FromRole="Employee" ToRole="EmpArmyInformation" />
-          <NavigationProperty Name="EmpBankDetails" Relationship="SOSHRMSModel.FK__EmpBankDe__Emplo__76969D2E" FromRole="Employee" ToRole="EmpBankDetail" />
-          <NavigationProperty Name="EmpDocuments" Relationship="SOSHRMSModel.FK__EmpDocume__Emplo__29221CFB" FromRole="Employee" ToRole="EmpDocument" />
-          <NavigationProperty Name="EmpEmergencyContacts" Relationship="SOSHRMSModel.FK__EmpEmerge__Emplo__7C4F7684" FromRole="Employee" ToRole="EmpEmergencyContact" />
-          <NavigationProperty Name="EmpFingerPrints" Relationship="SOSHRMSModel.FK__EmpFinger__Emplo__7D439ABD" FromRole="Employee" ToRole="EmpFingerPrint" />
-          <NavigationProperty Name="EmpPoliticalInformations" Relationship="SOSHRMSModel.FK__EmpPoliti__Emplo__07C12930" FromRole="Employee" ToRole="EmpPoliticalInformation" />
-          <NavigationProperty Name="EmpReferences" Relationship="SOSHRMSModel.FK__EmpRefere__Emplo__01142BA1" FromRole="Employee" ToRole="EmpReference" />
-          <NavigationProperty Name="EmpRejoinHistories" Relationship="SOSHRMSModel.FK__EmpRejoin__Emplo__04E4BC85" FromRole="Employee" ToRole="EmpRejoinHistory" />
-          <NavigationProperty Name="EmpSalaryDetails" Relationship="SOSHRMSModel.FK__EmpSalary__Emplo__05D8E0BE" FromRole="Employee" ToRole="EmpSalaryDetail" />
-          <NavigationProperty Name="EmpTransferHistories" Relationship="SOSHRMSModel.FK__EmpTransf__Emplo__06CD04F7" FromRole="Employee" ToRole="EmpTransferHistory" />
         </EntityType>
         <EntityType Name="EmpPoliticalInformation">
           <Key>
@@ -1227,6 +1194,216 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Post__ProjectId__7B264821">
+          <End Type="SOSHRMSModel.Project" Role="Project" Multiplicity="0..1" />
+          <End Type="SOSHRMSModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <NavigationProperty Name="Employees" Relationship="SOSHRMSModel.FK__Employee__Depart__7E02B4CC" FromRole="Department" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Designation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="DepartmentId" Type="Guid" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="SegmentId" Type="Guid" Nullable="false" />
+          <Property Name="EmployeeType" Type="Byte" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FatherName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FatherCNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PermanentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CurrentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ProfilePicture" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MotherName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Education" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BloodGroup" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IdentificationMarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Height" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Weight" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="MaritalStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="NextToKIN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WifeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NoOfChilds" Type="Int32" />
+          <Property Name="NoOfBoys" Type="Int32" />
+          <Property Name="NoOfGirls" Type="Int32" />
+          <Property Name="ProfileStatus" Type="Byte" />
+          <Property Name="Status" Type="Byte" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <Property Name="RegionId" Type="Guid" />
+          <Property Name="CenterId" Type="Guid" />
+          <Property Name="PostId" Type="Guid" />
+          <Property Name="SupervisorId" Type="Guid" />
+          <Property Name="DepartmentId" Type="Guid" />
+          <Property Name="DesignationId" Type="Guid" />
+          <NavigationProperty Name="Department" Relationship="SOSHRMSModel.FK__Employee__Depart__7E02B4CC" FromRole="Employee" ToRole="Department" />
+          <NavigationProperty Name="EmpArmyInformations" Relationship="SOSHRMSModel.FK__EmpArmyIn__Emplo__73BA3083" FromRole="Employee" ToRole="EmpArmyInformation" />
+          <NavigationProperty Name="EmpBankDetails" Relationship="SOSHRMSModel.FK__EmpBankDe__Emplo__76969D2E" FromRole="Employee" ToRole="EmpBankDetail" />
+          <NavigationProperty Name="EmpDocuments" Relationship="SOSHRMSModel.FK__EmpDocume__Emplo__29221CFB" FromRole="Employee" ToRole="EmpDocument" />
+          <NavigationProperty Name="EmpEmergencyContacts" Relationship="SOSHRMSModel.FK__EmpEmerge__Emplo__7C4F7684" FromRole="Employee" ToRole="EmpEmergencyContact" />
+          <NavigationProperty Name="EmpFingerPrints" Relationship="SOSHRMSModel.FK__EmpFinger__Emplo__7D439ABD" FromRole="Employee" ToRole="EmpFingerPrint" />
+          <NavigationProperty Name="EmpPoliticalInformations" Relationship="SOSHRMSModel.FK__EmpPoliti__Emplo__07C12930" FromRole="Employee" ToRole="EmpPoliticalInformation" />
+          <NavigationProperty Name="EmpReferences" Relationship="SOSHRMSModel.FK__EmpRefere__Emplo__01142BA1" FromRole="Employee" ToRole="EmpReference" />
+          <NavigationProperty Name="EmpRejoinHistories" Relationship="SOSHRMSModel.FK__EmpRejoin__Emplo__04E4BC85" FromRole="Employee" ToRole="EmpRejoinHistory" />
+          <NavigationProperty Name="EmpSalaryDetails" Relationship="SOSHRMSModel.FK__EmpSalary__Emplo__05D8E0BE" FromRole="Employee" ToRole="EmpSalaryDetail" />
+          <NavigationProperty Name="EmpTransferHistories" Relationship="SOSHRMSModel.FK__EmpTransf__Emplo__06CD04F7" FromRole="Employee" ToRole="EmpTransferHistory" />
+        </EntityType>
+        <EntityType Name="HRM_Vew_Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+            <PropertyRef Name="SegmentId" />
+            <PropertyRef Name="EmployeeType" />
+            <PropertyRef Name="CreatedOn" />
+            <PropertyRef Name="CreatedBy" />
+          </Key>
+          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
+          <Property Name="SegmentId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeType" Type="Byte" Nullable="false" />
+          <Property Name="CNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FatherName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FatherCNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PermanentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CurrentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ProfilePicture" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MotherName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Education" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BloodGroup" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IdentificationMarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Height" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Weight" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="MaritalStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="NextToKIN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WifeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NoOfChilds" Type="Int32" />
+          <Property Name="NoOfBoys" Type="Int32" />
+          <Property Name="NoOfGirls" Type="Int32" />
+          <Property Name="Status" Type="Byte" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <Property Name="ArmyInformationId" Type="Guid" />
+          <Property Name="JoiningDate" Type="DateTime" Precision="0" />
+          <Property Name="UnitName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ForceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastUnit" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastCenter" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ServicePeriod" Type="Int32" />
+          <Property Name="RecordCenter" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DischargeDate" Type="DateTime" Precision="0" />
+          <Property Name="Rank" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Trade" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ForceType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PreviousForces" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BankDetailsId" Type="Guid" />
+          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountOwner" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OpeningDate" Type="DateTime" Precision="3" />
+          <Property Name="EmergencyContactId" Type="Guid" />
+          <Property Name="EmergencyAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="EmergencyPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EmergencyCell" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FingerPrintId" Type="Guid" />
+          <Property Name="LeftThumb" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LeftIndexFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LeftMiddleFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LeftRingFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LeftBabyFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightThumb" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightIndexFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightMiddleFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightRingFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RightBabyFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="PoliticalInformationId" Type="Guid" />
+          <Property Name="PoliceStation" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PostOffice" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AreaNazimName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WellKnownPerson" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UCNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NANumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PANumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VoteNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RejoinHistoryId" Type="Guid" />
+          <Property Name="PreviousAppointmentDate" Type="DateTime" Precision="0" />
+          <Property Name="PreviousTerminateDate" Type="DateTime" Precision="0" />
+          <Property Name="RejoinDate" Type="DateTime" Precision="0" />
+          <Property Name="SalaryDetailsId" Type="Guid" />
+          <Property Name="BasicSalary" Type="Int32" />
+          <Property Name="DutyBouns" Type="Int32" />
+          <Property Name="WeaponAllowance" Type="Int32" />
+          <Property Name="AnnualLeaves" Type="Int32" />
+          <Property Name="Contract" Type="Int32" />
+          <Property Name="AppointmentDate" Type="DateTime" Precision="0" />
+          <Property Name="ResignationDate" Type="DateTime" Precision="0" />
+          <Property Name="TransferHistoryId" Type="Guid" />
+          <Property Name="OTSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTSubSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTDepartSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTJob" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTManager" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTCoach" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OTCenter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTSubSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTDepartSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTJob" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTManager" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTCoach" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NTCenter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RegionId" Type="Guid" />
+          <Property Name="RegionName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="RegionCode" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CenterId" Type="Guid" />
+          <Property Name="CenterName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="RegionHead" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="SupervisorName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="PostId" Type="Guid" />
+          <Property Name="PostName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SupervisorId" Type="Guid" />
+          <Property Name="ProfileStatus" Type="Byte" />
+          <Property Name="DesignationId" Type="Guid" />
+          <Property Name="DesignationTitle" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentId" Type="Guid" />
+          <Property Name="DepartmentName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
         <Association Name="FK__Employee__Depart__7E02B4CC">
           <End Type="SOSHRMSModel.Department" Role="Department" Multiplicity="0..1" />
           <End Type="SOSHRMSModel.Employee" Role="Employee" Multiplicity="*" />
@@ -1359,138 +1536,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Post__ProjectId__7B264821">
-          <End Type="SOSHRMSModel.Project" Role="Project" Multiplicity="0..1" />
-          <End Type="SOSHRMSModel.Post" Role="Post" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Project">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Post">
-              <PropertyRef Name="ProjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="HRM_Vew_Employee">
-          <Key>
-            <PropertyRef Name="EmployeeId" />
-            <PropertyRef Name="SegmentId" />
-            <PropertyRef Name="CreatedOn" />
-            <PropertyRef Name="CreatedBy" />
-            <PropertyRef Name="EmployeeType" />
-          </Key>
-          <Property Name="EmployeeId" Type="Guid" Nullable="false" />
-          <Property Name="SegmentId" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="CNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="FatherName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="FatherCNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="PermanentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CurrentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="ProfilePicture" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="MotherName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Education" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="BloodGroup" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="IdentificationMarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Height" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Weight" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="MaritalStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="NextToKIN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="WifeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="NoOfChilds" Type="Int32" />
-          <Property Name="NoOfBoys" Type="Int32" />
-          <Property Name="NoOfGirls" Type="Int32" />
-          <Property Name="Status" Type="Byte" />
-          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
-          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
-          <Property Name="UpdatedBy" Type="Guid" />
-          <Property Name="ArmyInformationId" Type="Guid" />
-          <Property Name="JoiningDate" Type="DateTime" Precision="0" />
-          <Property Name="UnitName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ForceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastUnit" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="LastCenter" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ServicePeriod" Type="Int32" />
-          <Property Name="RecordCenter" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="DischargeDate" Type="DateTime" Precision="0" />
-          <Property Name="Rank" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Trade" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ForceType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="PreviousForces" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="BankDetailsId" Type="Guid" />
-          <Property Name="BankName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="AccountTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="AccountNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="BranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AccountOwner" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="OpeningDate" Type="DateTime" Precision="3" />
-          <Property Name="EmergencyContactId" Type="Guid" />
-          <Property Name="EmergencyAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="EmergencyPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="EmergencyCell" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="FingerPrintId" Type="Guid" />
-          <Property Name="LeftThumb" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="LeftIndexFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="LeftMiddleFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="LeftRingFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="LeftBabyFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="RightThumb" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="RightIndexFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="RightMiddleFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="RightRingFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="RightBabyFinger" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="PoliticalInformationId" Type="Guid" />
-          <Property Name="PoliceStation" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="PostOffice" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="AreaNazimName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="WellKnownPerson" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="UCNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="NANumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PANumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="VoteNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="RejoinHistoryId" Type="Guid" />
-          <Property Name="PreviousAppointmentDate" Type="DateTime" Precision="0" />
-          <Property Name="PreviousTerminateDate" Type="DateTime" Precision="0" />
-          <Property Name="RejoinDate" Type="DateTime" Precision="0" />
-          <Property Name="SalaryDetailsId" Type="Guid" />
-          <Property Name="BasicSalary" Type="Int32" />
-          <Property Name="DutyBouns" Type="Int32" />
-          <Property Name="WeaponAllowance" Type="Int32" />
-          <Property Name="AnnualLeaves" Type="Int32" />
-          <Property Name="Contract" Type="Int32" />
-          <Property Name="AppointmentDate" Type="DateTime" Precision="0" />
-          <Property Name="ResignationDate" Type="DateTime" Precision="0" />
-          <Property Name="TransferHistoryId" Type="Guid" />
-          <Property Name="OTSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="OTSubSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="OTDepartSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="OTJob" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="OTManager" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="OTCoach" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="OTCenter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="NTSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="NTSubSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="NTDepartSegment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="NTJob" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="NTManager" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="NTCoach" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="NTCenter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="RegionId" Type="Guid" />
-          <Property Name="RegionName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="RegionCode" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="CenterId" Type="Guid" />
-          <Property Name="CenterName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="RegionHead" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="SupervisorName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="PostId" Type="Guid" />
-          <Property Name="PostName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="SupervisorId" Type="Guid" />
-          <Property Name="EmployeeType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1517,14 +1562,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             <EntityTypeMapping TypeName="SOSHRMSModel.City">
               <MappingFragment StoreEntitySet="City">
                 <ScalarProperty Name="RegionId" ColumnName="RegionId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Departments">
-            <EntityTypeMapping TypeName="SOSHRMSModel.Department">
-              <MappingFragment StoreEntitySet="Department">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -1622,47 +1659,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
                 <ScalarProperty Name="LeftThumb" ColumnName="LeftThumb" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
                 <ScalarProperty Name="FingerPrintId" ColumnName="FingerPrintId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Employees">
-            <EntityTypeMapping TypeName="SOSHRMSModel.Employee">
-              <MappingFragment StoreEntitySet="Employee">
-                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
-                <ScalarProperty Name="SupervisorId" ColumnName="SupervisorId" />
-                <ScalarProperty Name="PostId" ColumnName="PostId" />
-                <ScalarProperty Name="CenterId" ColumnName="CenterId" />
-                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="NoOfGirls" ColumnName="NoOfGirls" />
-                <ScalarProperty Name="NoOfBoys" ColumnName="NoOfBoys" />
-                <ScalarProperty Name="NoOfChilds" ColumnName="NoOfChilds" />
-                <ScalarProperty Name="WifeName" ColumnName="WifeName" />
-                <ScalarProperty Name="NextToKIN" ColumnName="NextToKIN" />
-                <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="Height" ColumnName="Height" />
-                <ScalarProperty Name="IdentificationMarks" ColumnName="IdentificationMarks" />
-                <ScalarProperty Name="BloodGroup" ColumnName="BloodGroup" />
-                <ScalarProperty Name="Education" ColumnName="Education" />
-                <ScalarProperty Name="MotherName" ColumnName="MotherName" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="ProfilePicture" ColumnName="ProfilePicture" />
-                <ScalarProperty Name="CurrentAddress" ColumnName="CurrentAddress" />
-                <ScalarProperty Name="PermanentAddress" ColumnName="PermanentAddress" />
-                <ScalarProperty Name="FatherCNIC" ColumnName="FatherCNIC" />
-                <ScalarProperty Name="FatherName" ColumnName="FatherName" />
-                <ScalarProperty Name="CNIC" ColumnName="CNIC" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="EmployeeType" ColumnName="EmployeeType" />
-                <ScalarProperty Name="SegmentId" ColumnName="SegmentId" />
-                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1836,10 +1832,78 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="SOSHRMSModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Designations">
+            <EntityTypeMapping TypeName="SOSHRMSModel.Designation">
+              <MappingFragment StoreEntitySet="Designation">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="SOSHRMSModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="DesignationId" ColumnName="DesignationId" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="SupervisorId" ColumnName="SupervisorId" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="CenterId" ColumnName="CenterId" />
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ProfileStatus" ColumnName="ProfileStatus" />
+                <ScalarProperty Name="NoOfGirls" ColumnName="NoOfGirls" />
+                <ScalarProperty Name="NoOfBoys" ColumnName="NoOfBoys" />
+                <ScalarProperty Name="NoOfChilds" ColumnName="NoOfChilds" />
+                <ScalarProperty Name="WifeName" ColumnName="WifeName" />
+                <ScalarProperty Name="NextToKIN" ColumnName="NextToKIN" />
+                <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="IdentificationMarks" ColumnName="IdentificationMarks" />
+                <ScalarProperty Name="BloodGroup" ColumnName="BloodGroup" />
+                <ScalarProperty Name="Education" ColumnName="Education" />
+                <ScalarProperty Name="MotherName" ColumnName="MotherName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ProfilePicture" ColumnName="ProfilePicture" />
+                <ScalarProperty Name="CurrentAddress" ColumnName="CurrentAddress" />
+                <ScalarProperty Name="PermanentAddress" ColumnName="PermanentAddress" />
+                <ScalarProperty Name="FatherCNIC" ColumnName="FatherCNIC" />
+                <ScalarProperty Name="FatherName" ColumnName="FatherName" />
+                <ScalarProperty Name="CNIC" ColumnName="CNIC" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EmployeeType" ColumnName="EmployeeType" />
+                <ScalarProperty Name="SegmentId" ColumnName="SegmentId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="HRM_Vew_Employee">
             <EntityTypeMapping TypeName="SOSHRMSModel.HRM_Vew_Employee">
               <MappingFragment StoreEntitySet="HRM_Vew_Employee">
-                <ScalarProperty Name="EmployeeType" ColumnName="EmployeeType" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="DesignationTitle" ColumnName="DesignationTitle" />
+                <ScalarProperty Name="DesignationId" ColumnName="DesignationId" />
+                <ScalarProperty Name="ProfileStatus" ColumnName="ProfileStatus" />
                 <ScalarProperty Name="SupervisorId" ColumnName="SupervisorId" />
                 <ScalarProperty Name="PostName" ColumnName="PostName" />
                 <ScalarProperty Name="PostId" ColumnName="PostId" />
@@ -1946,6 +2010,7 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
                 <ScalarProperty Name="FatherCNIC" ColumnName="FatherCNIC" />
                 <ScalarProperty Name="FatherName" ColumnName="FatherName" />
                 <ScalarProperty Name="CNIC" ColumnName="CNIC" />
+                <ScalarProperty Name="EmployeeType" ColumnName="EmployeeType" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="SegmentId" ColumnName="SegmentId" />

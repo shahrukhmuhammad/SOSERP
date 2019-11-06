@@ -31,7 +31,7 @@ namespace HRMS.Model
     
         public System.Guid EmployeeId { get; set; }
         public System.Guid SegmentId { get; set; }
-        public bool EmployeeType { get; set; }
+        public byte EmployeeType { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string CNIC { get; set; }
@@ -54,6 +54,7 @@ namespace HRMS.Model
         public Nullable<int> NoOfChilds { get; set; }
         public Nullable<int> NoOfBoys { get; set; }
         public Nullable<int> NoOfGirls { get; set; }
+        public Nullable<byte> ProfileStatus { get; set; }
         public Nullable<byte> Status { get; set; }
         public System.DateTime CreatedOn { get; set; }
         public System.Guid CreatedBy { get; set; }
@@ -64,6 +65,7 @@ namespace HRMS.Model
         public Nullable<System.Guid> PostId { get; set; }
         public Nullable<System.Guid> SupervisorId { get; set; }
         public Nullable<System.Guid> DepartmentId { get; set; }
+        public Nullable<System.Guid> DesignationId { get; set; }
     
         public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

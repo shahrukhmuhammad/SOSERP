@@ -245,7 +245,7 @@ namespace WebApp.Areas.Ecommerce.Controllers
                     
                     #endregion
 
-                    //realtime.UpdateEmployees("New Product created.");
+                    realtime.UpdateEmployees("New Product created.");
 
                     TempData["SuccessMsg"] = "New employee has been created successfully. An email has also been sent to the application user's email address.";
                 }

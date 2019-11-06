@@ -3,15 +3,78 @@
 @{
 
     var queryId = ViewContext.RouteData.Values["Id"];
+    var obj = Model as HRM_Vew_Employee;
     ViewBag.Title = (queryId == null ? "Add New Employee" : "Edit Employee");
-    //var dpSrc = (queryId == null ? "../../Content/Images/base-user.jpg" : "../../../Content/Uploads/HRMS/Dp/" + Model.EmployeeId + ".jpg");
+    var dpSrc = (queryId == null ? "../../Content/Images/base-user.jpg" : "../../../Content/Uploads/HRMS/Dp/" + Model.EmployeeId + ".jpg");
+    var ref1Src = ""; //(queryId == null ? "../../Content/Images/base-user.jpg" : "../../../Content/Uploads/HRMS/Dp/ref1-" + Model.EmployeeId + ".jpg");
+    var ref2Src = ""; //(queryId == null ? "../../Content/Images/base-user.jpg" : "../../../Content/Uploads/HRMS/Dp/ref2-" + Model.EmployeeId + ".jpg");
+
+    var docSrc = (queryId == null ? "../../Content//ext/folder.png" : "");
+
     var references = ViewBag.References as List<EmpReference>;
+
+
+    #region MyRegion
+    if (queryId != null)
+    {
+        var profileImg = $"~/{HRMContants.DP_PATH}{queryId}.jpg";
+        //var absolutePath = HttpContext.Current.Server.MapPath(profileImg);
+        //if (System.IO.File.Exists(absolutePath))
+        //{
+
+        //}
+        //else
+        //{
+
+        //}
+    }
+
+    #endregion
+
+
+    //EmpReference[] refArray;
+    //if (references != null && references.Count > 0)
+    //{
+    //    refArray = references.ToArray();
+    //}
+
+    #region FingerPrint Section
+    //string fingerPrintSrc = "../../Content/Images/came.png";
+
+    string leftThumbSrc = "";
+    string leftIndexFingerSrc = "";
+    string leftMiddleFingerSrc = "";
+    string leftRingFinger = "";
+    string leftBabyFinger = "";
+
+    string rightThumbSrc = "";
+    string rightIndexFinger = "";
+    string rightMiddleFinger = "";
+    string rightRingFinger = "";
+    string rightBabyFinger = "";
+
+    //string leftThumbSrc = ((queryId == null) ? "../../Content/Images/came.png" : "../../../Content/Uploads/HRMS/FingerPrints/" + Model.EmployeeId + "_LeftThumb.jpg");
+    //string leftIndexFingerSrc = (queryId == null ? "../../Content/Images/came.png" : "../../../Content/Uploads/HRMS/FingerPrints/" + Model.EmployeeId + "_LeftIndexFinger.jpg");
+    //string leftMiddleFingerSrc = (queryId == null ? "../../Content/Images/came.png" : "../../../Content/Uploads/HRMS/FingerPrints/" + Model.EmployeeId + "_LeftMiddleFinger.jpg");
+    //string leftRingFinger = (queryId == null ? "../../Content/Images/came.png" : "../../../Content/Uploads/HRMS/FingerPrints/" + Model.EmployeeId + "_LeftRingFinger.jpg");
+    //string leftBabyFinger = (queryId == null ? "../../Content/Images/came.png" : "../../../Content/Uploads/HRMS/FingerPrints/" + Model.EmployeeId + "_LeftBabyFinger.jpg");
+
+    //string rightThumbSrc = (queryId == null ? "../../Content/Images/came.png" : "../../../Content/Uploads/HRMS/FingerPrints/" + Model.EmployeeId + "_RightThumb.jpg");
+    //string rightIndexFinger = (queryId == null ? "../../Content/Images/came.png" : "../../../Content/Uploads/HRMS/FingerPrints/" + Model.EmployeeId + "_RightIndexFinger.jpg");
+    //string rightMiddleFinger = (queryId == null ? "../../Content/Images/came.png" : "../../../Content/Uploads/HRMS/FingerPrints/" + Model.EmployeeId + "_RightMiddleFinger.jpg");
+    //string rightRingFinger = (queryId == null ? "../../Content/Images/came.png" : "../../../Content/Uploads/HRMS/FingerPrints/" + Model.EmployeeId + "_RightRingFinger.jpg");
+    //string rightBabyFinger = (queryId == null ? "../../Content/Images/came.png" : "../../../Content/Uploads/HRMS/FingerPrints/" + Model.EmployeeId + "_RightBabyFinger.jpg");
+
+    #endregion
+
+    //src="/content/ext/folder.png"
 }
 <link href="~/Scripts/select2/select2.min.css" rel="stylesheet" />
 
 <form id="lead-frm" class="user-Profile" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
-    @*
+    @*<input type="hidden" id="EmployeeId" name="EmployeeId" value="@Model.EmployeeId" />
+        <input type="hidden" id="Code" name="Code" value="@Model.EmployeeId" />
         <input type="hidden" id="Type" name="Type" value="@(Request["t"] != null ? Convert.ToInt32(Request["t"]) : (int)Model.Type)" />
     *@
 
@@ -541,6 +604,11 @@
             <div id="document" class="tab-pane fade in">
                 <h4>Documents</h4>
                 <div class="row">
+                    @*<div class="col-sm-4">
+                            <div class="img-container">
+                                <img id="img-Preview" src="@docSrc" class="img-responsive img-centre" onerror="this.onerror = null; this.src = '/content/ext/folder.png';" />
+                            </div>
+                        </div>*@
                     <div class="col-sm-5">
                         <div class="row form-group">
                             <label class="col-sm-4 horizontal-label">Discharge Book <span class="req">*</span></label>
@@ -713,7 +781,7 @@
                                             <label class="col-sm-4 horizontal-label">&nbsp;</label>
                                             <div class="col-sm-8">
                                                 <div class="img-container">
-                                                    <img id="reference1-img" src="/Content/Images/base-user.jpg" class="img-responsive img-centre img-cirlce" />
+                                                    <img id="reference1-img" src="../../Content/Images/base-user.jpg" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
                                                     <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference1Photo" onchange="previewImage(this,'#reference1-img')" accept="image/x-png,image/jpg,image/jpeg" />
                                                     <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
                                                 </div>
@@ -797,7 +865,7 @@
                                             <label class="col-sm-4 horizontal-label">&nbsp;</label>
                                             <div class="col-sm-8">
                                                 <div class="img-container">
-                                                    <img id="reference2-img" src="/Content/Images/base-user.jpg" class="img-responsive img-centre img-cirlce" />
+                                                    <img id="reference2-img" src="../../Content/Images/base-user.jpg" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
                                                     <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference2Photo" onchange="previewImage(this,'#reference2-img')" accept="image/x-png,image/jpg,image/jpeg" />
                                                     <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
                                                 </div>
@@ -890,17 +958,7 @@
                                             <label class="col-sm-4 horizontal-label">&nbsp;</label>
                                             <div class="col-sm-8">
                                                 <div class="img-container">
-                                                    @{
-                                                        if (queryId != null && Utils.IsFileExist($"~/{HRMContants.DP_PATH}ref1-{queryId}.jpg"))
-                                                        {
-                                                            <img id="reference1-img" src="@($"/{HRMContants.DP_PATH}ref1-{queryId}.jpg")" class="img-responsive img-centre img-cirlce" />
-                                                        }
-                                                        else
-                                                        {
-                                                            <img id="reference1-img" src="/Content/Images/base-user.jpg" class="img-responsive img-centre img-cirlce" />
-                                                        }
-                                                    }
-                                                    @*<img id="reference1-img" src="@ref1Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />*@
+                                                    <img id="reference1-img" src="@ref1Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
                                                     <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference1Photo" onchange="previewImage(this,'#reference1-img')" accept="image/x-png,image/jpg,image/jpeg" />
                                                     <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
                                                 </div>
@@ -984,16 +1042,7 @@
                                             <label class="col-sm-4 horizontal-label">&nbsp;</label>
                                             <div class="col-sm-8">
                                                 <div class="img-container">
-                                                    @{
-                                                        if (queryId != null && Utils.IsFileExist($"~/{HRMContants.DP_PATH}ref2-{queryId}.jpg"))
-                                                        {
-                                                            <img id="reference2-img" src="@($"/{HRMContants.DP_PATH}ref2-{queryId}.jpg")" class="img-responsive img-centre img-cirlce" />
-                                                        }
-                                                        else
-                                                        {
-                                                            <img id="reference2-img" src="/Content/Images/base-user.jpg" class="img-responsive img-centre img-cirlce" />
-                                                        }
-                                                    }
+                                                    <img id="reference2-img" src="@ref2Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
                                                     <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference2Photo" onchange="previewImage(this,'#reference2-img')" accept="image/x-png,image/jpg,image/jpeg" />
                                                     <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
                                                 </div>
@@ -1080,17 +1129,7 @@
                                             <label class="col-sm-4 horizontal-label">&nbsp;</label>
                                             <div class="col-sm-8">
                                                 <div class="img-container">
-                                                    @{
-                                                        if (queryId != null && Utils.IsFileExist($"~/{HRMContants.DP_PATH}ref1-{queryId}.jpg"))
-                                                        {
-                                                            <img id="reference1-img" src="@($"/{HRMContants.DP_PATH}ref1-{queryId}.jpg")" class="img-responsive img-centre img-cirlce" />
-                                                        }
-                                                        else
-                                                        {
-                                                            <img id="reference1-img" src="/Content/Images/base-user.jpg" class="img-responsive img-centre img-cirlce" />
-                                                        }
-                                                    }
-
+                                                    <img id="reference1-img" src="@ref1Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
                                                     <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference1Photo" onchange="previewImage(this,'#reference1-img')" accept="image/x-png,image/jpg,image/jpeg" />
                                                     <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
                                                 </div>
@@ -1172,16 +1211,7 @@
                                             <label class="col-sm-4 horizontal-label">&nbsp;</label>
                                             <div class="col-sm-8">
                                                 <div class="img-container">
-                                                    @{
-                                                        if (queryId != null && Utils.IsFileExist($"~/{HRMContants.DP_PATH}ref2-{queryId}.jpg"))
-                                                        {
-                                                            <img id="reference2-img" src="@($"/{HRMContants.DP_PATH}ref2-{queryId}.jpg")" class="img-responsive img-centre img-cirlce" />
-                                                        }
-                                                        else
-                                                        {
-                                                            <img id="reference2-img" src="/Content/Images/base-user.jpg" class="img-responsive img-centre img-cirlce" />
-                                                        }
-                                                    }
+                                                    <img id="reference2-img" src="@ref2Src" class="img-responsive img-centre img-cirlce" onerror="this.onerror = null; this.src = '/Content/Images/base-user.jpg';" />
                                                     <input type="file" class="form-control input-sm file-select" id="ReferencePhoto" name="Reference2Photo" onchange="previewImage(this,'#reference2-img')" accept="image/x-png,image/jpg,image/jpeg" />
                                                     <a class="btn btn-default btn-xs img-centre" href="javascript://"><i class="fa fa-check"></i> Click here to select image</a>
                                                 </div>
@@ -1397,8 +1427,8 @@
                         <div class="row form-group">
                             <label class="col-sm-4 horizontal-label">Left Thumb</label>
                             <div class="col-sm-4">
-                                <div class="img-container">                                    
-                                    <img id="img-LeftThumb" src="@((queryId != null && Utils.IsFileExist($"~/{HRMContants.FINGER_PRINTS_PATH}{queryId}_LeftThumb.jpg")) ? $"/{HRMContants.FINGER_PRINTS_PATH}{queryId}_LeftThumb.jpg" : "../../../Content/Images/came.png")" class="img-responsive img-centre fingerPrintImg" />
+                                <div class="img-container">
+                                    <img id="img-LeftThumb" src="@leftThumbSrc" class="img-responsive img-centre fingerPrintImg" onerror="this.onerror = null; this.src = '/Content/Images/came.png';" />
                                     <input type="file" class="form-control input-sm file-select" id="LeftThumb" name="LeftThumb" onchange="previewImage(this,'#img-LeftThumb')" accept="image/x-png,image/jpg,image/jpeg" />
                                 </div>
                             </div>
@@ -1408,7 +1438,7 @@
                             <label class="col-sm-4 horizontal-label">Left Index Finger</label>
                             <div class="col-sm-4">
                                 <div class="img-container">
-                                    <img id="img-LeftIndexFinger" src="@((queryId != null && Utils.IsFileExist($"~/{HRMContants.FINGER_PRINTS_PATH}{queryId}_LeftIndexFinger.jpg")) ? $"/{HRMContants.FINGER_PRINTS_PATH}{queryId}_LeftIndexFinger.jpg" : "../../../Content/Images/came.png")" class="img-responsive img-centre fingerPrintImg" />
+                                    <img id="img-LeftIndexFinger" src="@leftIndexFingerSrc" class="img-responsive img-centre fingerPrintImg" onerror="this.onerror = null; this.src = '/Content/Images/came.png';" />
                                     <input type="file" class="form-control input-sm file-select" id="LeftIndexFinger" name="LeftIndexFinger" onchange="previewImage(this,'#img-LeftIndexFinger')" accept="image/x-png,image/jpg,image/jpeg" />
                                 </div>
                             </div>
@@ -1417,8 +1447,8 @@
                         <div class="row form-group">
                             <label class="col-sm-4 horizontal-label">Left Middle Finger</label>
                             <div class="col-sm-4">
-                                <div class="img-container">                                    
-                                    <img id="img-LeftMiddleFinger" src="@((queryId != null && Utils.IsFileExist($"~/{HRMContants.FINGER_PRINTS_PATH}{queryId}_LeftMiddleFinger.jpg")) ? $"/{HRMContants.FINGER_PRINTS_PATH}{queryId}_LeftMiddleFinger.jpg" : "../../../Content/Images/came.png")" class="img-responsive img-centre fingerPrintImg" />
+                                <div class="img-container">
+                                    <img id="img-LeftMiddleFinger" src="@leftMiddleFingerSrc" class="img-responsive img-centre fingerPrintImg" onerror="this.onerror = null; this.src = '/Content/Images/came.png';" />
                                     <input type="file" class="form-control input-sm file-select" id="LeftMiddleFinger" name="LeftMiddleFinger" onchange="previewImage(this,'#img-LeftMiddleFinger')" accept="image/x-png,image/jpg,image/jpeg" />
                                 </div>
                             </div>
@@ -1428,7 +1458,7 @@
                             <label class="col-sm-4 horizontal-label">Left Ring Finger</label>
                             <div class="col-sm-4">
                                 <div class="img-container">
-                                    <img id="img-LeftRingFinger" src="@((queryId != null && Utils.IsFileExist($"~/{HRMContants.FINGER_PRINTS_PATH}{queryId}_LeftRingFinger.jpg")) ? $"/{HRMContants.FINGER_PRINTS_PATH}{queryId}_LeftRingFinger.jpg" : "../../../Content/Images/came.png")" class="img-responsive img-centre fingerPrintImg" />
+                                    <img id="img-LeftRingFinger" src="@leftRingFinger" class="img-responsive img-centre fingerPrintImg" onerror="this.onerror = null; this.src = '/Content/Images/came.png';" />
                                     <input type="file" class="form-control input-sm file-select" id="LeftRingFinger" name="LeftRingFinger" onchange="previewImage(this,'#img-LeftRingFinger')" accept="image/x-png,image/jpg,image/jpeg" />
                                 </div>
                             </div>
@@ -1438,7 +1468,7 @@
                             <label class="col-sm-4 horizontal-label">Left Baby Finger</label>
                             <div class="col-sm-4">
                                 <div class="img-container">
-                                    <img id="img-LeftBabyFinger" src="@((queryId != null && Utils.IsFileExist($"~/{HRMContants.FINGER_PRINTS_PATH}{queryId}_LeftBabyFinger.jpg")) ? $"/{HRMContants.FINGER_PRINTS_PATH}{queryId}_LeftBabyFinger.jpg" : "../../../Content/Images/came.png")" class="img-responsive img-centre fingerPrintImg" />
+                                    <img id="img-LeftBabyFinger" src="@leftBabyFinger" class="img-responsive img-centre fingerPrintImg" onerror="this.onerror = null; this.src = '/Content/Images/came.png';" />
                                     <input type="file" class="form-control input-sm file-select" id="LeftBabyFinger" name="LeftBabyFinger" onchange="previewImage(this,'#img-LeftBabyFinger')" accept="image/x-png,image/jpg,image/jpeg" />
                                 </div>
                             </div>
@@ -1451,7 +1481,7 @@
                             <label class="col-sm-4 horizontal-label">Right Thumb</label>
                             <div class="col-sm-4">
                                 <div class="img-container">
-                                    <img id="img-RightThumb" src="@((queryId != null && Utils.IsFileExist($"~/{HRMContants.FINGER_PRINTS_PATH}{queryId}_RightThumb.jpg")) ? $"/{HRMContants.FINGER_PRINTS_PATH}{queryId}_RightThumb.jpg" : "../../../Content/Images/came.png")" class="img-responsive img-centre fingerPrintImg" />
+                                    <img id="img-RightThumb" src="@rightThumbSrc" class="img-responsive img-centre fingerPrintImg" onerror="this.onerror = null; this.src = '/Content/Images/came.png';" />
                                     <input type="file" class="form-control input-sm file-select" id="RightThumb" name="RightThumb" onchange="previewImage(this,'#img-RightThumb')" accept="image/x-png,image/jpg,image/jpeg" />
                                 </div>
                             </div>
@@ -1461,7 +1491,7 @@
                             <label class="col-sm-4 horizontal-label">Right Index Finger</label>
                             <div class="col-sm-4">
                                 <div class="img-container">
-                                    <img id="img-RightIndexFinger" src="@((queryId != null && Utils.IsFileExist($"~/{HRMContants.FINGER_PRINTS_PATH}{queryId}_RightIndexFinger.jpg")) ? $"/{HRMContants.FINGER_PRINTS_PATH}{queryId}_RightIndexFinger.jpg" : "../../../Content/Images/came.png")" class="img-responsive img-centre fingerPrintImg" />
+                                    <img id="img-RightIndexFinger" src="@rightIndexFinger" class="img-responsive img-centre fingerPrintImg" onerror="this.onerror = null; this.src = '/Content/Images/came.png';" />
                                     <input type="file" class="form-control input-sm file-select" id="RightIndexFinger" name="RightIndexFinger" onchange="previewImage(this,'#img-RightIndexFinger')" accept="image/x-png,image/jpg,image/jpeg" />
                                 </div>
                             </div>
@@ -1470,7 +1500,7 @@
                             <label class="col-sm-4 horizontal-label">Right Middle Finger</label>
                             <div class="col-sm-4">
                                 <div class="img-container">
-                                    <img id="img-RightMiddleFinger" src="@((queryId != null && Utils.IsFileExist($"~/{HRMContants.FINGER_PRINTS_PATH}{queryId}_RightMiddleFinger.jpg")) ? $"/{HRMContants.FINGER_PRINTS_PATH}{queryId}_RightMiddleFinger.jpg" : "../../../Content/Images/came.png")" class="img-responsive img-centre fingerPrintImg" />
+                                    <img id="img-RightMiddleFinger" src="@rightMiddleFinger" class="img-responsive img-centre fingerPrintImg" onerror="this.onerror = null; this.src = '/Content/Images/came.png';" />
                                     <input type="file" class="form-control input-sm file-select" id="RightMiddleFinger" name="RightMiddleFinger" onchange="previewImage(this,'#img-RightMiddleFinger')" accept="image/x-png,image/jpg,image/jpeg" />
                                 </div>
                             </div>
@@ -1479,7 +1509,7 @@
                             <label class="col-sm-4 horizontal-label">Right Ring Finger</label>
                             <div class="col-sm-4">
                                 <div class="img-container">
-                                    <img id="img-RightRingFinger" src="@((queryId != null && Utils.IsFileExist($"~/{HRMContants.FINGER_PRINTS_PATH}{queryId}_RightRingFinger.jpg")) ? $"/{HRMContants.FINGER_PRINTS_PATH}{queryId}_RightRingFinger.jpg" : "../../../Content/Images/came.png")" class="img-responsive img-centre fingerPrintImg" />
+                                    <img id="img-RightRingFinger" src="@rightRingFinger" class="img-responsive img-centre fingerPrintImg" onerror="this.onerror = null; this.src = '/Content/Images/came.png';" />
                                     <input type="file" class="form-control input-sm file-select" id="RightRingFinger" name="RightRingFinger" onchange="previewImage(this,'#img-RightRingFinger')" accept="image/x-png,image/jpg,image/jpeg" />
                                 </div>
                             </div>
@@ -1488,7 +1518,7 @@
                             <label class="col-sm-4 horizontal-label">Right Baby Finger</label>
                             <div class="col-sm-4">
                                 <div class="img-container">
-                                    <img id="img-RightBabyFinger" src="@((queryId != null && Utils.IsFileExist($"~/{HRMContants.FINGER_PRINTS_PATH}{queryId}_RightBabyFinger.jpg")) ? $"/{HRMContants.FINGER_PRINTS_PATH}{queryId}_RightBabyFinger.jpg" : "../../../Content/Images/came.png")" class="img-responsive img-centre fingerPrintImg" />                                  
+                                    <img id="img-RightBabyFinger" src="@rightBabyFinger" class="img-responsive img-centre fingerPrintImg" onerror="this.onerror = null; this.src = '/Content/Images/came.png';" />
                                     <input type="file" class="form-control input-sm file-select" id="RightBabyFinger" name="RightBabyFinger" onchange="previewImage(this,'#img-RightBabyFinger')" accept="image/x-png,image/jpg,image/jpeg" />
                                 </div>
                             </div>
@@ -1828,7 +1858,7 @@
                 $('#RegionId').val('@Model.RegionId').trigger('change');
             }
 
-            //-- Only Mode Trigger -// 
+            //-- Only Mode Trigger -//
             if ('@ViewData["IsView"]' != '') {
                 var $S1 = $("select[class=select2]");
                 $S1.attr("readonly", "readonly");
@@ -1839,7 +1869,7 @@
                 $("#txtIsActive").attr("disabled", true);
                 $("#submit").hide();
             }
-            
+
         });
 
         $(function () {
@@ -1881,3 +1911,4 @@
         border: none !important;
     }
 </style>
+

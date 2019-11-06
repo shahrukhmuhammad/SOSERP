@@ -1595,7 +1595,7 @@ ul.stage-Nav {
 
     .user-Profile .progress {
         height:40px;
-        border-radius: 30px;
+        border-radius: 5px;
     }
     .user-Profile .progress .progress-bar {
         text-decoration:none;
@@ -2297,6 +2297,10 @@ body {
 
 .select2 {
     width: 100% !important;
+}
+
+.progress {
+    margin-bottom: 10px !important;
 }
 /*------------------#endregion HRMS*/
 

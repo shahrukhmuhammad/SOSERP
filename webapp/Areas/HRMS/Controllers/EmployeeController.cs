@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebApp.Areas.HRM;
 
 namespace WebApp.Areas.HRMS.Controllers
 {
@@ -17,12 +18,18 @@ namespace WebApp.Areas.HRMS.Controllers
         private EmployeeEntity employeeRepo;
         private RegionEntity regionRepo;
         private CenterEntity centerRepo;
+        private PostEntity postRepo;
+        private DepartmentEntity departRepo;
+        private DesignationEntity designationRepo;
 
         public EmployeeController()
         {
             employeeRepo = new EmployeeEntity();
             regionRepo = new RegionEntity();
             centerRepo = new CenterEntity();
+            postRepo = new PostEntity();
+            departRepo = new DepartmentEntity();
+            designationRepo = new DesignationEntity();
         }
         public ActionResult Employees()
         {
@@ -34,6 +41,20 @@ namespace WebApp.Areas.HRMS.Controllers
             return PartialView(model);
         }
 
+        #region Employee Details
+        //[Route("HRMS/Employee/Record/{Id}/{IsView}")]
+        public ActionResult Details(Guid Id)
+        {
+            var model = new HRM_Vew_Employee();
+            model = employeeRepo.GetUserById(Id);
+            //ViewBag.References = employeeRepo.GetReferencesByEmpId(Id);
+            //ViewBag.RegionList = new SelectList(regionRepo.GetAllRegionsDropdown(), "Value", "Text");
+            //ViewBag.PostList = new SelectList(postRepo.GetPostsDropdown(), "Value", "Text");
+            //ViewBag.EmployeeList = new SelectList(employeeRepo.GetEmployeeDropdown(), "Value", "Text");
+            //ViewBag.DeparmentList = new SelectList(departRepo.GetDepartmentDropdown(), "Value", "Text");
+            return View(model);
+        }
+        #endregion
         #region Employee Record
         public ActionResult Record(Guid? Id)
         {
@@ -48,8 +69,9 @@ namespace WebApp.Areas.HRMS.Controllers
                 model.Code = employeeRepo.GetNextEmployeeCode();
             }
             ViewBag.RegionList = new SelectList(regionRepo.GetAllRegionsDropdown(), "Value", "Text");
-            //ViewBag.RegionList = new SelectList(regionRepo.GetAllRegionsDropdown(), "Value", "Text");
-            //ViewBag.RegionList = new SelectList(regionRepo.GetAllRegionsDropdown(), "Value", "Text");
+            ViewBag.PostList = new SelectList(postRepo.GetPostsDropdown(), "Value", "Text");
+            ViewBag.EmployeeList = new SelectList(employeeRepo.GetEmployeeDropdown(), "Value", "Text");
+            ViewBag.DeparmentList = new SelectList(departRepo.GetDepartmentDropdown(), "Value", "Text");
 
             //ViewBag.CenterList = new SelectList(centerRepo.GetCentersDropdown(), "Value", "Text");
             return View(model);
@@ -69,7 +91,8 @@ namespace WebApp.Areas.HRMS.Controllers
                 {
                     model.CreatedBy = CurrentUser.Id;
                     model.CreatedOn = DateTime.Now;
-                    model.Status = Convert.ToByte(AppUserStatus.UnVerified);
+                    model.ProfileStatus = Convert.ToByte(ProfileStatus.Draft);
+                    model.Status = Convert.ToByte(EmployeeStatus.Active);
                     var res = employeeRepo.Create(model);
                     if (res.HasValue)
                     {
@@ -120,6 +143,7 @@ namespace WebApp.Areas.HRMS.Controllers
                 }
                 else
                 {
+                    //Utils.IsFileExist("");
                     model.UpdatedBy = CurrentUser.Id;
                     model.UpdatedOn = DateTime.Now;
                     bool res = employeeRepo.Update(model);
@@ -154,7 +178,7 @@ namespace WebApp.Areas.HRMS.Controllers
 
                 }
                 #region Profile Image Upload
-                var dpPath = Server.MapPath("~/Content/Uploads/HRMS/Dp/");
+                var dpPath = Server.MapPath($"~/{HRMContants.DP_PATH}");
                 if (files.ProfilePhoto.HasValue())
                 {
                     files.ProfilePhoto.SaveAs(dpPath + model.EmployeeId + ".jpg");
@@ -169,7 +193,7 @@ namespace WebApp.Areas.HRMS.Controllers
                 }
                 #endregion
                 #region Finger Print Upload
-                var fingerDir = Server.MapPath("~/Content/Uploads/HRMS/FingerPrints/");
+                var fingerDir = Server.MapPath($"~/{HRMContants.FINGER_PRINTS_PATH}");
                 if (files.LeftThumb.HasValue())
                 {
                     files.LeftThumb.SaveAs($"{fingerDir}{model.EmployeeId}_LeftThumb.jpg");
@@ -417,8 +441,12 @@ namespace WebApp.Areas.HRMS.Controllers
         [HttpPost]
         public JsonResult GetCentersByRegionId(Guid Id)
         {
-            //new SelectList(centerRepo.GetCentersDropdown(), "Id", "Title");
             return Json(centerRepo.GetCentersDropdown(Id));
+        }
+        [HttpPost]
+        public JsonResult GetDesignationsByDepartId(Guid Id)
+        {
+            return Json(designationRepo.GetDesignationDropdown(Id));
         }
         #endregion
 

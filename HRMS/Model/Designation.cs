@@ -12,20 +12,12 @@ namespace HRMS.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class Department
+    public partial class Designation
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Department()
-        {
-            this.Employees = new HashSet<Employee>();
-        }
-    
         public System.Guid Id { get; set; }
+        public System.Guid DepartmentId { get; set; }
         public string Code { get; set; }
-        public string Name { get; set; }
+        public string Title { get; set; }
         public Nullable<bool> IsActive { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Employee> Employees { get; set; }
     }
 }

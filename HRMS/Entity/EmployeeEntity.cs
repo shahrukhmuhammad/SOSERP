@@ -50,6 +50,27 @@ namespace HRMS
                 throw ex;
             }
         }
+        public List<CustomSelectList> GetEmployeeDropdown(Guid? Id = null)
+        {
+            try
+            {
+                using (context = new SOSHRMSEntities())
+                {
+                    var ls = new List<Employee>();
+                    if (Id.HasValue)
+                    {
+                        ls = context.Employees.Where(x => x.PostId == Id).ToList();
+                        return ls.Select(x => new CustomSelectList { Value = x.EmployeeId.ToString(), Text = x.Name }).ToList();
+                    }
+                    ls = context.Employees.ToList();
+                    return ls.Select(x => new CustomSelectList { Value = x.EmployeeId.ToString(), Text = x.Code + " " + x.Name }).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         //public string GetNextEmployeeCode()
         //{
         //    try
@@ -724,6 +745,8 @@ namespace HRMS
 
     }
 
+    public enum ProfileStatus { Draft = 1, Done = 2, Review = 3, Completed = 4 }
+    public enum EmployeeStatus { Active = 1, Suspended = 2, Terminated = 3 }
     public enum Gender
     {
         Male = 1,

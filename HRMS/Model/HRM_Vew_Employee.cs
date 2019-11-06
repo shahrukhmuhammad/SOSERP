@@ -18,6 +18,7 @@ namespace HRMS.Model
         public System.Guid SegmentId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
+        public byte EmployeeType { get; set; }
         public string CNIC { get; set; }
         public string FatherName { get; set; }
         public string FatherCNIC { get; set; }
@@ -124,6 +125,10 @@ namespace HRMS.Model
         public Nullable<System.Guid> PostId { get; set; }
         public string PostName { get; set; }
         public Nullable<System.Guid> SupervisorId { get; set; }
-        public string EmployeeType { get; set; }
+        public Nullable<byte> ProfileStatus { get; set; }
+        public Nullable<System.Guid> DesignationId { get; set; }
+        public string DesignationTitle { get; set; }
+        public Nullable<System.Guid> DepartmentId { get; set; }
+        public string DepartmentName { get; set; }
     }
 }

@@ -59,6 +59,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\DesignationEntity.cs" />
+    <Compile Include="Entity\DepartmentEntity.cs" />
     <Compile Include="Entity\PostEntity.cs" />
     <Compile Include="Entity\Common.cs" />
     <Compile Include="Entity\CenterEntity.cs" />
@@ -73,6 +75,9 @@
       <DependentUpon>HRMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Department.cs">
+      <DependentUpon>HRMSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Designation.cs">
       <DependentUpon>HRMSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\EmpArmyInformation.cs">

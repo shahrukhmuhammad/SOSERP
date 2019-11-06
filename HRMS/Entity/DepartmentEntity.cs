@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace HRMS
 {
-    public class PostEntity
+    public class DepartmentEntity
     {
         private SOSHRMSEntities context;
 
 
-        public List<Post> GetAllPosts()
+        public List<Department> GetAllDepartments()
         {
             try
             {
                 using (context = new SOSHRMSEntities())
                 {
-                    return context.Posts.ToList();
+                    return context.Departments.ToList();
                 }
             }
             catch (Exception ex)
@@ -28,13 +28,13 @@ namespace HRMS
                 throw ex;
             }
         }
-        public List<Post> GetPostById(Guid Id)
+        public List<Department> GetDepartmentById(Guid Id)
         {
             try
             {
                 using (context = new SOSHRMSEntities())
                 {
-                    return context.Posts.Where(x=> x.PostId == Id).ToList();
+                    return context.Departments.Where(x=> x.Id == Id).ToList();
                 }
             }
             catch (Exception ex)
@@ -43,20 +43,20 @@ namespace HRMS
             }
         }
 
-        public List<CustomSelectList> GetPostsDropdown(Guid? Id = null)
+        public List<CustomSelectList> GetDepartmentDropdown(Guid? Id = null)
         {
             try
             {
                 using (context = new SOSHRMSEntities())
                 {
-                    var ls = new List<Post>();
+                    var ls = new List<Department>();
                     if (Id.HasValue)
                     {
-                        ls = context.Posts.Where(x => x.PostId == Id).ToList();
-                        return ls.Select(x => new CustomSelectList { Value = x.PostId.ToString(), Text = x.PostName }).ToList();
+                        ls = context.Departments.Where(x => x.Id == Id).ToList();
+                        return ls.Select(x => new CustomSelectList { Value = x.Id.ToString(), Text = x.Code + " - " + x.Name }).ToList();
                     }
-                    ls = context.Posts.ToList();
-                    return ls.Select(x => new CustomSelectList { Value = x.PostId.ToString(), Text = x.PostName }).ToList();
+                    ls = context.Departments.ToList();
+                    return ls.Select(x => new CustomSelectList { Value = x.Id.ToString(), Text = x.Code + " - " + x.Name }).ToList();
                 }
             }
             catch (Exception ex)
