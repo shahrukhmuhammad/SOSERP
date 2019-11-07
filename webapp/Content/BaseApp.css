@@ -2302,5 +2302,9 @@ body {
 .progress {
     margin-bottom: 10px !important;
 }
+
+.list-group-item {
+    font-weight:lighter;
+}
 /*------------------#endregion HRMS*/
 

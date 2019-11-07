@@ -12,48 +12,51 @@ using WebApp.Areas.HRM;
 
 namespace WebApp.Areas.HRMS.Controllers
 {
-    //[AppAuthorize(AppPermission.All, AppPermission.ViewHRMS, AppPermission.HRMS)]
+    [AppAuthorize(AppPermission.All, AppPermission.ViewHRMS, AppPermission.HRMS)]
     public class DepartmentController : AppController
     {
         private DepartmentEntity departRepo;
+        private Common commonRepo;
 
         public DepartmentController()
         {
             departRepo = new DepartmentEntity();
+            commonRepo = new Common();
         }
-        public ActionResult Deparments()
+        public ActionResult Departments()
         {
             return View();
         }
-        public PartialViewResult _AllDeparments()
+        public PartialViewResult _AllDepartments()
         {
             var model = departRepo.GetAllDepartments();
             return PartialView(model);
         }
 
         #region Details
-        public ActionResult Details(Guid Id)
+        [Route("HRMS/Department/Details/{Id}/{IsView}")]
+        public ActionResult Details(Guid Id, string IsView)
         {
-            var model = new HRM_Vew_Employee();
-            //model = employeeRepo.GetUserById(Id);
-            //ViewBag.References = employeeRepo.GetReferencesByEmpId(Id);
-            return View(model);
+            //var model = new Department();
+            //model = departRepo.GetDepartmentById(Id);
+            //return View(model);
+            TempData["IsView"] = IsView;
+            return RedirectToAction("Record", "Department", new { Id = Id});
         }
         #endregion
         #region Record
         public ActionResult Record(Guid? Id)
         {
-            var model = new HRM_Vew_Employee();
-            //if (Id.HasValue)
-            //{
-            //    model = employeeRepo.GetUserById(Id.Value);
-            //    ViewBag.References = employeeRepo.GetReferencesByEmpId(Id.Value);
-            //}
-            //else
-            //{
-            //    model.Code = employeeRepo.GetNextEmployeeCode();
-            //}
-            //ViewBag.RegionList = new SelectList(regionRepo.GetAllRegionsDropdown(), "Value", "Text");
+            ViewData["IsView"] = Convert.ToString(TempData["IsView"]);
+            var model = new Department();
+            if (Id.HasValue)
+            {
+                model = departRepo.GetDepartmentById(Id.Value);
+            }
+            else
+            {
+                model.Code = commonRepo.GetNextCode("Department");
+            }
 
             return View(model);
         }
@@ -64,21 +67,21 @@ namespace WebApp.Areas.HRMS.Controllers
             return View();
         }
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Record(HRM_Vew_Employee model, EmployeePostedFiles files, DocumentPostedFiles documentPostedFiles, List<EmpReference> Reference)
+        public ActionResult Record(Department model)
         {
             try
             {
-                if (model.EmployeeId.IsEmpty())
+                if (model.Id.IsEmpty())
                 {
                     model.CreatedBy = CurrentUser.Id;
                     model.CreatedOn = DateTime.Now;
-                    model.ProfileStatus = Convert.ToByte(ProfileStatus.Draft);
-                    model.Status = Convert.ToByte(EmployeeStatus.Active);
-                    //var res = employeeRepo.Create(model);
-                    //if (res.HasValue)
-                    //{
-                    //    model.EmployeeId = res.Value;
-                    //}
+                    //model.IsActive = true;
+                    model.Id = Guid.NewGuid();
+                    var res = departRepo.Create(model);
+                    if (res.HasValue)
+                    {
+                        model.Id = res.Value;
+                    }
 
                     #region Activity Log
                     //appLog.Create(CurrentUser.OfficeId, model.Id, CurrentUser.Id, AppLogType.Activity, "CRM - Lead", model.FullName + " lead created", "~/CRM/Contact/LeadRecord > HttpPost", "<table class='table table-hover table-striped table-condensed' style='margin-bottom:15px;'><tr><th class='text-center'>Description</th></tr><tr><td><strong>" + model.FullName + "</strong> lead created by <strong>" + CurrentUser.FullName + "</strong>.</td></tr></table>");
@@ -108,10 +111,9 @@ namespace WebApp.Areas.HRMS.Controllers
                 }
                 else
                 {
-                    //Utils.IsFileExist("");
                     model.UpdatedBy = CurrentUser.Id;
                     model.UpdatedOn = DateTime.Now;
-                    bool res = true; //employeeRepo.Update(model);
+                    bool res = departRepo.Update(model);
 
 
                     if (res)
@@ -142,7 +144,7 @@ namespace WebApp.Areas.HRMS.Controllers
             //}
             //else
             //{
-            return RedirectToAction("Employees");
+            return RedirectToAction("Departments");
         }
         #endregion
 
@@ -172,6 +174,65 @@ namespace WebApp.Areas.HRMS.Controllers
             return Json("");//designationRepo.GetDesignationDropdown(Id));
         }
         #endregion
+
+        #region Delete
+        [HttpPost]
+        public JsonResult Delete(Guid Id)
+        {
+            try
+            {
+                #region Activity Log
+                //appLog.Create(CurrentUser.OfficeId, Id, CurrentUser.Id, AppLogType.Activity, "CRM", "Contact Deleted", "~/CRM/Contact/Delete > HttpPost", "<table class='table table-hover table-striped table-condensed' style='margin-bottom:15px;'><tr><th class='text-center'>Description</th></tr><tr><td>Contact deleted by <strong>" + CurrentUser.FullName + "</strong>.</td></tr></table>");
+                #endregion
+                departRepo.Delete(Id);
+
+                TempData["SuccessMsg"] = "Department has been deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                #region Error Log
+                //appLog.Create(CurrentUser.OfficeId, null, CurrentUser.Id, AppLogType.Error, "CRM", ex.GetType().Name.ToSpacedTitleCase(), "~/CRM/Contact/Delete > HttpPost", "<table class='table table-hover table-striped'><tr><th class='text-right'>Source</th><td>" + ex.Source + "</td></tr><tr><th class='text-right'>URL</th><td>" + Request.Url.ToString() + "</td></tr><tr><th class='text-right'>Message</th><td>" + ex.Message + "</td></tr></table><table class='table table-hover table-striped table-condensed'><tr><th class='text-center'>Inner Exception</th></tr><tr><td>" + ex.InnerException + "</td></tr><tr><th class='text-center'>Stack Trace</th></tr><tr><td>" + ex.StackTrace.ToString() + "</td></tr></table>");
+                #endregion
+
+                TempData["ErrorMsg"] = "We have encountered an error while processing your request, Please see log for details.";
+            }
+            return Json(true);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteMultiple(string Ids)
+        {
+            try
+            {
+                var idsList = Ids.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (!string.IsNullOrEmpty(Ids))
+                {
+                    var lsIds = new List<Guid>();
+                    foreach (var x in idsList)
+                    {
+                        lsIds.Add(new Guid(x));
+                    }
+                    departRepo.DeleteMultiple(lsIds);
+                }
+
+                #region Activity Log
+                //appLog.Create(CurrentUser.OfficeId, null, CurrentUser.Id, AppLogType.Activity, "CRM", "Multiple Contacts Deleted", "~/CRM/Contact/DeleteMultiple > HttpPost", "<table class='table table-hover table-striped table-condensed' style='margin-bottom:15px;'><tr><th class='text-center'>Description</th></tr><tr><td>Multiple contacts deleted by <strong>" + CurrentUser.FullName + "</strong>.</td></tr></table>");
+                #endregion
+
+                TempData["SuccessMsg"] = "Selected department has been deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                #region Error Log
+                //appLog.Create(CurrentUser.OfficeId, null, CurrentUser.Id, AppLogType.Error, "CRM", ex.GetType().Name.ToSpacedTitleCase(), "~/CRM/Contact/DeleteMultiple > HttpPost", "<table class='table table-hover table-striped'><tr><th class='text-right'>Source</th><td>" + ex.Source + "</td></tr><tr><th class='text-right'>URL</th><td>" + Request.Url.ToString() + "</td></tr><tr><th class='text-right'>Message</th><td>" + ex.Message + "</td></tr></table><table class='table table-hover table-striped table-condensed'><tr><th class='text-center'>Inner Exception</th></tr><tr><td>" + ex.InnerException + "</td></tr><tr><th class='text-center'>Stack Trace</th></tr><tr><td>" + ex.StackTrace.ToString() + "</td></tr></table>");
+                #endregion
+
+                TempData["ErrorMsg"] = "We have encountered an error while processing your request, Please see log for details.";
+            }
+            return Json(true);
+        }
+        #endregion
+
 
     }
 }

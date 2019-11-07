@@ -137,12 +137,12 @@
                 <div class="panel panel-default">
                     <div class="panel-heading no-padding" role="tab" id="heading-employeeConfigurations">
                         <h4 class="panel-title">
-                            <a class="list-group-item  @SetActiveController("Region")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-employeeConfigurations" aria-expanded="false" aria-controls="collapse-employeeConfigurations">
+                            <a class="list-group-item @SetActiveController("Region") @SetActiveController("Department")" role="button" data-toggle="collapse" data-parent="#sideBar-accordion" href="#collapse-employeeConfigurations" aria-expanded="false" aria-controls="collapse-employeeConfigurations">
                                 <i class="fa fa-gears clr-blue"></i> Configurations <span class="badge"><i class="fa fa-angle-down"></i></span>
                             </a>
                         </h4>
                     </div>
-                    <div id="collapse-employeeConfigurations" class="panel-collapse collapse @SetActiveController("Region")" role="tabpanel" aria-labelledby="heading-employeeConfigurations">
+                    <div id="collapse-employeeConfigurations" class="panel-collapse collapse @SetActiveController("Department") @SetActiveController("Region")" role="tabpanel" aria-labelledby="heading-employeeConfigurations">
                         <div class="list-group">
                             <a class="list-group-item @SetActiveController("Department")" href="@Url.Action("Departments","Department")"><i class="fa fa-building clr-blue"></i> Department</a>
                             <a class="list-group-item @SetActiveController("Designation")" href="@Url.Action("Designations","Designation")"><i class="fa fa-angle-up clr-blue"></i> Designation</a>

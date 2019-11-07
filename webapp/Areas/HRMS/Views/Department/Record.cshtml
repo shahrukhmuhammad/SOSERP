@@ -1,0 +1,107 @@
+﻿@model Department
+@{
+    var queryId = ViewContext.RouteData.Values["Id"];
+    ViewBag.Title = (queryId == null ? "Add New Department" : "Edit Department");
+}
+
+<form id="lead-frm" class="user-Profile" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.Code)
+
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            <div class="btn-group" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                <button type="submit" id="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row tb-padding" style="margin-top:15px;">
+        <div class="col-sm-8 col-sm-offset-2">
+            @*<div class="progress">
+                    <div class="dropdown">
+                        <a href="javascript://" class="progress-bar progress-bar-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 25%; position:relative;">
+                            <img src="~/Content/Images/tick.png" style="position: absolute; height: 25px;left: 10px;top: 5px;" /> Draft
+                        </a>
+                    </div>
+                    <div class="dropdown">
+                        <a href="javascript://" class="progress-bar dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 25%; position:relative;">Done</a>
+                    </div>
+
+                    <div class="dropdown">
+                        <a href="javascript://" class="progress-bar dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 25%; position:relative;"> Review</a>
+                        <ul class="dropdown-menu" style="top:-50px; width:auto;">
+                            <li><a href="javascript://"><img src="~/Content/Images/tick.png" style="height: 15px;" />  Reviewed On: @DateTime.UtcNow by Super Admin</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <a href="javascript://" class="progress-bar dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 25%; position:relative;">Completed</a>
+                        <ul class="dropdown-menu" style="top:-50px; width:auto;">
+                            <li><a href="javascript://"><img src="~/Content/Images/tick.png" style="height: 10px;" />  Completed On: @DateTime.UtcNow by Super Admin</a></li>
+                        </ul>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-9 bordered-section">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="row form-group">
+                        <label class="col-sm-8 horizontal-label">Department Code: </label>
+                        <div class="col-sm-4" style="margin-top: 5px !important;">
+                            @Model.Code
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row form-group">
+                        <label class="col-sm-4 horizontal-label">Name</label>
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(x => x.Name, new { @class = "form-control input-sm", @placeholder = "Name", @required = "required", @autofocus = "true", @autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="row form-group">
+                        <div class="checkbox">
+                            <label>
+                                @*<input type="checkbox" name="SubscribedForUpdates" value="@(Model.SubscribedForUpdates ? "true" : "false")" @(Model.SubscribedForUpdates ? "checked" : "") /> Subscribe for Updates*@
+                                @Html.CheckBoxFor(x => x.IsActive) <span> Active</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            <div class="btn-group" role="group">
+                <a href="javascript://" onclick="window.history.back()" class="btn btn-default"><i class="fa fa-close"></i> Cancel / Back</a>
+                <button type="submit" id="submit" class="btn btn-success"><i class="fa fa-check"></i> Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+        @*$(document).ready(function () {
+            //-- Read Only Mode Trigger -//
+            if ('@ViewData["IsView"]' != '') {
+                $("input").attr("readonly", true);
+                $("#IsActive").attr("disabled", true);
+                $("#submit").hide();
+            }
+        });*@
+    </script>
+}
