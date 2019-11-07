@@ -6,32 +6,6 @@
     }
 </style>
 
-@*<div class="text-center">
-        <div class="btn-group btn-group-justified" role="group">
-            <div class="btn-group" role="group">
-                <button class="btn btn-primary" type="button" onclick="$(this).parent().parent().find('.btn-primary').removeClass('btn-primary').addClass('btn-default'); $(this).removeClass('btn-default').addClass('btn-primary'); $('#departments-dataTable_1').val('').trigger('keyup')">
-                    Total
-                    <br />
-                    <i class="fa fa-2x">@Model.Count()</i>
-                </button>
-            </div>
-            <div class="btn-group" role="group">
-                <button class="btn btn-default" type="button" onclick="$(this).parent().parent().find('.btn-primary').removeClass('btn-primary').addClass('btn-default'); $(this).removeClass('btn-default').addClass('btn-primary'); $('#departments-dataTable_1').val('Manager').trigger('keyup')">
-                    Manager
-                    <br />
-                    <i class="fa fa-2x">@Model.Where(x => x.Type == BaseApp.Entity.AppUserType.Manager).Count()</i>
-                </button>
-            </div>
-            <div class="btn-group" role="group">
-                <button class="btn btn-default" type="button" onclick="$(this).parent().parent().find('.btn-primary').removeClass('btn-primary').addClass('btn-default'); $(this).removeClass('btn-default').addClass('btn-primary'); $('#departments-dataTable_1').val('Employee').trigger('keyup')">
-                    Employee
-                    <br />
-                    <i class="fa fa-2x">@Model.Where(x => x.Type == BaseApp.Entity.AppUserType.Employee).Count()</i>
-                </button>
-            </div>
-        </div>
-    </div>*@
-
 <div class="form-Modal">
     <div class="modal-content bg-transparent">
         <div class="modal-header">

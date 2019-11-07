@@ -273,6 +273,7 @@
     <Compile Include="Areas\Ecommerce\Controllers\SettingsController.cs" />
     <Compile Include="Areas\Ecommerce\EcommerceAreaRegistration.cs" />
     <Compile Include="Areas\HRMS\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\HRMS\Controllers\RegionController.cs" />
     <Compile Include="Areas\HRMS\Controllers\DepartmentController.cs" />
     <Compile Include="Areas\HRMS\Controllers\EmployeeController.cs" />
     <Compile Include="Areas\HRMS\HRMSAreaRegistration.cs" />
@@ -1058,6 +1059,9 @@
     <Content Include="Areas\HRMS\Views\Department\_AllDepartments.cshtml" />
     <Content Include="Areas\HRMS\Views\Department\Index.cshtml" />
     <Content Include="Areas\HRMS\Views\Department\Record.cshtml" />
+    <Content Include="Areas\HRMS\Views\Region\Regions.cshtml" />
+    <Content Include="Areas\HRMS\Views\Region\_AllRegions.cshtml" />
+    <Content Include="Areas\HRMS\Views\Region\Record.cshtml" />
     <None Include="Properties\PublishProfiles\BaseApp %28Published%29.pubxml" />
     <None Include="Properties\PublishProfiles\BaseApp - A - CMS - V2.0 %28Published%29.pubxml" />
     <None Include="Properties\PublishProfiles\BaseApp - A - V3.0 %28Published%29.pubxml" />

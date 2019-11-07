@@ -19,9 +19,7 @@
         <EntityTypeShape EntityType="SOSHRMSModel.EmpTransferHistory" Width="1.5" PointX="5.25" PointY="24.875" />
         <EntityTypeShape EntityType="SOSHRMSModel.Post" Width="1.5" PointX="10" PointY="5.125" />
         <EntityTypeShape EntityType="SOSHRMSModel.Project" Width="1.5" PointX="7.75" PointY="5.875" />
-        <EntityTypeShape EntityType="SOSHRMSModel.Region" Width="1.5" PointX="7.75" PointY="1.125" />
         <EntityTypeShape EntityType="SOSHRMSModel.Segment" Width="1.5" PointX="2.75" PointY="0.75" />
-        <AssociationConnector Association="SOSHRMSModel.FK__Center__RegionId__1F98B2C1" />
         <AssociationConnector Association="SOSHRMSModel.FK__Post__ProjectId__7B264821" />
         <EntityTypeShape EntityType="SOSHRMSModel.Designation" Width="1.5" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="SOSHRMSModel.Employee" Width="1.5" PointX="3" PointY="20.75" />
@@ -38,6 +36,8 @@
         <AssociationConnector Association="SOSHRMSModel.FK__EmpTransf__Emplo__06CD04F7" />
         <EntityTypeShape EntityType="SOSHRMSModel.Department" Width="1.5" PointX="0.75" PointY="24.5" />
         <AssociationConnector Association="SOSHRMSModel.FK__Employee__Depart__7E02B4CC" />
+        <EntityTypeShape EntityType="SOSHRMSModel.Region" Width="1.5" PointX="7.75" PointY="1.125" />
+        <AssociationConnector Association="SOSHRMSModel.FK__Center__RegionId__1F98B2C1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

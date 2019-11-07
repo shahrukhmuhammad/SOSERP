@@ -1,17 +1,18 @@
 ﻿@{
-    ViewBag.Title = "Department List";
+    ViewBag.Title = "Regions List";
 }
+
 
 <div class="user-Profile" style="min-height:430px;">
     <div id="employees-Container">
-        @{ Html.RenderAction("_AllDepartments", "Department"); }
+        @{ Html.RenderAction("_AllRegions", "Region"); }
     </div>
 </div>
 
 @section scripts{
     <script>
         $(function () {
-            filterDataTable("#departments-dataTable", [1, 2, 3, 4, 5], [0, 6],10);
+            filterDataTable("#regions-dataTable", [1, 2, 3, 4, 5], [0, 6],10);
         });
     </script>
 }

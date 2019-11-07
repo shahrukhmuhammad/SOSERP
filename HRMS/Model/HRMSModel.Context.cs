@@ -41,12 +41,12 @@ namespace HRMS.Model
         public virtual DbSet<EmpTransferHistory> EmpTransferHistories { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
-        public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<Segment> Segments { get; set; }
         public virtual DbSet<Designation> Designations { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<HRM_Vew_Employee> HRM_Vew_Employee { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<Region> Regions { get; set; }
     
         public virtual ObjectResult<string> SP_Employee_GetMaxCode()
         {

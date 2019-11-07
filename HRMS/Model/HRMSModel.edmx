@@ -335,7 +335,7 @@
           <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
           <Property Name="UpdatedOn" Type="datetime" />
           <Property Name="UpdatedBy" Type="uniqueidentifier" />
-          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Segment">
           <Key>
@@ -841,12 +841,7 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <EntitySet Name="EmpTransferHistories" EntityType="SOSHRMSModel.EmpTransferHistory" />
           <EntitySet Name="Posts" EntityType="SOSHRMSModel.Post" />
           <EntitySet Name="Projects" EntityType="SOSHRMSModel.Project" />
-          <EntitySet Name="Regions" EntityType="SOSHRMSModel.Region" />
           <EntitySet Name="Segments" EntityType="SOSHRMSModel.Segment" />
-          <AssociationSet Name="FK__Center__RegionId__1F98B2C1" Association="SOSHRMSModel.FK__Center__RegionId__1F98B2C1">
-            <End Role="Region" EntitySet="Regions" />
-            <End Role="Center" EntitySet="Centers" />
-          </AssociationSet>
           <AssociationSet Name="FK__Post__ProjectId__7B264821" Association="SOSHRMSModel.FK__Post__ProjectId__7B264821">
             <End Role="Project" EntitySet="Projects" />
             <End Role="Post" EntitySet="Posts" />
@@ -898,6 +893,11 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <AssociationSet Name="FK__Employee__Depart__7E02B4CC" Association="SOSHRMSModel.FK__Employee__Depart__7E02B4CC">
             <End Role="Department" EntitySet="Departments" />
             <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+          <EntitySet Name="Regions" EntityType="SOSHRMSModel.Region" />
+          <AssociationSet Name="FK__Center__RegionId__1F98B2C1" Association="SOSHRMSModel.FK__Center__RegionId__1F98B2C1">
+            <End Role="Region" EntitySet="Regions" />
+            <End Role="Center" EntitySet="Centers" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Center">
@@ -1167,20 +1167,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <Property Name="UpdatedBy" Type="Guid" />
           <NavigationProperty Name="Posts" Relationship="SOSHRMSModel.FK__Post__ProjectId__7B264821" FromRole="Project" ToRole="Post" />
         </EntityType>
-        <EntityType Name="Region">
-          <Key>
-            <PropertyRef Name="RegionId" />
-          </Key>
-          <Property Name="RegionId" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="Code" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
-          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
-          <Property Name="UpdatedBy" Type="Guid" />
-          <NavigationProperty Name="Centers" Relationship="SOSHRMSModel.FK__Center__RegionId__1F98B2C1" FromRole="Region" ToRole="Center" />
-          <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
         <EntityType Name="Segment">
           <Key>
             <PropertyRef Name="Id" />
@@ -1188,18 +1174,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <Property Name="Id" Type="Guid" Nullable="false" />
           <Property Name="SegmentName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
-        <Association Name="FK__Center__RegionId__1F98B2C1">
-          <End Type="SOSHRMSModel.Region" Role="Region" Multiplicity="1" />
-          <End Type="SOSHRMSModel.Center" Role="Center" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Region">
-              <PropertyRef Name="RegionId" />
-            </Principal>
-            <Dependent Role="Center">
-              <PropertyRef Name="RegionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Post__ProjectId__7B264821">
           <End Type="SOSHRMSModel.Project" Role="Project" Multiplicity="0..1" />
           <End Type="SOSHRMSModel.Post" Role="Post" Multiplicity="*" />
@@ -1546,6 +1520,32 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Region">
+          <Key>
+            <PropertyRef Name="RegionId" />
+          </Key>
+          <Property Name="RegionId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Centers" Relationship="SOSHRMSModel.FK__Center__RegionId__1F98B2C1" FromRole="Region" ToRole="Center" />
+        </EntityType>
+        <Association Name="FK__Center__RegionId__1F98B2C1">
+          <End Type="SOSHRMSModel.Region" Role="Region" Multiplicity="1" />
+          <End Type="SOSHRMSModel.Center" Role="Center" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="RegionId" />
+            </Principal>
+            <Dependent Role="Center">
+              <PropertyRef Name="RegionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1821,20 +1821,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Regions">
-            <EntityTypeMapping TypeName="SOSHRMSModel.Region">
-              <MappingFragment StoreEntitySet="Region">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Segments">
             <EntityTypeMapping TypeName="SOSHRMSModel.Segment">
               <MappingFragment StoreEntitySet="Segment">
@@ -2030,6 +2016,20 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Regions">
+            <EntityTypeMapping TypeName="SOSHRMSModel.Region">
+              <MappingFragment StoreEntitySet="Region">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

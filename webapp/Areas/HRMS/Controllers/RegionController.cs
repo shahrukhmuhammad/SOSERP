@@ -13,75 +13,66 @@ using WebApp.Areas.HRM;
 namespace WebApp.Areas.HRMS.Controllers
 {
     [AppAuthorize(AppPermission.All, AppPermission.ViewHRMS, AppPermission.HRMS)]
-    public class DepartmentController : AppController
+    public class RegionController : AppController
     {
-        private DepartmentEntity departRepo;
+        private RegionEntity regionRepo;
         private Common commonRepo;
 
-        public DepartmentController()
+        public RegionController()
         {
-            departRepo = new DepartmentEntity();
+            regionRepo = new RegionEntity();
             commonRepo = new Common();
         }
-        public ActionResult Departments()
+        public ActionResult Regions()
         {
             return View();
         }
-        public PartialViewResult _AllDepartments()
+        public PartialViewResult _AllRegions()
         {
-            var model = departRepo.GetAllDepartments();
+            var model = regionRepo.GetAllRegions();
             return PartialView(model);
         }
 
         #region Details
-        [Route("HRMS/Department/Details/{Id}/{IsView}")]
+        [Route("HRMS/Region/Details/{Id}/{IsView}")]
         public ActionResult Details(Guid Id, string IsView)
         {
-            //var model = new Department();
-            //model = departRepo.GetDepartmentById(Id);
-            //return View(model);
             TempData["IsView"] = IsView;
-            return RedirectToAction("Record", "Department", new { Id = Id});
+            return RedirectToAction("Record", "Region", new { Id = Id});
         }
         #endregion
         #region Record
         public ActionResult Record(Guid? Id)
         {
             ViewData["IsView"] = Convert.ToString(TempData["IsView"]);
-            var model = new Department();
+            var model = new Region();
             if (Id.HasValue)
             {
-                model = departRepo.GetDepartmentById(Id.Value);
+                model = regionRepo.GetRegionById(Id.Value);
             }
             else
             {
-                model.Code = commonRepo.GetNextCode("Department");
+                model.Code = commonRepo.GetNextCode("Region");
                 model.IsActive = true;
             }
 
             return View(model);
         }
-
-        public ActionResult Index()
-        {
-
-            return View();
-        }
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Record(Department model)
+        public ActionResult Record(Region model)
         {
             try
             {
-                if (model.Id.IsEmpty())
+                if (model.RegionId.IsEmpty())
                 {
                     model.CreatedBy = CurrentUser.Id;
                     model.CreatedOn = DateTime.Now;
                     //model.IsActive = true;
-                    model.Id = Guid.NewGuid();
-                    var res = departRepo.Create(model);
+                    model.RegionId = Guid.NewGuid();
+                    var res = regionRepo.Create(model);
                     if (res.HasValue)
                     {
-                        model.Id = res.Value;
+                        model.RegionId = res.Value;
                     }
 
                     #region Activity Log
@@ -114,7 +105,7 @@ namespace WebApp.Areas.HRMS.Controllers
                 {
                     model.UpdatedBy = CurrentUser.Id;
                     model.UpdatedOn = DateTime.Now;
-                    bool res = departRepo.Update(model);
+                    bool res = regionRepo.Update(model);
 
 
                     if (res)
@@ -145,7 +136,7 @@ namespace WebApp.Areas.HRMS.Controllers
             //}
             //else
             //{
-            return RedirectToAction("Departments");
+            return RedirectToAction("Regions");
         }
         #endregion
 
@@ -185,7 +176,7 @@ namespace WebApp.Areas.HRMS.Controllers
                 #region Activity Log
                 //appLog.Create(CurrentUser.OfficeId, Id, CurrentUser.Id, AppLogType.Activity, "CRM", "Contact Deleted", "~/CRM/Contact/Delete > HttpPost", "<table class='table table-hover table-striped table-condensed' style='margin-bottom:15px;'><tr><th class='text-center'>Description</th></tr><tr><td>Contact deleted by <strong>" + CurrentUser.FullName + "</strong>.</td></tr></table>");
                 #endregion
-                departRepo.Delete(Id);
+                regionRepo.Delete(Id);
 
                 TempData["SuccessMsg"] = "Department has been deleted successfully.";
             }
@@ -213,7 +204,7 @@ namespace WebApp.Areas.HRMS.Controllers
                     {
                         lsIds.Add(new Guid(x));
                     }
-                    departRepo.DeleteMultiple(lsIds);
+                    regionRepo.DeleteMultiple(lsIds);
                 }
 
                 #region Activity Log

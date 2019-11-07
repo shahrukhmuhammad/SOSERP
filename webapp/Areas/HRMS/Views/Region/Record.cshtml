@@ -1,13 +1,13 @@
-﻿@model Department
+﻿@model Region
 @{
     var queryId = ViewContext.RouteData.Values["Id"];
-    ViewBag.Title = (queryId == null ? "Add New Department" : "Edit Department");
+    ViewBag.Title = (queryId == null ? "Add New Region" : "Edit Region");
 }
 
 <form id="lead-frm" class="user-Profile" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
 
-    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.RegionId)
     @Html.HiddenFor(x => x.Code)
 
     <div class="row">
@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="col-sm-3">
                     <div class="row form-group">
-                        <label class="col-sm-8 horizontal-label">Department Code: </label>
+                        <label class="col-sm-8 horizontal-label">Region Code: </label>
                         <div class="col-sm-4" style="margin-top: 5px !important;">
                             @Model.Code
                         </div>
@@ -47,7 +47,6 @@
                     <div class="row form-group">
                         <div class="checkbox">
                             <label>
-                                @*<input type="checkbox" name="SubscribedForUpdates" value="@(Model.SubscribedForUpdates ? "true" : "false")" @(Model.SubscribedForUpdates ? "checked" : "") /> Subscribe for Updates*@
                                 @Html.CheckBoxFor(x => x.IsActive) <span> Active</span>
                             </label>
                         </div>
