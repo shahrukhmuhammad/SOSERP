@@ -24,8 +24,14 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
-          <Property Name="RegionId" Type="uniqueidentifier" />
+          <Property Name="RegionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="Department">
           <Key>
@@ -828,7 +834,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
         <EntityContainer Name="SOSHRMSEntities" annotation:LazyLoadingEnabled="true">
           <FunctionImport Name="SP_Employee_GetMaxCode" ReturnType="Collection(String)" />
           <EntitySet Name="Centers" EntityType="SOSHRMSModel.Center" />
-          <EntitySet Name="Cities" EntityType="SOSHRMSModel.City" />
           <EntitySet Name="EmpArmyInformations" EntityType="SOSHRMSModel.EmpArmyInformation" />
           <EntitySet Name="EmpBankDetails" EntityType="SOSHRMSModel.EmpBankDetail" />
           <EntitySet Name="EmpDocuments" EntityType="SOSHRMSModel.EmpDocument" />
@@ -899,6 +904,7 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             <End Role="Region" EntitySet="Regions" />
             <End Role="Center" EntitySet="Centers" />
           </AssociationSet>
+          <EntitySet Name="Cities" EntityType="SOSHRMSModel.City" />
           </EntityContainer>
         <EntityType Name="Center">
           <Key>
@@ -914,14 +920,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
           <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
           <Property Name="UpdatedBy" Type="Guid" />
           <NavigationProperty Name="Region" Relationship="SOSHRMSModel.FK__Center__RegionId__1F98B2C1" FromRole="Center" ToRole="Region" />
-        </EntityType>
-        <EntityType Name="City">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="RegionId" Type="Guid" />
         </EntityType>
         <EntityType Name="EmpArmyInformation">
           <Key>
@@ -1546,6 +1544,20 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RegionId" Type="Guid" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" Nullable="false" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Guid" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1565,15 +1577,6 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
                 <ScalarProperty Name="RegionId" ColumnName="RegionId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="CenterId" ColumnName="CenterId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Cities">
-            <EntityTypeMapping TypeName="SOSHRMSModel.City">
-              <MappingFragment StoreEntitySet="City">
-                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2030,6 +2033,21 @@ warning 6002: The table/view 'SOSHRMS.dbo.HRM_Vew_Employee' does not have a prim
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cities">
+            <EntityTypeMapping TypeName="SOSHRMSModel.City">
+              <MappingFragment StoreEntitySet="City">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

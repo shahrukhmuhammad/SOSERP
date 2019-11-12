@@ -64,6 +64,7 @@
     <Compile Include="Entity\PostEntity.cs" />
     <Compile Include="Entity\Common.cs" />
     <Compile Include="Entity\CenterEntity.cs" />
+    <Compile Include="Entity\ProjectEntity.cs" />
     <Compile Include="Entity\RegionEntity.cs" />
     <Compile Include="Entity\HRMContants.cs" />
     <Compile Include="Model\AutoMapperConfig.cs" />

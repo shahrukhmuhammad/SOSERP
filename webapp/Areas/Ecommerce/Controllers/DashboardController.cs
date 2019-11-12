@@ -26,11 +26,11 @@ namespace WebApp.Areas.Ecommerce.Controllers
         public ActionResult Index()
         {
             #region CMS
-            ViewBag.RecentPages = webPage.GetAll();
-            ViewBag.RecentSlides = webSlide.GetAll();
-            ViewBag.RecentContents = webContent.GetAll();
-            ViewBag.RecentNews = webNews.GetAll();
-            ViewBag.RecentFiles = webFile.GetAll();
+            //ViewBag.RecentPages = webPage.GetAll();
+            //ViewBag.RecentSlides = webSlide.GetAll();
+            //ViewBag.RecentContents = webContent.GetAll();
+            //ViewBag.RecentNews = webNews.GetAll();
+            //ViewBag.RecentFiles = webFile.GetAll();
             #endregion
             return View();
         }

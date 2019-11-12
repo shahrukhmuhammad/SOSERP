@@ -15,7 +15,13 @@ namespace HRMS.Model
     public partial class City
     {
         public System.Guid Id { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
-        public Nullable<System.Guid> RegionId { get; set; }
+        public System.Guid RegionId { get; set; }
+        public bool IsActive { get; set; }
+        public System.DateTime CreatedOn { get; set; }
+        public System.Guid CreatedBy { get; set; }
+        public Nullable<System.DateTime> UpdatedOn { get; set; }
+        public Nullable<System.Guid> UpdatedBy { get; set; }
     }
 }

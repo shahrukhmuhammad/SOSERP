@@ -28,7 +28,6 @@ namespace HRMS.Model
         }
     
         public virtual DbSet<Center> Centers { get; set; }
-        public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<EmpArmyInformation> EmpArmyInformations { get; set; }
         public virtual DbSet<EmpBankDetail> EmpBankDetails { get; set; }
         public virtual DbSet<EmpDocument> EmpDocuments { get; set; }
@@ -47,6 +46,7 @@ namespace HRMS.Model
         public virtual DbSet<HRM_Vew_Employee> HRM_Vew_Employee { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
     
         public virtual ObjectResult<string> SP_Employee_GetMaxCode()
         {

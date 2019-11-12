@@ -77,11 +77,6 @@ namespace WebApp.Areas.HRMS.Controllers
             return View(model);
         }
 
-        public ActionResult Index()
-        {
-
-            return View();
-        }
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Record(HRM_Vew_Employee model, EmployeePostedFiles files, DocumentPostedFiles documentPostedFiles, List<EmpReference> Reference)
         {

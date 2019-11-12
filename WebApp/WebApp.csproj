@@ -273,6 +273,7 @@
     <Compile Include="Areas\Ecommerce\Controllers\SettingsController.cs" />
     <Compile Include="Areas\Ecommerce\EcommerceAreaRegistration.cs" />
     <Compile Include="Areas\HRMS\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\HRMS\Controllers\ProjectController.cs" />
     <Compile Include="Areas\HRMS\Controllers\RegionController.cs" />
     <Compile Include="Areas\HRMS\Controllers\DepartmentController.cs" />
     <Compile Include="Areas\HRMS\Controllers\EmployeeController.cs" />
@@ -1053,7 +1054,6 @@
     <Content Include="Areas\HRMS\Views\Employee\_AllEmployees.cshtml" />
     <Content Include="Areas\HRMS\Views\Employee\_EmpDocuments.cshtml" />
     <Content Include="Areas\HRMS\Views\Employee\ViewDocument.cshtml" />
-    <Content Include="Areas\HRMS\Views\Employee\Index.cshtml" />
     <Content Include="Areas\HRMS\Views\Employee\Details.cshtml" />
     <Content Include="Areas\HRMS\Views\Department\Departments.cshtml" />
     <Content Include="Areas\HRMS\Views\Department\_AllDepartments.cshtml" />

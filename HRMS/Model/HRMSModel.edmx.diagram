@@ -4,9 +4,8 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a047b49a12014b9aa25ff3e36574ffb3" Name="Diagram1" ZoomLevel="73">
-        <EntityTypeShape EntityType="SOSHRMSModel.Center" Width="1.5" PointX="10" PointY="1" />
-        <EntityTypeShape EntityType="SOSHRMSModel.City" Width="1.5" PointX="0.75" PointY="0.75" />
+      <Diagram DiagramId="a047b49a12014b9aa25ff3e36574ffb3" Name="Diagram1" ZoomLevel="95">
+        <EntityTypeShape EntityType="SOSHRMSModel.Center" Width="1.5" PointX="9.875" PointY="0.75" />
         <EntityTypeShape EntityType="SOSHRMSModel.EmpArmyInformation" Width="1.5" PointX="5.25" PointY="43.875" />
         <EntityTypeShape EntityType="SOSHRMSModel.EmpBankDetail" Width="1.5" PointX="5.25" PointY="39.5" />
         <EntityTypeShape EntityType="SOSHRMSModel.EmpDocument" Width="1.5" PointX="5.25" PointY="35.625" />
@@ -38,6 +37,7 @@
         <AssociationConnector Association="SOSHRMSModel.FK__Employee__Depart__7E02B4CC" />
         <EntityTypeShape EntityType="SOSHRMSModel.Region" Width="1.5" PointX="7.75" PointY="1.125" />
         <AssociationConnector Association="SOSHRMSModel.FK__Center__RegionId__1F98B2C1" />
+        <EntityTypeShape EntityType="SOSHRMSModel.City" Width="1.5" PointX="12" PointY="1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
